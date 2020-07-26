@@ -2,13 +2,15 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { fetchDataRoutine } from 'screens/Home/routines';
 import { IBindingAction } from 'models/Callbacks';
+import { IData } from 'screens/Home/models/IData';
 
 export interface IDataProps {
-  data: any;
+  data: IData;
   fetchData: IBindingAction;
 }
 
 const Data: React.FunctionComponent<IDataProps> = ({
+  data,
   fetchData: getData
 }) => {
   useEffect(() => {
@@ -16,12 +18,16 @@ const Data: React.FunctionComponent<IDataProps> = ({
   }, []);
 
   return (
-    <h1>Inner component</h1>
+    <div>
+      <h1>Inner component</h1>
+      <span>Data loaded: </span>
+      <span>{data.message}</span>
+    </div>
   );
 };
 
 const mapStateToProps = (state: any) => {
-  const { data } = state;
+  const { data: { data } } = state;
   return {
     data
   };

@@ -35,6 +35,7 @@ dependencies {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
 	testImplementation 'org.springframework.amqp:spring-rabbit-test'
+	testImplementation 'com.h2database:h2'
 }
 
 test {
