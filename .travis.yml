@@ -3,3 +3,4 @@ deploy:
   script: bash scripts/build.sh
   on:
     branch: develop
+    
