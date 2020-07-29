@@ -3,4 +3,4 @@ deploy:
   provider: script
   script: bash scripts/build.sh
   on:
-    branch: develop
+    branch: dev
