@@ -1,6 +1,6 @@
+language: minimal
 deploy:
   provider: script
   script: bash scripts/build.sh
   on:
     branch: develop
-    
