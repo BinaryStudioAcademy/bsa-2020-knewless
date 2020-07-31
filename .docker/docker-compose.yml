@@ -62,7 +62,7 @@ services:
     depends_on:
       - api
     ports:
-      - '8080:80'
+      - '80:80'
     env_file:
       - ../.env/client.env
     logging:
