@@ -2,7 +2,7 @@ language: minimal
 addons:
   ssh_known_hosts: $server_ip
 script: bash scripts/build.sh
-branches: 
+branches:
   only:
     - dev
 before_deploy:
@@ -15,4 +15,3 @@ deploy:
   script: bash scripts/deploy.sh
   on:
     branch: dev
-
