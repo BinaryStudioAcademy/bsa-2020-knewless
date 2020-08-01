@@ -1,6 +1,7 @@
 language: minimal
 addons:
-  ssh_known_hosts: $server_ip
+  ssh_known_hosts: 
+    - $server_ip
 script: bash scripts/build.sh
 branches:
   only:
