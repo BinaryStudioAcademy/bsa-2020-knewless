@@ -1,7 +1,7 @@
 language: minimal
 addons:
   ssh_known_hosts: 
-    - $server_ip
+    - 13.93.8.220
 script: bash scripts/build.sh
 branches:
   only:
