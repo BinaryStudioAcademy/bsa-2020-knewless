@@ -12,7 +12,7 @@ services:
       - pgconf_api:/etc/postgresql
       - pglog_api:/var/log/postgresql
     env_file:
-     - ../.env/api-db.env
+     - ~/.env/api-db.env
     logging:
       driver: "json-file"
       options:
@@ -25,7 +25,7 @@ services:
     container_name: 'rabbitmq'
     hostname: "rabbit"
     env_file:
-     - ../.env/rabbitmq.env
+     - ~/.env/rabbitmq.env
     ports:
       - '15672:15672'
       - '5672:5672'
@@ -37,18 +37,17 @@ services:
 
   # api
   api:
-    image: api:latest
+    image: bsa2020knewless/dockerhub:api
     container_name: api
     depends_on:
       - api-db
-      # - rabbitmq
+      - rabbitmq
     ports:
      - '5000:5000'
     env_file:
-      - ../.env/api.env
+      - ~/.env/api.env
     environment:
-      # WAIT_HOSTS: rabbitmq:5672, api-db:5432
-      WAIT_HOSTS: api-db:5432
+      WAIT_HOSTS: rabbitmq:5672, api-db:5432
     logging:
       driver: "json-file"
       options:
@@ -57,14 +56,14 @@ services:
 
   # # Frontend
   client:
-    image: client:latest
+    image: bsa2020knewless/dockerhub:client
     container_name: client
     depends_on:
       - api
     ports:
       - '80:80'
     env_file:
-      - ../.env/client.env
+      - ~/.env/client.env
     logging:
       driver: "json-file"
       options:
