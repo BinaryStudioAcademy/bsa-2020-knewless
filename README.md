@@ -1,4 +1,4 @@
-# Binary Studio Academy | 2020 | Java
+# Binary Studio Academy | 2020 | Java &middot; [![Build Status](https://travis-ci.org/BinaryStudioAcademy/bsa-2020-knewless.svg?branch=dev)](https://travis-ci.org/BinaryStudioAcademy/bsa-2020-knewless)
 
 ## [Knewless](http://knewless.tk/)
 
