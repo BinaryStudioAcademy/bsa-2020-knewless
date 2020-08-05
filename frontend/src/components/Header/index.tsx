@@ -40,76 +40,80 @@ const Header = ({ currentUser }: IHeaderProps) => {
   document.addEventListener('keydown', handleSearchReturn);
   return (
     <div className={styles.headerWrp}>
-      <div className={styles.left_side}>
-        <NavLink exact to="/">
-          <Logo />
-          <div className={styles.mainName}>KnewLess</div>
-        </NavLink>
-      </div>
-      <div className={styles.middle}>
-        <Grid centered columns="3" textAlign="center">
-          <Grid.Column verticalAlign="middle">
-            <NavLink exact to="/">
-              <Label
-                basic
-                size="tiny"
-                className={styles.routElement}
-                onClick={() => setCurrentRout(RoutPointer.home)}
-              >
-                <div className={styles.iconWrp}>
-                  <Icon name="home" size="big" inverted />
-                </div>
-              </Label>
-            </NavLink>
-            <div className={styles.routName}>Home</div>
-            {currentRout === 0 ? <div className={styles.homeLine} /> : ''}
-          </Grid.Column>
-          <Grid.Column verticalAlign="middle">
-            <NavLink exact to="/">
-              <Label
-                basic
-                size="tiny"
-                className={styles.routElement}
-                onClick={() => setCurrentRout(RoutPointer.courses)}
-              >
-                <div className={styles.iconWrp}>
-                  <Icon name="newspaper outline" size="big" inverted />
-                </div>
-              </Label>
-            </NavLink>
-            <div className={styles.routName}>Courses</div>
-            {currentRout === 1 ? <div className={styles.homeLine} /> : ''}
-          </Grid.Column>
-          <Grid.Column verticalAlign="middle">
-            <NavLink exact to="/">
-              <Label
-                basic
-                size="tiny"
-                className={styles.routElement}
-                onClick={() => setCurrentRout(RoutPointer.paths)}
-              >
-                <div className={styles.iconWrp}>
-                  <PathIcon />
-                </div>
-              </Label>
-            </NavLink>
-            <div className={styles.routName}>Paths</div>
-            {currentRout === 2 ? <div className={styles.homeLine} /> : ''}
-          </Grid.Column>
-        </Grid>
-        <Input
-          id="searchInput"
-          type="text"
-          icon="search"
-          value={search}
-          className={styles.search}
-          placeholder="Search..."
-          onChange={ev => setSearch(ev.target.value)}
-          inverted
-        />
-      </div>
-      <div className={styles.right_side}>
-        {currentUser ? <UserElement user={currentUser} /> : <LoginRegister /> }
+      <div className={styles.customHeader}>
+        <div className={styles.left_side}>
+          <NavLink exact to="/">
+            <div className={styles.mainName}>
+              <Logo />
+              KnewLess
+            </div>
+          </NavLink>
+        </div>
+        <div className={styles.middle}>
+          <Grid centered columns="3" textAlign="center">
+            <Grid.Column verticalAlign="middle">
+              <NavLink exact to="/">
+                <Label
+                  basic
+                  size="tiny"
+                  className={styles.routElement}
+                  onClick={() => setCurrentRout(RoutPointer.home)}
+                >
+                  <div className={styles.iconWrp}>
+                    <Icon name="home" size="big" inverted />
+                  </div>
+                  <div className={styles.routName}>Home</div>
+                </Label>
+              </NavLink>
+              {currentRout === 0 ? <div className={styles.homeLine} /> : ''}
+            </Grid.Column>
+            <Grid.Column verticalAlign="middle">
+              <NavLink exact to="/">
+                <Label
+                  basic
+                  size="tiny"
+                  className={styles.routElement}
+                  onClick={() => setCurrentRout(RoutPointer.courses)}
+                >
+                  <div className={styles.iconWrp}>
+                    <Icon name="newspaper outline" size="big" inverted />
+                  </div>
+                  <div className={styles.routName}>Courses</div>
+                </Label>
+              </NavLink>
+              {currentRout === 1 ? <div className={styles.homeLine} /> : ''}
+            </Grid.Column>
+            <Grid.Column verticalAlign="middle">
+              <NavLink exact to="/">
+                <Label
+                  basic
+                  size="tiny"
+                  className={styles.routElement}
+                  onClick={() => setCurrentRout(RoutPointer.paths)}
+                >
+                  <div className={styles.iconWrp}>
+                    <PathIcon />
+                  </div>
+                  <div className={styles.routName}>Paths</div>
+                </Label>
+              </NavLink>
+              {currentRout === 2 ? <div className={styles.homeLine} /> : ''}
+            </Grid.Column>
+          </Grid>
+          <Input
+            id="searchInput"
+            type="text"
+            icon="search"
+            value={search}
+            className={styles.search}
+            placeholder="Search..."
+            onChange={ev => setSearch(ev.target.value)}
+            inverted
+          />
+        </div>
+        <div className={styles.right_side}>
+          {currentUser ? <UserElement user={currentUser} /> : <LoginRegister /> }
+        </div>
       </div>
     </div>
   );
