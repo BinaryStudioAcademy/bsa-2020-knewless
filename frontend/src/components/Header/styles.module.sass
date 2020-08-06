@@ -2,10 +2,12 @@
     background: #121421
     box-shadow: 0px 30px 40px rgba(0, 0, 0, 0.1)
     position: fixed
-    height: 100px
+    height: 7em
     width: 100%
     right: 0px
     left: 0px
+    align-items: baseline
+    justify-content: space-between
     flex-direction: row
     z-index: 100
 
@@ -23,27 +25,26 @@
     align-items: center
 
 .headerWrp .left_side
-    width: 350px
-    padding-left: 110px
+    width: 22em
+    padding-left: 6em
 
 .headerWrp .right_side
-    
     display: flex
+    justify-content: flex-end
     align-items: center
-    padding-left: 60px
-    width: 350px
+    padding-right: 6em
+    width: 22em
 
 .headerWrp .middle
     display: flex
     align-items: center
-    width: 660px
+    width: 50em
 
 .mainName
     font-family: Open Sans
     font-style: normal
     font-weight: bold
-    font-size: 20px
-    line-height: 27px
+    font-size: 1.5em
     display: flex
     align-items: center
     color: #FFFFFF
@@ -56,9 +57,9 @@
     font-family: Montserrat
     font-style: normal
     font-weight: normal
-    font-size: 10px
-    line-height: 12px
-    width: 50px
+    font-size: 1em
+    line-height: 1.5em
+    width: 6em
     cursor: default
     padding-top: 4px
     text-transform: uppercase
@@ -79,15 +80,14 @@
 
 
 \:global(.ui.icon.input).search
-    width: 370px
+    width: 25em
     position: relative
     padding-left: 100px
 
 .homeLine
-  margin-top: 2px
+  padding-top: 0.3em
   position: relative
-  width: 50px
-  height: 2px
+  width: 4.2em
   background: linear-gradient(17.32deg, #0084f8 9.02%, #ff8576 90.81%)
 
 @media screen and ( max-width: 1250px )
@@ -100,5 +100,5 @@
     .homeLine
         width: auto
 
-@import url('https://fonts.googleapis.com/css?family=Open%20Sans');
-@import url('https://fonts.googleapis.com/css?family=Montserrat');
+@import url('https://fonts.googleapis.com/css?family=Open%20Sans')
+@import url('https://fonts.googleapis.com/css?family=Montserrat')
