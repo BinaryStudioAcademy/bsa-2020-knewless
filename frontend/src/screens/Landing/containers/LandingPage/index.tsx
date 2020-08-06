@@ -2,15 +2,15 @@ import React, { createRef, useEffect, useState } from 'react';
 import { Input, Label, Loader } from 'semantic-ui-react';
 import styles from './styles.module.sass';
 import video from '../../../../assets/videos/landing_video.webm';
-import { CourseCard, ICourseCardProps } from '../../components/CourseCard';
-import { IPathCardProps, PathCard } from '../../components/PathCard';
+import { CourseCard, ICourseCardProps } from '../../../../components/CourseCard';
+import { IPathCardProps, PathCard } from '../../../../components/PathCard';
 import { BottomNavigation } from '../../components/BottomNavigation';
 import { connect } from 'react-redux';
 import { IBindingAction } from '../../../../models/Callbacks';
 import { INavigationSectionProps } from '../../components/NavigationSection';
 import { IAppState } from '../../../../models/AppState';
 import { fetchDataRoutine } from 'screens/Landing/routines';
-import { CardsSegment } from '../../components/CardsSegment';
+import { CardsSegment } from '../../../../components/CardsSegment';
 
 // eslint-disable-next-line
 export interface ILandingProps {

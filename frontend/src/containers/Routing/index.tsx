@@ -6,6 +6,7 @@ import Header, { User } from '../../components/Header';
 import LandingPage from 'screens/Landing/containers/LandingPage';
 import PublicRoute from 'components/PublicRoute';
 import Data from 'screens/Home/containers/Data';
+import MainStudentPage from '../../screens/MainPage/containers/MainStudentPage';
 
 export interface IRoutingProps {
   isLoading: boolean;
@@ -23,6 +24,7 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({ isLoading }) => (
     <Header currentUser={mock} />
     <Switch>
       <PublicRoute exact path="/" component={LandingPage} />
+      <PublicRoute exact path="/main" component={MainStudentPage} />
       <PublicRoute exact path="/public" component={Data} />
       <div>
         <LoaderWrapper loading={isLoading}>

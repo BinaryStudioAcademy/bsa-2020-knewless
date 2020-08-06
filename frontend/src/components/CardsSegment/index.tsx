@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './styles.module.sass';
 import { Button } from 'semantic-ui-react';
-import { InlineLoaderWrapper } from '../../../../components/InlineLoaderWrapper';
+import { InlineLoaderWrapper } from '../InlineLoaderWrapper';
 
 export interface ICardsSegment {
   title: string;
