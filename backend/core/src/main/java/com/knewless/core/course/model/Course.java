@@ -4,7 +4,9 @@ import com.knewless.core.author.model.Author;
 import com.knewless.core.course.courseComment.model.CourseComment;
 import com.knewless.core.course.courseReaction.model.CourseReaction;
 import com.knewless.core.db.BaseEntity;
+import com.knewless.core.lecture.model.Lecture;
 import com.knewless.core.path.model.Path;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -16,6 +18,7 @@ import java.util.Set;
 
 @Entity
 @Data
+@Builder
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "courses")
 public class Course extends BaseEntity {
@@ -43,4 +46,7 @@ public class Course extends BaseEntity {
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CourseReaction> reactions = List.of();
+
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Lecture> lectures = List.of();
 }

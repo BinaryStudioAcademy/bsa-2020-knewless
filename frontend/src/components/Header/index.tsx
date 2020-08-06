@@ -31,12 +31,23 @@ const Header = ({ currentUser }: IHeaderProps) => {
   const [currentRout, setCurrentRout] = useState(RoutPointer.home);
   const [search, setSearch] = useState('');
 
+  const [serchStyle, setSearchStyle] = useState(styles.searchHidden);
+
   const handleSearchReturn = e => {
     const elem = document.getElementById('searchInput');
     if (e.key !== 'Escape' && e.target !== elem && !elem.contains(e.target)) return;
     if (e.key === 'Escape') setSearch('');
   };
 
+  const handleScroll = () => {
+    const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+    if (scrollTop < 390) {
+      setSearchStyle(styles.searchHidden);
+    } else {
+      setSearchStyle(styles.search);
+    }
+  };
+  window.addEventListener('scroll', handleScroll);
   document.addEventListener('keydown', handleSearchReturn);
   return (
     <div className={styles.headerWrp}>
@@ -105,7 +116,7 @@ const Header = ({ currentUser }: IHeaderProps) => {
             type="text"
             icon="search"
             value={search}
-            className={styles.search}
+            className={serchStyle}
             placeholder="Search..."
             onChange={ev => setSearch(ev.target.value)}
             inverted

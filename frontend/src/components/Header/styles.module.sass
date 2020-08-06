@@ -1,21 +1,28 @@
 @import "src/styles/common_variables"
+$container_width: 1400px
+$side_padding: 80px
 
 .headerWrp
   background: #121421
-  box-shadow: 0 30px 40px rgba(0, 0, 0, 0.1)
+  box-shadow: 0px 30px 40px rgba(0, 0, 0, 0.1)
   position: fixed
-  height: $header_height
+  height: 120px
   width: 100%
   right: 0px
   left: 0px
-  flex-direction: row
   z-index: 100
 
+
 .customHeader
-  margin: auto
-  width: auto
+  max-width: $container_width + ($side_padding * 2)
+  margin-left: auto !important
+  margin-right: auto !important
+  padding-left: $side_padding
+  padding-right: $side_padding
+  justify-content: space-between
+  width: 100%
   position: relative
-  background: inherit
+  background: #121421
   display: flex
 
 
@@ -25,27 +32,26 @@
   align-items: center
 
 .headerWrp .left_side
-  width: 350px
-  padding-left: 110px
+  width: auto
+  padding-right: 5em
 
 .headerWrp .right_side
-
   display: flex
+  justify-content: flex-end
   align-items: center
-  padding-left: 60px
-  width: 350px
+  width: auto
 
 .headerWrp .middle
   display: flex
   align-items: center
-  width: 660px
+  width: auto
+  padding-right: 5em
 
 .mainName
-  font-family: "Custom Open Sans", serif
+  font-family: Custom Open Sans
   font-style: normal
   font-weight: bold
-  font-size: 20px
-  line-height: 27px
+  font-size: 1.5em
   display: flex
   align-items: center
   color: #FFFFFF
@@ -58,9 +64,9 @@
   font-family: Montserrat
   font-style: normal
   font-weight: normal
-  font-size: 10px
-  line-height: 12px
-  width: 50px
+  font-size: 1em
+  line-height: 1.5em
+  width: 6em
   cursor: default
   padding-top: 4px
   text-transform: uppercase
@@ -68,8 +74,11 @@
   color: #FFFFFF
 
 \:global(.ui.basic.label).routElement
-  width: 30px
-  height: 40px
+  width: 2.8em
+  height: 5em
+  align-items: baseline
+  justify-content: space-between
+  flex-direction: row
   display: contents
   background: #121421
   border: none
@@ -78,28 +87,19 @@
 .iconWrp
   margin: auto
 
-
 \:global(.ui.icon.input).search
-  width: 370px
+  width: 25em
   position: relative
-  padding-left: 100px
+  padding-left: 7em
+
+\:global(.ui.icon.input).searchHidden
+  visibility: hidden
+  width: 25em
+  opacity: 0
 
 .homeLine
-  margin-top: 2px
+  padding-top: 0.3em
   position: relative
-  width: 50px
-  height: 2px
+  width: auto
   background: linear-gradient(17.32deg, #0084f8 9.02%, #ff8576 90.81%)
 
-@media screen and (max-width: 1250px)
-  .customHeader
-    width: inherit
-
-@media screen and (max-width: 1100px)
-  .routName
-    width: auto
-  .homeLine
-    width: auto
-
-@import url('https://fonts.googleapis.com/css?family=Open%20Sans')
-@import url('https://fonts.googleapis.com/css?family=Montserrat')
