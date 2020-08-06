@@ -15,7 +15,7 @@ const UserElement = ({ user }: IUserElementProps) => (
       className={styles.toolbarBtn}
       onClick={() => { console.log('clicked'); }}
     >
-      <Icon name="heart" size="large" inverted />
+      <Icon name="heart" size="big" inverted />
     </Label>
     <Label
       basic
@@ -23,7 +23,7 @@ const UserElement = ({ user }: IUserElementProps) => (
       className={styles.toolbarBtn}
       onClick={() => { console.log('clicked'); }}
     >
-      <Icon name="bell" size="large" inverted />
+      <Icon name="bell" size="big" inverted />
     </Label>
     <div className={styles.imageborder}>
       <img src={user.avatar} className={styles.avatar} alt={user.name} />

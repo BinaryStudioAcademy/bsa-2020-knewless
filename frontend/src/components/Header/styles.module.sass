@@ -1,24 +1,28 @@
 @import "src/styles/common_variables"
+$container_width: 1400px
+$side_padding: 80px
 
 .headerWrp
   background: #121421
   box-shadow: 0px 30px 40px rgba(0, 0, 0, 0.1)
   position: fixed
-  height: 7em
+  height: 120px
   width: 100%
   right: 0px
   left: 0px
-  align-items: baseline
-  justify-content: space-between
-  flex-direction: row
   z-index: 100
 
 
 .customHeader
-  margin: auto
-  width: auto
+  max-width: $container_width + ($side_padding * 2)
+  margin-left: auto !important
+  margin-right: auto !important
+  padding-left: $side_padding
+  padding-right: $side_padding
+  justify-content: space-between
+  width: 100%
   position: relative
-  background: inherit
+  background: #121421
   display: flex
 
 
@@ -29,14 +33,12 @@
 
 .headerWrp .left_side
   width: auto
-  padding-left: 5em
   padding-right: 5em
 
 .headerWrp .right_side
   display: flex
   justify-content: flex-end
   align-items: center
-  padding-right: 5em
   width: auto
 
 .headerWrp .middle
@@ -46,7 +48,7 @@
   padding-right: 5em
 
 .mainName
-  font-family: Open Sans
+  font-family: Custom Open Sans
   font-style: normal
   font-weight: bold
   font-size: 1.5em
@@ -88,7 +90,12 @@
 \:global(.ui.icon.input).search
   width: 25em
   position: relative
-  padding-left: 100px
+  padding-left: 7em
+
+\:global(.ui.icon.input).searchHidden
+  visibility: hidden
+  width: 25em
+  opacity: 0
 
 .homeLine
   padding-top: 0.3em
@@ -96,5 +103,3 @@
   width: auto
   background: linear-gradient(17.32deg, #0084f8 9.02%, #ff8576 90.81%)
 
-@import url('https://fonts.googleapis.com/css?family=Open%20Sans')
-@import url('https://fonts.googleapis.com/css?family=Montserrat')
