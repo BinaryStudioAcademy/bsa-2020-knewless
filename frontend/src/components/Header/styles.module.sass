@@ -4,13 +4,18 @@
     position: fixed
     height: 100px
     width: 100%
-    top: 0px
+    right: 0px
+    left: 0px
     flex-direction: row
     z-index: 100
 
-.icon
-    height: 50px
+.customHeader
+    margin: auto
     width: auto
+    position: relative
+    background: inherit
+    display: flex
+
 
 .headerWrp,
 .headerWrp .left_side 
@@ -18,10 +23,11 @@
     align-items: center
 
 .headerWrp .left_side
-    width: 450px
-    padding-left: 220px
+    width: 350px
+    padding-left: 110px
 
 .headerWrp .right_side
+    
     display: flex
     align-items: center
     padding-left: 60px
@@ -33,7 +39,7 @@
     width: 660px
 
 .mainName
-    font-family: Andale Mono, monospace
+    font-family: Open Sans
     font-style: normal
     font-weight: bold
     font-size: 20px
@@ -42,25 +48,28 @@
     align-items: center
     color: #FFFFFF
 
+.iconWrp
+    margin: auto
+    height: auto
+
 .routName
-    font-family: Andale Mono, monospace
+    font-family: Montserrat
     font-style: normal
     font-weight: normal
     font-size: 10px
     line-height: 12px
     width: 50px
     cursor: default
-    margin-top: 2px
-    margin-left: -5px
+    padding-top: 4px
     text-transform: uppercase
+    cursor: pointer
     color: #FFFFFF
 
 \:global(.ui.basic.label).routElement
     width: 30px
     height: 40px
+    display: contents
     background: #121421
-    justify-content: center
-    display: flex
     border: none
     margin: auto
 
@@ -74,11 +83,22 @@
     position: relative
     padding-left: 100px
 
-
-
 .homeLine
+  margin-top: 2px
   position: relative
   width: 50px
   height: 2px
-  margin-left: -5px
   background: linear-gradient(17.32deg, #0084f8 9.02%, #ff8576 90.81%)
+
+@media screen and ( max-width: 1250px )
+    .customHeader
+        width: inherit
+
+@media screen and ( max-width: 1100px )       
+    .routName
+        width: auto
+    .homeLine
+        width: auto
+
+@import url('https://fonts.googleapis.com/css?family=Open%20Sans');
+@import url('https://fonts.googleapis.com/css?family=Montserrat');
