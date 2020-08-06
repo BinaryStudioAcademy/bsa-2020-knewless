@@ -53,26 +53,53 @@
       color: white
       line-height: 156%
 
-  &__video_container video
-    position: relative
-    object-fit: cover
-    object-position: left
-    width: 50vw
-    height: 100%
+  &__video
+    &_container video
+      position: relative
+      object-fit: cover
+      object-position: left
+      width: 50vw
+      height: 100%
 
-  &__video_container
-    position: relative
+    &_container
+      position: relative
 
-  &__video_cover
-    position: absolute
-    left: 0
-    top: 0
-    height: 100%
-    width: 100%
-    background: linear-gradient(81.21deg, #3378BD 9.02%, #FF8576 90.81%)
-    box-shadow: 0 30px 40px rgba(0, 0, 0, 0.1)
-    z-index: 2
-    opacity: 60%
+    &_cover
+      position: absolute
+      left: 0
+      top: 0
+      height: 100%
+      width: 100%
+      background: linear-gradient(81.21deg, #3378BD 9.02%, #FF8576 90.81%)
+      box-shadow: 0 30px 40px rgba(0, 0, 0, 0.1)
+      z-index: 2
+      opacity: 0.6
+
+    &__button
+      &_container
+        position: absolute
+        height: 100%
+        width: 100%
+        display: flex
+        align-items: center
+        justify-content: center
+
+      &_play
+        opacity: 0.5
+        color: white !important
+        z-index: 3
+        cursor: pointer
+        background: none !important
+        font-size: 5em !important
+        // I can't access the icon inside and remove it's margin so I insert padding on contrary
+        padding: 0 !important
+        padding-left: 0.75em !important
+
+.hideable
+  opacity: 0
+  z-index: 2
+  &:hover
+    opacity: 1
 
 .content_row
   margin-top: 5em
