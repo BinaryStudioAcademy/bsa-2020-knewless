@@ -1,87 +1,88 @@
+@import "src/styles/common_variables"
+
 .headerWrp
-    background: #121421
-    box-shadow: 0px 30px 40px rgba(0, 0, 0, 0.1)
-    position: fixed
-    height: 100px
-    width: 100%
-    right: 0px
-    left: 0px
-    flex-direction: row
-    z-index: 100
+  background: #121421
+  box-shadow: 0 30px 40px rgba(0, 0, 0, 0.1)
+  position: fixed
+  height: $header_height
+  width: 100%
+  right: 0px
+  left: 0px
+  flex-direction: row
+  z-index: 100
 
 .customHeader
-    margin: auto
-    width: auto
-    position: relative
-    background: inherit
-    display: flex
+  margin: auto
+  width: auto
+  position: relative
+  background: inherit
+  display: flex
 
 
 .headerWrp,
-.headerWrp .left_side 
-    display: flex
-    align-items: center
+.headerWrp .left_side
+  display: flex
+  align-items: center
 
 .headerWrp .left_side
-    width: 350px
-    padding-left: 110px
+  width: 350px
+  padding-left: 110px
 
 .headerWrp .right_side
-    
-    display: flex
-    align-items: center
-    padding-left: 60px
-    width: 350px
+
+  display: flex
+  align-items: center
+  padding-left: 60px
+  width: 350px
 
 .headerWrp .middle
-    display: flex
-    align-items: center
-    width: 660px
+  display: flex
+  align-items: center
+  width: 660px
 
 .mainName
-    font-family: Open Sans
-    font-style: normal
-    font-weight: bold
-    font-size: 20px
-    line-height: 27px
-    display: flex
-    align-items: center
-    color: #FFFFFF
+  font-family: "Custom Open Sans", serif
+  font-style: normal
+  font-weight: bold
+  font-size: 20px
+  line-height: 27px
+  display: flex
+  align-items: center
+  color: #FFFFFF
 
 .iconWrp
-    margin: auto
-    height: auto
+  margin: auto
+  height: auto
 
 .routName
-    font-family: Montserrat
-    font-style: normal
-    font-weight: normal
-    font-size: 10px
-    line-height: 12px
-    width: 50px
-    cursor: default
-    padding-top: 4px
-    text-transform: uppercase
-    cursor: pointer
-    color: #FFFFFF
+  font-family: Montserrat
+  font-style: normal
+  font-weight: normal
+  font-size: 10px
+  line-height: 12px
+  width: 50px
+  cursor: default
+  padding-top: 4px
+  text-transform: uppercase
+  cursor: pointer
+  color: #FFFFFF
 
 \:global(.ui.basic.label).routElement
-    width: 30px
-    height: 40px
-    display: contents
-    background: #121421
-    border: none
-    margin: auto
+  width: 30px
+  height: 40px
+  display: contents
+  background: #121421
+  border: none
+  margin: auto
 
 .iconWrp
-    margin: auto
-
+  margin: auto
 
 
 \:global(.ui.icon.input).search
-    width: 370px
-    position: relative
-    padding-left: 100px
+  width: 370px
+  position: relative
+  padding-left: 100px
 
 .homeLine
   margin-top: 2px
@@ -90,15 +91,15 @@
   height: 2px
   background: linear-gradient(17.32deg, #0084f8 9.02%, #ff8576 90.81%)
 
-@media screen and ( max-width: 1250px )
-    .customHeader
-        width: inherit
+@media screen and (max-width: 1250px)
+  .customHeader
+    width: inherit
 
-@media screen and ( max-width: 1100px )       
-    .routName
-        width: auto
-    .homeLine
-        width: auto
+@media screen and (max-width: 1100px)
+  .routName
+    width: auto
+  .homeLine
+    width: auto
 
-@import url('https://fonts.googleapis.com/css?family=Open%20Sans');
-@import url('https://fonts.googleapis.com/css?family=Montserrat');
+@import url('https://fonts.googleapis.com/css?family=Open%20Sans')
+@import url('https://fonts.googleapis.com/css?family=Montserrat')

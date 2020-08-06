@@ -4,18 +4,19 @@ import LoaderWrapper from 'components/LoaderWrapper';
 import PublicRoute from 'components/PublicRoute';
 import Data from 'screens/Home/containers/Data';
 import Header from '../../components/Header';
+import LandingPage from 'screens/Landing/containers/LandingPage';
 
 export interface IRoutingProps {
   isLoading: boolean;
 }
-
 
 const Routing: React.FunctionComponent<IRoutingProps> = ({ isLoading }) => (
   <div>
     {/* {isAuthorized ? <Header /> : ''} */}
     <Header />
     <Switch>
-      {/* <PublicRoute exact path="/public" component={Data} />*/}
+      <PublicRoute exact path="/" component={LandingPage} />
+      <PublicRoute exact path="/public" component={Data} />
       <div>
         <LoaderWrapper loading={isLoading}>
           <Switch>
