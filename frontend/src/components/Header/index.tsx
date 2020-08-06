@@ -2,10 +2,10 @@ import Logo from './logo';
 import { NavLink } from 'react-router-dom';
 import UserElement from './UserElement';
 import PathIcon from './icons/paths';
-import LoginRegister from './LoginRegister';
 import React, { useState } from 'react';
 import { Input, Grid, Icon, Label } from 'semantic-ui-react';
 import styles from './styles.module.sass';
+import LoginRegister from './LoginRegister';
 
 enum RoutPointer {
     home,

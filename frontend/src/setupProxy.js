@@ -9,6 +9,8 @@ const apiProxy = proxy('/api', {
   }
 })
 
+const wsProxy = proxy('/ws', {target:'http://localhost:5000', ws: true})
+
 module.exports = function (app) {
-  app.use(apiProxy);
+  app.use(apiProxy, wsProxy);
 };

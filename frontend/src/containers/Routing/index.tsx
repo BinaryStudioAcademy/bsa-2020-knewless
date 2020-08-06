@@ -1,10 +1,11 @@
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import LoaderWrapper from 'components/LoaderWrapper';
-import PublicRoute from 'components/PublicRoute';
-import Data from 'screens/Home/containers/Data';
+import WebSocketNotifications from 'components/WebSocketNotifications';
 import Header, { User } from '../../components/Header';
 import LandingPage from 'screens/Landing/containers/LandingPage';
+import PublicRoute from 'components/PublicRoute';
+import Data from 'screens/Home/containers/Data';
 
 export interface IRoutingProps {
   isLoading: boolean;
@@ -38,6 +39,7 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({ isLoading }) => (
         </LoaderWrapper>
       </div>
     </Switch>
+    <WebSocketNotifications user={{ username: 'aab' }} />
   </div>
 );
 
