@@ -5,74 +5,73 @@ import {
 } from 'semantic-ui-react';
 import './style.sass';
 import {
-  locationOptions,
-  yearOptions,
-  levelOptions,
-  industryOptions,
-  roleOptions,
-  educationOptions,
-  employmentOptions
+  locationOptions
 } from './options';
-
+import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { fetchGetSettingsRoutine, fetchSetSettingsRoutine } from '../../routines';
-import { ISettings } from 'screens/AuthorSettings/models/ISettings';
+import { fetchGetAuthorSettingsRoutine, fetchSetAuthorSettingsRoutine } from '../../routines';
+import { IAuthorSettings } from 'screens/AuthorSettings/models/ISettings';
 import { IBindingAction, IBindingCallback1 } from 'models/Callbacks';
+import { uploadImage } from 'services/image.service';
 
-export interface ISettingsProps {
-  settings: ISettings;
-  fetchSettings: IBindingAction;
-  fetchSetSettings: IBindingCallback1<ISettings>;
+export interface IAuthorSettingsProps {
+  authorSettings: IAuthorSettings;
+  fetchAuthorSettings: IBindingAction;
+  fetchSetAuthorSettings: IBindingCallback1<IAuthorSettings>;
 }
 
-const AuthorSettings: React.FunctionComponent<ISettingsProps> = ({
-  settings,
-  fetchSettings: getSettings,
-  fetchSetSettings: setSettings
+const AuthorSettings: React.FunctionComponent<IAuthorSettingsProps> = ({
+  authorSettings: settings,
+  fetchAuthorSettings: getSettings,
+  fetchSetAuthorSettings: setSettings
 }) => {
   useEffect(() => {
     getSettings();
   }, []);
+  const history = useHistory();
   const [name, setName] = useState(settings.name);
+  const [avatar, setAvatar] = useState(settings.avatar);
   const [location, setLocation] = useState(settings.location);
-  const [companyName, setCompanyName] = useState(settings.companyName);
+  const [company, setCompany] = useState(settings.company);
   const [website, setWebsite] = useState(settings.website);
-  const [job, setJob] = useState(settings.job);
-  const [experience, setExperience] = useState(settings.experience);
-  const [level, setLevel] = useState(settings.level);
-  const [industry, setIndustry] = useState(settings.industry);
-  const [role, setRole] = useState(settings.role);
-  const [employment, setEmployment] = useState(settings.employment);
-  const [education, setEducation] = useState(settings.education);
-  const [years, setYears] = useState(settings.years);
-  const handleUploadFile = () => {
-    // todo
+  const [biography, setBiography] = useState(settings.biography);
+  useEffect(() => {
+    setAvatar(settings.avatar);
+    setName(settings.name);
+    setLocation(settings.location);
+    setCompany(settings.company);
+    setWebsite(settings.website);
+    setBiography(settings.biography);
+  }, [settings]);
+  const handleUploadFile = async image => {
+    console.log(image);
+    const { link } = await uploadImage(image);
+    console.log(link);
+    setAvatar(link);
   };
   const handleSubmit = () => {
     const updatedSettings = {
+      id: settings.id,
       name,
+      avatar,
       location,
-      companyName,
+      company,
       website,
-      job,
-      experience,
-      level,
-      industry,
-      role,
-      employment,
-      education,
-      years
+      biography
     };
     setSettings(updatedSettings);
+  };
+  const handleCancel = () => {
+    history.push('/');
   };
   return (
     <div className="Settings">
       <div className="SettingsTitle">Account Settings</div>
       <div className="WrapperImg">
-        <img src="" alt="" className="Avatar" />
+        <img src={avatar} alt="" className="Avatar" />
         <Button as="label" id="ImageUploder">
           Update
-          <input name="image" type="file" onChange={handleUploadFile} hidden />
+          <input name="image" type="file" onChange={e => handleUploadFile(e.target.files[0])} hidden />
         </Button>
       </div>
       <Form>
@@ -90,7 +89,7 @@ const AuthorSettings: React.FunctionComponent<ISettingsProps> = ({
             label="Location"
             placeholder="Select"
             options={locationOptions}
-            value={level}
+            value={location}
             onChange={(e, data) => setLocation(data.value as string)}
           />
         </Form.Group>
@@ -98,8 +97,8 @@ const AuthorSettings: React.FunctionComponent<ISettingsProps> = ({
           <Form.Input
             fluid
             label="Company name"
-            value={companyName}
-            onChange={e => setCompanyName(e.target.value)}
+            value={company}
+            onChange={e => setCompany(e.target.value)}
             placeholder="Company name"
           />
           <Form.Input
@@ -110,98 +109,16 @@ const AuthorSettings: React.FunctionComponent<ISettingsProps> = ({
             onChange={e => setWebsite(e.target.value)}
           />
         </Form.Group>
-        <div className="Demographic Title"> Demographic Info</div>
-        <Form.Group className="FormGroup" width="4">
-          <Form.Checkbox
-            label="Developer"
-            value="Developer"
-            checked={job === 'Developer'}
-            onChange={() => setJob('Developer')}
-          />
-          <Form.Checkbox
-            label="IT Professional"
-            value="IT Professional"
-            checked={job === 'IT Professional'}
-            onChange={() => setJob('IT Professional')}
-          />
-          <Form.Checkbox
-            label="Creative"
-            value="Creative"
-            checked={job === 'Creative'}
-            onChange={() => setJob('Creative')}
-          />
-          <Form.Checkbox
-            label="Other"
-            value="Other"
-            checked={job === 'Other'}
-            onChange={() => setJob('Other')}
-          />
-        </Form.Group>
         <Form.Group className="FormGroup" widths="2">
-          <Form.Input
-            fluid
-            label="Year of Experience"
-            placeholder="0"
-            value={experience}
-            onChange={e => setExperience(e.target.value)}
-          />
-          <Form.Select
-            fluid
-            label="Level within"
-            placeholder="Select"
-            options={levelOptions}
-            value={level}
-            onChange={(e, data) => setLevel(data.value as string)}
-          />
-        </Form.Group>
-        <Form.Group className="FormGroup" widths="2">
-          <Form.Select
-            fluid
-            label="Industry"
-            placeholder="Select"
-            options={industryOptions}
-            value={industry}
-            onChange={(e, data) => setIndustry(data.value as string)}
-          />
-          <Form.Select
-            fluid
-            label="Role"
-            placeholder="Select"
-            options={roleOptions}
-            value={role}
-            onChange={(e, data) => setRole(data.value as string)}
-          />
-        </Form.Group>
-        <Form.Group className="FormGroup" widths="2">
-          <Form.Select
-            fluid
-            label="Employment Status"
-            placeholder="Select"
-            options={employmentOptions}
-            value={employment}
-            onChange={(e, data) => setEmployment(data.value as string)}
-          />
-          <Form.Select
-            fluid
-            label="Education Level"
-            placeholder="Select"
-            options={educationOptions}
-            value={education}
-            onChange={(e, data) => setEducation(data.value as string)}
-          />
-        </Form.Group>
-        <Form.Group className="FormGroup" widths="2">
-          <Form.Select
-            fluid
-            label="Year of Birth"
-            placeholder="Select"
-            options={yearOptions}
-            value={years}
-            onChange={(e, data) => setYears(data.value as number)}
+          <Form.TextArea
+            label="Biography"
+            value={biography}
+            onChange={(e, data) => setBiography(data.value as string)}
+            placeholder="Tell about yourself"
           />
         </Form.Group>
         <Form.Group className="FormGroup" inline>
-          <Form.Button id="CancelBtn">Cancel </Form.Button>
+          <Form.Button id="CancelBtn" onClick={() => handleCancel()}>Cancel </Form.Button>
           <Form.Button type="submit" id="SubmitBtn" onClick={() => handleSubmit()}>Save</Form.Button>
         </Form.Group>
       </Form>
@@ -210,15 +127,15 @@ const AuthorSettings: React.FunctionComponent<ISettingsProps> = ({
 };
 
 const mapStateToProps = (state: any) => {
-  const { settings: { settings } } = state;
+  const { authorSettings: { authorSettings } } = state;
   return {
-    settings
+    authorSettings
   };
 };
 
 const mapDispatchToProps = {
-  fetchSettings: fetchGetSettingsRoutine,
-  fetchSetSettings: fetchSetSettingsRoutine
+  fetchAuthorSettings: fetchGetAuthorSettingsRoutine,
+  fetchSetAuthorSettings: fetchSetAuthorSettingsRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AuthorSettings);

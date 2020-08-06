@@ -8,6 +8,7 @@ const getFetchUrl = ({ endpoint, queryParams }: IFetchArgsData) => `${endpoint}$
 }`;
 
 const getInitHeaders = (contentType = 'application/json', hasContent = true) => {
+  console.log(contentType);
   const headers: HeadersInit = new Headers();
   if (hasContent) {
     headers.set('Content-Type', contentType);
@@ -16,16 +17,28 @@ const getInitHeaders = (contentType = 'application/json', hasContent = true) => 
 };
 
 const getFetchArgs = (args: IFetchArgsData): IFetchArgs => {
-  const headers = getInitHeaders();
+  console.log(args.attachment);
+  const headers = args.attachment ? getInitHeaders('multipart/form-data', false) : getInitHeaders();
 
-  if (args.requestData && args.type === 'GET') {
-    throw new Error('GET request does not support request body.');
+  let body;
+  if (args.attachment) {
+    if (args.type === 'GET') {
+      throw new Error('GET request does not support attachments.');
+    }
+    const formData = new FormData();
+    formData.append('image', args.attachment);
+    body = formData;
+    console.log(body);
+  } else if (args.requestData) {
+    if (args.type === 'GET') {
+      throw new Error('GET request does not support request body.');
+    }
+    body = JSON.stringify(args.requestData);
   }
-
   return {
     method: args.type,
     headers,
-    ...(args.type === 'GET' ? {} : { body: JSON.stringify(args.requestData) })
+    ...(args.requestData === 'GET' ? {} : { body })
   };
 };
 

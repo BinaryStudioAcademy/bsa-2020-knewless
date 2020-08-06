@@ -2,7 +2,7 @@ import { callApi } from 'helpers/api.helper';
 
 export const setSettings = async request => {
   const response = await callApi({
-    endpoint: '/api/settings/',
+    endpoint: '/api/author/',
     type: 'POST',
     requestData: request
 
@@ -12,7 +12,7 @@ export const setSettings = async request => {
 
 export const getSettings = async () => {
   const response = await callApi({
-    endpoint: '/api/settings/',
+    endpoint: '/api/author/',
     type: 'GET'
   });
   return response.json();

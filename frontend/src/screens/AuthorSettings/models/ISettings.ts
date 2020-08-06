@@ -1,15 +1,18 @@
-export interface ISettings {
+export interface IAuthorSettings {
+    id: undefined,
     name: string,
+    avatar: string,
     location:string,
-    companyName: string,
+    company: string,
     website: string,
-    job: string,
-    experience: string,
-    level: string,
-    industry: string,
-    role: string,
-    employment: string,
-    education: string,
-    years: number
+    biography: string
+    // job: string,
+    // experience: string,
+    // level: string,
+    // industry: string,
+    // role: string,
+    // employment: string,
+    // education: string,
+    // years: number
   }
   

@@ -2,42 +2,45 @@ import { takeEvery, put, call, all } from 'redux-saga/effects';
 import { toastr } from 'react-redux-toastr';
 import { fetchDataRoutine } from 'screens/Home/routines';
 import * as settingsService from '../../services/settings.service';
-import { fetchSetSettingsRoutine, fetchGetSettingsRoutine } from '../../routines';
+import { fetchSetAuthorSettingsRoutine, fetchGetAuthorSettingsRoutine } from '../../routines';
 import { Routine } from 'redux-saga-routines';
 
 function* getSettings() {
   try {
+    // const id = 'ef7ece86-445f-4ad1-b0b1-901c74fc0591';
     const response = yield call(settingsService.getSettings);
-    yield put(fetchGetSettingsRoutine.success(response));
+    console.log(response);
+    yield put(fetchGetAuthorSettingsRoutine.success(response));
     toastr.success('Settings loaded!');
   } catch (error) {
-    yield put(fetchGetSettingsRoutine.failure(error?.message));
+    yield put(fetchGetAuthorSettingsRoutine.failure(error?.message));
+    console.log(error?.message);
     toastr.error('Loading failed!');
   }
 }
 
-function* watchGetSettingsRequest() {
-  yield takeEvery(fetchGetSettingsRoutine.TRIGGER, getSettings);
+function* watchGetAuthorSettingsRequest() {
+  yield takeEvery(fetchGetAuthorSettingsRoutine.TRIGGER, getSettings);
 }
 
 function* setSettings(action: Routine<any>) {
   try {
+    console.log('set');
+    console.log(action.payload);
     const response = yield call(() => settingsService.setSettings(action.payload));
-    yield put(fetchDataRoutine.success(response));
     toastr.success('Settings loaded!');
   } catch (error) {
-    yield put(fetchDataRoutine.failure(error?.message));
     toastr.error('Loading failed!');
   }
 }
 
-function* watchSetSettingsRequest() {
-  yield takeEvery(fetchSetSettingsRoutine.TRIGGER, setSettings);
+function* watchSetAuthorSettingsRequest() {
+  yield takeEvery(fetchSetAuthorSettingsRoutine.TRIGGER, setSettings);
 }
 
-export default function* settingsSagas() {
+export default function* authorSettingsSagas() {
   yield all([
-    watchGetSettingsRequest(),
-    watchSetSettingsRequest()
+    watchGetAuthorSettingsRequest(),
+    watchSetAuthorSettingsRequest()
   ]);
 }
