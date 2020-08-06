@@ -1,15 +1,15 @@
 @import "src/styles/common_variables"
-$container_width: 1400px
-$side_padding: 80px
 
 .main_container
   padding-top: $header_height
   background: #121421 !important
 
 .wide_container
+  $container_width: 1400px
+  $side_padding: 80px
   max-width: $container_width + ($side_padding * 2)
-  margin-left: auto !important
-  margin-right: auto !important
+  margin-left: auto
+  margin-right: auto
   padding-left: $side_padding
   padding-right: $side_padding
 
@@ -75,7 +75,8 @@ $side_padding: 80px
     opacity: 60%
 
 .content_row
-  margin: 5em 0
+  margin-top: 5em
+  margin-bottom: 5em
 
 .space_under
   margin-bottom: 15vh
