@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { fetchDataRoutine } from 'screens/Home/routines';
 import { IBindingAction } from 'models/Callbacks';
 import { IData } from 'screens/Home/models/IData';
+import { IAppState } from '../../../../models/AppState';
 
 export interface IDataProps {
   data: IData;
@@ -26,7 +27,7 @@ const Data: React.FunctionComponent<IDataProps> = ({
   );
 };
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: IAppState) => {
   const { data: { data } } = state;
   return {
     data

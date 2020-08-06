@@ -1,84 +1,105 @@
-.headerWrp
-    background: #121421
-    box-shadow: 0px 30px 40px rgba(0, 0, 0, 0.1)
-    position: fixed
-    height: 100px
-    width: 100%
-    top: 0px
-    flex-direction: row
-    z-index: 100
+@import "src/styles/common_variables"
 
-.icon
-    height: 50px
-    width: auto
+$container_width: 1400px
+$side_padding: 80px
+
+.headerWrp
+  background: #121421
+  box-shadow: 0px 30px 40px rgba(0, 0, 0, 0.1)
+  position: fixed
+  height: 120px
+  width: 100%
+  right: 0px
+  left: 0px
+  z-index: 100
+
+
+.customHeader
+  max-width: $container_width + ($side_padding * 2)
+  margin-left: auto !important
+  margin-right: auto !important
+  padding-left: $side_padding
+  padding-right: $side_padding
+  justify-content: space-between
+  width: 100%
+  position: relative
+  background: #121421
+  display: flex
+
 
 .headerWrp,
-.headerWrp .left_side 
-    display: flex
-    align-items: center
+.headerWrp .left_side
+  display: flex
+  align-items: center
 
 .headerWrp .left_side
-    width: 450px
-    padding-left: 220px
+  width: auto
+  padding-right: 5em
 
 .headerWrp .right_side
-    display: flex
-    align-items: center
-    padding-left: 60px
-    width: 350px
+  display: flex
+  justify-content: flex-end
+  align-items: center
+  width: auto
 
 .headerWrp .middle
-    display: flex
-    align-items: center
-    width: 660px
+  display: flex
+  align-items: center
+  width: auto
+  padding-right: 5em
 
 .mainName
-    font-family: Andale Mono, monospace
-    font-style: normal
-    font-weight: bold
-    font-size: 20px
-    line-height: 27px
-    display: flex
-    align-items: center
-    color: #FFFFFF
-
-.routName
-    font-family: Andale Mono, monospace
-    font-style: normal
-    font-weight: normal
-    font-size: 10px
-    line-height: 12px
-    width: 50px
-    cursor: default
-    margin-top: 2px
-    margin-left: -5px
-    text-transform: uppercase
-    color: #FFFFFF
-
-\:global(.ui.basic.label).routElement
-    width: 30px
-    height: 40px
-    background: #121421
-    justify-content: center
-    display: flex
-    border: none
-    margin: auto
+  font-family: Custom Open Sans
+  font-style: normal
+  font-weight: bold
+  font-size: 1.5em
+  display: flex
+  align-items: center
+  color: #FFFFFF
 
 .iconWrp
-    margin: auto
+  margin: auto
+  height: auto
 
+.routName
+  font-family: Montserrat
+  font-style: normal
+  font-weight: normal
+  font-size: 1em
+  line-height: 1.5em
+  width: 6em
+  cursor: default
+  padding-top: 4px
+  text-transform: uppercase
+  cursor: pointer
+  color: #FFFFFF
 
+\:global(.ui.basic.label).routElement
+  width: 2.8em
+  height: 5em
+  align-items: baseline
+  justify-content: space-between
+  flex-direction: row
+  display: contents
+  background: #121421
+  border: none
+  margin: auto
+
+.iconWrp
+  margin: auto
 
 \:global(.ui.icon.input).search
-    width: 370px
-    position: relative
-    padding-left: 100px
+  width: 25em
+  position: relative
+  padding-left: 7em
 
-
+\:global(.ui.icon.input).searchHidden
+  visibility: hidden
+  width: 25em
+  opacity: 0
 
 .homeLine
+  padding-top: 0.3em
   position: relative
-  width: 50px
-  height: 2px
-  margin-left: -5px
+  width: auto
   background: linear-gradient(17.32deg, #0084f8 9.02%, #ff8576 90.81%)
