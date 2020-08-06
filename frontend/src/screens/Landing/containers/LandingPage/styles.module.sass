@@ -1,0 +1,110 @@
+@import "src/styles/common_variables"
+$container_width: 1400px
+$side_padding: 80px
+
+.main_container
+  padding-top: $header_height
+  background: #121421 !important
+
+.wide_container
+  max-width: $container_width + ($side_padding * 2)
+  margin-left: auto !important
+  margin-right: auto !important
+  padding-left: $side_padding
+  padding-right: $side_padding
+
+.uppercase
+  text-transform: uppercase !important
+
+.intro
+  &__container
+    background: #3378BD
+
+  &__layout
+    display: flex
+    flex-direction: row
+
+  &__text
+    display: flex
+    flex-direction: column
+    align-items: flex-start
+    justify-content: center
+    flex-shrink: 0
+    width: 50%
+    padding-right: 8em
+    padding-top: 2em
+    padding-bottom: 2em
+
+    & > h1
+      font-size: 3.14em !important
+      color: white !important
+      text-transform: uppercase !important
+      font-weight: 600
+      margin-top: 0
+      margin-bottom: 0
+      font-family: "Custom Open Sans", serif
+      line-height: 1.25em !important
+
+    & > p
+      margin-top: 2em
+      margin-bottom: 2em
+      font-size: 1.35em
+      font-weight: 100 !important
+      color: white
+      line-height: 156%
+
+  &__video_container video
+    position: relative
+    object-fit: cover
+    object-position: left
+    width: 50vw
+    height: 100%
+
+  &__video_container
+    position: relative
+
+  &__video_cover
+    position: absolute
+    left: 0
+    top: 0
+    height: 100%
+    width: 100%
+    background: linear-gradient(81.21deg, #3378BD 9.02%, #FF8576 90.81%)
+    box-shadow: 0 30px 40px rgba(0, 0, 0, 0.1)
+    z-index: 2
+    opacity: 60%
+
+.content_row
+  margin: 5em 0
+
+.space_under
+  margin-bottom: 15vh
+
+.navigation_layer
+  background: #2A2B37
+  padding: 4em 0
+  color: white
+
+.footer
+  &__layer
+    position: relative
+    padding: 2em 0
+    background: linear-gradient(19.89deg, #0A4C8C 9.02%, #884D4C 90.81%)
+    color: white
+
+    a
+      color: #CBCFD4
+
+    & footer
+      display: flex
+      flex-direction: row
+      gap: 2em
+
+  &__align_right
+    margin-left: auto
+
+
+.path_card, .course_card
+  width: 32%
+  box-shadow: 0 30px 40px rgba(0, 0, 0, 0.1)
+

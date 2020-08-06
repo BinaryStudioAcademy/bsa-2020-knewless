@@ -98,3 +98,6 @@ dist
 # additional
 *.hprof
 appsettings.Development.json
+
+# IDEA
+*.iml
