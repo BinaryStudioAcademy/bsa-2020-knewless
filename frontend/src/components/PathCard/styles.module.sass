@@ -2,14 +2,14 @@
   background: #2B2A36
   display: grid
   grid-template-columns: 5em 1fr
-  grid-template-rows: 3em 1em
+  grid-template-rows: 3.3em 1em
   padding: 3em 2em
   grid-gap: 0.5em
 
 .logo
   object-fit: cover
-  max-width: 4.5em
-  min-height: 4.5em
+  max-width: 4.7em
+  min-height: 4.7em
   grid-area: 1 / 1 / span 2
 
 .title
@@ -17,6 +17,10 @@
   color: #fff
   grid-area: 1 / 2 / span 1 / span 1
   overflow: hidden
+  text-overflow: ellipsis
+  display: -webkit-box
+  -webkit-line-clamp: 2 /* number of lines to show */
+  -webkit-box-orient: vertical
 
 .meta
   display: flex
