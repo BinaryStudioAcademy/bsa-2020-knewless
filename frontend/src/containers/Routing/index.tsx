@@ -6,6 +6,7 @@ import Header, { User } from '../../components/Header';
 import LandingPage from 'screens/Landing/containers/LandingPage';
 import PublicRoute from 'components/PublicRoute';
 import Data from 'screens/Home/containers/Data';
+import Settings from 'screens/AuthorSettings/containers/Settings';
 import AddCourse from '../../screens/AddCourse/containers/AddCoursePage';
 import MainStudentPage from '../../screens/MainPage/containers/MainStudentPage';
 
@@ -24,6 +25,8 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({ isLoading }) => (
     {/* {isAuthorized ? <Header /> : ''} */}
     <Header currentUser={mock} />
     <Switch>
+      <PublicRoute exact path="/public" component={Data} />
+      <PublicRoute exact path="/settings" component={Settings} />
       <PublicRoute exact path="/" component={LandingPage} />
       <PublicRoute exact path="/main" component={MainStudentPage} />
       <PublicRoute exact path="/public" component={Data} />

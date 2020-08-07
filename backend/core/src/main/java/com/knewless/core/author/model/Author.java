@@ -16,6 +16,21 @@ public class Author extends BaseEntity {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "avatar")
+    private String avatar;
+
+    @Column(name = "location")
+    private String location;
+
+    @Column(name = "company")
+    private String company;
+
+    @Column(name = "website")
+    private String website;
+
+    @Column(name = "biography")
+    private String biography;
+
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
     @JoinColumn(name = "user_id")
     private User user;
