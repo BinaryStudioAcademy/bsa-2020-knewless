@@ -65,6 +65,7 @@
     "@types/react-redux": "^7.1.5",
     "@types/react-select": "^3.0.9",
     "@types/redux-saga-routines": "^3.1.0",
+    "@types/sockjs-client": "^1.1.1",
     "@typescript-eslint/eslint-plugin": "^2.15.0",
     "@typescript-eslint/parser": "^2.15.0",
     "customize-cra": "^0.9.1",

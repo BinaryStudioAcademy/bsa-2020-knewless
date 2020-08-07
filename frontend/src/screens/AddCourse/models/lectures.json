@@ -1,0 +1,70 @@
+[
+    {
+        "id": "1",
+        "name": "Java Loops" 
+    },
+    {
+        "id": "2",
+        "name": "Java Arrays"
+    },
+    {
+        "id": "3",
+        "name": "Java Switch" 
+    },
+    {
+        "id": "4",
+        "name": "Java SpringBoot" 
+    },
+    {
+        "id": "5",
+        "name": "Java Hibernate" 
+    },
+    {
+        "id": "6",
+        "name": "JS for beginners" 
+    },
+    {
+        "id": "7",
+        "name": "Testing in java" 
+    },
+    {
+        "id": "8",
+        "name": "Java String Pool" 
+    },
+    {
+        "id": "9",
+        "name": "Java MVC" 
+    },
+    {
+        "id": "10",
+        "name": "Java History" 
+    },
+    {
+        "id": "11",
+        "name": "Java Intro" 
+    },
+    {
+        "id": "12",
+        "name": "JS Advanced" 
+    },
+    {
+        "id": "13",
+        "name": "Java String Pool" 
+    },
+    {
+        "id": "14",
+        "name": "Java MVC" 
+    },
+    {
+        "id": "15",
+        "name": "Java History" 
+    },
+    {
+        "id": "16",
+        "name": "Java Intro" 
+    },
+    {
+        "id": "17",
+        "name": "JS Advanced" 
+    }
+]
