@@ -17,11 +17,19 @@ export interface ICourseCardProps {
   level: string;
   rating: number;
   onOpenClick: () => void;
+  hideButton?: boolean;
 }
 
 export const CourseCard: React.FunctionComponent<ICourseCardProps> = ({
-  category, imageSrc, name, author, duration,
-  level, rating, onOpenClick
+  category,
+  imageSrc,
+  name,
+  author,
+  duration,
+  level,
+  rating,
+  onOpenClick,
+  hideButton
 }) => (
   <Card className={styles.course_card}>
     <Image src={imageSrc} wrapped ui={false} className={styles.card_image} />
@@ -34,10 +42,15 @@ export const CourseCard: React.FunctionComponent<ICourseCardProps> = ({
         <span>{level}</span>
       </CardMeta>
       <Rating defaultRating={rating} maxRating={5} size="huge" className="landing__rating_bar" />
-      <Button icon labelPosition="right" onClick={onOpenClick} className={styles.btn_more}>
-        Find out more
-        <Icon name="angle right" className={styles.btn_more_arrow} />
-      </Button>
+      {
+        !hideButton
+        && (
+        <Button icon labelPosition="right" onClick={onOpenClick} className={styles.btn_more}>
+          Find out more
+          <Icon name="angle right" className={styles.btn_more_arrow} />
+        </Button>
+        )
+      }
     </CardContent>
   </Card>
 );

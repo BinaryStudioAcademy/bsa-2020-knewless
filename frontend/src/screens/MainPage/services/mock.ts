@@ -1,15 +1,15 @@
-import { ICourseCardProps } from 'components/CourseCard';
-import javaImage from '../../../assets/images/card_image_java.png';
-import { IPathCardProps } from 'components/PathCard';
-import { INavigationSectionProps } from '../components/NavigationSection';
+import sqlImage from '../../../assets/images/card_image_sql.png';
+import { ICourseCardProps } from '../../../components/CourseCard';
+import { IPathCardProps } from '../../../components/PathCard';
+import { IStudent } from '../models/IStudent';
 
-export const courses: Array<ICourseCardProps> = [
+export const courses: ICourseCardProps[] = [
   {
-    imageSrc: javaImage,
+    imageSrc: sqlImage,
     level: 'Intermediate',
-    duration: '1h 12m',
-    author: 'Quipex',
-    name: 'Java courses',
+    duration: '2h 53m',
+    author: 'Xavier Morera',
+    name: 'T-SQL Data Manipulation Playbook',
     category: {
       name: 'Programming',
       // eslint-disable-next-line no-console
@@ -20,11 +20,11 @@ export const courses: Array<ICourseCardProps> = [
     onOpenClick: () => (console.log('click open'))
   },
   {
-    imageSrc: javaImage,
+    imageSrc: sqlImage,
     level: 'Intermediate',
-    duration: '1h 12m',
-    author: 'Quipex',
-    name: 'Java courses',
+    duration: '2h 53m',
+    author: 'Xavier Morera',
+    name: 'T-SQL Data Manipulation Playbook',
     category: {
       name: 'Programming',
       // eslint-disable-next-line no-console
@@ -35,11 +35,11 @@ export const courses: Array<ICourseCardProps> = [
     onOpenClick: () => (console.log('click open'))
   },
   {
-    imageSrc: javaImage,
+    imageSrc: sqlImage,
     level: 'Intermediate',
-    duration: '1h 12m',
-    author: 'Quipex',
-    name: 'Java courses qwe wqwe qwe qweqwe qwe qwe',
+    duration: '2h 53m',
+    author: 'Xavier Morera',
+    name: 'T-SQL Data Manipulation Playbook',
     category: {
       name: 'Programming',
       // eslint-disable-next-line no-console
@@ -51,7 +51,7 @@ export const courses: Array<ICourseCardProps> = [
   }
 ];
 
-export const paths: Array<IPathCardProps> = [
+export const paths: IPathCardProps[] = [
   {
     name: 'Javascript Core Language',
     // eslint-disable-next-line max-len
@@ -63,7 +63,7 @@ export const paths: Array<IPathCardProps> = [
     }
   },
   {
-    name: 'Java Language qweqdq qe wqe qweqw wqe qwewqqw eqwe qwe wqeq ',
+    name: 'Java Language',
     // eslint-disable-next-line max-len
     logoSrc: 'https://i.imgur.com/HB79yTL.png',
     courses: 180,
@@ -83,38 +83,12 @@ export const paths: Array<IPathCardProps> = [
   }
 ];
 
-export const navigations: INavigationSectionProps[] = [
-  {
-    title: 'Courses',
-    links: [
-      { text: 'Java Script beginner', url: '' },
-      { text: 'PHP advance', url: '' },
-      { text: 'Java Basic', url: '' },
-      { text: '.NET advance', url: '' }
-    ]
-  },
-  {
-    title: 'Paths',
-    links: [
-      { text: 'Java', url: '' },
-      { text: 'JavaScript', url: '' },
-      { text: '.NET', url: '' },
-      { text: 'PHP', url: '' }
-    ]
-  },
-  {
-    title: 'Support',
-    links: [
-      { text: 'Contact Us', url: '' },
-      { text: 'FAQs', url: '' },
-      { text: 'Live Chat', url: '' }
-    ]
-  },
-  {
-    title: 'Resources',
-    links: [
-      { text: 'Twitter', url: '', icon: 'twitter' },
-      { text: 'Facebook', url: '', icon: 'facebook' }
-    ]
-  }
-];
+export const student: IStudent = {
+  id: '1',
+  firstName: 'Shawn',
+  lastName: 'LastName',
+  email: 'email@gmail.com',
+  roleName: 'Angular web developer',
+  avatar: 'https://i1.wp.com/www.playtimes.com.hk/wp-content/uploads/2016/11/600x-shutterstock_88750303.jpg?ssl=1',
+  nickname: 'shawn'
+};

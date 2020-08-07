@@ -1,16 +1,16 @@
-import React, { useEffect } from 'react';
-import { Input, Loader } from 'semantic-ui-react';
+import React, { createRef, useEffect, useState } from 'react';
+import { Input, Label, Loader } from 'semantic-ui-react';
 import styles from './styles.module.sass';
 import video from '../../../../assets/videos/landing_video.webm';
-import { CourseCard, ICourseCardProps } from '../../components/CourseCard';
-import { IPathCardProps, PathCard } from '../../components/PathCard';
+import { CourseCard, ICourseCardProps } from '../../../../components/CourseCard';
+import { IPathCardProps, PathCard } from '../../../../components/PathCard';
 import { BottomNavigation } from '../../components/BottomNavigation';
 import { connect } from 'react-redux';
 import { IBindingAction } from '../../../../models/Callbacks';
 import { INavigationSectionProps } from '../../components/NavigationSection';
 import { IAppState } from '../../../../models/AppState';
 import { fetchDataRoutine } from 'screens/Landing/routines';
-import { CardsSegment } from '../../components/CardsSegment';
+import { CardsSegment } from '../../../../components/CardsSegment';
 
 // eslint-disable-next-line
 export interface ILandingProps {
@@ -31,6 +31,24 @@ export const LandingPage: React.FunctionComponent<ILandingProps> = ({
   useEffect(() => {
     getData();
   }, []);
+  const [playerRunning, setPlayerRunning] = useState(true);
+  const playerRef = createRef<HTMLVideoElement>();
+
+  function setPlay(play: boolean) {
+    setPlayerRunning(play);
+    if (play) {
+      playerRef.current.play();
+    } else {
+      playerRef.current.pause();
+    }
+  }
+
+  function handleViewAllCoursesClick() {
+    console.log('clicked view all courses');
+  }
+  function handleViewAllPathsClick() {
+    console.log('clicked view all paths');
+  }
 
   return (
     <div className={styles.main_container}>
@@ -46,12 +64,23 @@ export const LandingPage: React.FunctionComponent<ILandingProps> = ({
           </div>
           <div className={styles.intro__video_container}>
             <div className={styles.intro__video_cover} />
+            <div
+              className={`${styles.intro__video__button_container} ${playerRunning && styles.hideable}`}
+            >
+              <Label
+                className={styles.intro__video__button_play}
+                onClick={() => setPlay(!playerRunning)}
+                icon={playerRunning ? 'pause circle' : 'play circle'}
+              />
+            </div>
             {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
             <video
               loop
               autoPlay
               className={styles.video_player}
               src={video}
+              muted
+              ref={playerRef}
             />
           </div>
         </div>
@@ -60,7 +89,7 @@ export const LandingPage: React.FunctionComponent<ILandingProps> = ({
         <div className={`${styles.wide_container} ${styles.content_row}`}>
           <CardsSegment
             title="Most popular courses"
-            onViewAllClick={() => (console.log('clicked view all courses'))}
+            onViewAllClick={handleViewAllCoursesClick}
             loading={loading}
           >
             {courses.map(c => (
@@ -82,7 +111,7 @@ export const LandingPage: React.FunctionComponent<ILandingProps> = ({
         <div className={`${styles.wide_container} ${styles.card_segment} ${styles.space_under}`}>
           <CardsSegment
             title="Paths"
-            onViewAllClick={() => (console.log('clicked view all paths'))}
+            onViewAllClick={handleViewAllPathsClick}
             loading={loading}
           >
             {paths.map(p => (
