@@ -5,7 +5,7 @@ import WebSocketNotifications from 'components/WebSocketNotifications';
 import LandingPage from 'screens/Landing/containers/LandingPage';
 import PublicRoute from 'components/PublicRoute';
 import Data from 'screens/Home/containers/Data';
-import Header ,{User} from '../../components/Header';
+import Header, { User } from '../../components/Header';
 import Settings from 'screens/AuthorSettings/containers/Settings';
 import MainStudentPage from '../../screens/MainPage/containers/MainStudentPage';
 

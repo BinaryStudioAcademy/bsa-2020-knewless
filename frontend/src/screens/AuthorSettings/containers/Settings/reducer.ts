@@ -1,5 +1,5 @@
 import { Routine } from 'redux-saga-routines';
-import { IAuthorSettings } from '../../models/ISettings';
+import { IAuthorSettings } from '../../models/IAuthorSettings';
 import { fetchGetAuthorSettingsRoutine } from '../../routines';
 
 const initSettings = {
@@ -10,14 +10,6 @@ const initSettings = {
   company: undefined,
   website: undefined,
   biography: undefined
-  // job: undefined,
-  // experience: undefined,
-  // level: undefined,
-  // industry: undefined,
-  // role: undefined,
-  // employment: undefined,
-  // education: undefined,
-  // years: undefined
 };
 
 export const authorSettings = (state: IAuthorSettings = initSettings, action: Routine<any>) => {

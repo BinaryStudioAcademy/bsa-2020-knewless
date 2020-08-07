@@ -3,16 +3,16 @@ import {
   Button,
   Form
 } from 'semantic-ui-react';
-import './style.sass';
+
+import styles from './styles.module.sass';
 import {
   locationOptions
 } from './options';
 import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { fetchGetAuthorSettingsRoutine, fetchSetAuthorSettingsRoutine } from '../../routines';
-import { IAuthorSettings } from 'screens/AuthorSettings/models/ISettings';
+import { IAuthorSettings } from 'screens/AuthorSettings/models/IAuthorSettings';
 import { IBindingAction, IBindingCallback1 } from 'models/Callbacks';
-import { uploadImage } from 'services/image.service';
 
 export interface IAuthorSettingsProps {
   authorSettings: IAuthorSettings;
@@ -31,6 +31,7 @@ const AuthorSettings: React.FunctionComponent<IAuthorSettingsProps> = ({
   const history = useHistory();
   const [name, setName] = useState(settings.name);
   const [avatar, setAvatar] = useState(settings.avatar);
+  const [uploadImage, setUploadImage] = useState(null);
   const [location, setLocation] = useState(settings.location);
   const [company, setCompany] = useState(settings.company);
   const [website, setWebsite] = useState(settings.website);
@@ -43,11 +44,9 @@ const AuthorSettings: React.FunctionComponent<IAuthorSettingsProps> = ({
     setWebsite(settings.website);
     setBiography(settings.biography);
   }, [settings]);
-  const handleUploadFile = async image => {
-    console.log(image);
-    const { link } = await uploadImage(image);
-    console.log(link);
-    setAvatar(link);
+  const handleUploadFile = async file => {
+    setUploadImage(file);
+    setAvatar(URL.createObjectURL(file));
   };
   const handleSubmit = () => {
     const updatedSettings = {
@@ -57,26 +56,30 @@ const AuthorSettings: React.FunctionComponent<IAuthorSettingsProps> = ({
       location,
       company,
       website,
-      biography
+      biography,
+      uploadImage
     };
     setSettings(updatedSettings);
+    history.push('/');
   };
   const handleCancel = () => {
     history.push('/');
   };
   return (
-    <div className="Settings">
-      <div className="SettingsTitle">Account Settings</div>
-      <div className="WrapperImg">
-        <img src={avatar} alt="" className="Avatar" />
-        <Button as="label" id="ImageUploder">
-          Update
-          <input name="image" type="file" onChange={e => handleUploadFile(e.target.files[0])} hidden />
-        </Button>
+    <div className={styles.settings}>
+      <div id={styles.settingsTitle}>Account Settings</div>
+      <div className={styles.wrapperAvatar}>
+        <div className={styles.avatar}>
+          <img src={avatar} alt="" className={styles.avatarImage} />
+          <Button as="label" className={styles.avatarUploder}>
+            Update
+            <input name="image" type="file" onChange={e => handleUploadFile(e.target.files[0])} hidden />
+          </Button>
+        </div>
       </div>
-      <Form>
-        <div className="Personal Title">Personal info</div>
-        <Form.Group className="FormGroup" widths="2">
+      <Form className={styles.formSettings}>
+        <div id={styles.personalTitle} className={styles.title}>Personal info</div>
+        <Form.Group className={styles.formGroup} widths="equal">
           <Form.Input
             fluid
             label="Name"
@@ -93,7 +96,7 @@ const AuthorSettings: React.FunctionComponent<IAuthorSettingsProps> = ({
             onChange={(e, data) => setLocation(data.value as string)}
           />
         </Form.Group>
-        <Form.Group className="FormGroup" widths="2">
+        <Form.Group className={styles.formGroup} widths="equal">
           <Form.Input
             fluid
             label="Company name"
@@ -109,17 +112,18 @@ const AuthorSettings: React.FunctionComponent<IAuthorSettingsProps> = ({
             onChange={e => setWebsite(e.target.value)}
           />
         </Form.Group>
-        <Form.Group className="FormGroup" widths="2">
+        <Form.Group className={styles.formGroup} widths="equal">
           <Form.TextArea
             label="Biography"
             value={biography}
+            id={styles.textBio}
             onChange={(e, data) => setBiography(data.value as string)}
             placeholder="Tell about yourself"
           />
         </Form.Group>
-        <Form.Group className="FormGroup" inline>
-          <Form.Button id="CancelBtn" onClick={() => handleCancel()}>Cancel </Form.Button>
-          <Form.Button type="submit" id="SubmitBtn" onClick={() => handleSubmit()}>Save</Form.Button>
+        <Form.Group className={styles.formGroup}>
+          <Form.Button id={styles.cancelBtn} onClick={() => handleCancel()}>Cancel </Form.Button>
+          <Form.Button id={styles.submitBtn} onClick={() => handleSubmit()}>Save</Form.Button>
         </Form.Group>
       </Form>
     </div>

@@ -4,6 +4,8 @@ import { fetchDataRoutine } from 'screens/Home/routines';
 import * as settingsService from '../../services/settings.service';
 import { fetchSetAuthorSettingsRoutine, fetchGetAuthorSettingsRoutine } from '../../routines';
 import { Routine } from 'redux-saga-routines';
+import { ignoredYellowBox } from 'console';
+import * as imageService from 'services/image.service';
 
 function* getSettings() {
   try {
@@ -27,6 +29,11 @@ function* setSettings(action: Routine<any>) {
   try {
     console.log('set');
     console.log(action.payload);
+    const author = action.payload;
+    if (author?.uploadImage) {
+      const { link } = yield call(() => imageService.uploadImage(author.uploadImage));
+      author.avatar = link;
+    }
     const response = yield call(() => settingsService.setSettings(action.payload));
     toastr.success('Settings loaded!');
   } catch (error) {
