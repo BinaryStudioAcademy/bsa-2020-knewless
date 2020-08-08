@@ -1,8 +1,10 @@
 package com.knewless.core.author;
+
 import com.knewless.core.author.dto.AuthorSettingsDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -10,14 +12,15 @@ import java.util.UUID;
 public class AuthorController {
     @Autowired
     private AuthorService authorService;
+
     @GetMapping
-    public AuthorSettingsDto getSettings(){
-        UUID userId =  UUID.fromString("eaea544b-8383-49ee-90c6-2a169e5c560a");
+    public Optional<AuthorSettingsDto> getSettings() {
+        UUID userId = UUID.fromString("eaea544b-8383-49ee-90c6-2a169e5c560a");
         return authorService.getAuthorSettings(userId);
     }
 
     @PostMapping
-    public AuthorSettingsDto setSettings(@RequestBody AuthorSettingsDto settings){
+    public Optional<AuthorSettingsDto> setSettings(@RequestBody AuthorSettingsDto settings) {
         settings.setUserId(UUID.fromString("eaea544b-8383-49ee-90c6-2a169e5c560a"));
         return authorService.setAuthorSettings(settings);
     }

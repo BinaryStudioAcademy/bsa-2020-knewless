@@ -33,7 +33,7 @@ public class ImageRepository {
             String exstension = Optional.ofNullable(path)
                     .filter(f -> f.contains("."))
                     .map(f -> f.substring(path.lastIndexOf(".") + 1)).get();
-            String filename = UUID.randomUUID().toString()+"."+ exstension;
+            String filename = UUID.randomUUID().toString() + "." + exstension;
             Path filepath = Path.of(IMAGES + "/" + filename);
             Files.write(filepath, file);
             return IMAGE_URL + filepath.getFileName();

@@ -12,6 +12,7 @@ import java.io.IOException;
 public class ImageController {
     @Autowired
     ImageService imageService;
+
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
     public ImageDto uploadImage(@RequestParam("image") MultipartFile file) throws IOException {

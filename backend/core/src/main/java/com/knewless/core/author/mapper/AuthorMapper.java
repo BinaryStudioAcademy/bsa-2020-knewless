@@ -6,7 +6,7 @@ import com.knewless.core.user.model.User;
 import lombok.Data;
 
 public class AuthorMapper {
-  public static AuthorSettingsDto fromEntity(Author author) {
+    public static AuthorSettingsDto fromEntity(Author author) {
         if (author == null)
             return null;
         var result = new AuthorSettingsDto();
@@ -20,13 +20,14 @@ public class AuthorMapper {
         result.setWebsite(author.getWebsite());
         return result;
     }
+
     public static Author fromDto(AuthorSettingsDto author, User user) {
         if (author == null)
             return null;
         var result = new Author();
         result.setId(author.getId());
         result.setUser(user);
-        result.setAvatar( author.getAvatar());
+        result.setAvatar(author.getAvatar());
         result.setName(author.getName());
         result.setLocation(author.getLocation());
         result.setBiography(author.getBiography());

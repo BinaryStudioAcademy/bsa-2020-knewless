@@ -6,5 +6,5 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class ImageDto {
-    String link;
+    private String link;
 }

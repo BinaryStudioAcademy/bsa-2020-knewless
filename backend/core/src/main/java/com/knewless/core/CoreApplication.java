@@ -7,7 +7,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
 
-public class CoreApplication implements WebMvcConfigurer {
+public class CoreApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(CoreApplication.class, args);

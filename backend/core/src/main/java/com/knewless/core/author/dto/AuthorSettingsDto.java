@@ -6,12 +6,12 @@ import java.util.UUID;
 
 @Data
 public class AuthorSettingsDto {
-    UUID id;
-    UUID userId;
-    String avatar;
-    String name;
-    String location;
-    String company;
-    String website;
-    String biography;
+    private UUID id;
+    private UUID userId;
+    private String avatar;
+    private String name;
+    private String location;
+    private String company;
+    private String website;
+    private String biography;
 }
