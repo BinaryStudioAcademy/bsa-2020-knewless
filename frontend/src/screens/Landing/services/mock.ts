@@ -71,16 +71,16 @@ export const paths: Array<IPathCardProps> = [
       duration: 2,
       timeUnit: 'Weeks'
     }
-  },
-  {
-    name: 'PHP Core Language',
-    logoSrc: 'https://miro.medium.com/max/4096/1*Y1hq9sHXG26Fyhys81z8rg.png',
-    courses: 228,
-    duration: {
-      duration: 15,
-      timeUnit: 'Days'
-    }
   }
+  // {
+  //   name: 'PHP Core Language',
+  //   logoSrc: 'https://miro.medium.com/max/4096/1*Y1hq9sHXG26Fyhys81z8rg.png',
+  //   courses: 228,
+  //   duration: {
+  //     duration: 15,
+  //     timeUnit: 'Days'
+  //   }
+  // }
 ];
 
 export const navigations: INavigationSectionProps[] = [
