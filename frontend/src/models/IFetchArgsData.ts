@@ -3,4 +3,5 @@ export interface IFetchArgsData {
   endpoint: string;
   requestData?: object | string;
   queryParams?: object;
+  attachment?: File;
 }
