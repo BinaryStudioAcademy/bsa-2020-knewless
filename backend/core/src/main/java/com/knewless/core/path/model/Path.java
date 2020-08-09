@@ -19,6 +19,9 @@ public class Path extends BaseEntity {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "image")
+    private String image;
+
     @ManyToMany(mappedBy = "paths")
     private List<Course> courses = List.of();
 }

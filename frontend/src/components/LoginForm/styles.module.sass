@@ -1,0 +1,61 @@
+
+.main_container
+  margin: 0 !important
+
+  & *
+    box-shadow: none !important
+    border: none !important
+    font-weight: normal !important
+
+  &__button_login
+    background: linear-gradient(81.21deg, #3378BD 9.02%, #FF8576 90.81%) !important
+    font-family: Montserrat, monospace !important
+
+  &__header
+    margin-bottom: 40px !important
+
+  & label, h2
+    color: white !important
+    text-align: start !important
+    font-weight: unset !important
+
+  &__error_message
+    position: absolute !important
+    margin-top: 0 !important
+    width: 100% !important
+
+  &__column
+    padding: 0 !important
+    max-width: 450px
+    width: 50% !important
+
+  &__form
+    background: transparent !important
+    padding: 0 !important
+
+  &__divider
+    color: white !important
+    font-weight: unset !important
+
+  & a
+    margin: 5px
+
+  &__signUp_message
+    background: transparent !important
+    color: white !important
+    border: none !important
+
+.hidden
+  visibility: hidden !important
+
+@media screen and (max-width: 1200px)
+  .main_container__column
+    width: 75% !important
+
+@media screen and (max-width: 768px)
+  .main_container__column
+    width: 95% !important
+    max-width: 99%
+
+  .main_container h2 > *
+    justify-content: center
