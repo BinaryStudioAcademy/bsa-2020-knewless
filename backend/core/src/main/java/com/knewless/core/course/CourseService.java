@@ -42,7 +42,7 @@ public class CourseService {
 
     public CreateCourseResponseDto createCourse(CreateCourseRequestDto request) {
         System.out.println(request.getUserId());
-        Author author = authorRepository.getAuthorByUser_Id(request.getUserId()).orElseThrow();
+        Author author = authorRepository.findByUserId(request.getUserId()).orElseThrow();
         List<Lecture> allLectures = lectureRepository.getLecturesByUserId(request.getUserId());
         allLectures.removeIf(l -> !request.getLectures().contains(l.getId()));
         List<Lecture> thisLectures = new ArrayList<>();
