@@ -1,16 +1,7 @@
-ALTER TABLE lectures ADD COLUMN name text;
 ALTER TABLE courses ADD COLUMN description text;
 
 ALTER TABLE courses
 ALTER COLUMN level TYPE text;
-
-UPDATE lectures
-SET name = 'Java Intro'
-WHERE id = '31b2d2bc-7fb4-4a45-9fc4-c73279d04dec';
-
-UPDATE lectures
-SET name = 'JS sagas'
-WHERE id = '5208962f-9ece-4f92-9dad-1cad7bf185bf';
 
 UPDATE courses
 SET level = 'BEGINNER'
