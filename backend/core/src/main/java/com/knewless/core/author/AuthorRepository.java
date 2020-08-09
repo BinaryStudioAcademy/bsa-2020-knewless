@@ -14,4 +14,6 @@ public interface AuthorRepository extends JpaRepository<Author, UUID> {
     Optional<Author> findByUserId(UUID userId);
 
     Optional<Author> findByUser(User user);
+
+    Integer countBySchoolId(UUID schoolId);
 }
