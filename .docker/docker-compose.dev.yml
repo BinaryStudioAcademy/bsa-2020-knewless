@@ -12,7 +12,7 @@ services:
       - pgconf_api:/etc/postgresql
       - pglog_api:/var/log/postgresql
     env_file:
-     - ~/.env/api-db.env
+     - ../.env/api-db.env
     logging:
       driver: "json-file"
       options:
@@ -25,7 +25,7 @@ services:
     container_name: 'rabbitmq'
     hostname: "rabbit"
     env_file:
-     - ~/.env/rabbitmq.env
+     - ../.env/rabbitmq.env
     ports:
       - '15672:15672'
       - '5672:5672'
@@ -37,17 +37,15 @@ services:
 
   # api
   api:
-    image: bsa2020knewless/dockerhub:api
+    image: api
     container_name: api
     depends_on:
       - api-db
       - rabbitmq
     ports:
-      - '5000:5000'
-    volumes:
-      - /knewless/assets:/knewless/assets
+     - '5000:5000'
     env_file:
-      - ~/.env/api.env
+      - ../.env/api.env
     environment:
       WAIT_HOSTS: rabbitmq:5672, api-db:5432
     logging:
@@ -56,39 +54,18 @@ services:
         max-size: "10m"
         max-file: "5"
     volumes:
-      - /knewless/assets:/knewless/assets
+      - C:\\assets:/knewless/assets
 
-  # fileprocessor
-  fileprocessor:
-    image: bsa2020knewless/dockerhub:fileprocessor
-    container_name: fileprocessor
-    depends_on:
-      - api-db
-      - rabbitmq
-    ports:
-      - '5010:5010'
-    volumes:
-      - /knewless/assets:/knewless/assets
-    env_file:
-      - ~/.env/fileprocessor.env
-    environment:
-      WAIT_HOSTS: rabbitmq:5672, api-db:5432, api:5000
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "5"
-
-  # Frontend
+  # # Frontend
   client:
-    image: bsa2020knewless/dockerhub:client
+    image: client
     container_name: client
     depends_on:
       - api
     ports:
-      - '80:80'
+      - '8080:80'
     env_file:
-      - ~/.env/client.env
+      - ../.env/client.env
     logging:
       driver: "json-file"
       options:
@@ -96,7 +73,7 @@ services:
         max-file: "5"
     volumes:
       - /data/certs:/etc/nginx/certs
-      - /knewless/assets:/knewless/assets
+      - C:\\assets:/knewless/assets
 
 volumes:
   pgdata_api:
