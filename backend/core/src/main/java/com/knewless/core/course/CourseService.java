@@ -37,7 +37,8 @@ public class CourseService {
             }
         });
         return result.stream()
-                .map(l-> new ShortLectureDto(l.getId(), l.getName(), l.getDescription())).collect(Collectors.toList());
+                .map(l-> new ShortLectureDto(l.getId(), l.getName(), l.getDescription(), l.getDuration()))
+                .collect(Collectors.toList());
     }
 
     public CreateCourseResponseDto createCourse(CreateCourseRequestDto request) {

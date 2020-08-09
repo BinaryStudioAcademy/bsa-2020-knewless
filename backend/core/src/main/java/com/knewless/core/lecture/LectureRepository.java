@@ -13,7 +13,7 @@ import java.util.UUID;
 public interface LectureRepository extends JpaRepository<Lecture, UUID> {
 
 
-@Query("SELECT new com.knewless.core.lecture.Dto.ShortLectureDto(l.id, l.name, l.description) FROM Lecture l " +
+@Query("SELECT new com.knewless.core.lecture.Dto.ShortLectureDto(l.id, l.name, l.description, l.duration) FROM Lecture l " +
         "INNER JOIN Course c ON l.course.id = c.id " +
         "INNER JOIN Author a ON a.id = c.author.id " +
         "WHERE a.user.id = :id")

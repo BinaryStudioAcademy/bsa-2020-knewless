@@ -11,6 +11,7 @@ public class ShortLectureDto {
     private UUID id;
     private String name;
     private String description;
+    private int timeMinutes;
 }
 
 //Dto for reusing lectures in different courses

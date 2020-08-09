@@ -1,6 +1,6 @@
-import { IItem } from './sharedInterface/IItem';
+import { IFilterableItem } from '../../../components/FilterableList';
 
-export const filter = (element: IItem, filterValue: string): any => {
+export const filter = (element: IFilterableItem, filterValue: string): any => {
   if (!(typeof filterValue !== 'undefined' && filterValue)) {
     return element;
   }
@@ -10,7 +10,7 @@ export const filter = (element: IItem, filterValue: string): any => {
   return undefined;
 };
 
-export function compareName(a: IItem, b: IItem): number {
+export function compareName(a: IFilterableItem, b: IFilterableItem): number {
   if (a.name.toLowerCase() < b.name.toLocaleLowerCase()) {
     return -1;
   }

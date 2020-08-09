@@ -22,7 +22,7 @@ export const DependenciesSelector: React.FC<IDepsSelectorProps> = (
     <>
       <div className={styles.container}>
         <div className={styles.header}>
-          <h2>Courses:</h2>
+          <h2>{`${dependencyName}s`}</h2>
           <Button
             content={`Add ${dependencyName.toLowerCase()}...`}
             className={styles.add_button}

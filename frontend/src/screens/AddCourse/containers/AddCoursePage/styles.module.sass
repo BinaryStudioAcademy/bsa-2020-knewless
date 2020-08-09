@@ -3,28 +3,43 @@
 $container_width: 1400px
 $side_padding: 80px
 
-
 .main_container
   padding-top: $header_height
-  width: 100%
-  overflow-y: auto
-  background: #121421 !important
+  height: 100vh
+  min-height: 1100px
+  overflow-y: hidden
+  display: flex
+  flex-direction: column
 
-.settingsContainer
+
+.wide_container
+  $container_width: 1400px
+  $side_padding: 80px
   max-width: $container_width + ($side_padding * 2)
-  margin-left: auto !important
-  margin-right: auto !important
+  margin-left: auto
+  margin-right: auto
   padding-left: $side_padding
   padding-right: $side_padding
-  position: relative
-  width: 100%
-  padding-top: 20px
-  margin-bottom: 20px
-  height: 350px
   display: flex
   flex-direction: row
-  align-items: stretch
-  justify-content: space-between
+  width: 100%
+
+
+
+.title
+  flex-shrink: 0
+  margin-bottom: 0.5em
+
+.main_content
+  width: 100%
+  height: 100%
+  overflow-y: hidden
+  flex-grow: 1
+  display: flex
+  flex-direction: column
+  width: 100%
+  margin-bottom: 5vh
+  margin-top: 3vh
 
 .settingsInput
   width: 50%
@@ -32,14 +47,13 @@ $side_padding: 80px
   display: flex
   flex-direction: column
   align-content: center
-  justify-content: space-between
+  justify-content: flex-start
 
 .settingsInput .top
   display: flex
   justify-content: space-between
   align-items: center
-
-
+  padding-bottom: 2vh
 
 .customtextarea
   padding: 10px
@@ -47,6 +61,7 @@ $side_padding: 80px
   outline: none
   resize: none
   overflow: auto
+  border-radius: 5px
   position: relative
   width: 100%
   height: 100%
@@ -73,10 +88,9 @@ $side_padding: 80px
 
 .textareacontainer
   padding-bottom: 20px
-  padding-top: 20px
   position: relative
   width: 100%
-  height: 100%
+  height: 17em
   background: inherit
   padding: auto
   color: white
@@ -94,42 +108,61 @@ $side_padding: 80px
   font-family: Custom Open Sans
   font-style: normal
 
+.list_container
+  width: 50%
+  margin-top: -3.9vh
+
 .dropdown
   padding: auto
+  padding-left: 1em
   width: auto
-  color: white
   font-family: Custom Open Sans
   font-style: normal
+
+\:global(.ui.dropdown).lvldrop span
+  color: black
+
 
 .lecturesBox
   width: 50%
   height: 100%
-  
 
-.lecturesSelectedFlex
-  position: relative
-  background: #575c7e
-  display: flex
-  width: 100%
-  height: 170px
-  padding: 10px
-  justify-content: flex-start
-  flex-direction: row
-  align-items: center
-  overflow-x: auto
 
 .buttonGroup
-  width: inherit
+  width: 100%
   display: flex
-  justify-content: center
+  flex-direction: row
+  justify-content: space-between
   align-items: center
   padding: auto
   position: relative
 
+.buttonSaveGroup
+  width: inherit
+  display: flex
+  justify-content: flex-start
+  flex-direction: row
+
+\:global(.ui.button).buttonCancel
+  text-align: center
+  border: 1px solid #E0E0E0
+  background: none
+  box-sizing: border-box
+  color: #ffff
+  border-radius: 0
+  font-family: Montserrat, serif
+  font-style: normal
+  font-weight: bold
+  font-size: 1em
+  width: 10em
+  height: 2.5em
+  &:hover
+    background: #E0E0E0
+    color: #2A2B37
 
 \:global(.ui.button).button_save
-    width: 10em
-    height: 2.8em
+    width: 11em
+    height: 3em
     font-family: 'Montserrat', sans-serif
     font-style: normal
     font-weight: bold
@@ -139,11 +172,11 @@ $side_padding: 80px
     align-items: center
     color: #FFFFFF
     background: linear-gradient(#0a2d49 0%, #0b5a7c 125%)
-    border-radius: 1em
+    border-radius: 0.5em
   
 \:global(.ui.button).button_release
-    width: 10em
-    height: 2.8em
+    width: 11em
+    height: 3em
     font-family: 'Montserrat', sans-serif
     font-style: normal
     font-weight: bold
@@ -152,12 +185,12 @@ $side_padding: 80px
     text-transform: uppercase
     align-items: center
     color: #FFFFFF
-    background: linear-gradient(#16549b 0%, #086f97 125%)
-    border-radius: 1em
+    background: linear-gradient(90deg, #F27A54 0%, #A154F2 186.42%)
+    border-radius: 0.5em
 
 \:global(.ui.button).button_release_disabled
-    width: 10em
-    height: 2.8em
+    width: 11em
+    height: 3em
     font-family: 'Montserrat', sans-serif
     font-style: normal
     font-weight: bold
@@ -167,13 +200,13 @@ $side_padding: 80px
     align-items: center
     color: #FFFFFF
     opacity: 0.5
-    background: linear-gradient(#313942 0%, #686a6b 125%)
-    border-radius: 1em
+    background: linear-gradient(#2a3238 0%, #454849 125%)
+    border-radius: 0.5em
     cursor: default
 
 \:global(.ui.button).button_save_disabled
-    width: 10em
-    height: 2.8em
+    width: 11em
+    height: 3em
     font-family: 'Montserrat', sans-serif
     font-style: normal
     font-weight: bold
@@ -183,6 +216,6 @@ $side_padding: 80px
     align-items: center
     color: #FFFFFF
     background: linear-gradient(#2a3238 0%, #454849 125%)
-    border-radius: 1em
+    border-radius: 0.5em
     opacity: 0.5
     cursor: default

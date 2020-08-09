@@ -1,6 +1,6 @@
-import { IItem } from '../components/shared/sharedInterface/IItem';
+import { ILecture } from '../models/ILecture';
 
 export interface ICourseData {
-  lectures: Array<IItem>,
+  lectures: Array<ILecture>,
   isLecturesLoaded: boolean
 }

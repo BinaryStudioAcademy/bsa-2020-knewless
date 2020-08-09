@@ -8,6 +8,7 @@ import Data from 'screens/Home/containers/Data';
 import Header, { User } from '../../components/Header';
 import Settings from 'screens/AuthorSettings/containers/Settings';
 import AddCourse from '../../screens/AddCourse/containers/AddCoursePage';
+import { AddPathPage } from '../../screens/AddPath/containers/AddPathPage';
 import MainStudentPage from '../../screens/MainPage/containers/MainStudentPage';
 
 export interface IRoutingProps {
@@ -32,7 +33,7 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({ isLoading }) => (
       <PublicRoute exact path="/public" component={Data} />
       <PublicRoute exact path="/add_path" component={AddPathPage} />
       <PublicRoute exact path="/landing" component={LandingPage} />
-      <PublicRoute exact path="/course" component={AddCourse} />
+      <PublicRoute exact path="/add_course" component={AddCourse} />
       <div>
         <LoaderWrapper loading={isLoading}>
           <Switch>

@@ -1,20 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { fetchLecturesRoutine, saveCourseRoutine } from 'screens/AddCourse/routines';
 import { IBindingCallback1 } from 'models/Callbacks';
 import { ICourse } from '../../models/ICourse';
-import { Loader, Input, Dropdown, Button, Icon } from 'semantic-ui-react';
+import { Input, Dropdown, Button, Icon } from 'semantic-ui-react';
+import { Footer } from '../../../../components/Footer';
 import { useHistory } from 'react-router-dom';
 import styles from './styles.module.sass';
 import { levelOptions } from '../../models/options';
-import { compareName } from '../../components/shared/service';
-import { IItem } from '../../components/shared/sharedInterface/IItem';
-import PullSet from '../../components/shared/Pull';
-import SelectedSet from '../../components/shared/Selected';
+import { compareName } from '../../services/helper.service';
+import { IFilterableItem } from '../../../../components/FilterableList';
+import { ILecture } from '../../models/ILecture';
+import { LectureCard } from '../../components/LectureCard';
+import { DependenciesSelector } from '../../../../components/DependenciesSelector';
 import { IAppState } from 'models/AppState';
 
 interface IAddCourseProps {
-  lectures: IItem [];
+  lectures: ILecture [];
   teacherId?: string;
   loading: boolean;
   isLecturesLoaded: boolean;
@@ -30,40 +32,47 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
   saveCourse: save,
   isLecturesLoaded
 }) => {
-  const [pull, setPull] = useState(Array<IItem>());
+  const [pool, setPool] = useState(Array<ILecture>());
   useEffect(() => {
     if (lectures.length === 0 && !isLecturesLoaded) {
-      getLectures('f5f987b5-eaee-4709-93f4-94ac585cb812');
+      getLectures('f5f987b5-eaee-4709-93f4-94ac585cb812'); // getLectures(teacherId);
     }
-    setPull([...lectures.sort(compareName)]);
+    setPool([...lectures.sort(compareName)]);
   }, [lectures, getLectures]);
 
   const handleBack = () => {
     useHistory.push('/');
   };
 
-  const [selected, setSelected] = useState(Array<IItem>());
+  const itemToJsxWithClick = (item: IFilterableItem, click: (item) => void) => {
+    const lecture = item as ILecture;
+    return (
+      <LectureCard
+        name={lecture.name}
+        description={lecture.description}
+        timeMinutes={lecture.timeMinutes}
+        key={lecture.id}
+        onClick={() => click(lecture)}
+      />
+    );
+  };
+
+  const [selected, setSelected] = useState(Array<ILecture>());
   const [description, setDescription] = useState('');
   const [courseName, setCourseName] = useState('');
   const [level, setLevel] = useState('');
   const [buttonLoading, setButtonLoading] = useState(false);
   const [saved, setSaved] = useState(false);
 
-  const removeLectureFromPull = (lecture: IItem) => {
-    const pullafter = pull.filter(i => i.id !== lecture.id);
-    setPull(pullafter);
-    const selectedafter = [...selected, lecture];
-    selectedafter.sort(compareName);
-    setSelected(selectedafter);
-  };
+  const removeLectureFromPool = useCallback((dependency: IFilterableItem) => {
+    setPool(prev => prev.filter(c => c.id !== dependency.id));
+    setSelected(prev => [...prev, dependency as ILecture]);
+  }, [pool, selected]);
 
-  const removeLectureFromSelected = (lecture: IItem) => {
-    const selectedafter = selected.filter(i => i.id !== lecture.id);
-    setSelected(selectedafter);
-    const pullafter = [...pull, lecture];
-    pullafter.sort(compareName);
-    setPull(pullafter);
-  };
+  const removeLectureFromSelected = useCallback((dependency: IFilterableItem) => {
+    setSelected(prev => prev.filter(c => c.id !== dependency.id));
+    setPool(prev => [...prev, dependency as ILecture]);
+  }, [pool, selected]);
 
   const isSaveble = (description !== '' && courseName !== '' && level !== '');
   const isReleseble = !(!isSaveble || selected.length < 1);
@@ -84,97 +93,117 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
     setSaved(true);
   };
 
+  const handleCancle = () => {
+    setPool([...lectures.sort(compareName)]);
+    setSelected(Array<ILecture>());
+    setDescription('');
+    setCourseName('');
+    setLevel('');
+  };
+
   return (
     <div className={styles.main_container}>
-      <div className={styles.settingsContainer}>
-        <div className={styles.settingsInput}>
-          <div className={styles.top}>
-            <div className={styles.inputfield}>
-              <div className={styles.textcontainer}>Course Name:</div>
-              <Input
+      <div className={styles.main_content}>
+        <h1 className={`${styles.title} ${styles.wide_container}`}>New Course</h1>
+        <div className={styles.wide_container}>
+          <div className={styles.settingsInput}>
+            <div className={styles.top}>
+              <div className={styles.inputfield}>
+                <div className={styles.textcontainer}>Course Name:</div>
+                <Input
+                  disabled={saved}
+                  fluid
+                  type="text"
+                  value={courseName}
+                  placeholder="course..."
+                  onChange={ev => setCourseName(ev.target.value)}
+                  inverted
+                />
+              </div>
+              <div className={styles.dropdown}>
+                <div className={styles.textcontainer}>Complexity level:</div>
+                <Dropdown
+                  className={styles.lvldrop}
+                  disabled={saved}
+                  clearable
+                  value={level}
+                  onChange={(e, data) => setLevel(data.value as string)}
+                  placeholder="Level"
+                  search
+                  selection
+                  options={levelOptions}
+                />
+              </div>
+            </div>
+            <h4 className={styles.form__description_label}>Description:</h4>
+            <div className={styles.textareacontainer}>
+              <textarea
                 disabled={saved}
-                fluid
-                type="text"
-                value={courseName}
-                placeholder="course..."
-                onChange={ev => setCourseName(ev.target.value)}
-                inverted
+                onChange={ev => setDescription(ev.target.value)}
+                className={!saved ? styles.customtextarea : styles.customtextareablurred}
+                value={description}
               />
             </div>
-            <div className={styles.dropdown}>
-              <div className={styles.textcontainer}>Complexity level:</div>
-              <Dropdown
-                disabled={saved}
-                clearable
-                onChange={(e, data) => setLevel(data.value as string)}
-                placeholder="Level"
-                search
-                selection
-                options={levelOptions}
-              />
+            <div className={styles.buttonGroup}>
+              {saved ? ''
+                : (
+                  <>
+                    <div className={styles.buttonSaveGroup}>
+                      <Button
+                        loading={buttonLoading}
+                        className={isSaveble ? styles.button_save : styles.button_save_disabled}
+                        animated={isSaveble ? 'vertical' : false}
+                        onClick={() => handleSave(false)}
+                      >
+                        {isSaveble ? (
+                          <div>
+                            <Button.Content visible>Save</Button.Content>
+                            <Button.Content hidden>
+                              <Icon size="large" name="check" />
+                            </Button.Content>
+                          </div>
+                        ) : 'Save' }
+                      </Button>
+                      <Button
+                        loading={buttonLoading}
+                        className={isReleseble ? styles.button_release : styles.button_release_disabled}
+                        animated={isReleseble ? 'vertical' : false}
+                        onClick={() => handleSave(true)}
+                      >
+                        {isReleseble ? (
+                          <div>
+                            <Button.Content visible>Release</Button.Content>
+                            <Button.Content hidden>
+                              <Icon size="large" name="rocket" />
+                            </Button.Content>
+                          </div>
+                        ) : 'Release' }
+                      </Button>
+                    </div>
+                    <Button
+                      disabled={saved}
+                      content="Cancel"
+                      onClick={() => handleCancle()}
+                      className={styles.buttonCancel}
+                    />
+                  </>
+                )}
             </div>
           </div>
-          <div className={styles.textareacontainer}>
-            <div className={styles.textcontainer}>Add some description:</div>
-            <textarea
-              disabled={saved}
-              onChange={ev => setDescription(ev.target.value)}
-              className={!saved ? styles.customtextarea : styles.customtextareablurred}
-              value={description}
+          <div className={styles.list_container}>
+            <DependenciesSelector
+              selected={selected}
+              stored={pool}
+              selectedToStored={removeLectureFromSelected}
+              storedToSelected={removeLectureFromPool}
+              dependencyName="lecture"
+              itemToJsx={itemToJsxWithClick}
+              sortFn={compareName}
             />
           </div>
         </div>
-        <div className={styles.lecturesBox}>
-          {loading ? <Loader active inline="centered" />
-            : (
-              <PullSet
-                items={pull}
-                remove={removeLectureFromPull}
-              />
-            )}
-        </div>
       </div>
-      <div className={styles.lecturesSelectedFlex}>
-        <SelectedSet
-          items={selected}
-          remove={removeLectureFromSelected}
-        />
-      </div>
-      {saved ? ''
-        : (
-          <div className={styles.buttonGroup}>
-            <Button
-              loading={buttonLoading}
-              className={isSaveble ? styles.button_save : styles.button_save_disabled}
-              animated={isSaveble ? 'vertical' : false}
-              onClick={() => handleSave(false)}
-            >
-              {isSaveble ? (
-                <div>
-                  <Button.Content visible>Save</Button.Content>
-                  <Button.Content hidden>
-                    <Icon size="large" name="check" />
-                  </Button.Content>
-                </div>
-              ) : 'Save' }
-            </Button>
-            <Button
-              loading={buttonLoading}
-              className={isReleseble ? styles.button_release : styles.button_release_disabled}
-              animated={isReleseble ? 'vertical' : false}
-              onClick={() => handleSave(true)}
-            >
-              {isReleseble ? (
-                <div>
-                  <Button.Content visible>Release</Button.Content>
-                  <Button.Content hidden>
-                    <Icon size="large" name="rocket" />
-                  </Button.Content>
-                </div>
-              ) : 'Release' }
-            </Button>
-          </div>
-        )}
+      <Footer />
     </div>
   );
 };
