@@ -1,5 +1,9 @@
 export enum ComplexityLevel {
   BEGINNER,
-  INTERMEDIATE,
-  ADVANCED
+    INTERMEDIATE,
+    ADVANCED,
+    ELEMENTARY,
+    UPPERINTERMEDIATE,
+    PROFIENCY,
+    NONE
 }

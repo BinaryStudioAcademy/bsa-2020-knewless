@@ -4,7 +4,7 @@ import { ICourse } from '../models/ICourse';
 
 export const getLecturesByAuthor = async (id: string) => {
   const response = await callApi({
-    endpoint: `/api/course/lectures/user/${id}`,
+    endpoint: `/course/lectures/user/${id}`,
     type: 'GET'
   });
   return response.json();
@@ -19,7 +19,7 @@ export const getLecturesByAuthor = async (id: string) => {
 export const saveCourse = async (course: ICourse) => {
   const response = await callApi({
     type: 'POST',
-    endpoint: '/api/course',
+    endpoint: '/course',
     requestData: course
   });
   return response.json();

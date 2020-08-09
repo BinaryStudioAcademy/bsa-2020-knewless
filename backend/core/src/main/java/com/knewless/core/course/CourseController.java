@@ -20,7 +20,8 @@ public class CourseController {
     @GetMapping("/lectures/user/{id}")
     public List<ShortLectureDto> getLecturesByUserId(@PathVariable UUID id) {
         return courseService.getLecturesByUserId(id);
-    
+    }
+
     @GetMapping("/recommended/{id}")
     private List<CourseDto> getRecommendedCourses(@PathVariable("id") UUID id) {
         return courseService.getRecommendedCourses(id);
