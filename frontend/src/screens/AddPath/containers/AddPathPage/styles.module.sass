@@ -1,0 +1,124 @@
+@import "src/styles/common_variables"
+
+.main_container
+  padding-top: $header_height
+  //min-height: 100vh
+  height: 100vh
+  min-height: 1100px
+  overflow-y: hidden
+  display: flex
+  flex-direction: column
+
+.wide_container
+  $container_width: 1400px
+  $side_padding: 80px
+  max-width: $container_width + ($side_padding * 2)
+  margin-left: auto
+  margin-right: auto
+  padding-left: $side_padding
+  padding-right: $side_padding
+  width: 100%
+
+.main_content
+  width: 100%
+  height: 100%
+  overflow-y: hidden
+  flex-grow: 1
+  display: flex
+  flex-direction: column
+  margin-bottom: 5vh
+  margin-top: 3vh
+
+.title
+  flex-shrink: 0
+  margin-bottom: 0.5em
+
+.equal_containers
+  margin-top: 1em
+  overflow-y: hidden
+
+  display: flex
+  flex-direction: row
+  gap: 1em
+
+.form
+  &__container
+    //background: aquamarine
+    flex-grow: 1
+    flex-basis: 0
+
+    display: flex
+    flex-direction: column
+    align-content: flex-start
+    gap: 1em
+
+  &__name_button_group
+    display: grid
+    grid-template-columns: 1fr 9em
+    grid-column-gap: 1em
+
+  &__name_input
+    grid-area: 1 / 1
+
+  &__image_selector
+    grid-area: 1 / 2
+
+  &__description
+    &_area
+      height: 100%
+      resize: none !important
+      width: 100% !important
+
+  &__preview
+    box-shadow: 0 11px 22px 0 rgba(0,0,0,0.75)
+    margin-bottom: 2em
+
+  &__tags_input
+    width: 100%
+
+.list
+  &__container
+    flex-grow: 1
+    flex-basis: 0
+
+
+.error_message
+  position: absolute !important
+  top: -1em
+  left: 4em
+
+.btn_row
+  display: flex
+  flex-direction: row
+
+$width_btn: 100px
+$height_btn: 40px
+
+#btn_save
+  background: linear-gradient(70.06deg, #0084F8 9.02%, #FF8576 90.81%)
+  color: #ffff
+  border-radius: 0
+  font-family: Montserrat, serif
+  font-style: normal
+  font-weight: bold
+  font-size: 1em
+  width: $width_btn
+  height: $height_btn
+  margin-left: 2em
+
+#btn_cancel
+  text-align: center
+  border: 1px solid #E0E0E0
+  background: none
+  box-sizing: border-box
+  color: #ffff
+  border-radius: 0
+  font-family: Montserrat, serif
+  font-style: normal
+  font-weight: bold
+  font-size: 1em
+  width: $width_btn
+  height: $height_btn
+  &:hover
+    background: #E0E0E0
+    color: #2A2B37

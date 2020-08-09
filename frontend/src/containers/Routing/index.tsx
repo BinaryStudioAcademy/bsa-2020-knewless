@@ -30,6 +30,8 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({ isLoading }) => (
       <PublicRoute exact path="/" component={LandingPage} />
       <PublicRoute exact path="/main" component={MainStudentPage} />
       <PublicRoute exact path="/public" component={Data} />
+      <PublicRoute exact path="/add_path" component={AddPathPage} />
+      <PublicRoute exact path="/landing" component={LandingPage} />
       <PublicRoute exact path="/course" component={AddCourse} />
       <div>
         <LoaderWrapper loading={isLoading}>
