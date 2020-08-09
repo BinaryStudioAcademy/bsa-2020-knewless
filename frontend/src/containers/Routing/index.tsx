@@ -7,6 +7,8 @@ import PublicRoute from 'components/PublicRoute';
 import Data from 'screens/Home/containers/Data';
 import Header, { User } from '../../components/Header';
 import Settings from 'screens/AuthorSettings/containers/Settings';
+import LoginPage from '../../screens/Authentication/containers/LoginPage';
+import handler from '../../components/OAuth2RedirectHandler/OAuth2RedirectHandler';
 import MainStudentPage from '../../screens/MainPage/containers/MainStudentPage';
 
 export interface IRoutingProps {
@@ -27,8 +29,9 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({ isLoading }) => (
       <PublicRoute exact path="/public" component={Data} />
       <PublicRoute exact path="/settings" component={Settings} />
       <PublicRoute exact path="/" component={LandingPage} />
+      <PublicRoute exact path="/login" component={LoginPage} />
       <PublicRoute exact path="/main" component={MainStudentPage} />
-      <PublicRoute exact path="/public" component={Data} />
+      <PublicRoute exact path="/oauth2/redirect" component={handler} />
       <div>
         <LoaderWrapper loading={isLoading}>
           <Switch>

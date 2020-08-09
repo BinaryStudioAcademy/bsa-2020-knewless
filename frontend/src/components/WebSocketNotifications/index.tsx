@@ -7,17 +7,23 @@ import { NotificationContainer, NotificationManager } from 'react-notifications'
 import 'react-notifications/lib/notifications.css';
 import { INotification } from '../../containers/Notifications/model/INotification';
 import { connect } from 'react-redux';
+import { ACCESS_TOKEN } from '../../screens/Authentication/constants';
+import { loginRoutine } from '../../screens/Home/routines';
 import { addNotificationRoutine } from '../../containers/Notifications/routines';
 
 const WebSocketNotifications = ({
   isConnected,
   readyToConnect,
   user,
+  loadUser: load,
   addUserToPool: add,
   newNotification: notify }) => {
   const [stompClient] = useState(Stomp.over(new SockJS('/ws')));
 
   useEffect(() => {
+    if (localStorage.getItem(ACCESS_TOKEN)) {
+      load();
+    }
     if (!user) {
       return undefined;
     }
@@ -59,6 +65,7 @@ const mapStateToProps = rootState => ({
 
 const mapDispatchToProps = {
   addUserToPool: addUsersToSocketPoolRoutine,
+  loadUser: loginRoutine.success,
   newNotification: addNotificationRoutine
 };
 

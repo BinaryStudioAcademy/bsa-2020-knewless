@@ -5,6 +5,7 @@ import notificationSagas from 'containers/Notifications/sagas';
 import authorSettingsSagas from '../screens/AuthorSettings/sagas';
 import mainStudentPageSagas from '../screens/MainPage/containers/MainStudentPage/sagas';
 import landingSagas from 'screens/Landing/sagas';
+import authSagas from '../screens/Authentication/sagas';
 
 export default function* rootSaga() {
   yield all([
@@ -13,6 +14,7 @@ export default function* rootSaga() {
     authorSettingsSagas(),
     mainStudentPageSagas(),
     socketSagas(),
-    landingSagas()
+    landingSagas(),
+    authSagas()
   ]);
 }

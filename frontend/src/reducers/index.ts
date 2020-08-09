@@ -6,13 +6,15 @@ import authorSettings from '../screens/AuthorSettings/reducer';
 import mainPage from '../screens/MainPage/reducers';
 import socket from '../components/WebSocketNotifications/reducer';
 import landing from '../screens/Landing/reducers';
+import auth from '../screens/Authentication/reducer';
 
 export default combineReducers({
   toastr,
   authorSettings,
   data,
-  notify,
-  socket,
+  landing,
+  auth,
   mainPage,
-  landing
+  socket,
+  notify
 });
