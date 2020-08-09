@@ -1,6 +1,7 @@
 package com.knewless.core.course.model;
 
 import com.knewless.core.author.model.Author;
+import com.knewless.core.category.model.Category;
 import com.knewless.core.course.courseComment.model.CourseComment;
 import com.knewless.core.course.courseReaction.model.CourseReaction;
 import com.knewless.core.db.BaseEntity;
@@ -28,12 +29,19 @@ public class Course extends BaseEntity {
     @Column(name = "level")
     private int level;
 
+    @Column(name = "image")
+    private String image;
+
     @Column(name = "released_date")
     private Date releasedDate;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
     @JoinColumn(name = "author_id")
     private Author author;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+    @JoinColumn(name = "category_id")
+    private Category category;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     @JoinTable(name = "course_path",

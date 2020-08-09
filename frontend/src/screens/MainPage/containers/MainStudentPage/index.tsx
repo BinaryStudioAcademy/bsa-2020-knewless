@@ -7,16 +7,23 @@ import { IBindingAction } from 'models/Callbacks';
 import { CardsSegment } from 'components/CardsSegment';
 import { CourseCard, ICourseCardProps } from 'components/CourseCard';
 import { IPathCardProps, PathCard } from 'components/PathCard';
-import { fetchDataRoutine } from '../../routines';
 import { IAppState } from 'models/AppState';
+import {
+  fetchContinueCoursesRoutine, fetchPathsRoutine, fetchRecommendedCoursesRoutine
+} from '../../routines';
+import { student as studentMock } from '../../services/mock';
 
 export interface IMainStudentPageProps {
   student: IStudent;
   paths: IPathCardProps[];
   continueCourses: ICourseCardProps[];
   recommendedCourses: ICourseCardProps[];
-  fetchData: IBindingAction;
-  loading: boolean;
+  fetchContinueCourses: (id: string) => void;
+  fetchRecommendedCourses: (id: string) => void;
+  fetchPaths: IBindingAction;
+  continueCoursesLoading: boolean;
+  recommendedCoursesLoading: boolean;
+  pathsLoading: boolean;
 }
 
 const MainStudentPage: React.FunctionComponent<IMainStudentPageProps> = ({
@@ -24,33 +31,38 @@ const MainStudentPage: React.FunctionComponent<IMainStudentPageProps> = ({
   continueCourses,
   recommendedCourses,
   paths,
-  fetchData: getData,
-  loading
+  fetchContinueCourses: getStudentCourses,
+  fetchRecommendedCourses: getRecommendedCourses,
+  fetchPaths: getPaths,
+  continueCoursesLoading,
+  recommendedCoursesLoading,
+  pathsLoading
 }) => {
   useEffect(() => {
-    getData();
-  }, []);
+    if (student.id) {
+      getStudentCourses(student.id);
+      getRecommendedCourses(student.id);
+      getPaths();
+    }
+  }, [student.id]);
 
   return (
     <div className={styles.mainPage}>
-      {!loading
-      && (
       <UserInfoBlock
         student={student}
       />
-      )}
       <div className={styles.content}>
         <div className={`${styles.wide_container} ${styles.content_row}`}>
           <CardsSegment
             title="Continue Learning"
             onViewAllClick={() => (console.log('clicked view all courses'))}
-            loading={loading}
+            loading={continueCoursesLoading}
           >
-            {continueCourses.map(c => (
+            {continueCourses.slice(0, 3).map(c => (
               <div className={styles.course_card}>
                 <CourseCard
-                  name={c.name}
                   category={c.category}
+                  name={c.name}
                   author={c.author}
                   duration={c.duration}
                   imageSrc={c.imageSrc}
@@ -67,13 +79,13 @@ const MainStudentPage: React.FunctionComponent<IMainStudentPageProps> = ({
           <CardsSegment
             title="Recommended Courses"
             onViewAllClick={() => (console.log('clicked view all courses'))}
-            loading={loading}
+            loading={recommendedCoursesLoading}
           >
-            {recommendedCourses.map(c => (
+            {recommendedCourses.slice(0, 3).map(c => (
               <div className={styles.course_card}>
                 <CourseCard
-                  name={c.name}
                   category={c.category}
+                  name={c.name}
                   author={c.author}
                   duration={c.duration}
                   imageSrc={c.imageSrc}
@@ -89,9 +101,9 @@ const MainStudentPage: React.FunctionComponent<IMainStudentPageProps> = ({
           <CardsSegment
             title="Paths"
             onViewAllClick={() => (console.log('clicked view all paths'))}
-            loading={loading}
+            loading={pathsLoading}
           >
-            {paths.map(p => (
+            {paths.slice(0, 3).map(p => (
               <div className={styles.path_card}>
                 <PathCard
                   name={p.name}
@@ -111,16 +123,20 @@ const MainStudentPage: React.FunctionComponent<IMainStudentPageProps> = ({
 const mapStateToProps = (state: IAppState) => {
   const { student, continueCourses, recommendedCourses, paths } = state.mainPage.mainPageData;
   return {
-    student,
+    student: studentMock,
     continueCourses,
     recommendedCourses,
     paths,
-    loading: state.mainPage.requests.dataRequest.loading
+    continueCoursesLoading: state.mainPage.requests.continueCoursesRequest.loading,
+    recommendedCoursesLoading: state.mainPage.requests.recommendedCoursesRequest.loading,
+    pathsLoading: state.mainPage.requests.pathsRequest.loading
   };
 };
 
 const mapDispatchToProps = {
-  fetchData: fetchDataRoutine
+  fetchContinueCourses: fetchContinueCoursesRoutine,
+  fetchRecommendedCourses: fetchRecommendedCoursesRoutine,
+  fetchPaths: fetchPathsRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainStudentPage);

@@ -1,22 +1,53 @@
 import { takeEvery, put, call, all } from 'redux-saga/effects';
 import * as mainPageService from 'screens/MainPage/services/main.page.service';
-import { fetchDataRoutine } from '../../routines';
+import {
+  fetchContinueCoursesRoutine, fetchRecommendedCoursesRoutine, fetchPathsRoutine
+} from '../../routines';
+import { AnyAction } from 'redux';
 
-function* getData() {
+function* getContinueCourses({ payload }: AnyAction) {
   try {
-    const response = yield call(mainPageService.getData);
-    yield put(fetchDataRoutine.success(response));
+    const response = yield call(mainPageService.getContinueCourses, payload);
+    yield put(fetchContinueCoursesRoutine.success(response));
   } catch (error) {
-    yield put(fetchDataRoutine.failure(error?.message));
+    yield put(fetchContinueCoursesRoutine.failure(error?.message));
   }
 }
 
-function* watchGetData() {
-  yield takeEvery(fetchDataRoutine.TRIGGER, getData);
+function* watchGetStudentCourses() {
+  yield takeEvery(fetchContinueCoursesRoutine.TRIGGER, getContinueCourses);
+}
+
+function* getRecommendedCourses({ payload }: AnyAction) {
+  try {
+    const response = yield call(mainPageService.getRecommendedCourses, payload);
+    yield put(fetchRecommendedCoursesRoutine.success(response));
+  } catch (error) {
+    yield put(fetchRecommendedCoursesRoutine.failure(error?.message));
+  }
+}
+
+function* watchGetRecommendedCourses() {
+  yield takeEvery(fetchRecommendedCoursesRoutine.TRIGGER, getRecommendedCourses);
+}
+
+function* getPaths() {
+  try {
+    const response = yield call(mainPageService.getPaths);
+    yield put(fetchPathsRoutine.success(response));
+  } catch (error) {
+    yield put(fetchPathsRoutine.failure(error?.message));
+  }
+}
+
+function* watchGetPaths() {
+  yield takeEvery(fetchPathsRoutine.TRIGGER, getPaths);
 }
 
 export default function* mainStudentPageSagas() {
   yield all([
-    watchGetData()
+    watchGetStudentCourses(),
+    watchGetRecommendedCourses(),
+    watchGetPaths()
   ]);
 }

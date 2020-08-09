@@ -3,7 +3,9 @@ import { IMainPageData } from './IMainStudentPageData';
 
 export interface IMainStudentPageState {
   requests: {
-    dataRequest: IRequestState;
+    continueCoursesRequest: IRequestState;
+    recommendedCoursesRequest: IRequestState;
+    pathsRequest: IRequestState;
   };
   mainPageData: IMainPageData;
 }
