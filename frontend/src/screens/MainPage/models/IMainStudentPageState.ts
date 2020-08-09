@@ -7,5 +7,5 @@ export interface IMainStudentPageState {
     recommendedCoursesRequest: IRequestState;
     pathsRequest: IRequestState;
   };
-  mainPageData: IMainPageData;
+  data: IMainPageData;
 }

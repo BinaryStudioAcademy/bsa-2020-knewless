@@ -14,7 +14,7 @@ const initialState: IMainPageData = {
   paths: [] as IPathCardProps[]
 };
 
-export const mainPageData = (state = initialState, action: Routine<any>) => {
+export const studentMainPageData = (state = initialState, action: Routine<any>) => {
   switch (action.type) {
     case fetchContinueCoursesRoutine.SUCCESS:
       return {

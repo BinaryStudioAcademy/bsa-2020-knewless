@@ -21,6 +21,8 @@ export class User {
     avatar: string;
 
     notifications?: []
+
+    role: string;
 }
 
 interface IHeaderProps {

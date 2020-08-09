@@ -1,6 +1,8 @@
 package com.knewless.core.course;
 
+import com.knewless.core.course.dto.CourseBriefInfoDto;
 import com.knewless.core.course.dto.CourseDto;
+import com.knewless.core.course.mapper.CourseInfoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -11,8 +13,17 @@ import java.util.stream.Collectors;
 
 @Service
 public class CourseService {
+
+    private final CourseRepository courseRepository;
+
     @Autowired
-    private CourseRepository courseRepository;
+    public CourseService(CourseRepository courseRepository) {
+        this.courseRepository = courseRepository;
+    }
+
+    public List<CourseBriefInfoDto> getAuthorCoursesById(UUID authorId) {
+        return CourseInfoMapper.fromEntities(this.courseRepository.findByAuthorId(authorId));
+    }
 
     List<CourseDto> getRecommendedCourses(UUID id) {
         return courseRepository.findRecommendedCoursesId(PageRequest.of(0, 10))
@@ -36,13 +47,20 @@ public class CourseService {
 
     public String getLevel(int level) {
         switch (level) {
-            case 0: return "Beginner";
-            case 1: return "Elementary";
-            case 2: return "Intermediate";
-            case 3: return "Upper-intermediate";
-            case 4: return "Advanced";
-            case 5: return "Proficiency";
-            default: return "None";
+            case 0:
+                return "Beginner";
+            case 1:
+                return "Elementary";
+            case 2:
+                return "Intermediate";
+            case 3:
+                return "Upper-intermediate";
+            case 4:
+                return "Advanced";
+            case 5:
+                return "Proficiency";
+            default:
+                return "None";
         }
     }
 

@@ -9,6 +9,7 @@ import java.time.Duration;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,6 +20,13 @@ public class PathService {
     @Autowired
     public PathService(PathRepository pathRepository) {
         this.pathRepository = pathRepository;
+    }
+
+    public List<PathDto> getPathsByAuthorId(UUID authorId) {
+        return this.pathRepository.findPathsByAuthorId(authorId)
+                .stream()
+                .map(p -> new PathDto(p.getName(), p.getCourses(), p.getImage(), getDuration(p.getMinutes())))
+                .collect(Collectors.toUnmodifiableList());
     }
 
     List<PathDto> getAllPaths() {
@@ -46,4 +54,5 @@ public class PathService {
         }
         return new PathDurationDto(minutes, "Minutes");
     }
+
 }
