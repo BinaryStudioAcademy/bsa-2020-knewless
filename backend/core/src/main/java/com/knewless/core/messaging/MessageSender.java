@@ -23,7 +23,7 @@ public class MessageSender {
         this.template = template;
     }
 
-    public void send(String message) {
+    public void send(Message message) {
         log.info(" [x] Sending message...");
         this.template.convertAndSend(exchange, routingKey, message);
         log.info(" [x] Sent '{}'", message);

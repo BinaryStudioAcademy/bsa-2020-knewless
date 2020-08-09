@@ -60,5 +60,5 @@ public class Course extends BaseEntity {
     private List<CourseReaction> reactions = List.of();
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Lecture> lectures;
+    private List<Lecture> lectures = List.of();;
 }

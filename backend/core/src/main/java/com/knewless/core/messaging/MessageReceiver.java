@@ -8,9 +8,11 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class MessageReceiver {
 
-    @RabbitListener(queues = "${rabbitmq.queue}")
-    public void receive(String message) {
-        log.info(" [x] Received '{}'", message);
+    @RabbitListener(queues = "${rabbitmq.queue.resp}")
+    public void receive(Message message) {
+        if (message.getType() == MessageType.RESPONSE) {
+            log.info(" [x] Received '{}'", message);
+        }
     }
 
 }

@@ -27,6 +27,9 @@ public class Lecture extends BaseEntity {
     @Column(name = "source_url")
     private String sourceUrl;
 
+    @Column(name = "name")
+    private String name;
+
     @Column(name = "description")
     private String description;
 
