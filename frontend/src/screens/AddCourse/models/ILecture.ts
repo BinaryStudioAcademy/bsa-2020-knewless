@@ -1,5 +1,5 @@
 export interface ILecture {
-    key: string
+    id: string
     url?: string
     name: string
 }

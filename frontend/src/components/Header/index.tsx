@@ -79,7 +79,7 @@ const Header = ({ currentUser }: IHeaderProps) => {
               </NavLink>
             </div>
             <div className={styles.column}>
-              <NavLink exact to="/course">
+              <NavLink exact to="/">
                 <Label
                   basic
                   size="tiny"

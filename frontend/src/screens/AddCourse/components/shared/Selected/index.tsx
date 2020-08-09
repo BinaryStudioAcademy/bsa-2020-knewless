@@ -18,6 +18,7 @@ const SelectedSet: React.FunctionComponent<ISelectedSetProps> = ({
         key={i.id}
         id={i.id}
         name={i.name}
+        description={i.description}
         remove={remove}
       />
     ))}

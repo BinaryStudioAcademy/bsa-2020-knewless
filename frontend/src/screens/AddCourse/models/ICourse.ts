@@ -1,9 +1,10 @@
 import { ILecture } from './ILecture';
 
 export interface ICourse {
-    authorId: string;
+    userId: string;
     name: string;
-    lectures: Array<ILecture>;
+    lectures: Array<string>;
     level: string;
     description: string;
+    isReleased: boolean
 }

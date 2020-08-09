@@ -6,9 +6,7 @@ import com.knewless.core.course.courseReaction.model.CourseReaction;
 import com.knewless.core.db.BaseEntity;
 import com.knewless.core.lecture.model.Lecture;
 import com.knewless.core.path.model.Path;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -18,6 +16,8 @@ import java.util.Set;
 
 @Entity
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "courses")
@@ -25,8 +25,12 @@ public class Course extends BaseEntity {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "description")
+    private String description;
+
     @Column(name = "level")
-    private int level;
+    @Enumerated(EnumType.STRING)
+    private Level level;
 
     @Column(name = "released_date")
     private Date releasedDate;
@@ -48,5 +52,5 @@ public class Course extends BaseEntity {
     private List<CourseReaction> reactions = List.of();
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Lecture> lectures = List.of();
+    private List<Lecture> lectures;
 }
