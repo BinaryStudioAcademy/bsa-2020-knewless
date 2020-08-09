@@ -21,6 +21,10 @@ const Notifications = ({ user, notifications, fetchNotifications: fetch,
     fetch({ userId: user.id });
   }, []);
 
+  function countUnread() {
+    return notifications.filter(n => n.read === false).length > 0;
+  }
+
   function viewAll(payload) {
     if (viewingAll) {
       viewLess();
@@ -40,6 +44,10 @@ const Notifications = ({ user, notifications, fetchNotifications: fetch,
           className={styleName}
         >
           <Icon name="bell" size="large" inverted />
+          {
+            countUnread()
+              ? <Label name="circle" color="red" className={styles.label} circular size="tiny" empty /> : null
+          }
         </Label>
       )}
       on="click"
