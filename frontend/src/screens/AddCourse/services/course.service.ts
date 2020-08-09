@@ -7,7 +7,9 @@ export const getLecturesByAuthor = async (id: string) => {
     endpoint: `/course/lectures/user/${id}`,
     type: 'GET'
   });
-  return response.json();
+  const result = response.json();
+  console.log(result);
+  return result;
 };
 
 /* export const getLecturesByAuthor = async (id: string) => new Promise(resolve => {

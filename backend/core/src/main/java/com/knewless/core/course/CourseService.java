@@ -88,7 +88,7 @@ public class CourseService {
                 ? 0
                 : Math.round((float) result.getPositiveReactions() /
                 result.getAllReactions() * 5));
-        course.setLevel(result.getLevel());
+        course.setLevel(result.getLevel().name());
         course.setDuration(getDuration(result.getDuration()));
         return course;
     }
