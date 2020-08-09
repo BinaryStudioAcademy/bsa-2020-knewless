@@ -1,5 +1,6 @@
 package com.knewless.core.course;
 
+import com.knewless.core.course.dto.CourseDto;
 import com.knewless.core.course.dto.CreateCourseRequestDto;
 import com.knewless.core.course.dto.CreateCourseResponseDto;
 import com.knewless.core.lecture.Dto.ShortLectureDto;
@@ -19,6 +20,15 @@ public class CourseController {
     @GetMapping("/lectures/user/{id}")
     public List<ShortLectureDto> getLecturesByUserId(@PathVariable UUID id) {
         return courseService.getLecturesByUserId(id);
+    
+    @GetMapping("/recommended/{id}")
+    private List<CourseDto> getRecommendedCourses(@PathVariable("id") UUID id) {
+        return courseService.getRecommendedCourses(id);
+    }
+
+    @GetMapping("/{id}")
+    private CourseDto getCourseById(@PathVariable("id") UUID id) {
+        return courseService.getCourseById(id);
     }
 
     @PostMapping

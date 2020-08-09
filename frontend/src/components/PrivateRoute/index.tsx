@@ -1,13 +1,12 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { Route, Redirect } from 'react-router-dom';
+import { Redirect, Route } from 'react-router-dom';
+import { ACCESS_TOKEN } from '../../screens/Authentication/constants';
 
 const PrivateRoute = ({ component: Component, roles = null, ...rest }) => (
   <Route
     {...rest}
     render={props => {
-      // get token
-      const token = 'fake';
+      const token = localStorage.getItem(ACCESS_TOKEN);
       if (!token) {
         return (
           <Redirect

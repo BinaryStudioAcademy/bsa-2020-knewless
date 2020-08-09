@@ -2,11 +2,13 @@ package com.knewless.core.user.model;
 
 import com.knewless.core.achievement.model.Achievement;
 import com.knewless.core.db.BaseEntity;
+import com.knewless.core.notification.model.Notification;
 import com.knewless.core.user.role.model.Role;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -30,4 +32,7 @@ public class User extends BaseEntity {
 
     @ManyToMany(mappedBy = "users")
     private Set<Achievement> achievements = Set.of();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
+    List<Notification> notifications;
 }

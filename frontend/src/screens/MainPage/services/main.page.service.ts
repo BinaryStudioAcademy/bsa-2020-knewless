@@ -1,14 +1,29 @@
-import { courses, student, paths } from './mock';
+import { callApi } from '../../../helpers/api.helper';
 
-async function mockRequest() {
-  return new Promise(resolve => {
-    setTimeout(() => resolve({
-      student,
-      continueCourses: courses,
-      recommendedCourses: courses,
-      paths
-    }), 500);
+export async function getContinueCourses(id: string) {
+  console.log(id);
+  const response = await callApi({
+    endpoint: `/api/course/continue/${id}`,
+    type: 'GET'
   });
+
+  return response.json();
 }
 
-export const getData = async () => mockRequest();
+export async function getRecommendedCourses(id: string) {
+  const response = await callApi({
+    endpoint: `/api/course/recommended/${id}`,
+    type: 'GET'
+  });
+
+  return response.json();
+}
+
+export async function getPaths() {
+  const response = await callApi({
+    endpoint: '/api/paths/',
+    type: 'GET'
+  });
+  return response.json();
+}
+

@@ -3,5 +3,9 @@ package com.knewless.core.course.model;
 public enum Level {
     BEGINNER,
     INTERMEDIATE,
-    ADVANCED
+    ADVANCED,
+    ELEMENTARY,
+    UPPERINTERMEDIATE,
+    PROFIENCY,
+    NONE
 }

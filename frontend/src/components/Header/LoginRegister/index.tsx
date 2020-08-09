@@ -4,8 +4,10 @@ import { NavLink } from 'react-router-dom';
 import styles from './styles.module.sass';
 
 const LoginRegister = () => (
-  <div className={styles.button_container}>
-    <Button className={styles.button_login}>login</Button>
+  <div>
+    <NavLink exact to="/login">
+      <Button className={styles.button_login}>login</Button>
+    </NavLink>
     <NavLink exact to="/">
       <Button className={styles.button_register}>register</Button>
     </NavLink>

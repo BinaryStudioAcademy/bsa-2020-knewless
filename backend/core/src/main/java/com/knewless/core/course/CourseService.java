@@ -11,7 +11,9 @@ import com.knewless.core.lecture.LectureRepository;
 import com.knewless.core.lecture.homework.HomeworkRepository;
 import com.knewless.core.lecture.homework.model.Homework;
 import com.knewless.core.lecture.model.Lecture;
+import com.knewless.core.course.dto.CourseDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -70,4 +72,31 @@ public class CourseService {
         lectureRepository.saveAll(thisLectures);
         return new CreateCourseResponseDto(course.getId(), true);
     }
+
+    List<CourseDto> getRecommendedCourses(UUID id) {
+        return courseRepository.findRecommendedCoursesId(PageRequest.of(0, 10))
+                .stream()
+                .map(this::getCourseById)
+                .collect(Collectors.toList());
+    }
+
+    public CourseDto getCourseById(UUID id) {
+        var result = courseRepository.getCourseById(id);
+        var course = CourseMapper.MAPPER.courseQueryResultToCourseDto(result);
+
+        course.setRating(result.getAllReactions() == 0
+                ? 0
+                : Math.round((float) result.getPositiveReactions() /
+                result.getAllReactions() * 5));
+        course.setLevel(result.getLevel());
+        course.setDuration(getDuration(result.getDuration()));
+        return course;
+    }
+
+    public String getDuration(long minutes) {
+        long hh = minutes / 60;
+        long mm = minutes % 60;
+        return String.format("%dh %02dm", hh, mm);
+    }
+
 }
