@@ -14,6 +14,7 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "notifications")
 public class Notification extends BaseEntity {
+
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
     @JoinColumn(name = "user_id")
     private User user;
@@ -30,4 +31,10 @@ public class Notification extends BaseEntity {
 
     @Column(name = "link")
     private String link;
+
+    @Column(name = "is_read")
+    private boolean isRead;
+
+    @Column(name = "source_name")
+    private String sourceName;
 }

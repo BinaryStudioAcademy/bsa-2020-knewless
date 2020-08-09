@@ -5,9 +5,16 @@ import SockJS from 'sockjs-client';
 import { addUsersToSocketPoolRoutine } from './routines';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
+import { INotification } from '../../containers/Notifications/model/INotification';
 import { connect } from 'react-redux';
+import { addNotificationRoutine } from '../../containers/Notifications/routines';
 
-const WebSocketNotifications = ({ isConnected, readyToConnect, user, addUserToPool: add }) => {
+const WebSocketNotifications = ({
+  isConnected,
+  readyToConnect,
+  user,
+  addUserToPool: add,
+  newNotification: notify }) => {
   const [stompClient] = useState(Stomp.over(new SockJS('/ws')));
 
   useEffect(() => {
@@ -22,9 +29,9 @@ const WebSocketNotifications = ({ isConnected, readyToConnect, user, addUserToPo
     if (readyToConnect) {
       return stompClient.connect({ username: user.username }, () => {
         stompClient.subscribe('/user/queue/notification', message => {
-          const notif = JSON.parse(message.body);
+          const notif: INotification = JSON.parse(message.body);
           NotificationManager.info(`New notification ${notif.text}`);
-          // notify({ notification: notif });
+          notify({ notification: notif });
         });
         //  some others subscribtions
       });
@@ -51,7 +58,8 @@ const mapStateToProps = rootState => ({
 });
 
 const mapDispatchToProps = {
-  addUserToPool: addUsersToSocketPoolRoutine
+  addUserToPool: addUsersToSocketPoolRoutine,
+  newNotification: addNotificationRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(WebSocketNotifications);
