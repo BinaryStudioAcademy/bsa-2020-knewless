@@ -49,12 +49,15 @@ public class Course extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "path_id"))
     private List<Path> paths = List.of();
 
+    @Builder.Default
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CourseComment> comments = List.of();
 
+    @Builder.Default
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CourseReaction> reactions = List.of();
 
+    @Builder.Default
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Lecture> lectures = List.of();
 }
