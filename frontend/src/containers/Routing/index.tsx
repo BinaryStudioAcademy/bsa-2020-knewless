@@ -5,9 +5,9 @@ import WebSocketNotifications from 'components/WebSocketNotifications';
 import LandingPage from 'screens/Landing/containers/LandingPage';
 import PublicRoute from 'components/PublicRoute';
 import Data from 'screens/Home/containers/Data';
-import AddCourse from '../../screens/AddCourse/containers/AddCoursePage';
 import Header, { User } from '../../components/Header';
 import Settings from 'screens/AuthorSettings/containers/Settings';
+import AddCourse from '../../screens/AddCourse/containers/AddCoursePage';
 import MainStudentPage from '../../screens/MainPage/containers/MainStudentPage';
 
 export interface IRoutingProps {
@@ -30,6 +30,8 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({ isLoading }) => (
       <PublicRoute exact path="/" component={LandingPage} />
       <PublicRoute exact path="/main" component={MainStudentPage} />
       <PublicRoute exact path="/public" component={Data} />
+      <PublicRoute exact path="/add_path" component={AddPathPage} />
+      <PublicRoute exact path="/landing" component={LandingPage} />
       <PublicRoute exact path="/course" component={AddCourse} />
       <div>
         <LoaderWrapper loading={isLoading}>
