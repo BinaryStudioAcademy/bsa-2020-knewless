@@ -93,7 +93,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .and()
                 .authorizeRequests()
                     .antMatchers("/").permitAll()
-                    .antMatchers("/auth/**", "/oauth2/**").permitAll()
+                    .antMatchers("/auth/**", "/oauth2/**", "/assets/images/**").permitAll()
                     .anyRequest().authenticated()
                 .and()
                 .oauth2Login()

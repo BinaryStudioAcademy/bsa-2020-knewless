@@ -1,0 +1,20 @@
+@import "../common.variables"
+
+\:global(.ui.button).gradient
+  border-radius: $border_radius
+  font-family: $font_family
+  font-style: $font_style
+  font-weight: $font_weight
+  font-size: $font_size
+  padding: $padding
+  text-transform: $text_transform
+  min-width: $min_width
+  min-height: $min_height
+
+  transition: all .6s ease-in-out
+  background: linear-gradient(70.06deg,#FF8576, #0084F8, #FF8576)
+  color: #ffff
+  background-size: 300%
+
+  &:hover
+    background-position: -50% 0
