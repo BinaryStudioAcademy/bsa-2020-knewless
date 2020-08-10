@@ -37,7 +37,7 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({ isLoading }) => (
       <PublicRoute exact path="/add_path" component={AddPathPage} />
       <PublicRoute exact path="/landing" component={LandingPage} />
       <PublicRoute exact path="/add_course" component={AddCourse} />
-      <PublicRoute exact path="/oauth2/redirect" component={handler} />
+      <PublicRoute exact path="/oauth/redirect" component={handler} />
       <div>
         <LoaderWrapper loading={isLoading}>
           <Switch>
