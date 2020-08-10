@@ -3,7 +3,7 @@ import { reducer as toastr } from 'react-redux-toastr';
 import data from '../screens/Home/reducers';
 import notify from '../containers/Notifications/reducer';
 import authorSettings from '../screens/AuthorSettings/reducer';
-import studentMainPage from '../screens/MainPage/reducers';
+import mainPage from '../screens/MainPage/reducers';
 import authorMainPage from '../screens/AuthorMainPage/reducers';
 import socket from '../components/WebSocketNotifications/reducer';
 import landing from '../screens/Landing/reducers';
@@ -15,7 +15,7 @@ export default combineReducers({
   data,
   notify,
   socket,
-  studentMainPage,
+  mainPage,
   authorMainPage,
   landing,
   auth

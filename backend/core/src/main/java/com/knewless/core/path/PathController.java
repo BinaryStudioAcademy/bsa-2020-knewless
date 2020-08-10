@@ -25,8 +25,8 @@ public class PathController {
         return pathService.getAllPaths();
     }
 
-    @GetMapping
-    public ResponseEntity<List<PathDto>> getAuthorPaths(UUID authorId) {
+    @GetMapping("/{authorId}")
+    public ResponseEntity<List<PathDto>> getAuthorPaths(@PathVariable UUID authorId) {
         return ResponseEntity.ok(this.pathService.getPathsByAuthorId(authorId));
     }
 

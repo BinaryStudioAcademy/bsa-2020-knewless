@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import { reducerCreator } from 'helpers/reducer.helper';
-import { studentMainPageData } from '../containers/MainStudentPage/reducer';
+import { mainPageData } from '../containers/MainStudentPage/reducer';
 import {
   fetchContinueCoursesRoutine, fetchPathsRoutine, fetchRecommendedCoursesRoutine
 } from '../routines';
@@ -18,6 +18,6 @@ const requests = combineReducers({
 });
 
 export default combineReducers({
-  data: studentMainPageData,
+  mainPageData,
   requests
 });
