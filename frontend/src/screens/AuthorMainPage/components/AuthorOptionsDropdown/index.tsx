@@ -4,32 +4,19 @@ import styles from './styles.module.sass';
 
 export interface IAuthorOptionsDropdownProps {
   onEditClick?: () => void;
-  onDeleteClick?: () => void;
 }
 
 export const AuthorOptionsDropdown: React.FunctionComponent<IAuthorOptionsDropdownProps> = ({
-  onEditClick,
-  onDeleteClick
+  onEditClick
 }) => (
-  <Dropdown
-    icon="chevron down"
-    compact
-  >
-    <Dropdown.Menu>
+  <Dropdown compact icon="ellipsis vertical">
+    <Dropdown.Menu id={styles.author_dropdown_menu}>
       {onEditClick && (
         <Dropdown.Item
-          icon="edit inverted"
+          icon="edit"
           text="Edit"
           onClick={onEditClick}
-          className={styles.dropdown_item}
-        />
-      )}
-      {onDeleteClick && (
-        <Dropdown.Item
-          icon="trash inverted"
-          text="Delete"
-          onClick={onDeleteClick}
-          className={styles.dropdown_item}
+          id={styles.dropdown_item}
         />
       )}
     </Dropdown.Menu>

@@ -71,7 +71,7 @@ const MainAuthorPage: React.FunctionComponent<IMainAuthorPageProps> = ({
                 <p className={styles.no_school__msg}>Have no school?</p>
                 <div className={styles.no_school__btns}>
                   <Button
-                    className={styles.btn}
+                    id={styles.no_school_btn}
                     onSubmit={e => handleSchoolCreation(e)}
                     size="massive"
                   >
@@ -99,7 +99,6 @@ const MainAuthorPage: React.FunctionComponent<IMainAuthorPageProps> = ({
                   imageSrc={c.imageSrc}
                   onOpenClick={c.onOpenClick}
                   onEditClick={() => (console.log('clicked edit course'))}
-                  onDeleteClick={() => (console.log('clicked delete course'))}
                 />
               </div>
             )) : <h4>You have no courses yet.</h4>}
@@ -120,7 +119,6 @@ const MainAuthorPage: React.FunctionComponent<IMainAuthorPageProps> = ({
                   courses={p.courses}
                   duration={p.duration}
                   onEditClick={() => (console.log('clicked edit path'))}
-                  onDeleteClick={() => (console.log('clicked delete path'))}
                 />
               </div>
             )) : <h4>You have no paths yet.</h4>}

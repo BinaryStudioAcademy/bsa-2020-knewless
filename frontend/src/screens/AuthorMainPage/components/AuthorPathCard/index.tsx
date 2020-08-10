@@ -13,21 +13,19 @@ export interface IAuthorPathCardProps {
   courses: number;
   duration: IDuration;
   onEditClick?: () => void;
-  onDeleteClick?: () => void;
 }
 
 export const AuthorPathCard: React.FunctionComponent<IAuthorPathCardProps> = (
-  { name, logoSrc, courses, duration, onEditClick, onDeleteClick }
+  { name, logoSrc, courses, duration, onEditClick }
 ) => (
   <div className={styles.container}>
     <img src={logoSrc} className={styles.logo} alt="Path logo" />
     <div className={styles.title}>
       <span>{name}</span>
       <div className={styles.dropdown_right}>
-        {(onEditClick || onDeleteClick) && (
+        {onEditClick && (
         <AuthorOptionsDropdown
           onEditClick={onEditClick}
-          onDeleteClick={onDeleteClick}
         />
         )}
       </div>

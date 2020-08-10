@@ -8,14 +8,12 @@ export interface IAuthorCourseCardProps {
   name: string;
   onOpenClick: () => void;
   onEditClick?: () => void;
-  onDeleteClick?: () => void;
 }
 
 export const AuthorCourseCard: React.FunctionComponent<IAuthorCourseCardProps> = ({
   imageSrc,
   name,
-  onEditClick,
-  onDeleteClick
+  onEditClick
 }) => (
   <Card className={styles.course_card}>
     <Image src={imageSrc} wrapped ui={false} className={styles.card_image} />
@@ -23,11 +21,10 @@ export const AuthorCourseCard: React.FunctionComponent<IAuthorCourseCardProps> =
       <CardHeader className={styles.title}>
         <div className={styles.btns}>
           <span>{name}</span>
-          {(onEditClick || onDeleteClick) && (
+          {onEditClick && (
             <div className={styles.dropdown_right}>
               <AuthorOptionsDropdown
                 onEditClick={onEditClick}
-                onDeleteClick={onDeleteClick}
               />
             </div>
           )}
