@@ -2,6 +2,8 @@
 
 $container_width: 1400px
 $side_padding: 80px
+$width_btn: 100px
+$height_btn: 40px
 
 .main_container
   padding-top: $header_height
@@ -57,7 +59,6 @@ $side_padding: 80px
 
 .customtextarea
   padding: 10px
-  margin-top: 5px
   outline: none
   resize: none
   overflow: auto
@@ -149,73 +150,67 @@ $side_padding: 80px
   background: none
   box-sizing: border-box
   color: #ffff
-  border-radius: 0
-  font-family: Montserrat, serif
+  border-radius: 0px
+  font-family: Montserrat
   font-style: normal
   font-weight: bold
   font-size: 1em
-  width: 10em
-  height: 2.5em
+  width: $width_btn
+  height: $height_btn
   &:hover
     background: #E0E0E0
     color: #2A2B37
 
 \:global(.ui.button).button_save
-    width: 11em
-    height: 3em
+    width: $width_btn
+    height: $height_btn
     font-family: 'Montserrat', sans-serif
     font-style: normal
     font-weight: bold
-    font-size: 0.8em
+    font-size: 1em
     line-height: 1em
     margin-right: 1.6em
     align-items: center
     color: #FFFFFF
-    background: linear-gradient(#0a2d49 0%, #0b5a7c 125%)
-    border-radius: 0.5em
+    background: #20649b
+    border-radius: 0
   
 \:global(.ui.button).button_release
-    width: 11em
-    height: 3em
-    font-family: 'Montserrat', sans-serif
+    background: linear-gradient(70.06deg, #0084F8 9.02%, #FF8576 90.81%)
+    color: #ffff
+    border-radius: 0px
+    font-family: Montserrat
     font-style: normal
     font-weight: bold
-    font-size: 0.8em
-    line-height: 1em
-    text-transform: uppercase
-    align-items: center
-    color: #FFFFFF
-    background: linear-gradient(90deg, #F27A54 0%, #A154F2 186.42%)
-    border-radius: 0.5em
+    font-size: 1em
+    width: $width_btn
+    height: $height_btn
 
 \:global(.ui.button).button_release_disabled
-    width: 11em
-    height: 3em
-    font-family: 'Montserrat', sans-serif
+    color: #ffff
+    border-radius: 0px
+    font-family: Montserrat
     font-style: normal
     font-weight: bold
-    font-size: 0.8em
-    text-transform: uppercase
-    line-height: 1em
-    align-items: center
-    color: #FFFFFF
-    opacity: 0.5
-    background: linear-gradient(#2a3238 0%, #454849 125%)
-    border-radius: 0.5em
+    font-size: 1em
+    width: $width_btn
+    height: $height_btn
+    opacity: 0.7
+    background: #454849
     cursor: default
 
 \:global(.ui.button).button_save_disabled
-    width: 11em
-    height: 3em
+    width: $width_btn
+    height: $height_btn
     font-family: 'Montserrat', sans-serif
     font-style: normal
     font-weight: bold
-    font-size: 0.8em
+    font-size: 1em
     line-height: 1em
     margin-right: 1.6em
     align-items: center
     color: #FFFFFF
-    background: linear-gradient(#2a3238 0%, #454849 125%)
-    border-radius: 0.5em
-    opacity: 0.5
+    background: #454849
+    border-radius: 0
+    opacity: 0.7
     cursor: default

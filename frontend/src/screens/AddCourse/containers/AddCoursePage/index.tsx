@@ -57,12 +57,19 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
     );
   };
 
+  const [uploadImage, setUploadImage] = useState(null);
   const [selected, setSelected] = useState(Array<ILecture>());
   const [description, setDescription] = useState('');
   const [courseName, setCourseName] = useState('');
   const [level, setLevel] = useState('');
   const [buttonLoading, setButtonLoading] = useState(false);
-  const [saved, setSaved] = useState(false);
+  const [previewImage, setPreviewImage] = useState('');
+  const history = useHistory();
+
+  const handleUploadFile = async file => {
+    setUploadImage(file);
+    setPreviewImage(URL.createObjectURL(file));
+  };
 
   const removeLectureFromPool = useCallback((dependency: IFilterableItem) => {
     setPool(prev => prev.filter(c => c.id !== dependency.id));
@@ -90,7 +97,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
       description
     });
     setButtonLoading(false);
-    setSaved(true);
+    history.push('/main');
   };
 
   const handleCancle = () => {
@@ -111,11 +118,9 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
               <div className={styles.inputfield}>
                 <div className={styles.textcontainer}>Course Name:</div>
                 <Input
-                  disabled={saved}
                   fluid
                   type="text"
                   value={courseName}
-                  placeholder="course..."
                   onChange={ev => setCourseName(ev.target.value)}
                   inverted
                 />
@@ -124,70 +129,43 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
                 <div className={styles.textcontainer}>Complexity level:</div>
                 <Dropdown
                   className={styles.lvldrop}
-                  disabled={saved}
                   clearable
                   value={level}
                   onChange={(e, data) => setLevel(data.value as string)}
-                  placeholder="Level"
                   search
                   selection
                   options={levelOptions}
                 />
               </div>
             </div>
-            <h4 className={styles.form__description_label}>Description:</h4>
+            <div className={styles.textcontainer}>Description:</div>
             <div className={styles.textareacontainer}>
               <textarea
-                disabled={saved}
                 onChange={ev => setDescription(ev.target.value)}
-                className={!saved ? styles.customtextarea : styles.customtextareablurred}
+                className={styles.customtextarea}
                 value={description}
               />
             </div>
             <div className={styles.buttonGroup}>
-              {saved ? ''
-                : (
-                  <>
-                    <div className={styles.buttonSaveGroup}>
-                      <Button
-                        loading={buttonLoading}
-                        className={isSaveble ? styles.button_save : styles.button_save_disabled}
-                        animated={isSaveble ? 'vertical' : false}
-                        onClick={() => handleSave(false)}
-                      >
-                        {isSaveble ? (
-                          <div>
-                            <Button.Content visible>Save</Button.Content>
-                            <Button.Content hidden>
-                              <Icon size="large" name="check" />
-                            </Button.Content>
-                          </div>
-                        ) : 'Save' }
-                      </Button>
-                      <Button
-                        loading={buttonLoading}
-                        className={isReleseble ? styles.button_release : styles.button_release_disabled}
-                        animated={isReleseble ? 'vertical' : false}
-                        onClick={() => handleSave(true)}
-                      >
-                        {isReleseble ? (
-                          <div>
-                            <Button.Content visible>Release</Button.Content>
-                            <Button.Content hidden>
-                              <Icon size="large" name="rocket" />
-                            </Button.Content>
-                          </div>
-                        ) : 'Release' }
-                      </Button>
-                    </div>
-                    <Button
-                      disabled={saved}
-                      content="Cancel"
-                      onClick={() => handleCancle()}
-                      className={styles.buttonCancel}
-                    />
-                  </>
-                )}
+              <div className={styles.buttonSaveGroup}>
+                <Button
+                  content="Save"
+                  loading={buttonLoading}
+                  className={isSaveble ? styles.button_save : styles.button_save_disabled}
+                  onClick={() => handleSave(false)}
+                />
+                <Button
+                  content="Release"
+                  loading={buttonLoading}
+                  className={isReleseble ? styles.button_release : styles.button_release_disabled}
+                  onClick={() => handleSave(true)}
+                />
+              </div>
+              <Button
+                content="Cancel"
+                onClick={() => handleCancle()}
+                className={styles.buttonCancel}
+              />
             </div>
           </div>
           <div className={styles.list_container}>
