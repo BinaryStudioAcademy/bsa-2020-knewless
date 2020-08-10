@@ -1,0 +1,216 @@
+@import "src/styles/common_variables"
+
+$container_width: 1400px
+$side_padding: 80px
+$width_btn: 100px
+$height_btn: 40px
+
+.main_container
+  padding-top: $header_height
+  height: 100vh
+  min-height: 1100px
+  overflow-y: hidden
+  display: flex
+  flex-direction: column
+
+
+.wide_container
+  $container_width: 1400px
+  $side_padding: 80px
+  max-width: $container_width + ($side_padding * 2)
+  margin-left: auto
+  margin-right: auto
+  padding-left: $side_padding
+  padding-right: $side_padding
+  display: flex
+  flex-direction: row
+  width: 100%
+
+
+
+.title
+  flex-shrink: 0
+  margin-bottom: 0.5em
+
+.main_content
+  width: 100%
+  height: 100%
+  overflow-y: hidden
+  flex-grow: 1
+  display: flex
+  flex-direction: column
+  width: 100%
+  margin-bottom: 5vh
+  margin-top: 3vh
+
+.settingsInput
+  width: 50%
+  padding-right: 20px
+  display: flex
+  flex-direction: column
+  align-content: center
+  justify-content: flex-start
+
+.settingsInput .top
+  display: flex
+  justify-content: space-between
+  align-items: center
+  padding-bottom: 2vh
+
+.customtextarea
+  padding: 10px
+  outline: none
+  resize: none
+  overflow: auto
+  border-radius: 5px
+  position: relative
+  width: 100%
+  height: 100%
+  color: black
+  background: #eaebf5
+  padding: auto
+  font-family: Custom Open Sans
+  font-style: normal
+
+.customtextareablurred
+  background: #737377
+  padding: 10px
+  margin-top: 5px
+  outline: none
+  resize: none
+  overflow: auto
+  position: relative
+  width: 100%
+  height: 100%
+  color: black
+  padding: auto
+  font-family: Custom Open Sans
+  font-style: normal
+
+.textareacontainer
+  padding-bottom: 20px
+  position: relative
+  width: 100%
+  height: 17em
+  background: inherit
+  padding: auto
+  color: white
+  font-family: Custom Open Sans
+  font-style: normal
+
+.inputfield
+  padding: auto
+  width: 60%
+
+.textcontainer
+  cursor: default
+  margin-bottom: 5px
+  color: white
+  font-family: Custom Open Sans
+  font-style: normal
+
+.list_container
+  width: 50%
+  margin-top: -3.9vh
+
+.dropdown
+  padding: auto
+  padding-left: 1em
+  width: auto
+  font-family: Custom Open Sans
+  font-style: normal
+
+\:global(.ui.dropdown).lvldrop span
+  color: black
+
+
+.lecturesBox
+  width: 50%
+  height: 100%
+
+
+.buttonGroup
+  width: 100%
+  display: flex
+  flex-direction: row
+  justify-content: space-between
+  align-items: center
+  padding: auto
+  position: relative
+
+.buttonSaveGroup
+  width: inherit
+  display: flex
+  justify-content: flex-start
+  flex-direction: row
+
+\:global(.ui.button).buttonCancel
+  text-align: center
+  border: 1px solid #E0E0E0
+  background: none
+  box-sizing: border-box
+  color: #ffff
+  border-radius: 0px
+  font-family: Montserrat
+  font-style: normal
+  font-weight: bold
+  font-size: 1em
+  width: $width_btn
+  height: $height_btn
+  &:hover
+    background: #E0E0E0
+    color: #2A2B37
+
+\:global(.ui.button).button_save
+    width: $width_btn
+    height: $height_btn
+    font-family: 'Montserrat', sans-serif
+    font-style: normal
+    font-weight: bold
+    font-size: 1em
+    line-height: 1em
+    margin-right: 1.6em
+    align-items: center
+    color: #FFFFFF
+    background: #20649b
+    border-radius: 0
+  
+\:global(.ui.button).button_release
+    background: linear-gradient(70.06deg, #0084F8 9.02%, #FF8576 90.81%)
+    color: #ffff
+    border-radius: 0px
+    font-family: Montserrat
+    font-style: normal
+    font-weight: bold
+    font-size: 1em
+    width: $width_btn
+    height: $height_btn
+
+\:global(.ui.button).button_release_disabled
+    color: #ffff
+    border-radius: 0px
+    font-family: Montserrat
+    font-style: normal
+    font-weight: bold
+    font-size: 1em
+    width: $width_btn
+    height: $height_btn
+    opacity: 0.7
+    background: #454849
+    cursor: default
+
+\:global(.ui.button).button_save_disabled
+    width: $width_btn
+    height: $height_btn
+    font-family: 'Montserrat', sans-serif
+    font-style: normal
+    font-weight: bold
+    font-size: 1em
+    line-height: 1em
+    margin-right: 1.6em
+    align-items: center
+    color: #FFFFFF
+    background: #454849
+    border-radius: 0
+    opacity: 0.7
+    cursor: default

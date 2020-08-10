@@ -1,4 +1,6 @@
 @import "src/styles/common_variables"
+$container_width: 1400px
+$side_padding: 80px
 
 $container_width: 1400px
 $side_padding: 80px
@@ -10,6 +12,7 @@ $side_padding: 80px
   height: 120px
   width: 100%
   right: 0px
+  top: 0px
   left: 0px
   top: 0px
   flex-direction: row
@@ -28,7 +31,6 @@ $side_padding: 80px
   background: #121421
   display: flex
 
-
 .headerWrp,
 .headerWrp .left_side
   display: flex
@@ -36,19 +38,23 @@ $side_padding: 80px
 
 .headerWrp .left_side
   width: auto
-  padding-right: 5em
+  max-width: 13em
+  padding: 0px
 
 .headerWrp .right_side
+  padding: auto
   display: flex
   justify-content: flex-end
   align-items: center
+  max-width: 13em
   width: auto
 
-.headerWrp .middle
+.middle
+  justify-content: space-evenly
   display: flex
   align-items: center
-  width: auto
-  padding-right: 5em
+  width: 100%
+  padding: auto
 
 .mainName
   font-family: Custom Open Sans
@@ -69,7 +75,8 @@ $side_padding: 80px
   font-weight: normal
   font-size: 1em
   line-height: 1.5em
-  width: 6em
+  width: 5em
+  text-align: center
   cursor: default
   padding-top: 4px
   text-transform: uppercase
@@ -77,27 +84,44 @@ $side_padding: 80px
   color: #FFFFFF
 
 \:global(.ui.basic.label).routElement
-  width: 2.8em
-  height: 5em
-  align-items: baseline
+  width: 5em
+  height: 6em
   justify-content: space-between
-  flex-direction: row
-  display: contents
+  align-items: baseline
+  flex-direction: column
+  display: flex
   background: #121421
   border: none
-  margin: auto
+  padding: 0
+
+.column
+  display: flex
+  flex-direction: column 
+  justify-content: center
+  align-items: center
+  height: 6em
+  width: 5em
+
+
+.icons
+  display: flex
+  flex-direction: row
+  align-items: center
+  justify-content: space-between
 
 .iconWrp
-  margin: auto
+  height: 12px
+  padding-left: 0px
 
 \:global(.ui.icon.input).search
-  width: 25em
+  max-width: 18em
+  width: 100%
   position: relative
-  padding-left: 7em
 
 \:global(.ui.icon.input).searchHidden
   visibility: hidden
-  width: 25em
+  max-width: 18em
+  width: 100%
   opacity: 0
 
 .homeLine

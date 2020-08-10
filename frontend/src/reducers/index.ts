@@ -9,6 +9,7 @@ import authorMainPage from '../screens/AuthorMainPage/reducers';
 import socket from '../components/WebSocketNotifications/reducer';
 import landing from '../screens/Landing/reducers';
 import auth from '../screens/Authentication/reducer';
+import addcourse from '../screens/AddCourse/reducers';
 
 export default combineReducers({
   toastr,
@@ -20,5 +21,6 @@ export default combineReducers({
   mainPage,
   authorMainPage,
   landing,
+  addcourse,
   auth
 });

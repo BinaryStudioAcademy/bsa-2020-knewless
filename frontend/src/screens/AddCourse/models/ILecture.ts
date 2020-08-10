@@ -1,4 +1,6 @@
 export interface ILecture {
-    id: string
-    url: string
+    id: string;
+    name: string;
+    description: string;
+    timeMinutes: number;
 }

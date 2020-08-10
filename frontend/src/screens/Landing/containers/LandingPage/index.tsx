@@ -11,6 +11,7 @@ import { INavigationSectionProps } from '../../components/NavigationSection';
 import { IAppState } from '../../../../models/AppState';
 import { fetchDataRoutine } from 'screens/Landing/routines';
 import { CardsSegment } from '../../../../components/CardsSegment';
+import { Footer } from '../../../../components/Footer';
 
 // eslint-disable-next-line
 export interface ILandingProps {
@@ -133,13 +134,7 @@ export const LandingPage: React.FunctionComponent<ILandingProps> = ({
             : <BottomNavigation navigations={navigations} />}
         </div>
       </div>
-      <div className={styles.footer__layer}>
-        <footer className={styles.wide_container}>
-          <span>Copyright © 2020 BSA. All rights reserved.</span>
-          <a href="/" className={styles.footer__align_right}>Terms & Conditions</a>
-          <a href="/">Privacy Policy</a>
-        </footer>
-      </div>
+      <Footer />
     </div>
   );
 };

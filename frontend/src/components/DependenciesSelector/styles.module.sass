@@ -1,0 +1,82 @@
+.container
+  height: 100%
+  display: flex
+  flex-direction: column
+  gap: 0.5em
+
+.header
+  display: flex
+  text-transform: capitalize
+  flex-direction: row
+
+.add_button
+  margin-left: auto !important
+
+.list_container
+  height: 94%
+
+#add_courses
+  $width_btn: 200px
+  $height_btn: 40px
+  text-align: center
+  border: 1px solid #E0E0E0
+  background: none
+  box-sizing: border-box
+  color: #ffff
+  border-radius: 0
+  font-family: Montserrat, serif
+  font-style: normal
+  font-weight: bold
+  font-size: 1em
+  width: $width_btn
+  height: $height_btn
+
+  &:hover
+    background: #E0E0E0
+    color: #2A2B37
+
+.dependency
+  &__container
+    padding: 1em
+    display: grid
+    grid-template-columns: 30% 10% 10% 1fr
+    grid-template-rows: 2em 3em
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.75)
+    margin: 1em
+
+    &:hover
+      cursor: pointer
+      filter: brightness(50%)
+      background: #0A4C8C
+
+  &__meta
+    &__category
+      grid-area: 1 / 1
+      text-transform: uppercase
+      font-family: Montserrat, serif
+      color: #F27A54
+
+    &__author
+      grid-area: 1 / 2
+
+    &__time
+      grid-area: 1 / 3
+
+    &__level
+      grid-area: 1 / 4
+
+  &__name
+    grid-area: 2 / 1 / span 1 / span 4
+    font-size: 1.5em
+    overflow-x: hidden
+    text-overflow: ellipsis
+
+.modal__header, .modal__content
+  background: #2A2B37 !important
+  color: white !important
+  border-radius: 0 !important
+
+.modal__content
+  max-height: 80vh !important
+  height: 80vh !important
+  overflow-y: auto

@@ -1,5 +1,6 @@
 package com.knewless.core.course.dto;
 
+import com.knewless.core.course.model.Level;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,7 @@ import java.util.UUID;
 public class CourseQueryResult {
     private UUID id;
     private String name;
-    private int level;
+    private Level level;
     private String author;
     private String category;
     private String imageSrc;

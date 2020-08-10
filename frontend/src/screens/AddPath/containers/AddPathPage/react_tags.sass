@@ -1,0 +1,63 @@
+/* Example Styles for React Tags*/
+
+.react-tags
+  position: relative
+
+
+/* Styles for the input */
+.react-tags__search-input
+  width: 200px
+  border-radius: 2px
+  display: inline-block
+
+.react-tags__search-wrapper input.react-tags__search-input,
+.react-tags__search-wrapper input.react-tags__search-input:focus
+  height: 31px
+  margin: 0
+  font-size: 12px
+  width: 100%
+  border: 1px solid #eee
+  padding: 0 4px
+
+
+/* Styles for selected tags */
+.react-tags__selected-tag span.react-tags__selected-tag-name
+  border: 1px solid #ddd
+  background: #eee
+  font-size: 12px
+  display: inline-block
+  padding: 5px
+  margin: 0 5px
+  cursor: move
+  border-radius: 2px
+  color: black
+
+.react-tags__selected-tag a.react-tags__remove
+  color: #aaa
+  margin-left: 5px
+  cursor: pointer
+
+
+/* Styles for suggestions */
+.react-tags__suggestions
+  position: absolute
+
+.react-tags__suggestions ul
+  list-style-type: none
+  box-shadow: .05em .01em .5em rgba(0,0,0,.2)
+  background: white
+  width: 200px
+
+.react-tags__suggestions li
+  border-bottom: 1px solid #ddd
+  padding: 5px 10px
+  margin: 0
+
+.react-tags__suggestions li mark
+  text-decoration: underline
+  background: none
+  font-weight: 600
+
+.react-tags__suggestions ul li.react-tags__activeSuggestion
+  background: #b7cfe0
+  cursor: pointer

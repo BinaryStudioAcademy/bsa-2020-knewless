@@ -4,6 +4,7 @@ import com.knewless.core.course.dto.CourseBriefInfoDto;
 import com.knewless.core.course.dto.CourseDto;
 import com.knewless.core.course.dto.CreateCourseRequestDto;
 import com.knewless.core.course.dto.CreateCourseResponseDto;
+import com.knewless.core.lecture.Dto.ShortLectureDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -24,6 +25,11 @@ public class CourseController {
         this.courseService = courseService;
     }
 
+    @GetMapping("/lectures/user/{id}")
+    public List<ShortLectureDto> getLecturesByUserId(@PathVariable UUID id) {
+        return courseService.getLecturesByUserId(id);
+    }
+
     @GetMapping("/recommended/{id}")
     private List<CourseDto> getRecommendedCourses(@PathVariable("id") UUID id) {
         return courseService.getRecommendedCourses(id);
@@ -36,7 +42,7 @@ public class CourseController {
 
     @PostMapping
     private CreateCourseResponseDto createCourse(@RequestBody CreateCourseRequestDto request) {
-        return null;
+        return courseService.createCourse(request);
     }
 
 }

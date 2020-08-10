@@ -1,10 +1,10 @@
 import { ILecture } from './ILecture';
-import { ComplexityLevel } from './helper';
 
 export interface ICourse {
-    authorId: string;
+    userId: string;
     name: string;
-    lectures: Array<ILecture>;
-    level: ComplexityLevel;
+    lectures: Array<string>;
+    level: string;
     description: string;
+    isReleased: boolean
 }

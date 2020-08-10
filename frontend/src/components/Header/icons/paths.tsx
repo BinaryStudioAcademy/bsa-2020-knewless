@@ -1,7 +1,7 @@
 import React from 'react';
 
 const PathIcon = () => (
-  <svg width="19" height="19" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <svg width="24" height="24" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       d="M11.425 2.4792L8.9458 0L6.4666 2.4792V4.584L8.2146 2.835V19.3366H9.677V2.835L11.425 4.584V2.4792Z"
       fill="white"

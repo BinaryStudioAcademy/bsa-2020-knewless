@@ -36,6 +36,12 @@ const getFetchArgs = (args: IFetchArgsData): IFetchArgs => {
     }
     body = JSON.stringify(args.requestData);
   }
+
+  const token = localStorage.getItem('accessToken');
+  if (token) {
+    headers.set('Authorization', `Bearer ${token}`);
+  }
+
   return {
     method: args.type,
     headers,

@@ -2,7 +2,7 @@ import Logo from './logo';
 import { NavLink } from 'react-router-dom';
 import PathIcon from './icons/paths';
 import React, { useState } from 'react';
-import { Input, Grid, Icon, Label } from 'semantic-ui-react';
+import { Input, Icon, Label } from 'semantic-ui-react';
 import styles from './styles.module.sass';
 import LoginRegister from './LoginRegister';
 import UserElement from './UserElement';
@@ -63,8 +63,8 @@ const Header = ({ currentUser }: IHeaderProps) => {
           </NavLink>
         </div>
         <div className={styles.middle}>
-          <Grid centered columns="3" textAlign="center">
-            <Grid.Column verticalAlign="middle">
+          <div className={styles.icons}>
+            <div className={styles.column}>
               <NavLink exact to="/">
                 <Label
                   basic
@@ -77,10 +77,10 @@ const Header = ({ currentUser }: IHeaderProps) => {
                   </div>
                   <div className={styles.routName}>Home</div>
                 </Label>
+                {currentRout === 0 ? <div className={styles.homeLine} /> : ''}
               </NavLink>
-              {currentRout === 0 ? <div className={styles.homeLine} /> : ''}
-            </Grid.Column>
-            <Grid.Column verticalAlign="middle">
+            </div>
+            <div className={styles.column}>
               <NavLink exact to="/">
                 <Label
                   basic
@@ -93,10 +93,10 @@ const Header = ({ currentUser }: IHeaderProps) => {
                   </div>
                   <div className={styles.routName}>Courses</div>
                 </Label>
+                {currentRout === 1 ? <div className={styles.homeLine} /> : ''}
               </NavLink>
-              {currentRout === 1 ? <div className={styles.homeLine} /> : ''}
-            </Grid.Column>
-            <Grid.Column verticalAlign="middle">
+            </div>
+            <div className={styles.column}>
               <NavLink exact to="/">
                 <Label
                   basic
@@ -109,10 +109,10 @@ const Header = ({ currentUser }: IHeaderProps) => {
                   </div>
                   <div className={styles.routName}>Paths</div>
                 </Label>
+                {currentRout === 2 ? <div className={styles.homeLine} /> : ''}
               </NavLink>
-              {currentRout === 2 ? <div className={styles.homeLine} /> : ''}
-            </Grid.Column>
-          </Grid>
+            </div>
+          </div>
           <Input
             id="searchInput"
             type="text"

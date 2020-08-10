@@ -1,0 +1,120 @@
+.react-tags
+  $background-color: none
+  $font-color: white
+  $dark-font-color: #2A2B37
+
+  position: relative
+
+  div, span
+    color: white
+  /* shared font styles */
+  font-size: 1em
+  line-height: 1.2
+  /* clicking anywhere will focus the input */
+  cursor: text
+
+  .is-focused
+    border-color: #B1B1B1
+
+  &__selected
+    display: inline
+
+    &-tag
+      display: inline-block
+      box-sizing: border-box
+      margin: 0 6px 6px 0
+      padding: 0.78em 1.5em
+      border: 1px solid #D1D1D1
+      /* match the font styles */
+      font-size: inherit
+      line-height: inherit
+      background: none
+      span
+        font-weight: bold
+        font-family: Montserrat, serif
+
+      &:after
+        content: '\2715'
+        color: #AAA
+        margin-left: 8px
+
+      &:hover, &:focus
+        border-color: #B1B1B1
+
+      &:hover
+        cursor: pointer
+
+  &__search
+    display: inline-block
+    /* match tag layout */
+    padding: 7px 2px
+    margin-bottom: 6px
+    /* prevent autoresize overflowing the container */
+    max-width: 100%
+    /* this will become the offsetParent for suggestions */
+    position: relative
+
+    &, &-input
+      font-size: 1.1em
+
+    &-input
+      /* prevent autoresize overflowing the container */
+      max-width: 100%
+      /* remove styles and layout from this element */
+      margin: 0
+      padding: 0
+      border: 0
+      outline: none
+      /* match the font styles */
+      font-size: 1.1em
+      line-height: inherit
+      background: none
+      color: white
+
+      &::placeholder
+        color: #9f9f9f
+        text-decoration: underline
+
+      &::-ms-clear
+        display: none
+
+  &__suggestions
+    position: absolute
+    top: 100%
+    left: 0
+    width: 240px
+    z-index: 2
+
+    ul
+      margin: 4px -1px
+      padding: 0
+      list-style: none
+      background: white
+      border: 1px solid #D1D1D1
+      border-radius: 2px
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2)
+
+      span
+        color: $dark-font-color
+
+      li
+        border-bottom: 1px solid #ddd
+        padding: 6px 8px
+        color: $dark-font-color
+
+        mark
+          text-decoration: underline
+          background: none
+          font-weight: 600
+
+        &:hover
+          cursor: pointer
+          background: #aeaeae
+
+        .is-active
+          background: #97aec3
+
+        .is-disabled
+          color: $dark-font-color !important
+          opacity: 0.5
+          cursor: auto

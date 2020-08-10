@@ -6,7 +6,10 @@ import java.util.UUID;
 
 @Data
 public class CreateCourseRequestDto {
+    private UUID userId;
     private String name;
     private String level;
-    private List<UUID> lecturesId;
+    private String description;
+    private Boolean isReleased;
+    private List<UUID> lectures;
 }
