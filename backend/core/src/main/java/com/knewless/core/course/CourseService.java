@@ -67,13 +67,15 @@ public class CourseService {
         if (request.getIsReleased()) course.setReleasedDate(new Date());
         courseRepository.save(course);
         homeworkRepository.saveAll(homeworks);
-        thisLectures.forEach(l->{
+        thisLectures.forEach(l -> {
             l.setCourse(course);
-            Optional<Homework> ophw = homeworks.stream().filter(h->h.getLecture().getId().equals(l.getId())).findFirst();
+            Optional<Homework> ophw = homeworks.stream().filter(h -> h.getLecture().getId().equals(l.getId())).findFirst();
             if (!ophw.isEmpty()) l.setHomework(ophw.get());
         });
         lectureRepository.saveAll(thisLectures);
         return new CreateCourseResponseDto(course.getId(), true);
+    }
+
     public CourseService(CourseRepository courseRepository) {
         this.courseRepository = courseRepository;
     }
