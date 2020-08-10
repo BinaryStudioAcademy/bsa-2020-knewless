@@ -14,7 +14,6 @@ public interface AuthorInfoMapper {
         briefInfoDto.setAvatar(author.getAvatar());
         briefInfoDto.setRole(user.getRole().getName().name());
         briefInfoDto.setSchoolInfo(schoolBriefInfo);
-        briefInfoDto.setFollowers(author.getFollowers().size());
         return briefInfoDto;
     }
 

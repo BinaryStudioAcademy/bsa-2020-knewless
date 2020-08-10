@@ -15,15 +15,4 @@ public interface PathRepository extends JpaRepository<Path, UUID> {
             "INNER JOIN pc.lectures as pcl)) " +
             "FROM Path p")
     List<PathQueryResult> getAllPaths();
-
-    @Query("SELECT new com.knewless.core.path.dto.PathQueryResult" +
-            "(p.name, p.image, SIZE(p.courses), " +
-                "(" +
-                "SELECT COALESCE(SUM(pcl.duration), 0) " +
-                "FROM p.courses AS pc " +
-                "INNER JOIN pc.lectures AS pcl AND pc.author.id = :authorId" +
-                ")" +
-            ") " +
-            "FROM Path p")
-    List<PathQueryResult> findPathsByAuthorId(UUID authorId);
 }

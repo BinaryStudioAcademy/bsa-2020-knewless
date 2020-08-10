@@ -41,7 +41,4 @@ public class Author extends BaseEntity {
     @JoinColumn(name = "school_id")
     private School school;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<User> followers;
-
 }
