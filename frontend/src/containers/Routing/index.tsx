@@ -30,10 +30,8 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({ isLoading }) => (
     {/* {isAuthorized ? <Header /> : ''} */}
     <Header currentUser={mock} />
     <Switch>
-      <PublicRoute exact path="/public" component={Data} />
       <PublicRoute exact path="/settings" component={Settings} />
       <PublicRoute exact path="/" component={LandingPage} />
-      <PublicRoute exact path="/public" component={Data} />
       <PublicRoute exact path="/login" component={LoginPage} />
       <PublicRoute exact path="/public" component={Data} />
       <PublicRoute exact path="/add_path" component={AddPathPage} />
