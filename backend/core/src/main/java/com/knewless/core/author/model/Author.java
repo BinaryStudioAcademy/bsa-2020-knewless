@@ -7,12 +7,14 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "authors")
 public class Author extends BaseEntity {
+
     @Column(name = "name")
     private String name;
 
@@ -38,4 +40,8 @@ public class Author extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
     @JoinColumn(name = "school_id")
     private School school;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<User> followers;
+
 }

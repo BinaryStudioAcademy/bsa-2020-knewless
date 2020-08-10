@@ -7,10 +7,11 @@ import { IBindingAction } from 'models/Callbacks';
 import { CardsSegment } from 'components/CardsSegment';
 import { CourseCard, ICourseCardProps } from 'components/CourseCard';
 import { IPathCardProps, PathCard } from 'components/PathCard';
-import { IAppState } from 'models/AppState';
 import {
   fetchContinueCoursesRoutine, fetchPathsRoutine, fetchRecommendedCoursesRoutine
 } from '../../routines';
+import { IAppState } from 'models/AppState';
+
 import { student as studentMock } from '../../services/mock';
 
 export interface IMainStudentPageProps {
@@ -121,7 +122,7 @@ const MainStudentPage: React.FunctionComponent<IMainStudentPageProps> = ({
 };
 
 const mapStateToProps = (state: IAppState) => {
-  const { student, continueCourses, recommendedCourses, paths } = state.mainPage.mainPageData;
+  const { continueCourses, recommendedCourses, paths } = state.mainPage.mainPageData;
   return {
     student: studentMock,
     continueCourses,

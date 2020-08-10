@@ -8,7 +8,7 @@ COPY --from=mwader/static-ffmpeg:4.3.1-1 /ffprobe /usr/bin/
 COPY --from=mwader/static-ffmpeg:4.3.1-1 /qt-faststart /usr/bin/
 
 # copy project dir and run build
-ADD ./backend/fileprocessor /builder
+ADD . /builder
 RUN gradle build
 
 # used alpine linux for small disk size

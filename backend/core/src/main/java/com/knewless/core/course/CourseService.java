@@ -11,7 +11,9 @@ import com.knewless.core.lecture.LectureRepository;
 import com.knewless.core.lecture.homework.HomeworkRepository;
 import com.knewless.core.lecture.homework.model.Homework;
 import com.knewless.core.lecture.model.Lecture;
+import com.knewless.core.course.dto.CourseBriefInfoDto;
 import com.knewless.core.course.dto.CourseDto;
+import com.knewless.core.course.mapper.CourseInfoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -21,8 +23,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class CourseService {
-    @Autowired
-    private CourseRepository courseRepository;
+
+    private final CourseRepository courseRepository;
+
     @Autowired
     private LectureRepository lectureRepository;
     @Autowired
@@ -71,6 +74,8 @@ public class CourseService {
         });
         lectureRepository.saveAll(thisLectures);
         return new CreateCourseResponseDto(course.getId(), true);
+    public CourseService(CourseRepository courseRepository) {
+        this.courseRepository = courseRepository;
     }
 
     List<CourseDto> getRecommendedCourses(UUID id) {

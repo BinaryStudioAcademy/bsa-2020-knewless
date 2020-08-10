@@ -44,7 +44,7 @@ function* watchGetPaths() {
   yield takeEvery(fetchPathsRoutine.TRIGGER, getPaths);
 }
 
-export default function* mainStudentPageSagas() {
+export default function* studentMainPageSagas() {
   yield all([
     watchGetStudentCourses(),
     watchGetRecommendedCourses(),

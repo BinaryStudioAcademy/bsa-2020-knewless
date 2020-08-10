@@ -11,6 +11,8 @@ const apiProxy = proxy('/api', {
 
 const wsProxy = proxy('/ws', {target:'http://localhost:5000', ws: true})
 
+const oauth2Proxy = proxy('/oauth2', {target:'http://localhost:5000'})
+
 module.exports = function (app) {
-  app.use(apiProxy, wsProxy);
+  app.use(apiProxy, wsProxy, oauth2Proxy);
 };
