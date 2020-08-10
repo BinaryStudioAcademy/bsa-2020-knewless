@@ -1,5 +1,6 @@
 package com.knewless.core.course;
 
+import com.knewless.core.course.dto.CourseToPlayerProjection;
 import com.knewless.core.author.AuthorRepository;
 import com.knewless.core.author.model.Author;
 import com.knewless.core.course.dto.CreateCourseRequestDto;
@@ -78,6 +79,10 @@ public class CourseService {
 
     public CourseService(CourseRepository courseRepository) {
         this.courseRepository = courseRepository;
+    }
+
+    public CourseToPlayerProjection getCourseByLectureId(UUID lectureId) {
+        return courseRepository.findOneById(UUID.fromString(courseRepository.findByLectureId(lectureId).getId()));
     }
 
     List<CourseDto> getRecommendedCourses(UUID id) {

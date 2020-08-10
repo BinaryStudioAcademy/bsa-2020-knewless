@@ -1,5 +1,7 @@
 package com.knewless.core.course;
 
+import com.knewless.core.course.dto.CourseIdByLectureIdProjection;
+import com.knewless.core.course.dto.CourseToPlayerProjection;
 import com.knewless.core.course.dto.CourseQueryResult;
 import com.knewless.core.course.model.Course;
 import org.springframework.data.domain.Pageable;
@@ -11,6 +13,13 @@ import java.util.List;
 import java.util.UUID;
 
 public interface CourseRepository extends JpaRepository<Course, UUID> {
+
+    CourseToPlayerProjection findOneById(UUID courseId);
+
+    @Query(value = "select cast(course_id as varchar) from lectures where id = :lectureId",
+            nativeQuery = true)
+    CourseIdByLectureIdProjection findByLectureId(@Param("lectureId") UUID lectureId);
+	
     @Query("SELECT new com.knewless.core.course.dto.CourseQueryResult(c.id, " +
             "c.name, c.level, c.author.name, c.category.name, c.image, " +
             "(SELECT COALESCE(SUM(cl.duration), 0) FROM c.lectures as cl), " +

@@ -13,6 +13,7 @@ import { AddPathPage } from '../../screens/AddPath/containers/AddPathPage';
 import LoginPage from '../../screens/Authentication/containers/LoginPage';
 import handler from '../../components/OAuth2RedirectHandler/OAuth2RedirectHandler';
 import MainStudentPage from '../../screens/MainPage/containers/MainStudentPage';
+import LecturePage from 'screens/LecturePage/containers/Lectures/index';
 import MainAuthorPage from '../../screens/AuthorMainPage/containers/MainPage';
 
 export interface IRoutingProps {
@@ -29,19 +30,23 @@ const mock: User = {
 const Routing: React.FunctionComponent<IRoutingProps> = ({ isLoading }) => (
   <div>
     {/* {isAuthorized ? <Header /> : ''} */}
-    <Header currentUser={mock} />
     <Switch>
-      <PublicRoute exact path="/public" component={Data} />
-      <PublicRoute exact path="/author_settings" component={AuthorSettings} />
-      <PublicRoute exact path="/student_settings" component={StudentSettings} />
-      <PublicRoute exact path="/" component={LandingPage} />
-      <PublicRoute exact path="/login" component={LoginPage} />
-      <PublicRoute exact path="/public" component={Data} />
-      <PublicRoute exact path="/add_path" component={AddPathPage} />
-      <PublicRoute exact path="/landing" component={LandingPage} />
-      <PublicRoute exact path="/add_course" component={AddCourse} />
-      <PublicRoute exact path="/main" component={mock.role === 'STUDENT' ? MainStudentPage : MainAuthorPage} />
-      <PublicRoute exact path="/oauth/redirect" component={handler} />
+      <PublicRoute exact path="/lecture/:lectureId" component={LecturePage} />
+      <Route>
+        <Header currentUser={mock} />
+        <PublicRoute exact path="/public" component={Data} />
+        <PublicRoute exact path="/author_settings" component={AuthorSettings} />
+        <PublicRoute exact path="/student_settings" component={StudentSettings} />
+        <PublicRoute exact path="/" component={LandingPage} />
+        <PublicRoute exact path="/public" component={Data} />
+        <PublicRoute exact path="/add_path" component={AddPathPage} />
+        <PublicRoute exact path="/landing" component={LandingPage} />
+        <PublicRoute exact path="/add_course" component={AddCourse} />
+        <PublicRoute exact path="/login" component={LoginPage} />
+        <PublicRoute exact path="/main" component={mock.role === 'STUDENT' ? MainStudentPage : MainAuthorPage} />
+        <PublicRoute exact path="/oauth/redirect" component={handler} />
+      </Route>
+
       <div>
         <LoaderWrapper loading={isLoading}>
           <Switch>

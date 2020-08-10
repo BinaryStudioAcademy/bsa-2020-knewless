@@ -8,6 +8,7 @@ import mainPage from '../screens/MainPage/reducers';
 import authorMainPage from '../screens/AuthorMainPage/reducers';
 import socket from '../components/WebSocketNotifications/reducer';
 import landing from '../screens/Landing/reducers';
+import lecturePage from '../screens/LecturePage/reducers/index';
 import auth from '../screens/Authentication/reducer';
 import addcourse from '../screens/AddCourse/reducers';
 
@@ -18,6 +19,7 @@ export default combineReducers({
   data,
   notify,
   socket,
+  lecturePage,
   mainPage,
   authorMainPage,
   landing,

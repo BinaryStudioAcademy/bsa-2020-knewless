@@ -7,6 +7,7 @@ import authorSettingsSagas from '../screens/AuthorSettings/sagas';
 import mainPageSagas from '../screens/MainPage/containers/MainStudentPage/sagas';
 import authorMainPageSagas from '../screens/AuthorMainPage/sagas';
 import landingSagas from 'screens/Landing/sagas';
+import lectureSagas from 'screens/LecturePage/sagas';
 import authSagas from '../screens/Authentication/sagas';
 import addCourseSagas from 'screens/AddCourse/sagas';
 
@@ -20,6 +21,7 @@ export default function* rootSaga() {
     authorMainPageSagas(),
     socketSagas(),
     landingSagas(),
+    lectureSagas(),
     authSagas(),
     addCourseSagas()
   ]);

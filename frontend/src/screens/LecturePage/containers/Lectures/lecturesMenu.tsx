@@ -1,0 +1,48 @@
+import React from 'react';
+import { connect } from 'react-redux';
+import { Menu, Segment } from 'semantic-ui-react';
+
+import { IBindingCallback1 } from 'models/Callbacks';
+import { ILecturesMenu } from '../../models/ILecturesMenu';
+import { setMenuActiveItemRoutine } from '../../routines';
+import LecturesList from './lecturesList';
+
+import './styles.sass';
+
+export interface ILecturesMenuProps {
+  menuProps: ILecturesMenu;
+  setMenu: IBindingCallback1<ILecturesMenu>;
+}
+
+const LecturesMenu: React.FunctionComponent<ILecturesMenuProps> = ({
+  menuProps, setMenu
+}) => (
+  <div style={{ height: '100%' }}>
+    <Menu className="lecturesMenu" pointing secondary>
+      <Menu.Item
+        name="Lectures"
+        className="lecturesButtonStyle"
+        active={menuProps.lecturesMenuActiveItem === 'Lectures'}
+        onClick={() => setMenu({ lecturesMenuActiveItem: 'Lectures' })}
+      />
+      <Menu.Item
+        name="Discussions"
+        active={menuProps.lecturesMenuActiveItem === 'Disscussions'}
+        onClick={() => setMenu({ lecturesMenuActiveItem: 'Disscussions' })}
+      />
+    </Menu>
+    <Segment className="segmentStyle">
+      {menuProps.lecturesMenuActiveItem === 'Lectures' ? <LecturesList /> : 'Discussions' }
+    </Segment>
+  </div>
+);
+
+const mapStateToProps = (state: any) => ({
+  menuProps: state.lecturePage.lectureMenu
+});
+
+const mapDispatchToProps = {
+  setMenu: setMenuActiveItemRoutine
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(LecturesMenu);
