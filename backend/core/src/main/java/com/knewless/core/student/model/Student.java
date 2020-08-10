@@ -22,6 +22,48 @@ public class Student extends BaseEntity {
     @Column(name = "last_name")
     private String lastName;
 
+    @Column(name = "avatar")
+    private String avatar;
+
+    @Column(name = "job")
+    private String job;
+
+    @Column(name = "location")
+    private String location;
+
+    @Column(name = "company")
+    private String company;
+
+    @Column(name = "website")
+    private String website;
+
+    @Column(name = "biography")
+    private String biography;
+
+    @Column(name = "direction")
+    private String direction;
+
+    @Column(name = "experience")
+    private int experience;
+
+    @Column(name = "level")
+    private String level;
+
+    @Column(name = "industry")
+    private String industry;
+
+    @Column(name = "role")
+    private String role;
+
+    @Column(name = "employment")
+    private String employment;
+
+    @Column(name = "education")
+    private String education;
+
+    @Column(name = "year")
+    private int year;
+
     @Column(name = "total_content_watched")
     private int totalContentWatched;
 }

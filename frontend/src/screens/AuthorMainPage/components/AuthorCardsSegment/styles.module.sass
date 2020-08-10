@@ -1,35 +1,33 @@
 .title
-  color: white !important
-  font-size: 1.7em !important
-  margin-bottom: 1em
-  font-weight: 600 !important
-  display: flex
+    color: white !important
+    font-size: 1.7em !important
+    margin-bottom: 1em
+    font-weight: 600 !important
+    display: flex
 
-.ui.basic.button.btn_plain
-  font-size: 0.7em !important
-  margin-left: 0.5em !important
+#borderless_btn
+  color: #0084f8 !important
+  background: none !important
+  box-shadow: none !important
+  font-size: 0.8em !important
+  border: none !important
+  &:focus
+    color: #0084f8 !important
+    background: none !important
+    box-shadow: none !important
+  &:hover
+    color: #0084f8 !important
+    background: none !important
+    box-shadow: none !important
+    opacity: 0.8
+
+.btns_right
+  margin-left: auto
 
 .cards_layout
   display: flex
   flex-direction: row
-  //justify-content: space-between
   justify-content: flex-start
   align-items: stretch !important
   gap: 2%
 
-.ui.basic.button.btn_view_all
-  color: #0084f8 !important
-  font-size: 0.8em !important
-  //margin-left: 1.5em !important
-  border: none
-
-  &:focus
-    background: none !important
-    box-shadow: none !important
-
-  &:hover
-    background: none !important
-    box-shadow: none !important
-
-.btns_right
-  margin-left: auto

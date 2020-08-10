@@ -1,0 +1,21 @@
+@import "../common.variables"
+
+\:global(.ui.button).gray_outline
+  border-radius: $border_radius
+  font-family: $font_family
+  font-style: $font_style
+  font-weight: $font_weight
+  font-size: $font_size
+  padding: $padding
+  text-transform: $text_transform
+  min-width: $min_width
+  min-height: $min_height
+
+  border: 1px solid #fff
+  background: none
+  color: #ffff
+  transition: box-shadow .3s ease-in-out
+
+  &:hover
+    box-shadow: inset 0 0 0 1px #fff
+

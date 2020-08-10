@@ -13,7 +13,7 @@ export interface IAuthorCardsSegment {
 export const AuthorCardsSegment: React.FunctionComponent<IAuthorCardsSegment> = (
   { title, onCreateClick, onViewAllClick, loading, children }
 ) => (
-  <div>
+  <>
     <h1 className={styles.title}>
       {title}
       <Button
@@ -21,7 +21,7 @@ export const AuthorCardsSegment: React.FunctionComponent<IAuthorCardsSegment> = 
         onClick={onViewAllClick}
         basic
         compact
-        className={styles.btn_view_all}
+        id={styles.borderless_btn}
       >
         {' '}
         View all &gt;
@@ -33,8 +33,7 @@ export const AuthorCardsSegment: React.FunctionComponent<IAuthorCardsSegment> = 
             onClick={onCreateClick}
             basic
             compact
-            color="blue"
-            className={`${styles.btn_plain} ${styles.btn_create}`}
+            id={styles.borderless_btn}
           >
             Create new
           </Button>
@@ -46,5 +45,5 @@ export const AuthorCardsSegment: React.FunctionComponent<IAuthorCardsSegment> = 
         {children}
       </InlineLoaderWrapper>
     </div>
-  </div>
+  </>
 );

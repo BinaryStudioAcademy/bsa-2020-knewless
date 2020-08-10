@@ -1,5 +1,6 @@
 import { all } from 'redux-saga/effects';
 import homeSagas from 'screens/Home/sagas';
+import studentSettingsSagas from '../screens/StudentSettings/sagas';
 import socketSagas from 'components/WebSocketNotifications/sagas';
 import notificationSagas from 'containers/Notifications/sagas';
 import authorSettingsSagas from '../screens/AuthorSettings/sagas';
@@ -14,6 +15,7 @@ export default function* rootSaga() {
     homeSagas(),
     notificationSagas(),
     authorSettingsSagas(),
+    studentSettingsSagas(),
     mainPageSagas(),
     authorMainPageSagas(),
     socketSagas(),
