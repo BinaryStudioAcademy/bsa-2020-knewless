@@ -6,14 +6,14 @@ spring:
           google:
             clientId: test
             clientSecret: test
-            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+            redirectUri: "{baseScheme}://localhost{basePort}/oauth2/callback/{registrationId}"
             scope:
               - email
               - profile
           facebook:
             clientId: test
             clientSecret: test
-            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+            redirectUri: "{baseScheme}://localhost{basePort}/oauth2/callback/{registrationId}"
             scope:
               - email
               - public_profile

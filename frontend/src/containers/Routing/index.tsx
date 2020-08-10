@@ -34,7 +34,7 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({ isLoading }) => (
       <PublicRoute exact path="/public" component={Data} />
       <PublicRoute exact path="/login" component={LoginPage} />
       <PublicRoute exact path="/main" component={mock.role === 'STUDENT' ? MainStudentPage : MainAuthorPage} />
-      <PublicRoute exact path="/oauth2/redirect" component={handler} />
+      <PublicRoute exact path="/oauth/redirect" component={handler} />
       <div>
         <LoaderWrapper loading={isLoading}>
           <Switch>

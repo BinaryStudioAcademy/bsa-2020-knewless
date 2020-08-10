@@ -3,7 +3,7 @@ USER root
 WORKDIR /builder
 
 # copy project dir and run build
-ADD ./backend/core /builder
+ADD . /builder
 RUN gradle build
 
 # used alpine linux for small disk size
