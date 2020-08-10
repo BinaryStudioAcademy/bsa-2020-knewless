@@ -22,6 +22,4 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
 
     @Query("SELECT c.id from Course c")
     List<UUID> findRecommendedCoursesId(Pageable pageable);
-
-    List<Course> findByAuthorId(UUID authorId);
 }

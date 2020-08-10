@@ -21,10 +21,6 @@ public class CourseService {
         this.courseRepository = courseRepository;
     }
 
-    public List<CourseBriefInfoDto> getAuthorCoursesById(UUID authorId) {
-        return CourseInfoMapper.fromEntities(this.courseRepository.findByAuthorId(authorId));
-    }
-
     List<CourseDto> getRecommendedCourses(UUID id) {
         return courseRepository.findRecommendedCoursesId(PageRequest.of(0, 10))
                 .stream()

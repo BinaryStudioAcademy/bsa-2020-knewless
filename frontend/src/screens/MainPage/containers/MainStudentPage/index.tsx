@@ -122,7 +122,7 @@ const MainStudentPage: React.FunctionComponent<IMainStudentPageProps> = ({
 };
 
 const mapStateToProps = (state: IAppState) => {
-  const { continueCourses, recommendedCourses, paths } = state.mainPage.data;
+  const { continueCourses, recommendedCourses, paths } = state.mainPage.mainPageData;
   return {
     student: studentMock,
     continueCourses,

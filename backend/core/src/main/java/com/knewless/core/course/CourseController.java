@@ -39,9 +39,4 @@ public class CourseController {
         return null;
     }
 
-    @GetMapping
-    private ResponseEntity<List<CourseBriefInfoDto>> getAuthorCourses(UUID authorId) {
-        return ResponseEntity.ok(this.courseService.getAuthorCoursesById(authorId));
-    }
-
 }

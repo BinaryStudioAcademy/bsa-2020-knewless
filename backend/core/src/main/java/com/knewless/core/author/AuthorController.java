@@ -35,8 +35,8 @@ public class AuthorController {
         return authorService.setAuthorSettings(settings);
     }
 
-    @GetMapping
-    public ResponseEntity<AuthorBriefInfoDto> getAuthor(UUID authorId) {
+    @GetMapping("/{authorId}")
+    public ResponseEntity<AuthorBriefInfoDto> getAuthor(@PathVariable UUID authorId) {
         try {
             return ResponseEntity.ok(this.authorService.getAuthorInfoById(authorId));
         } catch (NotFoundException ex) {
