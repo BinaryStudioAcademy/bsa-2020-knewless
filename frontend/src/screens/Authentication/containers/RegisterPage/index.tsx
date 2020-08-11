@@ -4,41 +4,41 @@ import { IBindingAction } from '../../../../models/Callbacks';
 import { connect } from 'react-redux';
 
 import styles from '../styles.module.sass';
-import LoginForm from '../../../../components/LoginForm';
 import AuthImage from '../../../../components/AuthImage';
 import { IAppState } from '../../../../models/AppState';
-import { loginRoutine } from '../../../Home/routines';
+import { registerRoutine } from '../../../Home/routines';
+import RegisterForm from '../../../../components/RegisterForm';
 
-export interface ILoginRequest {
+export interface IRegisterRequest {
   email: string;
   password: string;
 }
 
-interface ILoginProps {
+interface IRegisterProps {
   isAuthorized: boolean;
-  isLoginLoading: boolean;
-  isLoginFailure: boolean;
-  loginUser: IBindingAction;
+  isRegisterLoading: boolean;
+  isRegisterFailure: boolean;
+  registerUser: IBindingAction;
 }
 
-const LoginPage: React.FunctionComponent<ILoginProps> = ({
+const RegisterPage: React.FunctionComponent<IRegisterProps> = ({
   isAuthorized,
-  isLoginLoading,
-  loginUser: login,
-  isLoginFailure
+  isRegisterLoading,
+  registerUser: register,
+  isRegisterFailure
 }) => (
   isAuthorized
     ? <Redirect to="/" />
     : (
       <div className={styles.main_container}>
-        {isLoginFailure
+        {isRegisterFailure
           ? (
             <div className={styles.main_container__error_message}>
-              Username or password is incorrect
+              Something went wrong. Please try again
             </div>
           ) : null}
 
-        <LoginForm isLoginLoading={isLoginLoading} login={login} />
+        <RegisterForm register={register} isRegisterLoading={isRegisterLoading} />
         <AuthImage />
       </div>
     ));
@@ -47,17 +47,17 @@ const mapStateToProps = (state: IAppState) => {
   const { auth, requests } = state.auth;
   return ({
     isAuthorized: auth.isAuthorized,
-    isLoginLoading: requests.loginRequest.loading,
-    isLoginFailure: requests.loginRequest.error != null && !requests.loginRequest.loading
+    isRegisterLoading: requests.registerRequest.loading,
+    isRegisterFailure: requests.registerRequest.error != null && !requests.registerRequest.loading
   });
 };
 
 const mapDispatchToProps = {
-  loginUser: loginRoutine.trigger
+  registerUser: registerRoutine.trigger
 };
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(LoginPage);
+)(RegisterPage);
 

@@ -29,13 +29,7 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
-
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentContextPath().path("/user/me")
-                .buildAndExpand(authService.register(signUpRequest)).toUri();
-
-        return ResponseEntity.created(location)
-                .body(new ApiResponse(true, "User registered successfully!"));
+        return ResponseEntity.ok(authService.register(signUpRequest));
     }
 
 }

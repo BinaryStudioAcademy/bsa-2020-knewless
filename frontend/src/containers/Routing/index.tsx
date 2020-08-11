@@ -15,6 +15,7 @@ import handler from '../../components/OAuth2RedirectHandler/OAuth2RedirectHandle
 import MainStudentPage from '../../screens/MainPage/containers/MainStudentPage';
 import LecturePage from 'screens/LecturePage/containers/Lectures/index';
 import MainAuthorPage from '../../screens/AuthorMainPage/containers/MainPage';
+import RegisterPage from '../../screens/Authentication/containers/RegisterPage';
 
 export interface IRoutingProps {
   isLoading: boolean;
@@ -47,6 +48,7 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({ isLoading }) => (
         <PublicRoute exact path="/login" component={LoginPage} />
         <PublicRoute exact path="/main" component={mock.role === 'STUDENT' ? MainStudentPage : MainAuthorPage} />
         <PublicRoute exact path="/oauth/redirect" component={handler} />
+        <PublicRoute exact path="/register" component={RegisterPage} />
       </Route>
 
       <div>

@@ -1,13 +1,14 @@
-import { loginReducer } from '../containers/LoginPage/reducer';
+import { authReducer } from '../containers/reducer';
 import { combineReducers } from 'redux';
 import { reducerCreator } from '../../../helpers/reducer.helper';
-import { loginRoutine } from '../../Home/routines';
+import { loginRoutine, registerRoutine } from '../../Home/routines';
 
 const requests = combineReducers({
-  loginRequest: reducerCreator([loginRoutine.TRIGGER, loginRoutine.SUCCESS])
+  loginRequest: reducerCreator([loginRoutine.TRIGGER, loginRoutine.SUCCESS]),
+  registerRequest: reducerCreator([registerRoutine.TRIGGER])
 });
 
 export default combineReducers({
-  login: loginReducer,
+  auth: authReducer,
   requests
 });

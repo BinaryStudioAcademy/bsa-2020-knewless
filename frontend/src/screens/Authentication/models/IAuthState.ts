@@ -1,9 +1,10 @@
 import { IRequestState } from '../../../models/IRequestState';
-import { IDataLogin } from './IDataLogin';
+import { IDataAuth } from './IDataAuth';
 
 export interface IAuthState {
   requests: {
     loginRequest: IRequestState;
+    registerRequest: IRequestState;
   };
-  login: IDataLogin;
+  auth: IDataAuth;
 }
