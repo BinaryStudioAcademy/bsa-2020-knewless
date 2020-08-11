@@ -74,7 +74,6 @@ const LecturePage: React.FunctionComponent<ILectureProps> = ({
     setChoosedVideo({ choosedVideo: match.params.lectureId });
   }, []);
 
-
   const booleanTrue = true;
   const resultList = videosQueue(lecturesListProps.choosedVideo, lecturesData, match.params.lectureId);
 

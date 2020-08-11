@@ -22,6 +22,7 @@ const UserElement = ({ user }: IUserElementProps) => (
     <Notifications user={{ id: 'f5f987b5-eaee-4709-93f4-94ac585cb812' }} styleName={styles.toolbarBtn} />
     <Popup
       id={styles.popup}
+      on="click"
       trigger={(
         <div className={styles.imageborder}>
           <img src={user.avatar} className={styles.avatar} alt={user.name} />
