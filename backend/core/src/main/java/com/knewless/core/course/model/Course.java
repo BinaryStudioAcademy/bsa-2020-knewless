@@ -19,6 +19,8 @@ import java.util.Set;
 @Data
 @Builder
 @EqualsAndHashCode(callSuper = true)
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "courses")
 public class Course extends BaseEntity {
     @Column(name = "name")
