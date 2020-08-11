@@ -74,7 +74,8 @@ const LecturePage: React.FunctionComponent<ILectureProps> = ({
     setChoosedVideo({ choosedVideo: match.params.lectureId });
   }, []);
 
-  const showControls = true;
+
+  const booleanTrue = true;
   const resultList = videosQueue(lecturesListProps.choosedVideo, lecturesData, match.params.lectureId);
 
   return (
@@ -86,9 +87,9 @@ const LecturePage: React.FunctionComponent<ILectureProps> = ({
             url={resultList}
             width="100%"
             height="100%"
-            playing={showControls}
-            controls={showControls}
-            loop={showControls}
+            playing={booleanTrue}
+            controls={booleanTrue}
+            loop={booleanTrue}
           />
         </div>
         <div className="courseName">

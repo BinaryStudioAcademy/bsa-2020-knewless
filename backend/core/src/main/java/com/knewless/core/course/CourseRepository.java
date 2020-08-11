@@ -45,3 +45,4 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
     List<CourseQueryResult> getCoursesByAuthorId(@Param("authorId") UUID authorId);
 
 }
+
