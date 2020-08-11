@@ -6,13 +6,12 @@ import com.knewless.core.course.dto.CreateCourseRequestDto;
 import com.knewless.core.course.dto.CreateCourseResponseDto;
 import com.knewless.core.lecture.Dto.ShortLectureDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
 
-@Controller
 @RestController
 @RequestMapping("/course")
 public class CourseController {
@@ -48,4 +47,10 @@ public class CourseController {
     public CourseToPlayerProjection getCourseByLectureId(@PathVariable UUID lectureId) {
         return courseService.getCourseByLectureId(lectureId);
     }
+
+    @GetMapping("/author/{authorId}")
+    private ResponseEntity<List<CourseDto>> getAuthorCourses(@PathVariable UUID authorId) {
+        return ResponseEntity.ok(courseService.getCoursesByAuthorId(authorId));
+    }
+
 }

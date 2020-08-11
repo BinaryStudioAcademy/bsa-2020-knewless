@@ -1,11 +1,14 @@
 import { combineReducers } from 'redux';
 import { reducerCreator } from 'helpers/reducer.helper';
 import { authorMainPageData } from '../containers/MainPage/reducer';
-import { fetchAuthorDataRoutine } from '../routines';
+import { fetchAuthorCoursesRoutine, fetchAuthorPathsRoutine } from '../routines';
 
 const requests = combineReducers({
-  dataRequest: reducerCreator(
-    [fetchAuthorDataRoutine.TRIGGER]
+  authorCoursesRequest: reducerCreator(
+    [fetchAuthorCoursesRoutine.TRIGGER]
+  ),
+  authorPathsRequest: reducerCreator(
+    [fetchAuthorPathsRoutine.TRIGGER]
   )
 });
 

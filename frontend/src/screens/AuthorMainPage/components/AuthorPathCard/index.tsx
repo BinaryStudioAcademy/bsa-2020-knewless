@@ -20,9 +20,9 @@ export const AuthorPathCard: React.FunctionComponent<IAuthorPathCardProps> = (
 ) => (
   <div className={styles.container}>
     <img src={logoSrc} className={styles.logo} alt="Path logo" />
-    <div className={styles.title}>
-      <span>{name}</span>
-      <div className={styles.dropdown_right}>
+    <div className={styles.header}>
+      <span className={styles.header__title}>{name}</span>
+      <div className={styles.header__dropdown_right}>
         {onEditClick && (
         <AuthorOptionsDropdown
           onEditClick={onEditClick}

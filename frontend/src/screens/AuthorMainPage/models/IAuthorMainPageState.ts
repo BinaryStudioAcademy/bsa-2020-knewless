@@ -3,7 +3,8 @@ import { IAuthorMainPageData } from './IAuthorMainPageData';
 
 export interface IAuthorMainPageState {
   requests: {
-    dataRequest: IRequestState;
+    authorCoursesRequest: IRequestState;
+    authorPathsRequest: IRequestState;
   };
   data: IAuthorMainPageData;
 }

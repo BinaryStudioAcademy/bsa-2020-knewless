@@ -2,12 +2,11 @@ package com.knewless.core.path;
 
 import com.knewless.core.path.dto.PathDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @CrossOrigin
@@ -25,4 +24,10 @@ public class PathController {
     private List<PathDto> getAllPaths() {
         return pathService.getAllPaths();
     }
+
+    @GetMapping("/author/{authorId}")
+    private ResponseEntity<List<PathDto>> getAuthorPaths(@PathVariable UUID authorId) {
+        return ResponseEntity.ok(pathService.getPathsByAuthorId(authorId));
+    }
+
 }

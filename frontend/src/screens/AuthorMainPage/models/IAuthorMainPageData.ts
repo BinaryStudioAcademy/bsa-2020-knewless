@@ -4,6 +4,6 @@ import { IPathCardProps } from 'components/PathCard';
 
 export interface IAuthorMainPageData {
   author: IAuthor;
-  courses: ICourseCardProps[];
-  paths: IPathCardProps[];
+  authorCourses: ICourseCardProps[];
+  authorPaths: IPathCardProps[];
 }

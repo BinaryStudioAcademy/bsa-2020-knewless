@@ -18,9 +18,9 @@ export const AuthorCourseCard: React.FunctionComponent<IAuthorCourseCardProps> =
   <Card className={styles.course_card}>
     <Image src={imageSrc} wrapped ui={false} className={styles.card_image} />
     <CardContent className={styles.inner_wrapper}>
-      <CardHeader className={styles.title}>
-        <div className={styles.btns}>
-          <span>{name}</span>
+      <CardHeader className={styles.header}>
+        <div className={styles.header__container}>
+          <span className={styles.header__title}>{name}</span>
           {onEditClick && (
             <div className={styles.dropdown_right}>
               <AuthorOptionsDropdown
