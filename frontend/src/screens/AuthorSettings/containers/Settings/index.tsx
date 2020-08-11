@@ -13,6 +13,8 @@ import { connect } from 'react-redux';
 import { fetchGetAuthorSettingsRoutine, fetchSetAuthorSettingsRoutine } from '../../routines';
 import { IAuthorSettings } from 'screens/AuthorSettings/models/IAuthorSettings';
 import { IBindingAction, IBindingCallback1 } from 'models/Callbacks';
+import GrayOutlineButton from 'components/buttons/GrayOutlineButton';
+import GradientButton from 'components/buttons/GradientButton';
 
 export interface IAuthorSettingsProps {
   authorSettings: IAuthorSettings;
@@ -29,19 +31,25 @@ const AuthorSettings: React.FunctionComponent<IAuthorSettingsProps> = ({
     getSettings();
   }, []);
   const history = useHistory();
-  const [name, setName] = useState(settings.name);
+  const [firstName, setFirstName] = useState(settings.firstName);
+  const [lastName, setLastName] = useState(settings.lastName);
   const [avatar, setAvatar] = useState(settings.avatar);
   const [uploadImage, setUploadImage] = useState(null);
   const [location, setLocation] = useState(settings.location);
   const [company, setCompany] = useState(settings.company);
+  const [job, setJob] = useState(settings.job);
   const [website, setWebsite] = useState(settings.website);
+  const [twitter, setTwitter] = useState(settings.twitter);
   const [biography, setBiography] = useState(settings.biography);
   useEffect(() => {
     setAvatar(settings.avatar);
-    setName(settings.name);
+    setFirstName(settings.firstName);
+    setLastName(settings.lastName);
     setLocation(settings.location);
     setCompany(settings.company);
+    setJob(settings.job);
     setWebsite(settings.website);
+    setTwitter(settings.twitter);
     setBiography(settings.biography);
   }, [settings]);
   const handleUploadFile = async file => {
@@ -51,11 +59,14 @@ const AuthorSettings: React.FunctionComponent<IAuthorSettingsProps> = ({
   const handleSubmit = () => {
     const updatedSettings = {
       id: settings.id,
-      name,
+      firstName,
+      lastName,
       avatar,
       location,
       company,
+      job,
       website,
+      twitter,
       biography,
       uploadImage
     };
@@ -79,26 +90,28 @@ const AuthorSettings: React.FunctionComponent<IAuthorSettingsProps> = ({
       </div>
       <Form className={styles.formSettings}>
         <div id={styles.personalTitle} className={styles.title}>Personal info</div>
-        <Form.Group className={styles.formGroup} widths="equal">
+        <Form.Group widths="equal">
           <Form.Input
             fluid
-            label="Name"
-            placeholder="Name"
-            value={name}
-            onChange={e => setName(e.target.value)}
+            className={styles.formField}
+            label="First Name"
+            placeholder="First Name"
+            value={firstName}
+            onChange={e => setFirstName(e.target.value)}
           />
-          <Form.Select
+          <Form.Input
             fluid
-            label="Location"
-            placeholder="Select"
-            options={locationOptions}
-            value={location}
-            onChange={(e, data) => setLocation(data.value as string)}
+            className={styles.formField}
+            label="Last Name"
+            placeholder="Last Name"
+            value={lastName}
+            onChange={e => setLastName(e.target.value)}
           />
         </Form.Group>
-        <Form.Group className={styles.formGroup} widths="equal">
+        <Form.Group widths="equal">
           <Form.Input
             fluid
+            className={styles.formField}
             label="Company name"
             value={company}
             onChange={e => setCompany(e.target.value)}
@@ -106,14 +119,45 @@ const AuthorSettings: React.FunctionComponent<IAuthorSettingsProps> = ({
           />
           <Form.Input
             fluid
+            className={styles.formField}
+            label="Job title"
+            placeholder="Job title"
+            value={job}
+            onChange={e => setJob(e.target.value)}
+          />
+        </Form.Group>
+        <Form.Group widths="2">
+          <Form.Input
+            fluid
+            className={styles.formField}
             label="Personal website"
             placeholder="Personal website"
             value={website}
             onChange={e => setWebsite(e.target.value)}
           />
+          <Form.Input
+            fluid
+            className={styles.formField}
+            label="Twitter"
+            placeholder="Twitter"
+            value={twitter}
+            onChange={e => setTwitter(e.target.value)}
+          />
         </Form.Group>
-        <Form.Group className={styles.formGroup} widths="equal">
+        <Form.Group widths="2">
+          <Form.Select
+            fluid
+            className={styles.formField}
+            label="Location"
+            placeholder="Select"
+            options={locationOptions}
+            value={location}
+            onChange={(e, data) => setLocation(data.value as string)}
+          />
+        </Form.Group>
+        <Form.Group widths="equal">
           <Form.TextArea
+            className={styles.formField}
             label="Biography"
             value={biography}
             id={styles.textBio}
@@ -121,9 +165,9 @@ const AuthorSettings: React.FunctionComponent<IAuthorSettingsProps> = ({
             placeholder="Tell about yourself"
           />
         </Form.Group>
-        <Form.Group className={styles.formGroup}>
-          <Form.Button id={styles.cancelBtn} onClick={() => handleCancel()}>Cancel </Form.Button>
-          <Form.Button id={styles.submitBtn} onClick={() => handleSubmit()}>Save</Form.Button>
+        <Form.Group className={styles.formField}>
+          <GrayOutlineButton className={styles.Btn} onClick={() => handleCancel()}>Cancel </GrayOutlineButton>
+          <GradientButton className={styles.Btn} onClick={() => handleSubmit()}>Save</GradientButton>
         </Form.Group>
       </Form>
     </div>

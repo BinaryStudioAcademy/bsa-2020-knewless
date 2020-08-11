@@ -22,7 +22,8 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
     CourseIdByLectureIdProjection findByLectureId(@Param("lectureId") UUID lectureId);
 
     @Query("SELECT new com.knewless.core.course.dto.CourseQueryResult(c.id, " +
-            "c.name, c.level, c.author.name, c.category.name, c.image, " +
+            "c.name, c.level, concat(c.author.firstName,' ' , c.author.lastName), " +
+            "c.category.name, c.image, " +
             "(SELECT COALESCE(SUM(cl.duration), 0) FROM c.lectures as cl), " +
             "(SELECT COALESCE(SUM(CASE WHEN cr.reaction = TRUE THEN 1 ELSE 0 END), 0) " +
             "FROM c.reactions as cr WHERE cr.reaction = TRUE), " +
@@ -34,12 +35,12 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
     List<UUID> findRecommendedCoursesId(Pageable pageable);
 
     @Query("SELECT DISTINCT new com.knewless.core.course.dto.AuthorCourseQueryResult(c.id, " +
-            "c.name, c.level, c.author.name, c.category.name, c.image, " +
+            "c.name, c.level, concat(c.author.firstName,' ' , c.author.lastName), c.category.name, c.image, " +
             "(SELECT COALESCE(SUM(cl.duration), 0) FROM c.lectures as cl), " +
             "( " +
-                "SELECT COALESCE(SUM(CASE WHEN cr.reaction = TRUE THEN 1 ELSE 0 END), 0) " +
-                "FROM c.reactions as cr " +
-                "WHERE cr.reaction = TRUE" +
+            "SELECT COALESCE(SUM(CASE WHEN cr.reaction = TRUE THEN 1 ELSE 0 END), 0) " +
+            "FROM c.reactions as cr " +
+            "WHERE cr.reaction = TRUE" +
             "), " +
             "SIZE(c.reactions), c.updatedAt) " +
             "FROM Course c WHERE c.author.id = :authorId " +
