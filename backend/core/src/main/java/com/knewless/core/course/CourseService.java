@@ -1,10 +1,8 @@
 package com.knewless.core.course;
 
-import com.knewless.core.course.dto.CourseToPlayerProjection;
+import com.knewless.core.course.dto.*;
 import com.knewless.core.author.AuthorRepository;
 import com.knewless.core.author.model.Author;
-import com.knewless.core.course.dto.CreateCourseRequestDto;
-import com.knewless.core.course.dto.CreateCourseResponseDto;
 import com.knewless.core.course.model.Course;
 import com.knewless.core.course.model.Level;
 import com.knewless.core.lecture.Dto.ShortLectureDto;
@@ -12,7 +10,6 @@ import com.knewless.core.lecture.LectureRepository;
 import com.knewless.core.lecture.homework.HomeworkRepository;
 import com.knewless.core.lecture.homework.model.Homework;
 import com.knewless.core.lecture.model.Lecture;
-import com.knewless.core.course.dto.CourseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -113,9 +110,9 @@ public class CourseService {
         return String.format("%dh %02dm", hh, mm);
     }
 
-    public List<CourseDto> getCoursesByAuthorId(UUID authorId) {
+    public List<AuthorCourseDto> getCoursesByAuthorId(UUID authorId) {
         return courseRepository.getCoursesByAuthorId(authorId).stream()
-                .map(CourseMapper.MAPPER::courseQueryResultToCourseDto)
+                .map(CourseMapper.MAPPER::authorCourseQueryResultToAuthorCourseDto)
                 .collect(Collectors.toUnmodifiableList());
     }
 

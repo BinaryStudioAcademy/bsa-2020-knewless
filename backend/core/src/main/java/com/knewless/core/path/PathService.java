@@ -1,5 +1,6 @@
 package com.knewless.core.path;
 
+import com.knewless.core.path.dto.AuthorPathDto;
 import com.knewless.core.path.dto.PathDto;
 import com.knewless.core.path.dto.PathDurationDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,11 +49,11 @@ public class PathService {
         return new PathDurationDto(minutes, "Minutes");
     }
 
-    public List<PathDto> getPathsByAuthorId(UUID authorId) {
+    public List<AuthorPathDto> getPathsByAuthorId(UUID authorId) {
         final var pathInfo = pathRepository.getPathsByAuthorId(authorId);
         return pathInfo.stream()
                 .map(p -> {
-                    var path = PathMapper.MAPPER.pathQueryResultToPathDto(p);
+                    var path = PathMapper.MAPPER.authorPathQueryResultToAuthorPathDto(p);
                     path.setDuration(getDuration(p.getMinutes()));
                     return path;
                 })

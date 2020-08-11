@@ -1,5 +1,6 @@
 package com.knewless.core.course;
 
+import com.knewless.core.course.dto.AuthorCourseQueryResult;
 import com.knewless.core.course.dto.CourseIdByLectureIdProjection;
 import com.knewless.core.course.dto.CourseToPlayerProjection;
 import com.knewless.core.course.dto.CourseQueryResult;
@@ -32,7 +33,7 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
     @Query("SELECT c.id from Course c")
     List<UUID> findRecommendedCoursesId(Pageable pageable);
 
-    @Query("SELECT DISTINCT new com.knewless.core.course.dto.CourseQueryResult(c.id, " +
+    @Query("SELECT DISTINCT new com.knewless.core.course.dto.AuthorCourseQueryResult(c.id, " +
             "c.name, c.level, c.author.name, c.category.name, c.image, " +
             "(SELECT COALESCE(SUM(cl.duration), 0) FROM c.lectures as cl), " +
             "( " +
@@ -40,9 +41,10 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
                 "FROM c.reactions as cr " +
                 "WHERE cr.reaction = TRUE" +
             "), " +
-            "SIZE(c.reactions)) " +
-            "FROM Course c WHERE c.author.id = :authorId")
-    List<CourseQueryResult> getCoursesByAuthorId(@Param("authorId") UUID authorId);
+            "SIZE(c.reactions), c.updatedAt) " +
+            "FROM Course c WHERE c.author.id = :authorId " +
+            "ORDER BY c.updatedAt")
+    List<AuthorCourseQueryResult> getCoursesByAuthorId(@Param("authorId") UUID authorId);
 
 }
 

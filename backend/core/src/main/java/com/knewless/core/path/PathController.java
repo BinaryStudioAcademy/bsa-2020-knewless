@@ -1,5 +1,6 @@
 package com.knewless.core.path;
 
+import com.knewless.core.path.dto.AuthorPathDto;
 import com.knewless.core.path.dto.PathDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,7 @@ public class PathController {
     }
 
     @GetMapping("/author/{authorId}")
-    private ResponseEntity<List<PathDto>> getAuthorPaths(@PathVariable UUID authorId) {
+    private ResponseEntity<List<AuthorPathDto>> getAuthorPaths(@PathVariable UUID authorId) {
         return ResponseEntity.ok(pathService.getPathsByAuthorId(authorId));
     }
 

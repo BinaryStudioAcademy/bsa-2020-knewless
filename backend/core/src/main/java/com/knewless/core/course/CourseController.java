@@ -1,9 +1,6 @@
 package com.knewless.core.course;
 
-import com.knewless.core.course.dto.CourseDto;
-import com.knewless.core.course.dto.CourseToPlayerProjection;
-import com.knewless.core.course.dto.CreateCourseRequestDto;
-import com.knewless.core.course.dto.CreateCourseResponseDto;
+import com.knewless.core.course.dto.*;
 import com.knewless.core.lecture.Dto.ShortLectureDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -49,7 +46,7 @@ public class CourseController {
     }
 
     @GetMapping("/author/{authorId}")
-    private ResponseEntity<List<CourseDto>> getAuthorCourses(@PathVariable UUID authorId) {
+    private ResponseEntity<List<AuthorCourseDto>> getAuthorCourses(@PathVariable UUID authorId) {
         return ResponseEntity.ok(courseService.getCoursesByAuthorId(authorId));
     }
 

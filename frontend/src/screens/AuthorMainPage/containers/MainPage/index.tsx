@@ -46,13 +46,11 @@ const MainAuthorPage: React.FunctionComponent<IMainAuthorPageProps> = ({
             onViewAllClick={() => (console.log('clicked view author courses'))}
             loading={coursesLoading}
           >
-            {authorCourses ? authorCourses.slice(0, 3).map(c => (
+            {(authorCourses && authorCourses.length > 0) ? authorCourses.slice(0, 3).map(c => (
               <div className={styles.course_card} key={c.name}>
                 <AuthorCourseCard
                   name={c.name}
                   imageSrc={c.imageSrc}
-                  onOpenClick={c.onOpenClick}
-                  onEditClick={() => (console.log('clicked edit course'))}
                 />
               </div>
             )) : <h4>You have no courses yet.</h4>}
@@ -65,14 +63,13 @@ const MainAuthorPage: React.FunctionComponent<IMainAuthorPageProps> = ({
             onViewAllClick={() => console.log('clicked view author paths')}
             loading={pathsLoading}
           >
-            {authorPaths ? authorPaths.slice(0, 3).map(p => (
+            {(authorPaths && authorPaths.length > 0) ? authorPaths.slice(0, 3).map(p => (
               <div className={styles.path_card} key={p.name}>
                 <AuthorPathCard
                   name={p.name}
                   logoSrc={p.logoSrc}
                   courses={p.courses}
                   duration={p.duration}
-                  onEditClick={() => (console.log('clicked edit path'))}
                 />
               </div>
             )) : <h4>You have no paths yet.</h4>}
