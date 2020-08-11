@@ -8,12 +8,16 @@ import { Footer } from '../../../../components/Footer';
 import { useHistory } from 'react-router-dom';
 import styles from './styles.module.sass';
 import { levelOptions } from '../../models/options';
-import { compareName } from '../../services/helper.service';
+import { compareName, getMinutes } from '../../services/helper.service';
 import { IFilterableItem } from '../../../../components/FilterableList';
 import { ILecture } from '../../models/ILecture';
 import { LectureCard } from '../../components/LectureCard';
 import { DependenciesSelector } from '../../../../components/DependenciesSelector';
+import { CoursePreview } from '../../../../components/CoursePreview';
 import { IAppState } from 'models/AppState';
+import GrayOutlineButton from 'components/buttons/GrayOutlineButton';
+import GradientButton from 'components/buttons/GradientButton';
+import CourseImage from '../../../../assets/images/default_course_image.jpg';
 
 interface IAddCourseProps {
   lectures: ILecture [];
@@ -44,7 +48,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
     useHistory.push('/');
   };
 
-  const itemToJsxWithClick = (item: IFilterableItem, click: (item) => void) => {
+  const itemToJsxWithClick = (item: IFilterableItem, click: (item) => void, isSelected?: boolean) => {
     const lecture = item as ILecture;
     return (
       <LectureCard
@@ -53,6 +57,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
         timeMinutes={lecture.timeMinutes}
         key={lecture.id}
         onClick={() => click(lecture)}
+        isSelected={isSelected}
       />
     );
   };
@@ -63,7 +68,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
   const [courseName, setCourseName] = useState('');
   const [level, setLevel] = useState('');
   const [buttonLoading, setButtonLoading] = useState(false);
-  const [previewImage, setPreviewImage] = useState('');
+  const [previewImage, setPreviewImage] = useState(CourseImage);
   const history = useHistory();
 
   const handleUploadFile = async file => {
@@ -94,13 +99,14 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
       level,
       isReleased: isRelease,
       lectures: selected.map(i => i.id),
-      description
+      description,
+      image: uploadImage
     });
     setButtonLoading(false);
     history.push('/main');
   };
 
-  const handleCancle = () => {
+  const handleCancel = () => {
     setPool([...lectures.sort(compareName)]);
     setSelected(Array<ILecture>());
     setDescription('');
@@ -111,7 +117,9 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
   return (
     <div className={styles.main_container}>
       <div className={styles.main_content}>
-        <h1 className={`${styles.title} ${styles.wide_container}`}>New Course</h1>
+        <div className={styles.dividerwrp}>
+          <h3 className={styles.title}>New Course</h3>
+        </div>
         <div className={styles.wide_container}>
           <div className={styles.settingsInput}>
             <div className={styles.top}>
@@ -146,6 +154,16 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
                 value={description}
               />
             </div>
+            <div className={styles.textcontainer}>Preview:</div>
+            <CoursePreview
+              image={previewImage}
+              lecturesNumber={selected.length}
+              name={courseName}
+              level={level}
+              durationMinutes={getMinutes(selected)}
+              action={handleUploadFile}
+              description={description}
+            />
             <div className={styles.buttonGroup}>
               <div className={styles.buttonSaveGroup}>
                 <Button
@@ -154,18 +172,20 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
                   className={isSaveble ? styles.button_save : styles.button_save_disabled}
                   onClick={() => handleSave(false)}
                 />
-                <Button
-                  content="Release"
+                <GradientButton
                   loading={buttonLoading}
                   className={isReleseble ? styles.button_release : styles.button_release_disabled}
                   onClick={() => handleSave(true)}
-                />
+                >
+                  Release
+                </GradientButton>
               </div>
-              <Button
-                content="Cancel"
-                onClick={() => handleCancle()}
+              <GrayOutlineButton
                 className={styles.buttonCancel}
-              />
+                onClick={() => handleCancel()}
+              >
+                Cancel
+              </GrayOutlineButton>
             </div>
           </div>
           <div className={styles.list_container}>

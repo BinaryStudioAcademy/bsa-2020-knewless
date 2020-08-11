@@ -1,4 +1,5 @@
 import { IFilterableItem } from '../../../components/FilterableList';
+import { ILecture } from '../models/ILecture';
 
 export const filter = (element: IFilterableItem, filterValue: string): any => {
   if (!(typeof filterValue !== 'undefined' && filterValue)) {
@@ -18,4 +19,10 @@ export function compareName(a: IFilterableItem, b: IFilterableItem): number {
     return 1;
   }
   return 0;
+}
+
+export function getMinutes(lectures: Array<ILecture>): number {
+  if (lectures.length === 0) return 0;
+  if (lectures.length === 1) return lectures[0].timeMinutes;
+  return lectures.map(l => l.timeMinutes).reduce((t1, t2) => t1 + t2);
 }
