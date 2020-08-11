@@ -27,6 +27,9 @@ const mock: User = {
   role: 'STUDENT'
 };
 
+const role = Math.round(Math.random());
+console.log(role);
+
 const Routing: React.FunctionComponent<IRoutingProps> = ({ isLoading }) => (
   <div>
     {/* {isAuthorized ? <Header /> : ''} */}
@@ -35,8 +38,7 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({ isLoading }) => (
       <Route>
         <Header currentUser={mock} />
         <PublicRoute exact path="/public" component={Data} />
-        <PublicRoute exact path="/author_settings" component={AuthorSettings} />
-        <PublicRoute exact path="/student_settings" component={StudentSettings} />
+        <PublicRoute exact path="/settings" component={role === 1 ? AuthorSettings : StudentSettings} />
         <PublicRoute exact path="/" component={LandingPage} />
         <PublicRoute exact path="/public" component={Data} />
         <PublicRoute exact path="/add_path" component={AddPathPage} />
