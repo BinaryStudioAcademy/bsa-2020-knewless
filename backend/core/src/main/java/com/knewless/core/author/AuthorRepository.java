@@ -17,3 +17,4 @@ public interface AuthorRepository extends JpaRepository<Author, UUID> {
 
     Integer countBySchoolId(UUID schoolId);
 }
+

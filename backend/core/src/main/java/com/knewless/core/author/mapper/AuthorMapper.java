@@ -13,11 +13,14 @@ public class AuthorMapper {
         result.setId(author.getId());
         result.setUserId(author.getUser().getId());
         result.setAvatar(author.getAvatar());
-        result.setName(author.getName());
+        result.setFirstName(author.getFirstName());
+        result.setLastName(author.getLastName());
         result.setLocation(author.getLocation());
         result.setBiography(author.getBiography());
         result.setCompany(author.getCompany());
+        result.setJob(author.getJob());
         result.setWebsite(author.getWebsite());
+        result.setTwitter(author.getTwitter());
         return result;
     }
 
@@ -28,11 +31,14 @@ public class AuthorMapper {
         result.setId(author.getId());
         result.setUser(user);
         result.setAvatar(author.getAvatar());
-        result.setName(author.getName());
+        result.setFirstName(author.getFirstName());
+        result.setLastName(author.getLastName());
         result.setLocation(author.getLocation());
         result.setBiography(author.getBiography());
         result.setCompany(author.getCompany());
+        result.setJob(author.getJob());
         result.setWebsite(author.getWebsite());
+        result.setTwitter(author.getTwitter());
         return result;
     }
 }

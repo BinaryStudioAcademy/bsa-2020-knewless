@@ -1,13 +1,18 @@
-import { author, courses, paths } from './author.page.mock';
+import { callApi } from '../../../helpers/api.helper';
 
-async function mockRequest() {
-  return new Promise(resolve => {
-    setTimeout(() => resolve({
-      author,
-      courses,
-      paths
-    }), 500);
+export async function getAuthorCourses(id: string) {
+  const response = await callApi({
+    endpoint: `/api/course/author/${id}`,
+    type: 'GET'
   });
+  return response.json();
 }
 
-export const getData = async () => mockRequest();
+export async function getAuthorPaths(id: string) {
+  const response = await callApi({
+    endpoint: `/api/paths/author/${id}`,
+    type: 'GET'
+  });
+  return response.json();
+}
+

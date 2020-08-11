@@ -1,5 +1,4 @@
 import React from 'react';
-import { AuthorOptionsDropdown } from '../AuthorOptionsDropdown';
 import styles from './styles.module.sass';
 
 export interface IDuration {
@@ -12,23 +11,15 @@ export interface IAuthorPathCardProps {
   logoSrc: string;
   courses: number;
   duration: IDuration;
-  onEditClick?: () => void;
 }
 
 export const AuthorPathCard: React.FunctionComponent<IAuthorPathCardProps> = (
-  { name, logoSrc, courses, duration, onEditClick }
+  { name, logoSrc, courses, duration }
 ) => (
   <div className={styles.container}>
     <img src={logoSrc} className={styles.logo} alt="Path logo" />
-    <div className={styles.title}>
-      <span>{name}</span>
-      <div className={styles.dropdown_right}>
-        {onEditClick && (
-        <AuthorOptionsDropdown
-          onEditClick={onEditClick}
-        />
-        )}
-      </div>
+    <div className={styles.header}>
+      <span className={styles.header__title}>{name}</span>
     </div>
     <div className={styles.meta}>
       <div>

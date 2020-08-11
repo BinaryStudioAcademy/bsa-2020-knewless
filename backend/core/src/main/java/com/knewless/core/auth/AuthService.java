@@ -50,20 +50,18 @@ public class AuthService {
         return new AuthResponse(token);
     }
 
-    public User register(SignUpRequest signUpRequest) {
+    public AuthResponse register(SignUpRequest signUpRequest) {
         if(userRepository.existsByEmail(signUpRequest.getEmail())) {
             throw new BadRequestException("Email address already in use.");
         }
 
         // Creating user's account
         User user = new User();
-        user.setNickname(signUpRequest.getName());
         user.setEmail(signUpRequest.getEmail());
-        user.setPassword(signUpRequest.getPassword());
-        user.setRole(roleRepository.findByName(signUpRequest.getRole()));
+        user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
 
-        return userRepository.save(user);
+        return login(new LoginRequest(signUpRequest.getEmail(), signUpRequest.getPassword()));
     }
 }

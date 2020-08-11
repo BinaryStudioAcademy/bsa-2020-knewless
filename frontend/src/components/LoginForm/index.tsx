@@ -7,16 +7,15 @@ import { ILoginRequest } from '../../screens/Authentication/containers/LoginPage
 import LogoWithText from '../LogoWithText';
 
 import styles from './styles.module.sass';
+import GradientButton from '../buttons/GradientButton';
 
 interface ILoginForm {
   login: IBindingCallback1<ILoginRequest>;
-  isLoginFailure: boolean;
   isLoginLoading: boolean;
 }
 
 const LoginForm: FunctionComponent<ILoginForm> = ({
   login,
-  isLoginFailure,
   isLoginLoading
 }) => {
   const [email, setEmail] = useState('');
@@ -63,16 +62,9 @@ const LoginForm: FunctionComponent<ILoginForm> = ({
               onChange={ev => passwordChanged(ev.target.value)}
             />
             <div>
-              <Button
-                type="submit"
-                fluid
-                size="large"
-                loading={isLoginLoading}
-                primary
-                className={styles.main_container__button_login}
-              >
+              <GradientButton className={styles.main_container__button_login} loading={isLoginLoading}>
                 LOGIN
-              </Button>
+              </GradientButton>
               <Divider className={styles.main_container__divider} horizontal>Or</Divider>
               <a className="btn btn-block social-btn google" href={GOOGLE_AUTH_URL}>
                 <Button circular type="button" icon="google" color="google plus" />
@@ -87,9 +79,6 @@ const LoginForm: FunctionComponent<ILoginForm> = ({
           New to us?
           {' '}
           <NavLink exact to="/register">Sign Up</NavLink>
-        </Message>
-        <Message error hidden={!isLoginFailure} className={styles.main_container__error_message}>
-          Username or password is incorrect
         </Message>
       </Grid.Column>
     </Grid>

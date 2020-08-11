@@ -6,13 +6,16 @@
   padding: 3em 2em
   grid-gap: 0.5em
 
+.container:hover
+  cursor: pointer
+
 .logo
   object-fit: cover
   max-width: 4.7em
   min-height: 4.7em
   grid-area: 1 / 1 / span 2
 
-.title
+.header
   display: flex
   flex-direction: row
   justify-content: flex-start
@@ -20,11 +23,8 @@
   font-size: 1.5em
   color: #fff
   grid-area: 1 / 2 / span 1 / span 1
-  span
+  &____title
     margin-right: 0.7em
-
-.dropdown_right
-  margin-left: auto
 
 .meta
   display: flex

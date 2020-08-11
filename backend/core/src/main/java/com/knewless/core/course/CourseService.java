@@ -1,9 +1,15 @@
 package com.knewless.core.course;
 
+<<<<<<< HEAD
 import com.knewless.core.author.AuthorRepository;
 import com.knewless.core.author.model.Author;
 import com.knewless.core.course.dto.CreateCourseRequestDto;
 import com.knewless.core.course.dto.CreateCourseResponseDto;
+=======
+import com.knewless.core.course.dto.*;
+import com.knewless.core.author.AuthorRepository;
+import com.knewless.core.author.model.Author;
+>>>>>>> 477e0494e617486ab7da1c90f42f4bcbd79d5eb5
 import com.knewless.core.course.model.Course;
 import com.knewless.core.course.model.Level;
 import com.knewless.core.lecture.Dto.ShortLectureDto;
@@ -11,9 +17,12 @@ import com.knewless.core.lecture.LectureRepository;
 import com.knewless.core.lecture.homework.HomeworkRepository;
 import com.knewless.core.lecture.homework.model.Homework;
 import com.knewless.core.lecture.model.Lecture;
+<<<<<<< HEAD
 import com.knewless.core.course.dto.CourseBriefInfoDto;
 import com.knewless.core.course.dto.CourseDto;
 import com.knewless.core.course.mapper.CourseInfoMapper;
+=======
+>>>>>>> 477e0494e617486ab7da1c90f42f4bcbd79d5eb5
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -26,12 +35,20 @@ public class CourseService {
 
     private final CourseRepository courseRepository;
 
+    private final LectureRepository lectureRepository;
+
+    private final AuthorRepository authorRepository;
+
+    private final HomeworkRepository homeworkRepository;
+
     @Autowired
-    private LectureRepository lectureRepository;
-    @Autowired
-    private AuthorRepository authorRepository;
-    @Autowired
-    private HomeworkRepository homeworkRepository;
+    public CourseService(CourseRepository courseRepository, LectureRepository lectureRepository,
+                         AuthorRepository authorRepository, HomeworkRepository homeworkRepository) {
+        this.courseRepository = courseRepository;
+        this.lectureRepository = lectureRepository;
+        this.authorRepository = authorRepository;
+        this.homeworkRepository = homeworkRepository;
+    }
 
     public List<ShortLectureDto> getLecturesByUserId(UUID id) {
         List<Lecture> allLectures = lectureRepository.getLecturesByUserId(id);
@@ -54,7 +71,7 @@ public class CourseService {
         List<Lecture> thisLectures = new ArrayList<>();
         List<Homework> homeworks = new ArrayList<>();
         Course course = Course.builder().level(Level.valueOf(request.getLevel())).author(author)
-                .name(request.getName()).description(request.getDescription()).image(request.getImage()).build();
+                .name(request.getName()).description(request.getDescription()).build();
         for (Lecture l : allLectures) {
             Lecture lec = Lecture.builder().name(l.getName()).sourceUrl(l.getSourceUrl()).description(l.getDescription())
                     .duration(l.getDuration()).build();
@@ -76,8 +93,8 @@ public class CourseService {
         return new CreateCourseResponseDto(course.getId(), true);
     }
 
-    public CourseService(CourseRepository courseRepository) {
-        this.courseRepository = courseRepository;
+    public CourseToPlayerProjection getCourseByLectureId(UUID lectureId) {
+        return courseRepository.findOneById(UUID.fromString(courseRepository.findByLectureId(lectureId).getId()));
     }
 
     List<CourseDto> getRecommendedCourses(UUID id) {
@@ -104,6 +121,12 @@ public class CourseService {
         long hh = minutes / 60;
         long mm = minutes % 60;
         return String.format("%dh %02dm", hh, mm);
+    }
+
+    public List<AuthorCourseDto> getCoursesByAuthorId(UUID authorId) {
+        return courseRepository.getCoursesByAuthorId(authorId).stream()
+                .map(CourseMapper.MAPPER::authorCourseQueryResultToAuthorCourseDto)
+                .collect(Collectors.toUnmodifiableList());
     }
 
 }

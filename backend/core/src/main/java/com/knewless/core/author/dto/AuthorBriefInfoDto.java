@@ -8,7 +8,8 @@ import java.util.UUID;
 @Data
 public class AuthorBriefInfoDto {
     private UUID id;
-    private String name;
+    private String firstName;
+    private String lastName;
     private String role;
     private String avatar;
     private SchoolBriefInfoDto schoolInfo;

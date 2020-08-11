@@ -4,11 +4,14 @@ import { fetchGetAuthorSettingsRoutine } from '../../routines';
 
 const initSettings = {
   id: undefined,
-  name: undefined,
+  firstName: undefined,
+  lastName: undefined,
   avatar: undefined,
   location: undefined,
   company: undefined,
+  job: undefined,
   website: undefined,
+  twitter: undefined,
   biography: undefined
 };
 

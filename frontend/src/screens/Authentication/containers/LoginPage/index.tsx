@@ -3,7 +3,7 @@ import { Redirect } from 'react-router-dom';
 import { IBindingAction } from '../../../../models/Callbacks';
 import { connect } from 'react-redux';
 
-import styles from './styles.module.sass';
+import styles from '../styles.module.sass';
 import LoginForm from '../../../../components/LoginForm';
 import AuthImage from '../../../../components/AuthImage';
 import { IAppState } from '../../../../models/AppState';
@@ -31,17 +31,24 @@ const LoginPage: React.FunctionComponent<ILoginProps> = ({
     ? <Redirect to="/" />
     : (
       <div className={styles.main_container}>
-        <LoginForm isLoginLoading={isLoginLoading} isLoginFailure={isLoginFailure} login={login} />
+        {isLoginFailure
+          ? (
+            <div className={styles.main_container__error_message}>
+              Username or password is incorrect
+            </div>
+          ) : null}
+
+        <LoginForm isLoginLoading={isLoginLoading} login={login} />
         <AuthImage />
       </div>
     ));
 
 const mapStateToProps = (state: IAppState) => {
-  const { isAuthorized } = state.auth.login;
+  const { auth, requests } = state.auth;
   return ({
-    isAuthorized,
-    isLoginLoading: state.auth.requests.loginRequest.loading,
-    isLoginFailure: state.auth.requests.loginRequest.error != null && !state.auth.requests.loginRequest.loading
+    isAuthorized: auth.isAuthorized,
+    isLoginLoading: requests.loginRequest.loading,
+    isLoginFailure: requests.loginRequest.error != null && !requests.loginRequest.loading
   });
 };
 

@@ -15,8 +15,11 @@ import java.util.List;
 @Table(name = "authors")
 public class Author extends BaseEntity {
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "first_name")
+    private String firstName;
+
+    @Column(name = "last_name")
+    private String lastName;
 
     @Column(name = "avatar")
     private String avatar;
@@ -27,8 +30,14 @@ public class Author extends BaseEntity {
     @Column(name = "company")
     private String company;
 
+    @Column(name = "job")
+    private String job;
+
     @Column(name = "website")
     private String website;
+
+    @Column(name = "twitter")
+    private String twitter;
 
     @Column(name = "biography")
     private String biography;

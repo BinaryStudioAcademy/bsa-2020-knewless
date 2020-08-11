@@ -6,6 +6,9 @@
   background: #2B2A36 !important
   box-shadow: none !important
 
+.course_card:hover
+  cursor: pointer
+
 .inner_wrapper
   padding: 2em 2em 0 !important
   display: flex
@@ -13,22 +16,18 @@
   align-items: flex-start
   gap: 2em
 
-.title
-  font-size: 1.5em !important
-  font-weight: normal !important
-  color: white !important
-  flex-grow: 1
-
-.btns
+.header
   display: flex
   flex-direction: row
   justify-content: flex-start
   width: 100%
-  span
+  font-size: 1.5em
+  color: white !important
+  &__container
+    display: flex
+    width: 100%
+  &__title
     margin-right: 0.7em
-
-.dropdown_right
-  margin-left: auto
 
 .meta_info
   display: flex
