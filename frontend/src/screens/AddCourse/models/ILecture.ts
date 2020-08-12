@@ -1,6 +1,6 @@
 export interface ILecture {
-    id: string;
-    name: string;
-    description: string;
-    timeMinutes: number;
+  id: string;
+  name: string;
+  description?: string;
+  timeMinutes?: number;
 }

@@ -9,7 +9,7 @@ import Header, { User } from '../../components/Header';
 import AuthorSettings from 'screens/AuthorSettings/containers/Settings';
 import StudentSettings from 'screens/StudentSettings/containers/Settings';
 import AddCourse from '../../screens/AddCourse/containers/AddCoursePage';
-import { AddPathPage } from '../../screens/AddPath/containers/AddPathPage';
+import AddPathPage from '../../screens/AddPath/containers/AddPathPage';
 import LoginPage from '../../screens/Authentication/containers/LoginPage';
 import handler from '../../components/OAuth2RedirectHandler/OAuth2RedirectHandler';
 import MainStudentPage from '../../screens/MainPage/containers/MainStudentPage';

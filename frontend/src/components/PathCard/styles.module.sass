@@ -12,6 +12,19 @@
   min-height: 4.7em
   grid-area: 1 / 1 / span 2
 
+.clickable
+  &:hover
+    filter: brightness(50%)
+    cursor: pointer
+
+.cover
+  &_clicked
+    &:hover
+      background: #2A2B37
+      opacity: 0.5
+      cursor: pointer
+  &_none
+
 .title
   font-size: 1.5em
   color: #fff

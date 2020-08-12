@@ -10,6 +10,7 @@ import landingSagas from 'screens/Landing/sagas';
 import lectureSagas from 'screens/LecturePage/sagas';
 import authSagas from '../screens/Authentication/sagas';
 import addCourseSagas from 'screens/AddCourse/sagas';
+import addPathSagas from '../screens/AddPath/sagas';
 
 export default function* rootSaga() {
   yield all([
@@ -23,6 +24,7 @@ export default function* rootSaga() {
     landingSagas(),
     lectureSagas(),
     authSagas(),
-    addCourseSagas()
+    addCourseSagas(),
+    addPathSagas()
   ]);
 }

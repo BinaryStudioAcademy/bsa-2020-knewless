@@ -4,6 +4,7 @@ import { ICourseState } from '../screens/AddCourse/models/ICourseState';
 import { IMainStudentPageState } from '../screens/MainPage/models/IMainStudentPageState';
 import { IAuthorMainPageState } from '../screens/AuthorMainPage/models/IAuthorMainPageState';
 import { IAuthState } from '../screens/Authentication/models/IAuthState';
+import { IAddPathState } from '../screens/AddPath/models/AddPathState';
 
 export interface IAppState {
   toastr: any;
@@ -13,4 +14,5 @@ export interface IAppState {
   mainPage: IMainStudentPageState;
   authorMainPage: IAuthorMainPageState;
   auth: IAuthState;
+  addPathPage: IAddPathState;
 }

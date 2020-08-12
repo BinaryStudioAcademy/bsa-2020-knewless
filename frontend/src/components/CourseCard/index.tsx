@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Card, CardContent, CardHeader, CardMeta, Icon, Image, Rating } from 'semantic-ui-react';
 import styles from './styles.module.sass';
 import './rating.sass';
+import GradientButton from '../buttons/GradientButton';
 
 export interface ICardCategory {
   name: string;
@@ -45,10 +46,10 @@ export const CourseCard: React.FunctionComponent<ICourseCardProps> = ({
       {
         !hideButton
         && (
-        <Button icon labelPosition="right" onClick={onOpenClick} className={styles.btn_more}>
+        <GradientButton icon labelPosition="right" onClick={onOpenClick} className={styles.btn_more}>
           Find out more
           <Icon name="angle right" className={styles.btn_more_arrow} />
-        </Button>
+        </GradientButton>
         )
       }
     </CardContent>

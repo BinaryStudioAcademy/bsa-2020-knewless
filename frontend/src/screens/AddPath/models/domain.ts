@@ -3,7 +3,8 @@ export interface IPath {
   name: string;
   courses: ICourse[];
   description: string;
-  tags: string[];
+  tags: ITag[];
+  imageTag: ITag;
 }
 
 export interface ICourse {
@@ -13,4 +14,11 @@ export interface ICourse {
   author: string;
   timeMinutes: number;
   level: string;
+  image: string;
+}
+
+export interface ITag {
+  id: string;
+  name: string;
+  imageSrc: string;
 }

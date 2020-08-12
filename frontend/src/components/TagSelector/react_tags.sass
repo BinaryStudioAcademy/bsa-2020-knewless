@@ -102,6 +102,14 @@
         padding: 6px 8px
         color: $dark-font-color
 
+        &.is-active
+          background: #97aec3
+
+        &.is-disabled
+          color: $dark-font-color !important
+          opacity: 0.7
+          cursor: auto
+
         mark
           text-decoration: underline
           background: none
@@ -110,11 +118,3 @@
         &:hover
           cursor: pointer
           background: #aeaeae
-
-        .is-active
-          background: #97aec3
-
-        .is-disabled
-          color: $dark-font-color !important
-          opacity: 0.5
-          cursor: auto

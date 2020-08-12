@@ -9,7 +9,6 @@ import com.knewless.core.tag.model.Tag;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -41,12 +40,15 @@ public class Lecture extends BaseEntity {
     @JoinColumn(name = "homework_id")
     private Homework homework;
 
+    @Builder.Default
     @OneToMany(mappedBy = "lecture", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<LectureComment> comments = List.of();
 
+    @Builder.Default
     @OneToMany(mappedBy = "lecture", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<LectureReaction> reactions = List.of();
 
+    @Builder.Default
     @ManyToMany(mappedBy = "lectures")
     private Set<Tag> tags = Set.of();
 }

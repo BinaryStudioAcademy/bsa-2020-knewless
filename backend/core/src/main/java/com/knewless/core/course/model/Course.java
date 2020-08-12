@@ -10,10 +10,9 @@ import com.knewless.core.path.model.Path;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -23,6 +22,11 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "courses")
 public class Course extends BaseEntity {
+    
+    public Course(UUID id) {
+        this.setId(id);
+    }
+    
     @Column(name = "name")
     private String name;
 
@@ -46,20 +50,21 @@ public class Course extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
     @JoinColumn(name = "category_id")
     private Category category;
-
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
-    @JoinTable(name = "course_path",
-            joinColumns = @JoinColumn(name = "course_id"),
-            inverseJoinColumns = @JoinColumn(name = "path_id"))
+    
+    @Builder.Default
+    @ManyToMany(mappedBy = "courses", cascade = CascadeType.REFRESH)
     private List<Path> paths = List.of();
-
+    
+    @Builder.Default
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CourseComment> comments = List.of();
-
+    
+    @Builder.Default
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CourseReaction> reactions = List.of();
 
+    @Builder.Default
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Lecture> lectures = List.of();;
+    private List<Lecture> lectures = List.of();
 }
 

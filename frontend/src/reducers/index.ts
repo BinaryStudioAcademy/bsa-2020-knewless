@@ -11,6 +11,7 @@ import landing from '../screens/Landing/reducers';
 import lecturePage from '../screens/LecturePage/reducers/index';
 import auth from '../screens/Authentication/reducer';
 import addcourse from '../screens/AddCourse/reducers';
+import addPathPage from '../screens/AddPath/reducers';
 
 export default combineReducers({
   toastr,
@@ -24,5 +25,6 @@ export default combineReducers({
   authorMainPage,
   landing,
   addcourse,
-  auth
+  auth,
+  addPathPage
 });
