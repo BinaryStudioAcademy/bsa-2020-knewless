@@ -38,6 +38,8 @@ public class CourseController {
     @PostMapping
     private CreateCourseResponseDto createCourse(@RequestBody CreateCourseRequestDto request) {
         return courseService.createCourse(request);
+    }
+
     @GetMapping("/lecture/{lectureId}")
     public CourseToPlayerProjection getCourseByLectureId(@PathVariable UUID lectureId) {
         return courseService.getCourseByLectureId(lectureId);
@@ -48,3 +50,4 @@ public class CourseController {
         return ResponseEntity.ok(courseService.getCoursesByAuthorId(authorId));
     }
 
+}
