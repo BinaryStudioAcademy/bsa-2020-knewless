@@ -16,16 +16,23 @@ interface ISettingsRouteProps {
 const SettingsRoute: React.FunctionComponent<ISettingsRouteProps> = ({
   settingsMode,
   user
-}) => (
-  <PublicRoute
-    exact
-    path="/settings"
-    component={(settingsMode === RoleTypes.AUTHOR
-        || user?.role?.name === RoleTypes[RoleTypes.AUTHOR])
-      ? AuthorSettings
-      : StudentSettings}
-  />
-);
+}) => {
+  let renderComponent: React.FunctionComponent = () => null;
+  if (settingsMode === RoleTypes.AUTHOR
+    || user?.role?.name === RoleTypes[RoleTypes.AUTHOR]) {
+    renderComponent = AuthorSettings;
+  } else if (settingsMode === RoleTypes.USER
+    || user?.role?.name === RoleTypes[RoleTypes.USER]) {
+    renderComponent = StudentSettings;
+  }
+  return (
+    <PublicRoute
+      exact
+      path="/settings"
+      component={renderComponent}
+    />
+  );
+};
 
 const mapStateToProps = (state: IAppState) => {
   const { settingsMode, user } = state.appRouter;
