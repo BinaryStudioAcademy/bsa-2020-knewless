@@ -9,7 +9,7 @@ const apiProxy = proxy('/api', {
   }
 })
 
-const wsProxy = proxy('/ws', {target:'http://localhost:5000', ws: true})
+const wsProxy = proxy('/socket.io', {target:'http://localhost:3003', ws: true})
 
 const oauth2Proxy = proxy('/oauth2', {target:'http://localhost:5000'})
 

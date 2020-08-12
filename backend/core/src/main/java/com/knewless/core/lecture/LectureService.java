@@ -30,6 +30,6 @@ public class LectureService {
         message.setFolderId(folderId);
         message.setType(MessageType.REQUEST);
 
-        messageSender.send(message);
+        messageSender.sendToFileProcessor(message);
     }
 }

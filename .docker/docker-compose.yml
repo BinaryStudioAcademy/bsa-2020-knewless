@@ -55,8 +55,24 @@ services:
       options:
         max-size: "10m"
         max-file: "5"
-    volumes:
-      - /knewless/assets:/knewless/assets
+
+  #PushService
+  push:
+    image: bsa2020knewless/dockerhub:push
+    container_name: push
+    depends_on:
+      - rabbitmq
+    ports:
+      - '3003:3003'
+    env_file:
+      - ~/.env/push.env
+    environment:
+      WAIT_HOSTS: rabbitmq:5672
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
 
   # fileprocessor
   fileprocessor:
@@ -81,12 +97,13 @@ services:
 
   # Frontend
   client:
-    image: bsa2020knewless/dockerhub:client
+    image: client
     container_name: client
     depends_on:
       - api
+      - push
     ports:
-      - '80:80'
+      - '8080:80'
     env_file:
       - ~/.env/client.env
     logging:
@@ -96,7 +113,7 @@ services:
         max-file: "5"
     volumes:
       - /data/certs:/etc/nginx/certs
-      - /knewless/assets:/knewless/assets
+      - /knewless/assets:/knewless/asset
 
 volumes:
   pgdata_api:

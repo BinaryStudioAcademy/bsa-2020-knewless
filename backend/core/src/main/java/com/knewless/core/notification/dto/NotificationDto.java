@@ -1,10 +1,10 @@
 package com.knewless.core.notification.dto;
 
-import com.knewless.core.db.SourceType;
 import com.knewless.core.notification.model.Notification;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.UUID;
@@ -14,18 +14,18 @@ import java.util.UUID;
 @Data
 public class NotificationDto {
     private String text;
-    private String link;
-    private String sourceName;
     private UUID id;
+    private String sourceType;
+    private String sourceId;
     private boolean isRead;
     private Date date;
 
     public static NotificationDto fromEntity(Notification notification){
         return NotificationDto.builder()
-                .sourceName(notification.getSourceName())
                 .id(notification.getId())
                 .text(notification.getText())
-                .link(notification.getLink())
+                .sourceType(notification.getSourceType().toString())
+                .sourceId(notification.getSourceId().toString())
                 .isRead(notification.isRead())
                 .date(notification.getCreatedAt())
                 .build();

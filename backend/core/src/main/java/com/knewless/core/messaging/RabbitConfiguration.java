@@ -32,7 +32,7 @@ public class RabbitConfiguration implements RabbitListenerConfigurer {
 
     @Bean
     public Queue queue() {
-        return new Queue(queue, false);
+        return new Queue(queue, true);
     }
 
     @Bean

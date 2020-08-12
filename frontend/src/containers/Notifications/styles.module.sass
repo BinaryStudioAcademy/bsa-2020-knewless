@@ -1,31 +1,58 @@
-.action
-    align-self: center
-    width: 100%
-    border-color: lightgray
-    background-color: white !important
-    text-align: center
-
 .notifications
-    max-height: 30em
+    max-height: 400px
     display: flex
     flex-flow: column-reverse
-    overflow-y: scroll
+    overflow-y: auto
+    background-color: #F0F3F5
 
 .popup
     padding: 0px !important
     margin-top: 1em !important
-    margin-right: 6px !important
+    margin-right: 12px !important
 
 .title
-    width: 100%
+    width: 400px
     background-color: white
-    height: 2em
     display: flex
-    justify-content: center
-    align-items: center
-    text-align: center
-    box-shadow: 0 1px rgba(0, 0, 0, 0.1)
+    justify-content: space-between
+    height: 50px
+    line-height: 50px
+    padding: 0 20px
+    border-bottom: 1px solid lighten(#ACAEAF, 10%)
+    box-shadow: 0px 1px rgba(0, 0, 0, 0.15)
+    z-index: 1
+    p.titleHeader     
+        line-height: 50px
+        color: #000
+        font-weight: bold
+    .action
+        color: #666
+        text-align: center
+        padding-left: 3px
+        &:hover
+            cursor: pointer
 
 .label
     position: absolute
     bottom: 54%
+
+.empty
+    width: 400px
+    padding: 50px
+    padding-top: 0
+    line-height: 50px
+    text-align: center
+    color: #ACAEAF
+    img 
+        width: 200px
+        height: auto
+        margin-bottom: -30px
+    .emptyTitle
+        color: #000
+        display: block
+        margin: 0
+        padding: 0
+    p 
+        color: #ACAEAF
+        margin-top: 20px
+

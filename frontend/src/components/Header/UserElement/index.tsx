@@ -19,7 +19,7 @@ const UserElement = ({ user }: IUserElementProps) => (
     >
       <Icon name="heart" size="big" inverted />
     </Label>
-    <Notifications user={{ id: 'f5f987b5-eaee-4709-93f4-94ac585cb812' }} styleName={styles.toolbarBtn} />
+    <Notifications user={{ id: user.id }} styleName={styles.toolbarBtn} />
     <Popup
       id={styles.popup}
       on="click"

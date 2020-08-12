@@ -1,9 +1,9 @@
 export interface INotification {
   text: string,
-  link: string,
-  sourceName: string,
   id: string,
   read: boolean,
+  sourceType: string,
+  sourceId: string,
   date: string,
   deleting?: boolean
 }

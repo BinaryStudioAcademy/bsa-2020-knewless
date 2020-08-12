@@ -29,12 +29,6 @@ public class Notification extends BaseEntity {
     @Column(name = "text")
     private String text;
 
-    @Column(name = "link")
-    private String link;
-
     @Column(name = "is_read")
     private boolean isRead;
-
-    @Column(name = "source_name")
-    private String sourceName;
 }
