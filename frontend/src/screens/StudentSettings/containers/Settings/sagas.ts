@@ -7,7 +7,9 @@ import * as imageService from 'services/image.service';
 function* getSettings() {
   try {
     const response = yield call(settingsService.getSettings);
-    yield put(fetchGetStudentSettingsRoutine.success(response));
+    if (response !== null) {
+      yield put(fetchGetStudentSettingsRoutine.success(response));
+    }
   } catch (error) {
     yield put(fetchGetStudentSettingsRoutine.failure(error?.message));
   }
@@ -24,7 +26,7 @@ function* setSettings(action: Routine<any>) {
       const { link } = yield call(() => imageService.uploadImage(author.uploadImage));
       author.avatar = link;
     }
-    const response = yield call(() => settingsService.setSettings(action.payload));
+    yield call(() => settingsService.setSettings(action.payload));
   } catch (error) {
     console.log('Set settings failed!');
   }

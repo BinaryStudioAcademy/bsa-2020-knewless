@@ -6,8 +6,6 @@ import LandingPage from 'screens/Landing/containers/LandingPage';
 import PublicRoute from 'components/PublicRoute';
 import Data from 'screens/Home/containers/Data';
 import Header, { User } from '../../components/Header';
-import AuthorSettings from 'screens/AuthorSettings/containers/Settings';
-import StudentSettings from 'screens/StudentSettings/containers/Settings';
 import AddCourse from '../../screens/AddCourse/containers/AddCoursePage';
 import AddPathPage from '../../screens/AddPath/containers/AddPathPage';
 import LoginPage from '../../screens/Authentication/containers/LoginPage';
@@ -15,10 +13,15 @@ import handler from '../../components/OAuth2RedirectHandler/OAuth2RedirectHandle
 import MainStudentPage from '../../screens/MainPage/containers/MainStudentPage';
 import LecturePage from 'screens/LecturePage/containers/Lectures/index';
 import MainAuthorPage from '../../screens/AuthorMainPage/containers/MainPage';
+import SettingsRoute from 'containers/SettingsRoute';
 import RegisterPage from '../../screens/Authentication/containers/RegisterPage';
+import { IAppState } from '../../models/AppState';
+import { connect } from 'react-redux';
+import { IUser } from 'containers/AppRouter/models/IUser';
 
 export interface IRoutingProps {
   isLoading: boolean;
+  user: IUser;
 }
 
 const mock: User = {
@@ -31,15 +34,15 @@ const mock: User = {
 const role = Math.round(Math.random());
 console.log(role);
 
-const Routing: React.FunctionComponent<IRoutingProps> = ({ isLoading }) => (
+const Routing: React.FunctionComponent<IRoutingProps> = ({ isLoading, user }) => (
   <div>
     {/* {isAuthorized ? <Header /> : ''} */}
     <Switch>
       <PublicRoute exact path="/lecture/:lectureId" component={LecturePage} />
       <Route>
         <Header currentUser={mock} />
+        <SettingsRoute />
         <PublicRoute exact path="/public" component={Data} />
-        <PublicRoute exact path="/settings" component={role === 1 ? AuthorSettings : StudentSettings} />
         <PublicRoute exact path="/" component={LandingPage} />
         <PublicRoute exact path="/public" component={Data} />
         <PublicRoute exact path="/add_path" component={AddPathPage} />
@@ -70,4 +73,11 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({ isLoading }) => (
   </div>
 );
 
-export default Routing;
+const mapStateToProps = (state: IAppState) => {
+  const { user } = state.appRouter;
+  return {
+    user
+  };
+};
+
+export default connect(mapStateToProps)(Routing);

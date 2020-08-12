@@ -10,6 +10,7 @@ import landingSagas from 'screens/Landing/sagas';
 import lectureSagas from 'screens/LecturePage/sagas';
 import authSagas from '../screens/Authentication/sagas';
 import addCourseSagas from 'screens/AddCourse/sagas';
+import appRouterSagas from 'containers/AppRouter/sagas';
 import addPathSagas from '../screens/AddPath/sagas';
 
 export default function* rootSaga() {
@@ -25,6 +26,7 @@ export default function* rootSaga() {
     lectureSagas(),
     authSagas(),
     addCourseSagas(),
+    appRouterSagas(),
     addPathSagas()
   ]);
 }

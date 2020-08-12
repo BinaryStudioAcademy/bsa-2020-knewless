@@ -1,0 +1,104 @@
+.container
+  display: flex
+  flex-direction: column
+  justify-content: center
+  align-items: center
+  position: fixed
+  width: 100vw
+  height: 100vh
+  z-index: 1200
+  background: #121421
+
+.inner_container
+  display: flex
+  flex-direction: column
+  justify-content: center
+  align-items: center
+  width: 35rem
+  height: 25rem
+
+.logo
+  display: flex
+  flex-direction: row
+  align-items: center
+  align-self: flex-start
+  color: white
+  font-size: 1.3em
+  font-weight: 600
+
+.buttons_container
+  display: flex
+  width: 100%
+  flex-direction: row
+  justify-content: space-between
+
+.title
+  color: white
+  text-align: center
+  font-size: 1.5em
+  font-weight: 600
+  margin-bottom: 1.9rem
+
+.role_btn
+  position: relative
+  height: 7.5rem
+  display: flex
+  align-items: center
+  justify-content: center
+  flex-grow: 1
+  background-color: transparent !important
+  opacity: 1
+  border: 0.1rem solid !important
+  color: white !important
+  text-transform: uppercase !important
+  font-size: 1.6em !important
+  font-family: "Custom Open Sans" !important
+  font-weight: 500 !important
+
+.role_btn:before
+  content: ""
+  position: absolute
+  top: 0
+  bottom: 0
+  width: 0
+  height: 100%
+  z-index: -1
+  opacity: 0
+  transition: opacity 0.4s ease-out, width 10s
+
+.role_btn:hover:before
+  width: 100%
+  opacity: 1
+  transition: opacity 0.5s ease-out
+
+.student_btn
+  border-image-source: linear-gradient(83.47deg, #0084F8 9.02%, #FF8576 90.81%) !important
+  border-image-slice: 1 !important
+
+.student_btn:before
+  right: 0
+  border-radius: 0 45% 0 45%
+  background-image: linear-gradient(83.47deg, #0084F8 9.02%, #FF8576 90.81%)
+
+.author_btn
+  border-image-source: linear-gradient(263.47deg, #0084F8 9.02%, #FF8576 90.81%) !important
+  border-image-slice: 1 !important
+
+.author_btn:before
+  left: 0
+  border-radius: 45% 0 45% 0
+  background-image: linear-gradient(263.47deg, #0084F8 9.02%, #FF8576 90.81%) !important
+
+.separator
+  opacity: 0
+  width: 0.1rem
+  background: #595959
+  margin-left: 1.5rem
+  margin-right: 1.5rem
+
+.info
+  color: white
+  margin-top: 2rem
+  font-size: 1em
+  text-align: center
+  font-weight: 300

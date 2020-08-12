@@ -2,6 +2,8 @@ package com.knewless.core.author;
 
 import com.knewless.core.author.dto.AuthorBriefInfoDto;
 import com.knewless.core.author.dto.AuthorSettingsDto;
+import com.knewless.core.security.oauth.UserPrincipal;
+import com.knewless.core.user.model.CurrentUser;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,14 +26,14 @@ public class AuthorController {
     }
 
     @GetMapping
-    public Optional<AuthorSettingsDto> getSettings() {
-        UUID userId = UUID.fromString("eaea544b-8383-49ee-90c6-2a169e5c560a");
-        return authorService.getAuthorSettings(userId);
+    public Optional<AuthorSettingsDto> getSettings(@CurrentUser UserPrincipal userPrincipal) {
+        return authorService.getAuthorSettings(userPrincipal.getId());
     }
 
     @PostMapping
-    public Optional<AuthorSettingsDto> setSettings(@RequestBody AuthorSettingsDto settings) {
-        settings.setUserId(UUID.fromString("eaea544b-8383-49ee-90c6-2a169e5c560a"));
+    public Optional<AuthorSettingsDto> setSettings(@CurrentUser UserPrincipal userPrincipal,
+                                                   @RequestBody AuthorSettingsDto settings) {
+        settings.setUserId(userPrincipal.getId());
         return authorService.setAuthorSettings(settings);
     }
 

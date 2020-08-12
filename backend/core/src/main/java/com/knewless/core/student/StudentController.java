@@ -3,7 +3,9 @@ package com.knewless.core.student;
 
 import com.knewless.core.author.AuthorService;
 import com.knewless.core.author.dto.AuthorSettingsDto;
+import com.knewless.core.security.oauth.UserPrincipal;
 import com.knewless.core.student.dto.StudentSettingsDto;
+import com.knewless.core.user.model.CurrentUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,14 +19,14 @@ public class StudentController {
     private StudentService studentService;
 
     @GetMapping
-    public Optional<StudentSettingsDto> getSettings() {
-        UUID userId = UUID.fromString("d1d9eb03-f80a-4f9b-9e84-202e7d88a7b9");
-        return studentService.getStudentSettings(userId);
+    public Optional<StudentSettingsDto> getSettings(@CurrentUser UserPrincipal userPrincipal) {
+        return studentService.getStudentSettings(userPrincipal.getId());
     }
 
     @PostMapping
-    public Optional<StudentSettingsDto> setSettings(@RequestBody StudentSettingsDto settings) {
-        settings.setUserId(UUID.fromString("d1d9eb03-f80a-4f9b-9e84-202e7d88a7b9"));
+    public Optional<StudentSettingsDto> setSettings(@CurrentUser UserPrincipal userPrincipal,
+                                                    @RequestBody StudentSettingsDto settings) {
+        settings.setUserId(userPrincipal.getId());
         return studentService.setStudentSettings(settings);
     }
 }

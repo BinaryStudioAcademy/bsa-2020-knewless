@@ -11,6 +11,7 @@ import landing from '../screens/Landing/reducers';
 import lecturePage from '../screens/LecturePage/reducers/index';
 import auth from '../screens/Authentication/reducer';
 import addcourse from '../screens/AddCourse/reducers';
+import { appRouter } from 'containers/AppRouter/reducer';
 import addPathPage from '../screens/AddPath/reducers';
 
 export default combineReducers({
@@ -26,5 +27,6 @@ export default combineReducers({
   landing,
   addcourse,
   auth,
+  appRouter,
   addPathPage
 });

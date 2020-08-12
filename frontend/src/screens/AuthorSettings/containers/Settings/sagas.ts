@@ -3,11 +3,15 @@ import * as settingsService from '../../services/settings.service';
 import { fetchSetAuthorSettingsRoutine, fetchGetAuthorSettingsRoutine } from '../../routines';
 import { Routine } from 'redux-saga-routines';
 import * as imageService from 'services/image.service';
+import { setUserRoleRoutine } from 'containers/AppRouter/routines';
+import { RoleTypes } from 'containers/AppRouter/models/IRole';
 
 function* getSettings() {
   try {
     const response = yield call(settingsService.getSettings);
-    yield put(fetchGetAuthorSettingsRoutine.success(response));
+    if (response !== null) {
+      yield put(fetchGetAuthorSettingsRoutine.success(response));
+    }
   } catch (error) {
     yield put(fetchGetAuthorSettingsRoutine.failure(error?.message));
   }
@@ -25,6 +29,7 @@ function* setSettings(action: Routine<any>) {
       author.avatar = link;
     }
     const response = yield call(() => settingsService.setSettings(action.payload));
+    yield put(setUserRoleRoutine.success(RoleTypes.USER));
   } catch (error) {
     console.log('Set settings failed!');
   }
