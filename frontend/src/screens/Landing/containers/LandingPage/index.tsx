@@ -93,7 +93,7 @@ export const LandingPage: React.FunctionComponent<ILandingProps> = ({
             onViewAllClick={handleViewAllCoursesClick}
             loading={loading}
           >
-            {courses.map(c => (
+            {loading || courses.map(c => (
               <div className={styles.course_card}>
                 <CourseCard
                   name={c.name}
@@ -115,7 +115,7 @@ export const LandingPage: React.FunctionComponent<ILandingProps> = ({
             onViewAllClick={handleViewAllPathsClick}
             loading={loading}
           >
-            {paths.map(p => (
+            {loading || paths.map(p => (
               <div className={styles.path_card}>
                 <PathCard
                   name={p.name}
