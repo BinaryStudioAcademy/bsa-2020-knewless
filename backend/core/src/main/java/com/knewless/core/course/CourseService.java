@@ -42,12 +42,18 @@ public class CourseService {
         List<Lecture> result = new ArrayList<>();
         allLectures.stream().forEach(lec-> {
             if(!result.stream().map(l -> l.getSourceUrl()).collect(Collectors.toList()).contains(lec.getSourceUrl())) {
-               result.add(lec);
+                result.add(lec);
             }
         });
+
         return result.stream()
-                .map(l-> new ShortLectureDto(l.getId(), l.getName(), l.getDescription(), l.getDuration()))
-                .collect(Collectors.toList());
+            .map(l->
+                new ShortLectureDto(
+                    l.getId(),
+                    l.getName() == null ? "mockName" + (int) (Math.random()*200) : l.getName(),
+                    l.getDescription(),
+                    l.getDuration()))
+            .collect(Collectors.toList());
     }
 
     public CreateCourseResponseDto createCourse(CreateCourseRequestDto request) {
@@ -58,7 +64,7 @@ public class CourseService {
         List<Lecture> thisLectures = new ArrayList<>();
         List<Homework> homeworks = new ArrayList<>();
         Course course = Course.builder().level(Level.valueOf(request.getLevel())).author(author)
-                .name(request.getName()).description(request.getDescription()).build();
+                .name(request.getName()).description(request.getDescription()).image(request.getImage()).build();
         for (Lecture l : allLectures) {
             Lecture lec = Lecture.builder().name(l.getName()).sourceUrl(l.getSourceUrl()).description(l.getDescription())
                     .duration(l.getDuration()).build();

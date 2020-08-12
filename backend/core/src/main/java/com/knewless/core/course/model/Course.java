@@ -17,10 +17,10 @@ import java.util.Set;
 
 @Entity
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @EqualsAndHashCode(callSuper = true)
-@AllArgsConstructor
-@NoArgsConstructor
 @Table(name = "courses")
 public class Course extends BaseEntity {
     @Column(name = "name")

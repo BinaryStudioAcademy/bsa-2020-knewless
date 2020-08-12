@@ -8,6 +8,7 @@ import java.util.UUID;
 public class CreateCourseRequestDto {
     private UUID userId;
     private String name;
+    private String image;
     private String level;
     private String description;
     private Boolean isReleased;

@@ -8,7 +8,7 @@ export interface IDepsSelectorProps {
   stored: IFilterableItem[];
   storedToSelected: (item: IFilterableItem) => void;
   selectedToStored: (item: IFilterableItem) => void;
-  itemToJsx: (item: IFilterableItem, click: (item) => void) => JSX.Element;
+  itemToJsx: (item: IFilterableItem, click: (item) => void, isSelected?: boolean) => JSX.Element;
   dependencyName: string;
   sortFn?: (item1: IFilterableItem, item2: IFilterableItem) => number;
 }
@@ -33,18 +33,18 @@ export const DependenciesSelector: React.FC<IDepsSelectorProps> = (
         <div className={styles.list_container}>
           <FilterableList
             items={selected}
-            itemToJsx={item => itemToJsx(item, selectedToStored)}
+            itemToJsx={item => itemToJsx(item, selectedToStored, true)}
             sortFn={sortFn}
             scrolling
           />
         </div>
       </div>
-      <Modal open={modalOpen} onClose={() => setModalOpen(false)}>
+      <Modal open={modalOpen} closeIcon onClose={() => setModalOpen(false)}>
         <ModalHeader className={styles.modal__header}>{`Add ${dependencyName.toLowerCase()}s`}</ModalHeader>
         <ModalContent className={styles.modal__content}>
           <FilterableList
             items={stored}
-            itemToJsx={item => itemToJsx(item, storedToSelected)}
+            itemToJsx={item => itemToJsx(item, storedToSelected, false)}
             sortFn={sortFn}
             scrolling
           />

@@ -1,0 +1,152 @@
+$previewheight: 13em
+
+.container
+  background: #2A2B37
+  margin-bottom: 1em
+  display: grid
+  width: 100%
+  height: $previewheight
+  grid-template-columns: $previewheight 1fr 1fr 15% 15% 10% 5%  5%
+  grid-template-rows: repeat(10, 10% )
+
+.inactive_avatar
+  width: 100%
+  height: 100%
+  max-width: $previewheight
+  max-height: $previewheight
+  display: flex
+  align-self: center
+  align-content: center
+  
+.uploadWrapper
+  width: 100%
+  height: 100%
+  max-width: $previewheight
+  max-height: $previewheight
+  display: flex
+  align-self: center
+  align-content: center
+
+  .avatar
+    position: absolute
+    width: 100%
+    height: 100%
+    max-width: $previewheight
+    max-height: $previewheight
+    background-color: #2a2b3798
+    object-fit: cover
+    z-index: 1
+
+  .uploader
+    display: flex
+    justify-content: center
+    align-items: center
+    margin: auto
+    width: 100%
+    height: 100%
+    border-radius: 0
+    max-width: $previewheight
+    max-height: $previewheight
+    background: #2a2b3765
+    padding: 0
+    z-index: 2
+    opacity: 0
+    transition-duration: 0.4s
+    &:hover
+        transition-duration: 0.4s
+        opacity: 85%
+        background: #2a2b3765
+
+
+.number
+  color: #FF8576  
+  font-weight: bold
+
+
+.meta
+  &__image
+    grid-area: 1 / 1 / 11 / 2
+
+  &__lectures
+    padding-left: 3em
+    color: #666666
+    
+
+.levelText
+  color: #FF8576
+  font-size: 0.9em
+  text-transform: uppercase
+
+.course_name
+  grid-area: 1 / 2 / 4 / 6
+  justify-self: start
+  align-self: flex-start
+  overflow: hidden
+  max-width: 100%
+  padding: 1em
+  padding-left: 3em
+  white-space: nowrap
+  text-transform: capitalize
+
+.nameText
+  font-size: 2em
+  font-weight: bold
+  color: white
+
+.description
+  grid-area: 5 / 2 / 7 / 8
+  max-height: $previewheight - 6em
+  padding: 3em
+  justify-self: start
+  align-self: center
+  overflow: hidden
+  max-width: 100%
+  display: inline-block
+
+.description_text
+  font-size: 0.9em
+  line-height: 150%
+
+.bottomflex
+  display: flex
+  flex-direction: row
+  align-items: flex-end
+  justify-items: center
+  justify-content: flex-start
+  padding-bottom: 5px
+  padding-right: 5px
+
+.grid_row_flex
+  grid-area: 9 / 2 / 10 / 6
+  justify-self: stretch
+  align-self: stretch
+
+.topflex
+  display: flex
+  flex-direction: row
+  align-items: flex-end
+  justify-items: center
+  justify-content: flex-end
+  padding-top: 5px
+  padding-right: 5px
+
+.grid_top_row_flex
+  grid-area: 4 / 2 / 5 / 4
+  justify-self: stretch
+  align-self: flex-end
+  padding-left: 3em
+
+.optional_element
+  grid-area: 5 / 7 / 7 / 9
+  justify-self: center
+  align-self: center
+
+\:global(.ui.basic.label).toolBarIcon
+  background: inherit
+  border: none
+  padding: 0
+  color: white
+
+  &:hover
+    cursor: pointer  
+    

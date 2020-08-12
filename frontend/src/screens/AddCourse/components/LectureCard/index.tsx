@@ -1,22 +1,49 @@
 import React, { useCallback } from 'react';
 import styles from './styles.module.sass';
+import { Label, Icon } from 'semantic-ui-react';
 
 export interface ILectureCardProps {
   timeMinutes: number;
   name: string;
   description: string;
   onClick: () => void;
+  isSelected?: boolean;
 }
 
 export const LectureCard: React.FC<ILectureCardProps> = ({
-  timeMinutes, description, name, onClick
+  timeMinutes, description, name, onClick, isSelected
 }) => (
-  // eslint-disable-next-line jsx-a11y/interactive-supports-focus,jsx-a11y/click-events-have-key-events
-  <div className={styles.lecture__container} onClick={onClick} role="button">
-    <span className={styles.lecture__meta__nametitle}>Name</span>
-    <span className={styles.lecture__meta__duration}>{`${timeMinutes} minutes`}</span>
-    <span className={styles.lecture__meta__descriptiontitle}>Description</span>
-    <span className={styles.lecture__descriptionbody}>{description}</span>
-    <span className={styles.lecture__namebody}>{name}</span>
+  <div className={styles.lecture__container}>
+    <div className={styles.meta__playIcon}>
+      <Label
+        basic
+        size="tiny"
+        className={styles.toolBarIcon}
+      >
+        <Icon name="play circle outline" size="big" inverted />
+      </Label>
+    </div>
+    <div className={styles.meta__name}>
+      {name}
+    </div>
+    <div className={styles.meta__time}>
+      {`${timeMinutes} minutes`}
+    </div>
+    <div className={styles.meta__actionButton}>
+      <Label
+        basic
+        size="tiny"
+        className={styles.toolBarIcon}
+        onClick={onClick}
+      >
+        <Icon
+          className={styles.addIcon}
+          name={isSelected ? 'delete' : 'check'}
+          size="large"
+          inverted
+          color={isSelected ? 'pink' : 'green'}
+        />
+      </Label>
+    </div>
   </div>
 );
