@@ -1,11 +1,19 @@
 import { Routine } from 'redux-saga-routines';
 import { IAddPathData } from '../../models/AddPathData';
-import { fetchCoursesRoutine } from '../../routines';
+import { fetchCoursesRoutine, fetchTagsRoutine } from '../../routines';
 
-export const data = (state: IAddPathData = { message: '' }, action: Routine<any>) => {
+export const data = (state: IAddPathData = { courses: [], tags: [] }, action: Routine<any>) => {
   switch (action.type) {
     case fetchCoursesRoutine.SUCCESS:
-      return action.payload;
+      return {
+        ...state,
+        courses: action.payload
+      };
+    case fetchTagsRoutine.SUCCESS:
+      return {
+        ...state,
+        tags: action.payload
+      };
     default:
       return state;
   }

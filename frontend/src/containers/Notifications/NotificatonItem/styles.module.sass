@@ -1,42 +1,48 @@
 .item
     color: #121421
     display: flex
-    width: 30em
-    flex-flow: column
-    border-bottom: solid
-    margin-bottom: 3%
-    border-bottom-width: 1px
-    justify-content: center
-
-.unread
-    background-color: lightgray
+    width: 100%
+    min-height: 100px
+    border-bottom: 1px solid #c9c9c9
+    padding: 20px 20px
+    justify-content: space-between
+    align-items: start
+    transition: .15s ease
+    &:hover
+        background-color: lighten(#F0F3F5, 2%)
 
 .link
-    color: black
-    display: inline-block
-    margin-right: 3px
-    text-decoration: underline
-
-.link:hover
-    color: black
-    text-decoration: underline
+    color: #666
+    text-decoration: none
+    transition: .15s ease
+    &:hover
+        color: #3378BD
 
 
-\:global(.ui.basic.label).deleteBtn
-  border: none
-  background: inherit
+
+i.radioRead
+    width: 10px
+    margin-top: 3px
+    opacity: 0
+    
+i.radioRead.unread 
+    color: #3378BD
+    opacity: 1
 
 .content
+    width: 100%      
     display: flex
-    flex-flow: row
-    align-items: center
-    justify-content: space-between
+    svg
+        width: 20px
+        height: 20px
+        margin-top: 3px
 
 .text
-    width: 70%
+    margin: 0 15px
+    width: 90%
 
 .time
-    margin-top: 1%
-    margin-left: 10%
-    align-self: flex-start
+    color: #ACAEAF
+    margin: 10px 0
+    font-size: 0.8em
     font-style: italic

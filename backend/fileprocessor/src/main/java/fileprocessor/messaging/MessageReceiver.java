@@ -18,7 +18,7 @@ public class MessageReceiver {
     public void receive(Message message) throws IOException {
         if (message.getType() == MessageType.REQUEST) {
             log.info(" [x] Received '{}'", message);
-            videoEncoderService.encode(message.getFolderId(), message.getEntityId());
+           videoEncoderService.encode(message.getFolderId(), message.getEntityId());
         }
     }
 

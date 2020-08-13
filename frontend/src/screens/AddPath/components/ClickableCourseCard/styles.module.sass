@@ -1,0 +1,97 @@
+$info_padding: 1.5em
+$info_gap: 1.3em
+$name_size: 1.5em
+$first_row_size: 2em
+$meta_size: 0.8em
+
+.container
+  display: grid
+  grid-template-columns: 10em 1fr
+  border-bottom: 1px solid #4a5053
+
+.image
+  $image_height: $info_gap + ($info_padding * 2) + $first_row_size + $meta_size
+  &_container
+    grid-area: 1 / 1 / span 2 / span 1
+    max-height: $image_height
+    overflow: hidden
+
+  &_preview
+    max-height: $image_height + 1em
+    object-fit: cover
+    opacity: 0.8
+
+.dependency
+  &__container
+    position: relative
+    grid-area: 1 / 2
+    padding: $info_padding
+    display: grid
+    row-gap: $info_gap
+    grid-template-rows: $first_row_size
+
+  &__name
+    grid-area: 1 / 1 / span 1 / span 4
+    font-size: $name_size
+    overflow: hidden
+    word-break: keep-all
+    text-overflow: ellipsis
+    white-space: nowrap
+
+  &__meta
+    &_container
+      grid-area: 2 / 1 / span 1 / span 4
+      display: flex
+      flex-direction: row
+      gap: 1.5em
+      & > *
+        font-size: 1em
+        font-family: Montserrat, serif
+
+    &__category
+      text-transform: uppercase
+      color: #F27A54
+
+    &__time
+      &_duration
+        font-weight: bold
+        color: #F27A54
+      &_unit
+        margin-left: 0.5em
+    &__level
+      text-transform: uppercase
+
+.btn_container
+  position: absolute
+  opacity: 0
+  z-index: 2
+  height: 100%
+  width: 100%
+  display: flex
+  flex-direction: row
+  align-items: center
+  &:hover
+    opacity: 1
+
+.btn
+  &_add, &_remove
+    $btn-height: 2.5em
+    transition: opacity 3s ease-in-out
+    margin-right: 1em !important
+    position: absolute
+    right: 1em
+    height: $btn-height
+    width: $btn-height
+    cursor: pointer
+    border-radius: 50% !important
+    text-align: center !important
+    line-height: 130% !important
+    &:hover
+      filter: brightness(150%)
+
+  &_add
+    background: lightgreen !important
+    color: #2A2B37 !important
+  &_remove
+    background: indianred !important
+    color: white !important

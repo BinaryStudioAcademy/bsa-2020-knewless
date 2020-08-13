@@ -2,6 +2,8 @@ package com.knewless.core.course;
 
 import com.knewless.core.course.dto.*;
 import com.knewless.core.lecture.Dto.ShortLectureDto;
+import com.knewless.core.security.oauth.UserPrincipal;
+import com.knewless.core.user.model.CurrentUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -49,5 +51,9 @@ public class CourseController {
     private ResponseEntity<List<AuthorCourseDto>> getAuthorCourses(@PathVariable UUID authorId) {
         return ResponseEntity.ok(courseService.getCoursesByAuthorId(authorId));
     }
-
+    
+    @GetMapping("author")
+    public List<CourseWithMinutesProjection> getCoursesByAuthor(@CurrentUser UserPrincipal user) {
+        return courseService.getCoursesWithMinutesByUserId(user.getId());
+    }
 }

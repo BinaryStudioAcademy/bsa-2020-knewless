@@ -1,10 +1,8 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { Router } from 'react-router-dom';
 import ReduxToastr from 'react-redux-toastr';
-import { history } from '../../helpers/history.helper';
 import { store } from '../../store';
-import Routing from 'containers/Routing';
+import AppRouter from '../AppRouter';
 
 const App: React.FC = () => (
   <Provider store={store}>
@@ -18,9 +16,7 @@ const App: React.FC = () => (
       transitionOut="fadeOut"
       closeOnToastrClick
     />
-    <Router history={history}>
-      <Routing isLoading={false} />
-    </Router>
+    <AppRouter />
   </Provider>
 );
 

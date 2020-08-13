@@ -1,13 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import {
-  Button,
-  Form
-} from 'semantic-ui-react';
+import React, { useEffect, useState } from 'react';
+import { Button, Form } from 'semantic-ui-react';
 
 import styles from './styles.module.sass';
-import {
-  locationOptions
-} from './options';
+import { locationOptions } from './options';
 import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { fetchGetAuthorSettingsRoutine, fetchSetAuthorSettingsRoutine } from '../../routines';
@@ -15,20 +10,27 @@ import { IAuthorSettings } from 'screens/AuthorSettings/models/IAuthorSettings';
 import { IBindingAction, IBindingCallback1 } from 'models/Callbacks';
 import GrayOutlineButton from 'components/buttons/GrayOutlineButton';
 import GradientButton from 'components/buttons/GradientButton';
+import { resetSettingsModeRoutine, setUserRoleRoutine } from 'containers/AppRouter/routines';
+import { RoleTypes } from 'containers/AppRouter/models/IRole';
 
 export interface IAuthorSettingsProps {
   authorSettings: IAuthorSettings;
   fetchAuthorSettings: IBindingAction;
   fetchSetAuthorSettings: IBindingCallback1<IAuthorSettings>;
+  setUserRole: IBindingCallback1<RoleTypes>;
+  resetSettingsMode: IBindingAction;
 }
 
 const AuthorSettings: React.FunctionComponent<IAuthorSettingsProps> = ({
   authorSettings: settings,
   fetchAuthorSettings: getSettings,
-  fetchSetAuthorSettings: setSettings
+  fetchSetAuthorSettings: setSettings,
+  resetSettingsMode,
+  setUserRole
 }) => {
   useEffect(() => {
     getSettings();
+    return () => resetSettingsMode();
   }, []);
   const history = useHistory();
   const [firstName, setFirstName] = useState(settings.firstName);
@@ -57,6 +59,7 @@ const AuthorSettings: React.FunctionComponent<IAuthorSettingsProps> = ({
     setAvatar(URL.createObjectURL(file));
   };
   const handleSubmit = () => {
+    setUserRole(RoleTypes.AUTHOR);
     const updatedSettings = {
       id: settings.id,
       firstName,
@@ -183,7 +186,9 @@ const mapStateToProps = (state: any) => {
 
 const mapDispatchToProps = {
   fetchAuthorSettings: fetchGetAuthorSettingsRoutine,
-  fetchSetAuthorSettings: fetchSetAuthorSettingsRoutine
+  fetchSetAuthorSettings: fetchSetAuthorSettingsRoutine,
+  setUserRole: setUserRoleRoutine,
+  resetSettingsMode: resetSettingsModeRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AuthorSettings);

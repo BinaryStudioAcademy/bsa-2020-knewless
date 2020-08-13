@@ -1,5 +1,6 @@
 package com.knewless.core.messaging;
 
+import com.knewless.core.messaging.userMessage.UserMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,9 @@ public class MessageSender {
     @Value("${rabbitmq.routing-key}")
     private String routingKey;
 
+    @Value("${rabbitmq.routing-key-user}")
+    private String routingKeyUser;
+
     private final RabbitTemplate template;
 
     @Autowired
@@ -23,9 +27,15 @@ public class MessageSender {
         this.template = template;
     }
 
-    public void send(Message message) {
+    public void sendToFileProcessor(Message message) {
         log.info(" [x] Sending message...");
         this.template.convertAndSend(exchange, routingKey, message);
+        log.info(" [x] Sent '{}'", message);
+    }
+
+    public void sendToUser(UserMessage message) {
+        log.info(" [x] Sending message...");
+        this.template.convertAndSend(exchange, routingKeyUser, message);
         log.info(" [x] Sent '{}'", message);
     }
 

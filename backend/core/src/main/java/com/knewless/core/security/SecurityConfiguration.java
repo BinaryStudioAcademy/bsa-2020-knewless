@@ -22,6 +22,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import static com.knewless.core.swagger.SwaggerConfiguration.SWAGGER_PATHS_WHITELIST;
+
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
@@ -93,6 +95,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .and()
                 .authorizeRequests()
                     .antMatchers("/").permitAll()
+                    .antMatchers(SWAGGER_PATHS_WHITELIST).permitAll()
                     .antMatchers("/auth/**", "/oauth2/**", "/assets/images/**").permitAll()
                     .anyRequest().authenticated()
                 .and()

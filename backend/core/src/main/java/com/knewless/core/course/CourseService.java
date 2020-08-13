@@ -40,9 +40,9 @@ public class CourseService {
     public List<ShortLectureDto> getLecturesByUserId(UUID id) {
         List<Lecture> allLectures = lectureRepository.getLecturesByUserId(id);
         List<Lecture> result = new ArrayList<>();
-        allLectures.stream().forEach(lec-> {
-            if(!result.stream().map(l -> l.getSourceUrl()).collect(Collectors.toList()).contains(lec.getSourceUrl())) {
-                result.add(lec);
+        allLectures.forEach(lec-> {
+            if(!result.stream().map(Lecture::getSourceUrl).collect(Collectors.toList()).contains(lec.getSourceUrl())) {
+               result.add(lec);
             }
         });
 
@@ -80,7 +80,7 @@ public class CourseService {
         thisLectures.forEach(l -> {
             l.setCourse(course);
             Optional<Homework> ophw = homeworks.stream().filter(h -> h.getLecture().getId().equals(l.getId())).findFirst();
-            if (!ophw.isEmpty()) l.setHomework(ophw.get());
+            ophw.ifPresent(l::setHomework);
         });
         lectureRepository.saveAll(thisLectures);
         return new CreateCourseResponseDto(course.getId(), true);
@@ -114,6 +114,11 @@ public class CourseService {
         long hh = minutes / 60;
         long mm = minutes % 60;
         return String.format("%dh %02dm", hh, mm);
+    }
+
+    public List<CourseWithMinutesProjection> getCoursesWithMinutesByUserId(UUID userId) {
+        var author = authorRepository.findByUserId(userId).orElseThrow();
+        return courseRepository.findAllByAuthorWithMinutes(author.getId());
     }
 
     public List<AuthorCourseDto> getCoursesByAuthorId(UUID authorId) {

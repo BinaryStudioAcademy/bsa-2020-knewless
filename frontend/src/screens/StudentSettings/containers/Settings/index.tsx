@@ -1,39 +1,43 @@
-import React, { useState, useEffect } from 'react';
-import {
-  Button,
-  Form
-} from 'semantic-ui-react';
+import React, { useEffect, useState } from 'react';
+import { Button, Form } from 'semantic-ui-react';
 import GrayOutlineButton from 'components/buttons/GrayOutlineButton';
 import GradientButton from 'components/buttons/GradientButton';
 import styles from './styles.module.sass';
 import {
-  locationOptions,
-  yearOptions,
-  levelOptions,
-  industryOptions,
-  roleOptions,
   educationOptions,
-  employmentOptions
+  employmentOptions,
+  industryOptions,
+  levelOptions,
+  locationOptions,
+  roleOptions,
+  yearOptions
 } from './options';
 import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { fetchGetStudentSettingsRoutine, fetchSetStudentSettingsRoutine } from '../../routines';
 import { IStudentSettings } from 'screens/StudentSettings/models/IStudentSettings';
 import { IBindingAction, IBindingCallback1 } from 'models/Callbacks';
+import { resetSettingsModeRoutine, setUserRoleRoutine } from 'containers/AppRouter/routines';
+import { RoleTypes } from 'containers/AppRouter/models/IRole';
 
 export interface IStudentSettingsProps {
   studentSettings: IStudentSettings;
   fetchStudentSettings: IBindingAction;
   fetchSetStudentSettings: IBindingCallback1<IStudentSettings>;
+  setUserRole: IBindingCallback1<RoleTypes>;
+  resetSettingsMode: IBindingAction;
 }
 
 const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
   studentSettings: settings,
   fetchStudentSettings: getSettings,
-  fetchSetStudentSettings: setSettings
+  fetchSetStudentSettings: setSettings,
+  setUserRole,
+  resetSettingsMode
 }) => {
   useEffect(() => {
     getSettings();
+    return () => resetSettingsMode();
   }, []);
   const history = useHistory();
   const [firstName, setFirstName] = useState(settings.firstName);
@@ -77,6 +81,7 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
     setAvatar(URL.createObjectURL(file));
   };
   const handleSubmit = () => {
+    setUserRole(RoleTypes.USER);
     const updatedSettings = {
       id: settings.id,
       firstName,
@@ -301,7 +306,9 @@ const mapStateToProps = (state: any) => {
 
 const mapDispatchToProps = {
   fetchStudentSettings: fetchGetStudentSettingsRoutine,
-  fetchSetStudentSettings: fetchSetStudentSettingsRoutine
+  fetchSetStudentSettings: fetchSetStudentSettingsRoutine,
+  setUserRole: setUserRoleRoutine,
+  resetSettingsMode: resetSettingsModeRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(StudentSettings);

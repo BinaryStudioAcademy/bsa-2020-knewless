@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import styles from './styles.module.sass';
-import { Button, Modal, ModalContent, ModalHeader } from 'semantic-ui-react';
+import { Modal, ModalContent, ModalHeader } from 'semantic-ui-react';
 import { FilterableList, IFilterableItem } from '../FilterableList';
+import GrayOutlineButton from '../buttons/GrayOutlineButton';
 
 export interface IDepsSelectorProps {
   selected: IFilterableItem[];
   stored: IFilterableItem[];
   storedToSelected: (item: IFilterableItem) => void;
   selectedToStored: (item: IFilterableItem) => void;
-  itemToJsx: (item: IFilterableItem, click: (item) => void, isSelected?: boolean) => JSX.Element;
+  itemToJsx: (item: IFilterableItem, click: (item) => void, isSelected: boolean) => JSX.Element;
   dependencyName: string;
   sortFn?: (item1: IFilterableItem, item2: IFilterableItem) => number;
 }
@@ -22,11 +23,10 @@ export const DependenciesSelector: React.FC<IDepsSelectorProps> = (
     <>
       <div className={styles.container}>
         <div className={styles.header}>
-          <h2>{`${dependencyName}s`}</h2>
-          <Button
+          <h4>{`${dependencyName.substring(0, 1).toUpperCase().concat(dependencyName.substring(1))}s:`}</h4>
+          <GrayOutlineButton
             content={`Add ${dependencyName.toLowerCase()}...`}
             className={styles.add_button}
-            id={styles.add_courses}
             onClick={() => setModalOpen(true)}
           />
         </div>

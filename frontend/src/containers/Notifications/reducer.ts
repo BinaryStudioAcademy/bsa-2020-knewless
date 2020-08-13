@@ -17,7 +17,7 @@ export default function (state = initialState, action) {
   switch (action.type) {
     case addNotificationRoutine.TRIGGER: {
       const { notification } = action.payload;
-      if (state.notifications[0].read) {
+      if (state.notifications[0]?.read) {
         state.notifications.shift();
       }
       return ({
