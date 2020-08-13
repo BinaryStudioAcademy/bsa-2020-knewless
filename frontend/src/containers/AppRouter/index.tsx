@@ -9,6 +9,7 @@ import { fetchUserRoutine, setSettingsModeRoutine } from './routines';
 import { IBindingAction, IBindingFunction } from '../../models/Callbacks';
 import { IUser } from './models/IUser';
 import { RoleTypes } from './models/IRole';
+import { ACCESS_TOKEN, REFRESH_TOKEN } from '../../screens/Authentication/constants';
 
 interface IAppRouterProps {
   user: IUser;
@@ -37,7 +38,8 @@ const AppRouter: React.FunctionComponent<IAppRouterProps> = ({
   }, []);
 
   useEffect(() => {
-    if (isAuthorized && !roleLoading) {
+    const isTokenExist = localStorage.getItem(ACCESS_TOKEN) || localStorage.getItem(REFRESH_TOKEN);
+    if (isTokenExist && !roleLoading) {
       fetchUser();
     }
   }, [isAuthorized, roleLoading]);

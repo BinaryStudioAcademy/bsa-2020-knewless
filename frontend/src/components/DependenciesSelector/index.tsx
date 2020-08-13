@@ -23,7 +23,7 @@ export const DependenciesSelector: React.FC<IDepsSelectorProps> = (
     <>
       <div className={styles.container}>
         <div className={styles.header}>
-          <h4>{`${dependencyName.substring(0, 1).toUpperCase().concat(dependencyName.substring(1))}s:`}</h4>
+          <span>{`${dependencyName.substring(0, 1).toUpperCase().concat(dependencyName.substring(1))}s:`}</span>
           <GrayOutlineButton
             content={`Add ${dependencyName.toLowerCase()}...`}
             className={styles.add_button}
@@ -40,7 +40,7 @@ export const DependenciesSelector: React.FC<IDepsSelectorProps> = (
         </div>
       </div>
       <Modal open={modalOpen} closeIcon onClose={() => setModalOpen(false)}>
-        <ModalHeader className={styles.modal__header}>{`Add ${dependencyName.toLowerCase()}s`}</ModalHeader>
+        <ModalHeader className={styles.modal__header}>{`Select ${dependencyName.toLowerCase()}s`}</ModalHeader>
         <ModalContent className={styles.modal__content}>
           <FilterableList
             items={stored}

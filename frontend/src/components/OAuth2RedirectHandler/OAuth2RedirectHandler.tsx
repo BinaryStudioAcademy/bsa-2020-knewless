@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import { ACCESS_TOKEN } from '../../screens/Authentication/constants';
+import { ACCESS_TOKEN, REFRESH_TOKEN } from '../../screens/Authentication/constants';
 import { Redirect } from 'react-router-dom';
 import { IBindingAction } from '../../models/Callbacks';
 import { loginRoutine } from '../../screens/Home/routines';
@@ -27,6 +27,7 @@ const OAuth2Handler: FunctionComponent<IOAuthProps> = ({
     const token = getUrlParameter('token');
     if (token) {
       localStorage.setItem(ACCESS_TOKEN, getUrlParameter('token'));
+      localStorage.setItem(REFRESH_TOKEN, getUrlParameter('refresh'));
       login();
       return true;
     }

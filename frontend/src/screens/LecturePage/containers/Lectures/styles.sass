@@ -6,13 +6,13 @@ body, #root
     border-image: linear-gradient($direction, $fromColor, $toColor)
     border-image-slice: 1
 
-.ui.secondary.pointing.menu
+.ui.secondary.pointing.menu.lecturesMenu
     padding-left: 5%
     height: 12%
     @include linear-gradient(border-bottom, 1px, 120.32deg, rgb(0, 132, 248) 9.02%, rgb(255, 133, 118) 90.81%)
     @include linear-gradient(border-top, 1px, 120.32deg, rgb(0, 132, 248) 9.02%, rgb(255, 133, 118) 90.81%)
 
-.ui.secondary.pointing.menu .item
+.ui.secondary.pointing.menu.lecturesMenu .item
     color: white
     height: 100%
     width: 35%
@@ -22,20 +22,20 @@ body, #root
     border-bottom: 3px solid transparent
     margin: 0 !important
 
-.ui.secondary.pointing.menu .item:not(active):hover
+.ui.secondary.pointing.menu.lecturesMenu  .item:not(active):hover
     color: white
     border-bottom: 4px solid transparent
     background: black 70%
 
-.ui.secondary.pointing.menu .active.item, .ui.secondary.pointing.menu .active.item.lecturesButtonStyle
+.ui.secondary.pointing.menu.lecturesMenu  .active.item, .ui.secondary.pointing.menu .active.item.lecturesButtonStyle
     color: white
     @include linear-gradient(border-bottom, 3px, 70.32deg, rgb(0, 132, 248) 9.02%, rgb(255, 133, 118) 90.81%)
 
-.ui.secondary.pointing.menu .active.item:hover
+.ui.secondary.pointing.menu.lecturesMenu  .active.item:hover
     color: white
     @include linear-gradient(border-bottom, 4px, 45.32deg, rgb(0, 132, 248) 9.02%, rgb(255, 133, 118) 90.81%)
 
-.ui.secondary.pointing.menu .item.lecturesButtonStyle
+.ui.secondary.pointing.menu.lecturesMenu  .item.lecturesButtonStyle
     width: 40%
 
 .mainContainer

@@ -3,11 +3,13 @@ import { IUser } from './models/IUser';
 import * as appRouterService from './service';
 import { fetchUserRoutine, setRoleLoadingRoutine, setSettingsModeRoutine, setUserRoleRoutine } from './routines';
 import { AnyAction } from 'redux';
+import { loginRoutine } from '../../screens/Home/routines';
 
 function* getCurrentUser() {
   try {
     const result: IUser = yield call(appRouterService.getCurrentUser);
     yield put(fetchUserRoutine.success(result));
+    yield put(loginRoutine.success());
   } catch (error) {
     yield put(fetchUserRoutine.failure(error?.message));
   }

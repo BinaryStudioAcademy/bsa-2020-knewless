@@ -19,25 +19,21 @@ interface IRegisterProps {
   isRegisterLoading: boolean;
   isRegisterFailure: boolean;
   registerUser: IBindingAction;
+  error: string;
 }
 
 const RegisterPage: React.FunctionComponent<IRegisterProps> = ({
   isAuthorized,
   isRegisterLoading,
   registerUser: register,
-  isRegisterFailure
+  isRegisterFailure,
+  error
 }) => (
   isAuthorized
     ? <Redirect to="/" />
     : (
       <div className={styles.main_container}>
-        {isRegisterFailure
-          ? (
-            <div className={styles.main_container__error_message}>
-              Something went wrong. Please try again
-            </div>
-          ) : null}
-
+        {isRegisterFailure && (<div className={styles.main_container__error_message}>{error}</div>)}
         <RegisterForm register={register} isRegisterLoading={isRegisterLoading} />
         <AuthImage />
       </div>
@@ -48,7 +44,8 @@ const mapStateToProps = (state: IAppState) => {
   return ({
     isAuthorized: auth.isAuthorized,
     isRegisterLoading: requests.registerRequest.loading,
-    isRegisterFailure: requests.registerRequest.error != null && !requests.registerRequest.loading
+    isRegisterFailure: requests.registerRequest.error != null && !requests.registerRequest.loading,
+    error: requests.registerRequest.error || 'Something went wrong. Please try again'
   });
 };
 

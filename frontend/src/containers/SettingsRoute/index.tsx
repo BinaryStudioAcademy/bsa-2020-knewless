@@ -2,11 +2,11 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { IAppState } from '../../models/AppState';
 import { connect } from 'react-redux';
-import PublicRoute from '../../components/PublicRoute';
 import { RoleTypes } from '../AppRouter/models/IRole';
 import { IUser } from '../AppRouter/models/IUser';
 import AuthorSettings from '../../screens/AuthorSettings/containers/Settings';
 import StudentSettings from '../../screens/StudentSettings/containers/Settings';
+import PrivateRoute from '../PrivateRoute';
 
 interface ISettingsRouteProps {
   user: IUser;
@@ -26,7 +26,7 @@ const SettingsRoute: React.FunctionComponent<ISettingsRouteProps> = ({
     renderComponent = StudentSettings;
   }
   return (
-    <PublicRoute
+    <PrivateRoute
       exact
       path="/settings"
       component={renderComponent}

@@ -1,0 +1,89 @@
+@import "src/styles/common"
+@import "src/styles/common_variables"
+$container_width: 1400px
+$side_padding: 80px
+$avatar_size: 210px
+$height_wrap_img: 290px
+$width_btn: 100px
+$height_btn: 40px
+
+body
+    background: #121421 !important
+
+.profile
+    margin: auto
+    padding-top: $header-height
+    color: #ffff
+    width: 100%
+    display: flex
+    flex-direction: column
+.detailsProfile
+    margin: auto
+    width: 100%
+    max-width: $container_width + ($side_padding * 2)
+    padding-left: $side_padding
+    padding-right: $side_padding
+    padding-bottom: 100px
+
+.wrapperTitle    
+    width: 100%
+    background: #2A2B37 !important
+#profileTitle
+    margin: auto
+    width: 100%
+    padding-top: 30px
+    padding-bottom: 20px
+    max-width: $container_width + ($side_padding * 2)
+    padding-left: $side_padding
+    padding-right: $side_padding
+    color: #ffff
+    font-family: Custom Open Sans
+    font-style: normal
+    font-weight: 600
+    font-size: 1.5em
+    line-height: 1.5em
+
+.title
+    margin: auto
+    width: 100%
+    padding-top: 30px
+    padding-bottom: 20px
+    color: #ffff
+    font-family: Custom Open Sans
+    font-style: normal
+    font-weight: 600
+    font-size: 1.5em
+    line-height: 1.5em
+
+.block
+    max-width: $container_width + ($side_padding * 2) !important
+    width: 100%
+    padding-left: $side_padding
+    padding-right: $side_padding
+    margin-left: auto !important
+    margin-right: auto !important
+    padding-bottom: 30px    
+
+.timeBlock
+    max-width: $container_width + ($side_padding * 2) !important
+    width: 100%
+    padding-left: $side_padding
+    padding-right: $side_padding 
+    margin: auto   
+
+.wrapperTime
+    background: linear-gradient(52.17deg, #0084F8 9.02%, #FF8576 90.81%)
+    height: $height_wrap_img
+    display: flex
+    justify-items: center
+    align-items: center
+    text-align: center
+    align-content: center
+.currentCourse
+    background: #2A2B37 
+    box-shadow: 0px 30px 40px rgba(0, 0, 0, 0.1)
+    border-radius: 6px
+.completedCourse
+    background: none
+    min-height: 300px    
+

@@ -6,6 +6,9 @@ import { Input, Icon, Label } from 'semantic-ui-react';
 import styles from './styles.module.sass';
 import LoginRegister from './LoginRegister';
 import UserElement from './UserElement';
+import { connect } from 'react-redux';
+import { IAppState } from '../../models/AppState';
+import { IUser } from '../../containers/AppRouter/models/IUser';
 
 enum RoutPointer {
     home,
@@ -13,23 +16,12 @@ enum RoutPointer {
     paths
 }
 
-export class User {
-    id: string;
-
-    name: string;
-
-    avatar: string;
-
-    notifications?: []
-
-    role: string;
-}
-
 interface IHeaderProps {
-    currentUser?: User;
+  currentUser: IUser;
+  isAuthorized: boolean;
 }
 
-const Header = ({ currentUser }: IHeaderProps) => {
+const Header = ({ currentUser, isAuthorized }: IHeaderProps) => {
   const [currentRout, setCurrentRout] = useState(RoutPointer.home);
   const [search, setSearch] = useState('');
 
@@ -125,11 +117,22 @@ const Header = ({ currentUser }: IHeaderProps) => {
           />
         </div>
         <div className={styles.right_side}>
-          {currentUser ? <UserElement user={currentUser} /> : <LoginRegister /> }
+          {isAuthorized ? <UserElement user={currentUser} /> : <LoginRegister /> }
         </div>
       </div>
     </div>
   );
 };
 
-export default Header;
+const mapStateToProps = (state: IAppState) => {
+  const { appRouter, auth } = state;
+  return {
+    currentUser: appRouter.user,
+    isAuthorized: auth.auth.isAuthorized
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  null
+)(Header);

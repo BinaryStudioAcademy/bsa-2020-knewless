@@ -105,7 +105,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
       image: uploadImage
     });
     setButtonLoading(false);
-    history.push('/main');
+    history.push('/');
   };
 
   const handleCancel = () => {

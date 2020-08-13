@@ -1,13 +1,18 @@
-import { takeEvery, put, call, all } from 'redux-saga/effects';
+import { all, call, put, takeEvery } from 'redux-saga/effects';
 import { toastr } from 'react-redux-toastr';
 import { fetchDataRoutine } from '../../routines';
 import * as landingService from '../../services/landing.service';
 
 function* getData() {
   try {
-    const response = yield call(landingService.getData);
-    yield put(fetchDataRoutine.success(response));
-    // toastr.success('Data loaded!');
+    const coursesResp = yield call(landingService.getPopularCourses);
+    const pathsResp = yield call(landingService.getPaths);
+    const navigationsResp = yield call(landingService.getNavigations);
+    yield put(fetchDataRoutine.success({
+      courses: coursesResp,
+      paths: pathsResp,
+      navigations: navigationsResp
+    }));
   } catch (error) {
     yield put(fetchDataRoutine.failure(error?.message));
     toastr.error('Loading failed!');

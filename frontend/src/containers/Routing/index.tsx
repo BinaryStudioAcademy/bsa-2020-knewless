@@ -1,41 +1,39 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import LoaderWrapper from 'components/LoaderWrapper';
-import LandingPage from 'screens/Landing/containers/LandingPage';
 import PublicRoute from 'components/PublicRoute';
-import Data from 'screens/Home/containers/Data';
-import Header, { User } from '../../components/Header';
+import Header from '../../components/Header';
 import AddCourse from '../../screens/AddCourse/containers/AddCoursePage';
+import AddPathPage from '../../screens/AddPath/containers/AddPathPage';
 import LoginPage from '../../screens/Authentication/containers/LoginPage';
 import handler from '../../components/OAuth2RedirectHandler/OAuth2RedirectHandler';
-import MainStudentPage from '../../screens/MainPage/containers/MainStudentPage';
 import LecturePage from 'screens/LecturePage/containers/Lectures/index';
-import MainAuthorPage from '../../screens/AuthorMainPage/containers/MainPage';
+import SettingsRoute from 'containers/SettingsRoute';
 import RegisterPage from '../../screens/Authentication/containers/RegisterPage';
+import AuthorPublicPage from '../../screens/AuthorPublicPage/containers/AuthorPublicPage';
+import StudentProfile from 'screens/StudentPage/containers/StudentProfilePage';
 import { ACCESS_TOKEN } from '../../screens/Authentication/constants';
 import { IAppState } from '../../models/AppState';
 import { connect } from 'react-redux';
 import { IUser } from 'containers/AppRouter/models/IUser';
+import RootRoute from '../RootRoute';
+import PrivateRoute from '../PrivateRoute';
 import WebSocketNotifications from 'containers/WebSocketNotifications';
-import { AddPathPage } from 'screens/AddPath/containers/AddPathPage';
-import SettingsRoute from 'containers/SettingsRoute';
+import { RoleTypes } from '../AppRouter/models/IRole';
+import { history } from '../../helpers/history.helper';
 
 export interface IRoutingProps {
   isLoading: boolean;
-  user: IUser;
 }
 
-const mock: User = {
-  id: '1',
-  name: 'name',
-  avatar: 'https://media1.tenor.com/images/6f4fa5fea73897955d4b0508c47eeca5/tenor.gif?itemid=14645687',
-  role: 'STUDENT'
-};
+const Routing: React.FunctionComponent<IRoutingProps> = ({ isLoading }) => {
+  const checkHeaderShown = () => {
+    const headerBlackList = ['/login', '/register', '/lecture/'];
 
-const role = Math.round(Math.random());
-console.log(role);
+    return headerBlackList.every(item => !history.location.pathname.startsWith(item));
+  };
+  const [isHeaderShown, setIsHeaderShown] = useState(checkHeaderShown());
 
-const Routing: React.FunctionComponent<IRoutingProps> = ({ isLoading, user }) => {
   const connectToWebsocket = () => {
     const token = localStorage.getItem(ACCESS_TOKEN);
     if (token) {
@@ -44,26 +42,27 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({ isLoading, user }) =>
     return '';
   };
 
+  history.listen(() => {
+    setIsHeaderShown(checkHeaderShown());
+  });
+
   return (
     <div>
-      {/* {isAuthorized ? <Header /> : ''} */}
       <Switch>
-        <PublicRoute exact path="/lecture/:lectureId" component={LecturePage} />
         <Route>
-          <Header currentUser={mock} />
+          {isHeaderShown ? <Header /> : null}
           <SettingsRoute />
-          <PublicRoute exact path="/public" component={Data} />
-          <PublicRoute exact path="/" component={LandingPage} />
-          <PublicRoute exact path="/public" component={Data} />
-          <PublicRoute exact path="/add_path" component={AddPathPage} />
-          <PublicRoute exact path="/landing" component={LandingPage} />
-          <PublicRoute exact path="/add_course" component={AddCourse} />
+          <RootRoute />
           <PublicRoute exact path="/login" component={LoginPage} />
-          <PublicRoute exact path="/main" component={mock.role === 'STUDENT' ? MainStudentPage : MainAuthorPage} />
           <PublicRoute exact path="/oauth/redirect" component={handler} />
           <PublicRoute exact path="/register" component={RegisterPage} />
-        </Route>
+          <PublicRoute exact path="/author/:authorId" component={AuthorPublicPage} />
 
+          <PrivateRoute exact path="/lecture/:lectureId" component={LecturePage} />
+          <PrivateRoute exact path="/add_path" roles={[RoleTypes.AUTHOR]} component={AddPathPage} />
+          <PrivateRoute exact path="/add_course" roles={[RoleTypes.AUTHOR]} component={AddCourse} />
+          <PrivateRoute exact path="/profile" roles={[RoleTypes.USER]} component={StudentProfile} />
+        </Route>
         <div>
           <LoaderWrapper loading={isLoading}>
             <Switch>
@@ -84,11 +83,4 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({ isLoading, user }) =>
   );
 };
 
-const mapStateToProps = (state: IAppState) => {
-  const { user } = state.appRouter;
-  return {
-    user
-  };
-};
-
-export default connect(mapStateToProps)(Routing);
+export default Routing;

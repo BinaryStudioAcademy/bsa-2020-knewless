@@ -1,11 +1,25 @@
 @import "src/styles/common_variables"
 
+$title_container_height: 55px
+
 .main_container
-  padding-top: $header_height
+  padding-top: $header_height + $title_container_height
   background: #121421
   min-height: 100vh
   display: flex
   flex-direction: column
+
+.title
+  &_container
+    display: flex
+    align-items: center
+    background: #2A2B37
+    height: $title_container_height
+    position: fixed
+    top: $header_height
+    left: 0
+    z-index: 2
+    width: 100%
 
 .wide_container
   $container_width: 1400px
@@ -25,7 +39,7 @@
   display: flex
   flex-direction: column
   margin-bottom: 5vh
-  margin-top: 3vh
+  margin-top: 0.5em
 
 .form
   &__container
@@ -43,12 +57,13 @@
     flex-grow: 1
 
   &__label
+    display: block
     margin-bottom: 0.5em
 
   &__name
     position: relative
     grid-area: 1 / 1
-    margin-top: 1.8em
+    margin-top: 2.2em
     margin-bottom: 2em
     &_input_label
       margin-bottom: 0.5em

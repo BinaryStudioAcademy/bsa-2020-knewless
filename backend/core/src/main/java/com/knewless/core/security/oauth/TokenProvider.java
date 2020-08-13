@@ -21,11 +21,19 @@ public class TokenProvider {
         this.appProperties = appProperties;
     }
 
-    public String createToken(Authentication authentication) {
+    public String createAccessToken(Authentication authentication) {
+        return createToken(authentication, appProperties.getAuth().getTokenExpirationMsec());
+    }
+
+    public String createRefreshToken(Authentication authentication) {
+        return createToken(authentication, appProperties.getAuth().getRefreshExpirationMsec());
+    }
+
+    private String createToken(Authentication authentication, long expirationTime) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
 
         Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + appProperties.getAuth().getTokenExpirationMsec());
+        Date expiryDate = new Date(now.getTime() + expirationTime);
 
         return Jwts.builder()
                 .setSubject(userPrincipal.getId().toString())

@@ -1,4 +1,5 @@
 import React, { createRef, useCallback, useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import styles from './styles.module.sass';
 import { ICourse, IPath, ITag } from '../../models/domain';
 import { Footer } from '../../../../components/Footer';
@@ -36,6 +37,7 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
   triggerFetchCourses, triggerFetchTags, triggerSavePath
 }) => {
   const tagsRef = createRef();
+  const history = useHistory();
   const [selectedCourses, setSelectedCourses] = useState([]);
   const [storedCourses, setStoredCourses] = useState([]);
   const [pathName, setPathName] = useState('');
@@ -84,6 +86,7 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
         imageTag: pathImageTag
       };
       triggerSavePath(path);
+      history.push('/');
     }
   }
 
@@ -144,38 +147,42 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
   }, [selectedCourses]);
 
   return (
-    <div className={styles.main_container}>
-      <div className={styles.main_content}>
-        <h1 className={`${styles.title} ${styles.wide_container}`}>New Path</h1>
-        <div className={styles.wide_container}>
-          <div className={styles.form__container}>
-            <div className={styles.form__form}>
-              <div className={styles.form__name}>
-                <h4 className={styles.form__label}>Name:</h4>
-                <Input
-                  className={styles.form__name_input}
-                  onChange={ev => {
-                    setPathName(ev.target.value);
-                    validateName(ev.target.value);
-                  }}
-                  onBlur={validateName}
-                  error={!nameValid}
-                  fluid
-                />
-                {errors.name && (
-                <Label
-                  className={styles.error_message}
-                  pointing="below"
-                  content={errors.name}
-                  color="red"
-                />
-                )}
-              </div>
-              <div className={`${styles.form__tags} ${styles.form__group}`}>
-                <h4 className={styles.form__label}>Tags:</h4>
-                <div className={styles.form__tags_selector}>
-                  <InlineLoaderWrapper loading={tagsLoading} centered>
-                    {!tagsLoading && (
+    <>
+      <div className={styles.title_container}>
+        <h3 className={`${styles.title} ${styles.wide_container}`}>New Path</h3>
+      </div>
+      <div className={styles.main_container}>
+        <div className={styles.main_content}>
+          <div className={styles.wide_container}>
+            <div className={styles.form__container}>
+              <div className={styles.form__form}>
+                <div className={styles.form__name}>
+                  <span className={styles.form__label}>Name:</span>
+                  <Input
+                    name="Name"
+                    className={styles.form__name_input}
+                    onChange={ev => {
+                      setPathName(ev.target.value);
+                      validateName(ev.target.value);
+                    }}
+                    onBlur={validateName}
+                    error={!nameValid}
+                    fluid
+                  />
+                  {errors.name && (
+                  <Label
+                    className={styles.error_message}
+                    pointing="below"
+                    content={errors.name}
+                    color="red"
+                  />
+                  )}
+                </div>
+                <div className={`${styles.form__tags} ${styles.form__group}`}>
+                  {/* <label className={styles.form__label}>Tags:</label>*/}
+                  <div className={styles.form__tags_selector}>
+                    <InlineLoaderWrapper loading={tagsLoading} centered>
+                      {!tagsLoading && (
                       <TagSelector
                         ref={tagsRef}
                         onDelete={onTagDeletion}
@@ -184,53 +191,53 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
                         tags={selectedTags}
                         id="PathTags"
                       />
-                    )}
-                  </InlineLoaderWrapper>
+                      )}
+                    </InlineLoaderWrapper>
+                  </div>
+                </div>
+                <div className={`${styles.form__description} ${styles.form__group}`}>
+                  <span className={styles.form__label}>Description:</span>
+                  <Form className={styles.form__description_wrapper}>
+                    <TextArea
+                      className={styles.form__description_area}
+                      rows="5"
+                      onChange={(ev: any) => setPathDescription(ev.target.value)}
+                    />
+                  </Form>
+                </div>
+                <div className={`${styles.form__preview} ${styles.form__group}`}>
+                  <span className={styles.form__label}>Preview:</span>
+                  <div className={styles.form__preview_wrapper}>
+                    <PathPreview
+                      name={pathName}
+                      logoSrc={pathImageTag?.imageSrc || noImage}
+                      courses={selectedCourses.length}
+                      duration={countOverallDuration()}
+                      availableTags={selectedTags}
+                      selectedTag={pathImageTag}
+                      handleTagSelection={handleImageTagSelection}
+                    />
+                  </div>
+                </div>
+                <div className={`${styles.form__buttons} ${styles.form__group}`}>
+                  <div className={styles.form__button_row}>
+                    <GrayOutlineButton
+                      content="Cancel"
+                      onClick={handleCancel}
+                    />
+                    <GradientButton
+                      disabled={!nameValid}
+                      className={styles.btn_save}
+                      content="Save"
+                      onClick={handleSavePath}
+                      loading={pathUploading}
+                    />
+                  </div>
                 </div>
               </div>
-              <div className={`${styles.form__description} ${styles.form__group}`}>
-                <h4 className={styles.form__label}>Description:</h4>
-                <Form className={styles.form__description_wrapper}>
-                  <TextArea
-                    className={styles.form__description_area}
-                    rows="5"
-                    onChange={(ev: any) => setPathDescription(ev.target.value)}
-                  />
-                </Form>
-              </div>
-              <div className={`${styles.form__preview} ${styles.form__group}`}>
-                <h4 className={styles.form__label}>Preview:</h4>
-                <div className={styles.form__preview_wrapper}>
-                  <PathPreview
-                    name={pathName}
-                    logoSrc={pathImageTag?.imageSrc || noImage}
-                    courses={selectedCourses.length}
-                    duration={countOverallDuration()}
-                    availableTags={selectedTags}
-                    selectedTag={pathImageTag}
-                    handleTagSelection={handleImageTagSelection}
-                  />
-                </div>
-              </div>
-              <div className={`${styles.form__buttons} ${styles.form__group}`}>
-                <div className={styles.form__button_row}>
-                  <GrayOutlineButton
-                    content="Cancel"
-                    onClick={handleCancel}
-                  />
-                  <GradientButton
-                    disabled={!nameValid}
-                    className={styles.btn_save}
-                    content="Save"
-                    onClick={handleSavePath}
-                    loading={pathUploading}
-                  />
-                </div>
-              </div>
-            </div>
-            <div className={styles.form__list_container}>
-              <InlineLoaderWrapper loading={coursesLoading} centered>
-                {!coursesLoading && (
+              <div className={styles.form__list_container}>
+                <InlineLoaderWrapper loading={coursesLoading} centered>
+                  {!coursesLoading && (
                   <DependenciesSelector
                     selected={selectedCourses}
                     stored={storedCourses}
@@ -240,14 +247,15 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
                     itemToJsx={itemToJsxWithClick}
                     sortFn={compareName}
                   />
-                )}
-              </InlineLoaderWrapper>
+                  )}
+                </InlineLoaderWrapper>
+              </div>
             </div>
           </div>
         </div>
+        <Footer />
       </div>
-      <Footer />
-    </div>
+    </>
   );
 };
 

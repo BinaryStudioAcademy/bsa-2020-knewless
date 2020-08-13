@@ -1,0 +1,73 @@
+@import "src/styles/common"
+@import "src/styles/common_variables"
+
+$size_progress: 70px
+$size_ready: 30px
+.courseCard
+    padding: 20px 5px
+    display: flex
+    flex-direction: row
+    width: 100%
+    cursor: pointer
+    &:hover
+        background: #1b1c29
+
+.content
+    margin-left: 10px
+    display: flex
+    flex-direction: column   
+
+.category
+    color: #FF8576
+    font-family: Montserrat
+    font-style: normal
+    font-weight: bold
+    font-size: 10px
+    line-height: 12px
+    display: flex
+    align-items: center
+    text-transform: uppercase
+.title
+    padding-top: 10px
+    color: #fffff
+    font-family: Custom Open Sans
+    font-style: normal
+    font-weight: normal
+    font-size: 20px
+    line-height: 24px
+        
+.wrapperProgress
+    background: linear-gradient(52.17deg, #0084F8 9.02%, #FF8576 90.81%)
+    border-radius: 50%
+    overflow: hidden
+    width: $size_progress
+    height: $size_progress
+    align-self: center
+.progress
+    margin: 2px
+    padding: 2px
+    width: ($size_progress - 4px)
+    height: ($size_progress - 4px)
+    background: #121421
+    border-radius: 50%
+    display: flex
+    text-align: center
+    justify-content: center
+    align-items: center
+    font-size: 1.15em
+.ready
+    background: #2A2B37
+    border-radius: 50%
+    display: flex
+    justify-content: center
+    justify-items: center
+    align-content: center
+    align-items: center
+    width: $size_ready
+    height: $size_ready
+    text-align: center
+    align-self: center
+    margin-left: auto
+.icon
+    margin: 0 !important
+    padding: 0 !important  

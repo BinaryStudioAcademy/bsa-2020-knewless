@@ -1,4 +1,5 @@
 export const ACCESS_TOKEN = 'accessToken';
+export const REFRESH_TOKEN = 'refreshToken';
 
 const OAUTH2_REDIRECT_URI = 'oauth/redirect';
 
