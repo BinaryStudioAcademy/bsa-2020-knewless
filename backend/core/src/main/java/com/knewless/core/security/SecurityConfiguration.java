@@ -10,6 +10,7 @@ import com.knewless.core.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -95,6 +96,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .and()
                 .authorizeRequests()
                     .antMatchers("/").permitAll()
+                    .antMatchers(HttpMethod.GET, "/course").permitAll()
+                    .antMatchers(HttpMethod.GET, "/paths").permitAll()
                     .antMatchers(SWAGGER_PATHS_WHITELIST).permitAll()
                     .antMatchers("/auth/**", "/oauth2/**", "/assets/images/**").permitAll()
                     .anyRequest().authenticated()
