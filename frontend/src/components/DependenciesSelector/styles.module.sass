@@ -82,10 +82,13 @@
   overflow-y: auto
 
 
-\:global(i.close.icon::before)
-  cursor: pointer
-  position: absolute
-  font-size: 25px
-  color: #c7c7ce
-  left: -30px
-  top: 45px
+
+@media screen and (min-width: 991px)
+  \:global(i.close.icon::before)
+    cursor: pointer
+    position: absolute
+    font-size: 25px
+    color: #c7c7ce
+    left: -40px
+    top: 57px
+

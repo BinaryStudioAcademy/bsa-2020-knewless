@@ -69,8 +69,8 @@ $height_btn: 40px
 .settingsInput .top
   display: flex
   justify-content: space-between
-  align-items: center
-  padding-bottom: 2em
+  align-items: stretch
+  margin-bottom: 2em
 
 .customtextarea
   padding: 10px
@@ -86,27 +86,28 @@ $height_btn: 40px
   padding: auto
   font-family: Custom Open Sans
   font-style: normal
-
-.customtextareablurred
-  background: #737377
-  padding: 10px
-  margin-top: 5px
-  outline: none
-  resize: none
-  overflow: auto
-  position: relative
-  width: 100%
-  height: 100%
-  color: black
-  padding: auto
-  font-family: Custom Open Sans
-  font-style: normal
+  &_error
+    padding: 10px
+    outline: none
+    resize: none
+    overflow: auto
+    border-radius: 5px
+    position: relative
+    width: 100%
+    height: 100%
+    padding: auto
+    font-family: Custom Open Sans
+    font-style: normal
+    background-color: #fff6f6
+    border-color: #e0b4b4
+    color: #9f3a38
+    box-shadow: none
 
 .textareacontainer
-  padding-bottom: 30px
+  margin-bottom: 30px
   position: relative
   width: 100%
-  height: 17em
+  height: 15em
   background: inherit
   padding: auto
   color: white
@@ -115,6 +116,9 @@ $height_btn: 40px
 
 .inputfield
   padding: auto
+  display: flex
+  flex-direction: column
+  justify-content: space-between
   width: 60%
 
 .textcontainer
@@ -128,9 +132,12 @@ $height_btn: 40px
   width: 50%
   margin-top: -28px
 
+.customInput
+  height: 100%
+
 .dropdown
   padding: auto
-  padding-left: 1em
+  margin-left: 1em
   width: auto
   font-family: Custom Open Sans
   font-style: normal
@@ -145,7 +152,7 @@ $height_btn: 40px
 
 
 .buttonGroup
-  margin-top: 10px
+  margin-top: 15px
   width: 100%
   display: flex
   flex-direction: row
@@ -161,6 +168,7 @@ $height_btn: 40px
   flex-direction: row
 
 \:global(.ui.button).buttonCancel
+  font-size: 0.9em !important
   border-radius: 3px
   width: $width_btn
   height: $height_btn
@@ -186,13 +194,12 @@ $height_btn: 40px
     height: $height_btn
 
 \:global(.ui.button).button_release_disabled
-    color: #ffff
-    order-radius: 3px
+    border-radius: 3px
     width: $width_btn
     height: $height_btn
-    opacity: 0.7
-    background: #454849
+    opacity: 0.5
     cursor: default
+    
 
 \:global(.ui.button).button_save_disabled
     width: $width_btn
