@@ -3,9 +3,11 @@ package com.knewless.core.auth;
 import com.knewless.core.exception.BadRequestException;
 import com.knewless.core.security.model.AuthResponse;
 import com.knewless.core.security.model.LoginRequest;
+import com.knewless.core.security.model.RefreshTokenResponse;
 import com.knewless.core.security.model.SignUpRequest;
 import com.knewless.core.security.oauth.TokenProvider;
 import com.knewless.core.user.UserRepository;
+import com.knewless.core.user.UserService;
 import com.knewless.core.user.model.User;
 import com.knewless.core.user.role.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +15,12 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Service
 public class AuthService {
@@ -29,10 +35,10 @@ public class AuthService {
     private UserRepository userRepository;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private UserService customUserDetailsService;
 
     @Autowired
-    private RoleRepository roleRepository;
+    private PasswordEncoder passwordEncoder;
 
     public AuthResponse login(LoginRequest loginRequest) {
 
@@ -45,9 +51,10 @@ public class AuthService {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        String token = tokenProvider.createToken(authentication);
+        String token = tokenProvider.createAccessToken(authentication);
+        String refresh = tokenProvider.createRefreshToken(authentication);
 
-        return new AuthResponse(token);
+        return new AuthResponse(token, refresh);
     }
 
     public AuthResponse register(SignUpRequest signUpRequest) {
@@ -63,5 +70,17 @@ public class AuthService {
         userRepository.save(user);
 
         return login(new LoginRequest(signUpRequest.getEmail(), signUpRequest.getPassword()));
+    }
+
+    public RefreshTokenResponse refreshToken(String token) {
+        tokenProvider.validateToken(token);
+
+        UUID userId = tokenProvider.getUserIdFromToken(token);
+        UserDetails userDetails = customUserDetailsService.loadUserById(userId);
+
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        return new RefreshTokenResponse(tokenProvider.createAccessToken(authentication));
     }
 }

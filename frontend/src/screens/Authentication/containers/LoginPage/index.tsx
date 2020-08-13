@@ -34,7 +34,7 @@ const LoginPage: React.FunctionComponent<ILoginProps> = ({
         {isLoginFailure
           ? (
             <div className={styles.main_container__error_message}>
-              Username or password is incorrect
+              Email or password is incorrect
             </div>
           ) : null}
 

@@ -9,6 +9,8 @@ import { fetchUserRoutine, setSettingsModeRoutine } from './routines';
 import { IBindingAction, IBindingFunction } from '../../models/Callbacks';
 import { IUser } from './models/IUser';
 import { RoleTypes } from './models/IRole';
+import { ACCESS_TOKEN } from '../../screens/Authentication/constants';
+import { loginRoutine } from '../../screens/Home/routines';
 
 interface IAppRouterProps {
   user: IUser;
@@ -17,6 +19,7 @@ interface IAppRouterProps {
   isAuthorized: boolean;
   fetchUser: IBindingAction;
   setSettingsMode: IBindingFunction<RoleTypes, void>;
+  loginUser: IBindingAction;
 }
 
 const AppRouter: React.FunctionComponent<IAppRouterProps> = ({
@@ -25,7 +28,8 @@ const AppRouter: React.FunctionComponent<IAppRouterProps> = ({
   isAuthorized,
   fetchUser,
   setSettingsMode,
-  roleLoading
+  roleLoading,
+  loginUser
 }) => {
   useEffect(() => {
     const unlisten = history.listen(() => {
@@ -37,7 +41,8 @@ const AppRouter: React.FunctionComponent<IAppRouterProps> = ({
   }, []);
 
   useEffect(() => {
-    if (isAuthorized && !roleLoading) {
+    if (localStorage.getItem(ACCESS_TOKEN) && !roleLoading) {
+      loginUser();
       fetchUser();
     }
   }, [isAuthorized, roleLoading]);
@@ -65,7 +70,8 @@ const mapStateToProps = (state: IAppState) => {
 
 const mapDispatchToProps = {
   fetchUser: fetchUserRoutine,
-  setSettingsMode: setSettingsModeRoutine
+  setSettingsMode: setSettingsModeRoutine,
+  loginUser: loginRoutine.success
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppRouter);

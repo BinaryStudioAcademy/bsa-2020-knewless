@@ -2,7 +2,7 @@ import * as queryString from 'query-string';
 import { toastr } from 'react-redux-toastr';
 import { IFetchArgsData } from 'models/IFetchArgsData';
 import { IFetchArgs } from 'models/IFetchArgs';
-import { ACCESS_TOKEN } from 'screens/Authentication/constants';
+import { ACCESS_TOKEN, REFRESH_TOKEN } from 'screens/Authentication/constants';
 
 const getFetchUrl = ({ endpoint, queryParams }: IFetchArgsData) => `${endpoint}${
   queryParams ? `?${queryString.stringify(queryParams)}` : ''
@@ -67,8 +67,29 @@ const throwIfResponseFailed = async (res: Response) => {
   }
 };
 
+const refreshToken = async () => {
+  const token = localStorage.getItem(REFRESH_TOKEN);
+
+  const headers = getInitHeaders();
+  if (token) {
+    headers.set('Refresh-token', token);
+  }
+
+  const response = await fetch('/api/auth/refresh', { headers, method: 'POST' });
+  return response.json();
+};
+
 export const callApi = async (args: IFetchArgsData): Promise<Response> => {
-  const res = await fetch(getFetchUrl(args), getFetchArgs(args));
+  let res = await fetch(getFetchUrl(args), getFetchArgs(args));
+
+  if (res.status === 401 && localStorage.getItem(REFRESH_TOKEN)) {
+    const tokenRefreshResponse = await refreshToken();
+
+    if (tokenRefreshResponse.accessToken) {
+      localStorage.setItem(ACCESS_TOKEN, tokenRefreshResponse.accessToken);
+      res = await fetch(getFetchUrl(args), getFetchArgs(args));
+    }
+  }
   await throwIfResponseFailed(res);
   return res;
 };

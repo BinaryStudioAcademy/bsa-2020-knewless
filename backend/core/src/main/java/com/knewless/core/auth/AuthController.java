@@ -5,11 +5,9 @@ import com.knewless.core.security.model.ApiResponse;
 import com.knewless.core.security.model.LoginRequest;
 import com.knewless.core.security.model.SignUpRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
@@ -32,4 +30,12 @@ public class AuthController {
         return ResponseEntity.ok(authService.register(signUpRequest));
     }
 
+    @PostMapping("/refresh")
+    public ResponseEntity<?> refreshToken(@RequestHeader("Refresh-token") String token) {
+        try {
+            return ResponseEntity.ok(authService.refreshToken(token));
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+    }
 }

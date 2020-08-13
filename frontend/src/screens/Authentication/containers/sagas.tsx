@@ -5,7 +5,7 @@ import { authUser, setToken } from '../../../services/auth.service';
 export function* login(request: any) {
   try {
     const response = yield call(authUser, { endpoint: 'login', payload: request.payload });
-    setToken(response.accessToken);
+    setToken(response.accessToken, response.refreshToken);
 
     yield put(loginRoutine.success());
   } catch (e) {
@@ -20,7 +20,7 @@ function* watchLogin() {
 export function* register(request: any) {
   try {
     const response = yield call(authUser, { endpoint: 'signup', payload: request.payload });
-    setToken(response.accessToken);
+    setToken(response.accessToken, response.accessToken);
 
     yield put(registerRoutine.success());
   } catch (e) {
