@@ -12,6 +12,7 @@ import MainStudentPage from '../../screens/MainPage/containers/MainStudentPage';
 import LecturePage from 'screens/LecturePage/containers/Lectures/index';
 import MainAuthorPage from '../../screens/AuthorMainPage/containers/MainPage';
 import RegisterPage from '../../screens/Authentication/containers/RegisterPage';
+import AuthorPublicPage from '../../screens/AuthorPublicPage/containers/AuthorPublicPage';
 import StudentProfile from 'screens/StudentPage/containers/StudentProfilePage';
 import { ACCESS_TOKEN } from '../../screens/Authentication/constants';
 import { IAppState } from '../../models/AppState';
@@ -64,6 +65,7 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({ isLoading, user }) =>
           <PublicRoute exact path="/main" component={mock.role.name === 'STUDENT' ? MainStudentPage : MainAuthorPage} />
           <PublicRoute exact path="/oauth/redirect" component={handler} />
           <PublicRoute exact path="/register" component={RegisterPage} />
+          <PublicRoute exact path="/author/:authorId" component={AuthorPublicPage} />
         </Route>
 
         <div>

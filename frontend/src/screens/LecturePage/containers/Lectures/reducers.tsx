@@ -14,7 +14,8 @@ const basicCourseData = {
     duration: 0
   }],
   author: {
-    name: 'Unspecified author!',
+    firstName: 'Unspecified ',
+    lastName: ' author!',
     id: null
   }
 };

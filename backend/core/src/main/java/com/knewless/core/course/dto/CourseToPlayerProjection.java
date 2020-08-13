@@ -1,6 +1,5 @@
 package com.knewless.core.course.dto;
 
-import com.knewless.core.author.dto.AuthorNameIdProjection;
 import com.knewless.core.lecture.dto.LectureToPlayerDto;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -10,6 +9,6 @@ public interface CourseToPlayerProjection {
     String getId();
     String getName();
     @Value("#{target.author}")
-    AuthorNameIdProjection getAuthor();
+    AuthorToPlayerProjection getAuthor();
     List<LectureToPlayerDto> getLectures();
 }

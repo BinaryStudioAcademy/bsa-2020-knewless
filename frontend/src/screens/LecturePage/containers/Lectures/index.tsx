@@ -64,7 +64,6 @@ function videosQueue(choosedVideoProps: string, responseData: CourseData, incomi
   }
   return neccessaryVideoResult;
 }
-// videosQueue(lecturesListProps.choosedVideo, lecturesData, match.params.lectureId)
 
 const LecturePage: React.FunctionComponent<ILectureProps> = ({
   lecturesData, lecturesListProps, match, fetchCourseDto: getCourseDto, setChoosedVideo
@@ -98,9 +97,9 @@ const LecturePage: React.FunctionComponent<ILectureProps> = ({
           By &nbsp;
           <Link
             className="authorLink"
-            to={`/author/${lecturesData.author.name}/${lecturesData.author.id}`}
+            to={`/author/${lecturesData.author.id}`}
           >
-            {lecturesData.author.name}
+            {`${lecturesData.author.firstName} ${lecturesData.author.lastName}`}
           </Link>
         </div>
         <div className="lecturesList">
