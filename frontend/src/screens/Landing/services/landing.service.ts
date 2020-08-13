@@ -1,23 +1,29 @@
 import { callApi } from 'helpers/api.helper';
-import { courses, navigations, paths } from './mock';
+import { navigations } from './mock';
 
-async function properRequest() {
+async function coursesRequest() {
   const response = await callApi({
-    endpoint: '/api/data/',
-    type: 'GET'
+    endpoint: '/api/course',
+    type: 'GET',
+    queryParams: { page: 0, size: 3 }
   });
-
   return response.json();
 }
 
-async function mockRequest() {
-  return new Promise(resolve => {
-    setTimeout(() => resolve({
-      courses,
-      paths,
-      navigations
-    }), 500);
+async function pathsRequest() {
+  const response = await callApi({
+    endpoint: '/api/paths',
+    type: 'GET',
+    queryParams: { page: 0, size: 3 }
   });
+  return response.json();
 }
 
-export const getData = async () => mockRequest();
+export const getPopularCourses = async () => coursesRequest();
+export const getPaths = async () => pathsRequest();
+
+function mockNavigations() {
+  return Promise.resolve(navigations);
+}
+
+export const getNavigations = async () => mockNavigations();

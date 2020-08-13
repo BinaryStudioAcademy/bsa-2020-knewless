@@ -3,9 +3,9 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import LoaderWrapper from 'components/LoaderWrapper';
 import LandingPage from 'screens/Landing/containers/LandingPage';
 import PublicRoute from 'components/PublicRoute';
-import Data from 'screens/Home/containers/Data';
 import Header from '../../components/Header';
 import AddCourse from '../../screens/AddCourse/containers/AddCoursePage';
+import AddPathPage from '../../screens/AddPath/containers/AddPathPage';
 import LoginPage from '../../screens/Authentication/containers/LoginPage';
 import handler from '../../components/OAuth2RedirectHandler/OAuth2RedirectHandler';
 import LecturePage from 'screens/LecturePage/containers/Lectures/index';
@@ -19,7 +19,6 @@ import { connect } from 'react-redux';
 import { IUser } from 'containers/AppRouter/models/IUser';
 import MainPageRoute from '../MainPageRoute';
 import WebSocketNotifications from 'containers/WebSocketNotifications';
-import { AddPathPage } from 'screens/AddPath/containers/AddPathPage';
 
 export interface IRoutingProps {
   isLoading: boolean;
@@ -44,11 +43,8 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({ isLoading, user }) =>
           <Header />
           <SettingsRoute />
           <PublicRoute exact path="/profile" component={StudentProfile} />
-          <PublicRoute exact path="/public" component={Data} />
           <PublicRoute exact path="/" component={LandingPage} />
-          <PublicRoute exact path="/public" component={Data} />
           <PublicRoute exact path="/add_path" component={AddPathPage} />
-          <PublicRoute exact path="/landing" component={LandingPage} />
           <PublicRoute exact path="/add_course" component={AddCourse} />
           <PublicRoute exact path="/login" component={LoginPage} />
           <MainPageRoute />

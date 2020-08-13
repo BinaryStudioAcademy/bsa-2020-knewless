@@ -20,34 +20,31 @@ import java.util.Objects;
 public class Path extends BaseEntity {
 	@Column(name = "name")
 	private String name;
-	
+
 	@Column(name = "description")
 	private String description;
-	
+
 	@ManyToMany(cascade = {CascadeType.REFRESH, CascadeType.PERSIST})
 	@JoinTable(name = "path_tag",
 			joinColumns = @JoinColumn(name = "path_id"),
 			inverseJoinColumns = @JoinColumn(name = "tag_id"))
 	private List<Tag> tags;
-	
-	@Column(name = "image")
-	private String image;
-	
+
 	/**
 	 * This tag is used to determine what image to display
 	 */
 	@ManyToOne
 	private Tag imageTag;
-	
+
 	@ManyToMany(cascade = {CascadeType.REFRESH, CascadeType.PERSIST})
 	@JoinTable(name = "course_path",
 			joinColumns = @JoinColumn(name = "path_id"),
 			inverseJoinColumns = @JoinColumn(name = "course_id"))
 	private List<Course> courses = List.of();
-	
+
 	@ManyToOne
 	private Author author;
-	
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
@@ -58,7 +55,7 @@ public class Path extends BaseEntity {
 				Objects.equals(description, path.description) &&
 				Objects.equals(author, path.author);
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(super.hashCode(), name, description, author);

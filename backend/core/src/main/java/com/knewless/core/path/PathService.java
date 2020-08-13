@@ -9,6 +9,7 @@ import com.knewless.core.path.dto.PathDurationDto;
 import com.knewless.core.path.model.Path;
 import com.knewless.core.tag.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -36,8 +37,8 @@ public class PathService {
 		this.authorRepository = authorRepository;
 	}
 
-	public List<PathDto> getAllPaths() {
-		var pathInfo = pathRepository.getAllPaths();
+	public List<PathDto> getPaths(Pageable pageable) {
+		var pathInfo = pathRepository.getAllPaths(pageable);
 		return pathInfo.stream().map(p -> {
 			var path = PathMapper.MAPPER.pathQueryResultToPathDto(p);
 			path.setDuration(getDuration(p.getMinutes()));

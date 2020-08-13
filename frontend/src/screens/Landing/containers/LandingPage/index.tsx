@@ -26,14 +26,15 @@ export const LandingPage: React.FunctionComponent<ILandingProps> = ({
   courses,
   paths,
   navigations,
-  fetchData: getData,
+  fetchData: triggerFetchData,
   loading
 }) => {
-  useEffect(() => {
-    getData();
-  }, []);
   const [playerRunning, setPlayerRunning] = useState(true);
   const playerRef = createRef<HTMLVideoElement>();
+
+  useEffect(() => {
+    triggerFetchData();
+  }, []);
 
   function setPlay(play: boolean) {
     setPlayerRunning(play);
