@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -54,8 +55,12 @@ public class AuthorController {
     }
 
     @GetMapping("/overview/{authorId}")
-    public AuthorPublicDto getPublicAuthor(@PathVariable UUID authorId, @CurrentUser UserPrincipal userPrincipal) {
-        return authorService.getAuthorPublicDto(authorId, userPrincipal);
+    public ResponseEntity<?> getPublicAuthor(@PathVariable UUID authorId, @CurrentUser UserPrincipal userPrincipal) {
+        try {
+            return new ResponseEntity<>(this.authorService.getAuthorPublicDto(authorId, userPrincipal), HttpStatus.OK);
+        } catch (NotFoundException ex) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
+        }
     }
 
 }

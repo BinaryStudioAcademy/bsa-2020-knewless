@@ -81,17 +81,24 @@ public class AuthorService {
         return AuthorInfoMapper.fromEntities(author, user, schoolBriefInfo);
     }
 
-    public AuthorPublicDto getAuthorPublicDto(UUID authorId, UserPrincipal userPrincipal) {
-        // after merge you have to change userPrincipal to userId and find by userId
-        var author = this.authorRepository.findOneById(authorId);
+    public AuthorPublicDto getAuthorPublicDto(UUID authorId, UserPrincipal userPrincipal) throws NotFoundException {
+
+        var author = this.authorRepository.findOneById(authorId)
+                .orElseThrow(() -> new NotFoundException("Author with id " + authorId + " not found"));
+
         var courses = this.courseRepository.getCoursesByAuthorId(authorId);
         var articles = this.articleRepository.getArticleDtoByAuthorId(authorId);
-        var school = this.authorRepository.getSchoolByAuthorId(authorId);
-        var printFollowButton = !this.userRepository.getUserRoleId(userPrincipal.getEmail()).equals(RoleType.AUTHOR);
-        var numberOfSubscriptions = this.authorRepository.getNumberOfSubscriptions(authorId);
-        System.out.println(userPrincipal.getEmail());
 
-        var resultAuthorPublicDto = new AuthorPublicDto(author.getFirstName(),
+        var school = this.authorRepository.getSchoolByAuthorId(authorId)
+                .orElseThrow(() -> new NotFoundException("Author " + authorId + " school not found"));
+
+        var currentUserId = this.authorRepository.checkForCurrentUser(userPrincipal.getEmail());
+        var printFollowButton = currentUserId.isPresent() ? !currentUserId.get().equals(authorId) : true;
+
+        var numberOfSubscriptions = this.authorRepository.getNumberOfSubscriptions(authorId)
+                .orElseThrow(() -> new NotFoundException("Cant find number of author subscribers " + authorId));
+
+        return new AuthorPublicDto(author.getFirstName(),
                 author.getLastName(),
                 author.getAvatar(),
                 author.getBiography(),
@@ -99,7 +106,6 @@ public class AuthorService {
                 school.getId().toString(),
                 numberOfSubscriptions,
                 courses, articles, printFollowButton);
-        return resultAuthorPublicDto;
     }
 
 }

@@ -9,7 +9,7 @@ const basicAuthorData = {
   firstName: 'Unspecified',
   lastName: 'author',
   biography: 'unspecified information about author',
-  schoolName: 'undefined shool',
+  schoolName: '',
   schoolId: 'incorrect id',
   numberOfSubscribers: 0,
   courses: [{

@@ -40,11 +40,14 @@ const AuthorPublicPage: React.FunctionComponent<IAuthorPublic> = ({
         <div className="authorName-publicPage">
           {`${authorData.firstName} ${authorData.lastName}`}
         </div>
-        <div className="authorKnewlessStatic">
-          <Link className="cardSchoolLink-wrapper" to={`/school/${authorData.schoolId}`}>
-            {`Author in ${authorData.schoolName}`}
-          </Link>
-        </div>
+        {authorData.schoolName === '' ? null
+          : (
+            <div className="authorKnewlessStatic">
+              <Link className="cardSchoolLink-wrapper" to={`/school/${authorData.schoolId}`}>
+                {`Author in ${authorData.schoolName}`}
+              </Link>
+            </div>
+          )}
 
         {authorData.printFollowButton
           ? (
