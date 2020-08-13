@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { fetchLecturesRoutine, saveCourseRoutine } from 'screens/AddCourse/routines';
 import { IBindingCallback1 } from 'models/Callbacks';
 import { ICourse } from '../../models/ICourse';
-import { Input, Dropdown, Button, Icon } from 'semantic-ui-react';
+import { Input, Dropdown, Button } from 'semantic-ui-react';
 import { Footer } from '../../../../components/Footer';
 import { useHistory } from 'react-router-dom';
 import styles from './styles.module.sass';

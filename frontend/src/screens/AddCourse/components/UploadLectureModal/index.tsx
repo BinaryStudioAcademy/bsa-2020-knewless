@@ -50,7 +50,7 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
     validateName();
     setFile(undefined);
     const thisFile: File = e.target.files[0];
-    if (isVideo(thisFile.name)) {
+    if (thisFile && isVideo(thisFile.name)) {
       setFile(thisFile);
       setIsValidFile(true);
     } else {
