@@ -13,9 +13,6 @@ import RegisterPage from '../../screens/Authentication/containers/RegisterPage';
 import AuthorPublicPage from '../../screens/AuthorPublicPage/containers/AuthorPublicPage';
 import StudentProfile from 'screens/StudentPage/containers/StudentProfilePage';
 import { ACCESS_TOKEN } from '../../screens/Authentication/constants';
-import { IAppState } from '../../models/AppState';
-import { connect } from 'react-redux';
-import { IUser } from 'containers/AppRouter/models/IUser';
 import RootRoute from '../RootRoute';
 import PrivateRoute from '../PrivateRoute';
 import WebSocketNotifications from 'containers/WebSocketNotifications';
@@ -57,7 +54,6 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({ isLoading }) => {
           <PublicRoute exact path="/oauth/redirect" component={handler} />
           <PublicRoute exact path="/register" component={RegisterPage} />
           <PublicRoute exact path="/author/:authorId" component={AuthorPublicPage} />
-
           <PrivateRoute exact path="/lecture/:lectureId" component={LecturePage} />
           <PrivateRoute exact path="/add_path" roles={[RoleTypes.AUTHOR]} component={AddPathPage} />
           <PrivateRoute exact path="/add_course" roles={[RoleTypes.AUTHOR]} component={AddCourse} />

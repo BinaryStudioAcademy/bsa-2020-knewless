@@ -76,8 +76,8 @@ $image_width: 10em
       gap: 1.5em
       align-items: flex-end
       overflow: hidden
-      white-space: nowrap
       column-width: 1px
+      flex-wrap: wrap
       & > *
         font-size: $meta_font_size
         font-family: Montserrat, serif
@@ -88,6 +88,13 @@ $image_width: 10em
         color: #F27A54
       &_unit
         margin-left: 0.5em
+
+    &__info_row
+      height: 100%
+      white-space: nowrap
+      display: flex
+      align-items: flex-end
+      column-gap: 1.5em
 
 .btn_container
   position: absolute

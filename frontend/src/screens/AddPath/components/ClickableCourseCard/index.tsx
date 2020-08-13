@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import styles from './styles.module.sass';
 import { minutesToDuration } from '../../../../components/PathCard/helper';
 import { Label } from 'semantic-ui-react';
+import { StyledRating } from '../../../../components/StyledRating';
 
 export interface ICourseCardProps {
   category: string;
@@ -36,12 +37,15 @@ export const CourseCard: React.FC<ICourseCardProps> = ({
         <span className={styles.dependency__name} title={name}>{name}</span>
         <span className={styles.dependency__category}>{category}</span>
         <div className={styles.dependency__meta_container}>
-          <span className={styles.dependency__meta__author}>{author}</span>
-          <div>
-            <span className={styles.dependency__meta__time_duration}>{duration}</span>
-            <span className={styles.dependency__meta__time_unit}>{timeUnit}</span>
+          <div className={styles.dependency__meta__info_row}>
+            <span className={styles.dependency__meta__author}>{author}</span>
+            <div>
+              <span className={styles.dependency__meta__time_duration}>{duration}</span>
+              <span className={styles.dependency__meta__time_unit}>{timeUnit}</span>
+            </div>
+            <span className={styles.dependency__level}>{level}</span>
           </div>
-          <span className={styles.dependency__level}>{level}</span>
+          <StyledRating rating={rating} className={styles.dependency__rating} />
         </div>
         <div className={styles.btn_container}>
           <Label
