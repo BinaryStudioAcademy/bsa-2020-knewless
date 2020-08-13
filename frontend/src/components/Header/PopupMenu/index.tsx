@@ -2,7 +2,7 @@ import React from 'react';
 import { Label, List, Divider } from 'semantic-ui-react';
 import styles from './styles.module.sass';
 import { useHistory } from 'react-router-dom';
-import { ACCESS_TOKEN } from 'screens/Authentication/constants';
+import { ACCESS_TOKEN, REFRESH_TOKEN } from 'screens/Authentication/constants';
 
 const PopupMenu = () => {
   const history = useHistory();
@@ -17,6 +17,7 @@ const PopupMenu = () => {
   };
   const handleOnClickSignOut = () => {
     localStorage.removeItem(ACCESS_TOKEN);
+    localStorage.removeItem(REFRESH_TOKEN);
     history.push('/');
     history.go();
   };

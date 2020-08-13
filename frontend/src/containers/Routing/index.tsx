@@ -4,7 +4,7 @@ import LoaderWrapper from 'components/LoaderWrapper';
 import LandingPage from 'screens/Landing/containers/LandingPage';
 import PublicRoute from 'components/PublicRoute';
 import Data from 'screens/Home/containers/Data';
-import Header, { User } from '../../components/Header';
+import Header from '../../components/Header';
 import AddCourse from '../../screens/AddCourse/containers/AddCoursePage';
 import LoginPage from '../../screens/Authentication/containers/LoginPage';
 import handler from '../../components/OAuth2RedirectHandler/OAuth2RedirectHandler';
@@ -25,11 +25,11 @@ export interface IRoutingProps {
   user: IUser;
 }
 
-const mock: User = {
+const mock: IUser = {
   id: '1',
-  name: 'name',
+  nickname: 'name',
   avatar: 'https://media1.tenor.com/images/6f4fa5fea73897955d4b0508c47eeca5/tenor.gif?itemid=14645687',
-  role: 'STUDENT'
+  role: { name: 'STUDENT' }
 };
 
 const role = Math.round(Math.random());
@@ -50,7 +50,7 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({ isLoading, user }) =>
       <Switch>
         <PublicRoute exact path="/lecture/:lectureId" component={LecturePage} />
         <Route>
-          <Header currentUser={mock} />
+          <Header />
           <SettingsRoute />
           <PublicRoute exact path="/public" component={Data} />
           <PublicRoute exact path="/" component={LandingPage} />
@@ -59,7 +59,7 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({ isLoading, user }) =>
           <PublicRoute exact path="/landing" component={LandingPage} />
           <PublicRoute exact path="/add_course" component={AddCourse} />
           <PublicRoute exact path="/login" component={LoginPage} />
-          <PublicRoute exact path="/main" component={mock.role === 'STUDENT' ? MainStudentPage : MainAuthorPage} />
+          <PublicRoute exact path="/main" component={mock.role.name === 'STUDENT' ? MainStudentPage : MainAuthorPage} />
           <PublicRoute exact path="/oauth/redirect" component={handler} />
           <PublicRoute exact path="/register" component={RegisterPage} />
         </Route>

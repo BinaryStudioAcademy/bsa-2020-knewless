@@ -1,15 +1,11 @@
 import React from 'react';
 import { Icon, Label, Popup } from 'semantic-ui-react';
 import styles from './styles.module.sass';
-import { User } from '../index';
 import Notifications from '../../../containers/Notifications';
 import PopupMenu from '../PopupMenu';
+import { IUser } from '../../../containers/AppRouter/models/IUser';
 
-interface IUserElementProps {
-  user: User;
-}
-
-const UserElement = ({ user }: IUserElementProps) => (
+const UserElement = user => (
   <div className={styles.profileWrp}>
     <Label
       basic
@@ -25,7 +21,7 @@ const UserElement = ({ user }: IUserElementProps) => (
       on="click"
       trigger={(
         <div className={styles.imageborder}>
-          <img src={user.avatar} className={styles.avatar} alt={user.name} />
+          <img src={user.avatar} className={styles.avatar} alt={user.nickname} />
         </div>
         )}
       position="bottom right"
