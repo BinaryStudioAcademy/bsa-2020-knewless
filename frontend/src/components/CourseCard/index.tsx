@@ -1,8 +1,8 @@
 import React from 'react';
-import { Button, Card, CardContent, CardHeader, CardMeta, Icon, Image, Rating } from 'semantic-ui-react';
+import { Button, Card, CardContent, CardHeader, CardMeta, Icon, Image } from 'semantic-ui-react';
 import styles from './styles.module.sass';
-import './rating.sass';
 import GradientButton from '../buttons/GradientButton';
+import { StyledRating } from '../StyledRating';
 
 export interface ICardCategory {
   name: string;
@@ -42,7 +42,7 @@ export const CourseCard: React.FunctionComponent<ICourseCardProps> = ({
         <span>{duration}</span>
         <span>{level}</span>
       </CardMeta>
-      <Rating defaultRating={rating} maxRating={5} size="huge" className="landing__rating_bar" />
+      <StyledRating rating={rating} disabled />
       {
         !hideButton
         && (

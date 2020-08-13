@@ -11,19 +11,21 @@ export interface ICourseCardProps {
   name: string;
   previewSrc: string;
   onClick: () => void;
+  rating?: number;
   // either addition or deletion
   isSelectedIcon?: boolean;
 }
 
 export const CourseCard: React.FC<ICourseCardProps> = ({
   category, author, timeMinutes, level, name, previewSrc,
-  isSelectedIcon = true, onClick
+  isSelectedIcon = true, onClick, rating = 3
 }) => {
   const calcDuration = useCallback(() => minutesToDuration(timeMinutes), [timeMinutes]);
   const { timeUnit, duration } = calcDuration();
   return (
     <div className={styles.container}>
       <div className={styles.image_container}>
+        <div className={styles.image_cover} />
         <img
           className={styles.image_preview}
           src={previewSrc || 'https://i.imgur.com/LFR6UaK.jpg'}
@@ -31,16 +33,16 @@ export const CourseCard: React.FC<ICourseCardProps> = ({
         />
       </div>
       <div className={styles.dependency__container}>
+        <span className={styles.dependency__name} title={name}>{name}</span>
+        <span className={styles.dependency__category}>{category}</span>
         <div className={styles.dependency__meta_container}>
-          <span className={styles.dependency__meta__category}>{category}</span>
           <span className={styles.dependency__meta__author}>{author}</span>
           <div>
             <span className={styles.dependency__meta__time_duration}>{duration}</span>
             <span className={styles.dependency__meta__time_unit}>{timeUnit}</span>
           </div>
-          <span className={styles.dependency__meta__level}>{level}</span>
+          <span className={styles.dependency__level}>{level}</span>
         </div>
-        <span className={styles.dependency__name}>{name}</span>
         <div className={styles.btn_container}>
           <Label
             icon={isSelectedIcon ? 'minus' : 'plus'}

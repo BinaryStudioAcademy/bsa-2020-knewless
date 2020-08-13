@@ -1,8 +1,8 @@
 package com.knewless.core.course;
 
+import com.knewless.core.course.dto.*;
 import com.knewless.core.author.AuthorRepository;
 import com.knewless.core.author.model.Author;
-import com.knewless.core.course.dto.*;
 import com.knewless.core.course.model.Course;
 import com.knewless.core.course.model.Level;
 import com.knewless.core.lecture.Dto.ShortLectureDto;
@@ -91,7 +91,7 @@ public class CourseService {
 				.map(CourseMapper.MAPPER::courseQueryResultToCourseDto).collect(Collectors.toList());
 	}
 
-	List<CourseDto> getRecommendedCourses(UUID id, Pageable pageable) {
+	public List<CourseDto> getRecommendedCourses(UUID id, Pageable pageable) {
 		return getCourses(pageable);
 	}
 
