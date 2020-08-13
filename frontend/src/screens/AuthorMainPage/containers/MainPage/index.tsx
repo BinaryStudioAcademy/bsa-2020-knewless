@@ -8,6 +8,7 @@ import { AuthorCardsSegment } from '../../components/AuthorCardsSegment';
 import AuthorInfoBlock from '../../components/AuthorInfoBlock';
 import { fetchAuthorCoursesRoutine, fetchAuthorPathsRoutine } from '../../routines';
 import { author as authorMock } from '../../services/author.page.mock';
+import { useHistory } from 'react-router-dom';
 import styles from './styles.module.sass';
 
 export interface IMainAuthorPageProps {
@@ -35,6 +36,7 @@ const MainAuthorPage: React.FunctionComponent<IMainAuthorPageProps> = ({
       getAuthorPaths(author.id);
     }
   }, [author.id]);
+  const history = useHistory();
   return (
     <div className={styles.main_page}>
       <AuthorInfoBlock author={author} />
@@ -42,7 +44,7 @@ const MainAuthorPage: React.FunctionComponent<IMainAuthorPageProps> = ({
         <div className={`${styles.wide_container} ${styles.content_row}`}>
           <AuthorCardsSegment
             title="Your recently created Courses"
-            onCreateClick={() => (console.log('clicked create course'))}
+            onCreateClick={() => history.push('/add_course')}
             onViewAllClick={() => (console.log('clicked view author courses'))}
             loading={coursesLoading}
           >
@@ -59,7 +61,7 @@ const MainAuthorPage: React.FunctionComponent<IMainAuthorPageProps> = ({
         <div className={`${styles.wide_container} ${styles.content_row}`}>
           <AuthorCardsSegment
             title="Your recently created Paths"
-            onCreateClick={() => (console.log('clicked create path'))}
+            onCreateClick={() => (history.push('/add_path'))}
             onViewAllClick={() => console.log('clicked view author paths')}
             loading={pathsLoading}
           >
