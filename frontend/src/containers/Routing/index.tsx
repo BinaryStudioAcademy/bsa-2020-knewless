@@ -12,6 +12,7 @@ import MainStudentPage from '../../screens/MainPage/containers/MainStudentPage';
 import LecturePage from 'screens/LecturePage/containers/Lectures/index';
 import MainAuthorPage from '../../screens/AuthorMainPage/containers/MainPage';
 import RegisterPage from '../../screens/Authentication/containers/RegisterPage';
+import StudentProfile from 'screens/StudentPage/containers/StudentProfilePage';
 import { ACCESS_TOKEN } from '../../screens/Authentication/constants';
 import { IAppState } from '../../models/AppState';
 import { connect } from 'react-redux';
@@ -52,6 +53,7 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({ isLoading, user }) =>
         <Route>
           <Header />
           <SettingsRoute />
+          <PublicRoute exact path="/profile" component={StudentProfile} />
           <PublicRoute exact path="/public" component={Data} />
           <PublicRoute exact path="/" component={LandingPage} />
           <PublicRoute exact path="/public" component={Data} />

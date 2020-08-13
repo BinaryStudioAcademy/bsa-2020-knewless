@@ -1,0 +1,82 @@
+@import "src/styles/common"
+@import "src/styles/common_variables"
+
+$size_progress: 150px
+$size_ready: 30px
+$height_image: 60px
+$width_image: 100px
+$height_progress: 5px
+$width_progress: 200px
+.courseCard
+    padding: 20px
+    display: flex
+    flex-direction: row
+    width: 100%
+    cursor: pointer
+    &:hover
+        background: #363741 
+
+.content
+    margin-left: 10px
+    display: flex
+    flex-direction: column   
+
+.category
+    color: #FF8576
+    font-family: Montserrat
+    font-style: normal
+    font-weight: bold
+    font-size: 10px
+    line-height: 12px
+    display: flex
+    align-items: center
+    text-transform: uppercase
+.title
+    padding-top: 10px
+    color: #fffff
+    font-family: Custom Open Sans
+    font-style: normal
+    font-weight: normal
+    font-size: 20px
+    line-height: 24px
+        
+.wrapperImage
+    overflow: hidden
+    align-self: center
+    width: $width_image
+    height: $height_image
+    border-radius: 6px
+    margin-right: 10px
+    align-self: center
+    .imageCourse
+       margin: 0 !important
+       padding: 0 !important 
+       object-fit: cover
+       width: $width_image 
+       height: $height_image
+.progress
+    display: flex
+    flex-direction: row
+    margin-left: auto       
+.wrapperProgress
+    width: $width_progress
+    height: $height_progress
+    align-self: center
+.progressTime
+    margin-right: 10px
+    align-self: center
+    font-family: Montserrat
+    font-style: normal
+    font-weight: bold
+    font-size: 1em  
+
+\:global(.ui.progress .bar)
+    border-radius: 0px
+    height: $height_progress
+    background: linear-gradient(83.47deg, #0084F8 9.02%, #FF8576 90.81%) !important
+\:global(.ui.progress .label)
+    color: #ffffff !important
+    font-family: Montserrat
+    font-style: normal
+    font-weight: bold
+    font-size: 1em 
