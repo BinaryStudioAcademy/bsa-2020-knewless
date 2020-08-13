@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import LoaderWrapper from 'components/LoaderWrapper';
 import PublicRoute from 'components/PublicRoute';
@@ -20,13 +20,20 @@ import RootRoute from '../RootRoute';
 import PrivateRoute from '../PrivateRoute';
 import WebSocketNotifications from 'containers/WebSocketNotifications';
 import { RoleTypes } from '../AppRouter/models/IRole';
+import { history } from '../../helpers/history.helper';
 
 export interface IRoutingProps {
   isLoading: boolean;
-  user: IUser;
 }
 
-const Routing: React.FunctionComponent<IRoutingProps> = ({ isLoading, user }) => {
+const Routing: React.FunctionComponent<IRoutingProps> = ({ isLoading }) => {
+  const checkHeaderShown = () => {
+    const headerBlackList = ['/login', '/register', '/lecture/'];
+
+    return headerBlackList.every(item => !history.location.pathname.startsWith(item));
+  };
+  const [isHeaderShown, setIsHeaderShown] = useState(checkHeaderShown());
+
   const connectToWebsocket = () => {
     const token = localStorage.getItem(ACCESS_TOKEN);
     if (token) {
@@ -35,12 +42,15 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({ isLoading, user }) =>
     return '';
   };
 
+  history.listen(() => {
+    setIsHeaderShown(checkHeaderShown());
+  });
+
   return (
     <div>
-      {/* {isAuthorized ? <Header /> : ''} */}
       <Switch>
         <Route>
-          <Header />
+          {isHeaderShown ? <Header /> : null}
           <SettingsRoute />
           <RootRoute />
           <PublicRoute exact path="/login" component={LoginPage} />
@@ -73,11 +83,4 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({ isLoading, user }) =>
   );
 };
 
-const mapStateToProps = (state: IAppState) => {
-  const { user } = state.appRouter;
-  return {
-    user
-  };
-};
-
-export default connect(mapStateToProps)(Routing);
+export default Routing;
