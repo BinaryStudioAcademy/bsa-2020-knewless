@@ -70,16 +70,11 @@
   display: flex
   flex-direction: column
   justify-content: flex-start
-  background: #121421 !important
-  max-height: 60vh !important
-  height: auto !important
-  overflow-y: auto
-  border-radius: 0 !important
-
-.modal__header
   background: #2A2B37 !important
-  color: white !important
+  max-height: 80vh !important
+  height: auto !important
   border-radius: 0 !important
+  
 
 .topRow
   width: 100%
@@ -87,6 +82,7 @@
   display: flex
   justify-content: space-between
   align-items: flex-end
+  padding-top: 1.5em
   margin-bottom: 1em
 
 .inputWrapper
@@ -94,7 +90,7 @@
   display: flex
   flex-direction: column
   justify-content: space-between
-  width: 45%
+  width: 55%
 
 .progressinactive
   background: #2A2B37 !important
@@ -144,5 +140,50 @@
   justify-content: space-between
   align-items: flex-end
   width: auto
+
+\:global(.ui.button).buttonCancel
+  border-radius: 3px !important
+  height: 46px !important
+  margin-left: 20px
+
+
+.iconrow
+  padding: 5px
+  display: flex
+  justify-content: space-between
+  align-items: flex-start
+  width: 100%
+  height: 45px
+
+.header
+  width: auto
+  font-size: 2em
+  font-weight: bold
+  color: white
+
+\:global(.ui.basic.label).toolBarIcon
+  background: inherit
+  border: none
+  padding: 0
+  color: white
+
+  &:hover
+    background: inherit
+    border: none
+    padding: 0
+    color: white
+    cursor: pointer
+
+.filenamecontainer
+  cursor: default
+  color: white
+  font-size: 12px
+  font-family: Custom Open Sans
+  font-style: normal
+  margin-top: 3px
+  outline: none
+  &:hover
+      cursor: pointer
+      
 
 

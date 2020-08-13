@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styles from './styles.module.sass';
-import { Button, Modal, ModalContent, ModalHeader } from 'semantic-ui-react';
+import { Modal, ModalContent, ModalHeader } from 'semantic-ui-react';
 import { AddCourseFilterableList, IFilterableItem } from '../AddCourseFilterableList';
 import GrayOutlineButton from 'components/buttons/GrayOutlineButton';
 
@@ -24,17 +24,12 @@ export const AddCourseDependenciesSelector: React.FC<IDepsSelectorProps> = (
     <>
       <div className={styles.container}>
         <div className={styles.header}>
-          <h4>{`${dependencyName}s`}</h4>
+          <div className={styles.textcontainer}>Lectures</div>
           <div className={styles.button_group}>
             <GrayOutlineButton
               content="Select lectures"
               className={styles.add_button}
               onClick={() => setModalChooseOpen(true)}
-            />
-            <GrayOutlineButton
-              content="Upload new"
-              className={styles.upload_button}
-              onClick={() => openModalAction(true)}
             />
           </div>
         </div>
@@ -55,6 +50,7 @@ export const AddCourseDependenciesSelector: React.FC<IDepsSelectorProps> = (
             itemToJsx={item => itemToJsx(item, storedToSelected, false)}
             sortFn={sortFn}
             scrolling
+            openModal={openModalAction}
           />
         </ModalContent>
       </Modal>

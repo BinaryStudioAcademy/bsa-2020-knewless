@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, createRef } from 'react';
 import styles from './styles.module.sass';
-import { Modal, ModalContent, ModalHeader, Input, Icon, Label } from 'semantic-ui-react';
+import { Modal, ModalContent, Input, Icon, Label } from 'semantic-ui-react';
 import GrayOutlineButton from 'components/buttons/GrayOutlineButton';
 import GradientButton from 'components/buttons/GradientButton';
 import { isVideo } from './helper';
@@ -26,6 +26,7 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
   const [isValidName, setIsValidName] = useState(true);
   const [isValidDescription, setIsValidDescription] = useState(true);
   const [isValidFile, setIsValidFile] = useState(true);
+  const inputRef = createRef<HTMLInputElement>();
 
   const isSaveble = (isValidName && isValidDescription && isValidFile
     && name.length > 1 && file && (description.length === 0 || description.length > 9));
@@ -35,13 +36,13 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
       setIsValidName(false);
       return;
     }
-    const pattern = /^[a-zA-Z0-9!@#$&()\\-`.+,/"]{2,40}$/;
+    const pattern = /^[a-zA-Z0-9!@#$&()\\-`.+,/" ]{2,40}$/;
     setIsValidName(pattern.test(name));
   };
 
   const validateDescription = () => {
     if (description.length === 0) return;
-    const pattern = /^[a-zA-Z0-9!@#$&()\\-`.+,/"]{10,120}$/;
+    const pattern = /^[a-zA-Z0-9!@#$&()\\-`.+,/" ]{10,120}$/;
     setIsValidDescription(pattern.test(description));
   };
 
@@ -82,9 +83,33 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
     : 'Description should consists of 10-120 Latin letters, numbers or special characters, or be skipped'}`;
 
   return (
-    <Modal size="small" open={isOpen} closeIcon onClose={() => handleClose()}>
-      <ModalHeader className={styles.modal__header}>Add new lecture</ModalHeader>
+    <Modal size="small" open={isOpen} onClose={() => handleClose()}>
       <ModalContent className={styles.modal__upload__content}>
+        <div className={styles.iconrow}>
+          <div className={styles.header}>Add new lecture</div>
+          {file ? (
+            <div className={styles.filecontainer}>
+              <Label
+                basic
+                size="tiny"
+                as="a"
+                onClick={() => inputRef.current.click()}
+                className={styles.toolBarIcon}
+              >
+                <Icon name="file archive outline" size="huge" inverted />
+              </Label>
+              <span
+                tabIndex={0}
+                role="button"
+                onClick={() => inputRef.current.click()}
+                className={styles.filenamecontainer}
+                onKeyDown={() => validateDescription()}
+              >
+                {file?.name?.length > 25 ? `${file.name.substring(0, 23)}...` : file.name}
+              </span>
+            </div>
+          ) : ''}
+        </div>
         <div className={styles.topRow}>
           <div className={styles.inputWrapper}>
             <div className={styles.textcontainer}>Name:</div>
@@ -100,18 +125,12 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
             />
           </div>
           <div className={styles.rightside}>
-            {file ? (
-              <div className={styles.filecontainer}>
-                <Icon name="file archive outline" size="big" inverted />
-                <span>file attached</span>
-              </div>
-            ) : ''}
             <GrayOutlineButton
               className={isValidFile ? styles.upload_button : styles.upload_button_error}
               as="label"
             >
-              {file ? 'Attach another' : 'Attach lecture'}
-              <input name="video" type="file" onChange={e => handleAddFile(e)} hidden />
+              Upload
+              <input ref={inputRef} name="video" type="file" onChange={e => handleAddFile(e)} hidden />
             </GrayOutlineButton>
           </div>
         </div>
@@ -134,6 +153,12 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
         >
           Save
         </GradientButton>
+        <GrayOutlineButton
+          className={styles.buttonCancel}
+          onClick={() => handleClose()}
+        >
+          Cancel
+        </GrayOutlineButton>
       </ModalContent>
     </Modal>
   );

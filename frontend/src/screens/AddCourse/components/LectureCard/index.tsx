@@ -37,11 +37,9 @@ export const LectureCard: React.FC<ILectureCardProps> = ({
         onClick={onClick}
       >
         <Icon
-          className={styles.addIcon}
-          name={isSelected ? 'delete' : 'check'}
-          size="large"
+          className={isSelected ? styles.btn_remove : styles.btn_add}
+          name={isSelected ? 'minus' : 'plus'}
           inverted
-          color={isSelected ? 'pink' : 'green'}
         />
       </Label>
     </div>
