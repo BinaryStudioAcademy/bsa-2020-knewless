@@ -97,13 +97,13 @@ services:
 
   # Frontend
   client:
-    image: client
+    image: bsa2020knewless/dockerhub:client
     container_name: client
     depends_on:
       - api
       - push
     ports:
-      - '8080:80'
+      - '80:80'
     env_file:
       - ~/.env/client.env
     logging:
@@ -113,7 +113,7 @@ services:
         max-file: "5"
     volumes:
       - /data/certs:/etc/nginx/certs
-      - /knewless/assets:/knewless/asset
+      - /knewless/assets:/knewless/assets
 
 volumes:
   pgdata_api:
