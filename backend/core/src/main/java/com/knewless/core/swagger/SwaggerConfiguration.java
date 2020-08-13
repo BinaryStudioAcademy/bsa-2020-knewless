@@ -1,5 +1,6 @@
 package com.knewless.core.swagger;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.PathSelectors;
@@ -27,9 +28,13 @@ public class SwaggerConfiguration {
             "/v2/api-docs"
     };
 
+    @Value("${swagger.host}")
+    private String host;
+
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
+                .host(host)
                 .select()
                 .apis(RequestHandlerSelectors.any())
                 .paths(PathSelectors.any())
