@@ -18,7 +18,6 @@ function* getUnread(action) {
     yield put(fetchUnreadNotificationsRoutine.success({ notifications: result }));
   } catch (error) {
     yield put(fetchUnreadNotificationsRoutine.failure(error?.message));
-    toastr.error('Autenthification failed!');
   }
 }
 

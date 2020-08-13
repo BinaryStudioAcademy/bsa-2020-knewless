@@ -57,7 +57,6 @@ const throwIfResponseFailed = async (res: Response) => {
     let parsedException = 'Something went wrong with request!';
     try {
       parsedException = await res.json();
-      toastr.error('Error!', parsedException);
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error(`An error occurred: ${err}`);
