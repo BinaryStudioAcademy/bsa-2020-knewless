@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { fetchLecturesRoutine, saveCourseRoutine } from 'screens/AddCourse/routines';
 import { IBindingCallback1 } from 'models/Callbacks';
 import { ICourse } from '../../models/ICourse';
-import { Input, Dropdown, Button, Icon } from 'semantic-ui-react';
+import { Input, Dropdown, Button } from 'semantic-ui-react';
 import { Footer } from '../../../../components/Footer';
 import { useHistory } from 'react-router-dom';
 import styles from './styles.module.sass';
@@ -12,11 +12,12 @@ import { compareName, getMinutes } from '../../services/helper.service';
 import { IFilterableItem } from '../../../../components/FilterableList';
 import { ILecture } from '../../models/ILecture';
 import { LectureCard } from '../../components/LectureCard';
-import { DependenciesSelector } from '../../../../components/DependenciesSelector';
+import { AddCourseDependenciesSelector } from '../../components/AddCourseDependenciesSelector';
 import { CoursePreview } from '../../../../components/CoursePreview';
 import { IAppState } from 'models/AppState';
 import GrayOutlineButton from 'components/buttons/GrayOutlineButton';
 import GradientButton from 'components/buttons/GradientButton';
+import { UploadLectureModal } from '../../components/UploadLectureModal';
 import CourseImage from '../../../../assets/images/default_course_image.jpg';
 
 interface IAddCourseProps {
@@ -70,6 +71,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
   const [buttonLoading, setButtonLoading] = useState(false);
   const [previewImage, setPreviewImage] = useState(CourseImage);
   const history = useHistory();
+  const [modalAddOpen, setModalAddOpen] = useState(false);
 
   const handleUploadFile = async file => {
     setUploadImage(file);
@@ -129,6 +131,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
                   fluid
                   type="text"
                   value={courseName}
+                  className={styles.customInput}
                   onChange={ev => setCourseName(ev.target.value)}
                   inverted
                 />
@@ -189,7 +192,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
             </div>
           </div>
           <div className={styles.list_container}>
-            <DependenciesSelector
+            <AddCourseDependenciesSelector
               selected={selected}
               stored={pool}
               selectedToStored={removeLectureFromSelected}
@@ -197,11 +200,16 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
               dependencyName="lecture"
               itemToJsx={itemToJsxWithClick}
               sortFn={compareName}
+              openModalAction={setModalAddOpen}
             />
           </div>
         </div>
       </div>
       <Footer />
+      <UploadLectureModal
+        isOpen={modalAddOpen}
+        openAction={setModalAddOpen}
+      />
     </div>
   );
 };

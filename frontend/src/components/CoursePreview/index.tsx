@@ -56,11 +56,11 @@ export const CoursePreview: React.FC<ICoursePreviewProps> = ({
         <div className={styles.bottomflex}>
           <div>
             <span className={styles.meta__lectures}>lectures:</span>
-            <span className={styles.number}>{` ${lecturesNumber}`}</span>
+            <span className={styles.number}>{lecturesNumber}</span>
           </div>
           <div>
-            <span className={styles.meta__lectures}>minutes</span>
-            <span className={styles.number}>{` ${durationMinutes}`}</span>
+            <span className={styles.meta__lectures}>minutes:</span>
+            <span className={styles.number}>{durationMinutes}</span>
           </div>
         </div>
       </div>
@@ -76,7 +76,7 @@ export const CoursePreview: React.FC<ICoursePreviewProps> = ({
       </div>
       <div className={styles.description}>
         <span className={styles.description_text}>
-          {description === '' ? 'Add some description to your course...' : description}
+          {description === '' ? 'Fill in the fields with information about your course' : description}
         </span>
       </div>
       <div className={styles.optional_element}>

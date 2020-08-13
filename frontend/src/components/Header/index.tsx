@@ -27,12 +27,6 @@ const Header = ({ currentUser, isAuthorized }: IHeaderProps) => {
 
   const [serchStyle, setSearchStyle] = useState(styles.searchHidden);
 
-  const handleSearchReturn = e => {
-    const elem = document.getElementById('searchInput');
-    if (e.key !== 'Escape' && e.target !== elem && !elem.contains(e.target)) return;
-    if (e.key === 'Escape') setSearch('');
-  };
-
   const handleScroll = () => {
     const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
     if (scrollTop < 390) {
@@ -42,7 +36,6 @@ const Header = ({ currentUser, isAuthorized }: IHeaderProps) => {
     }
   };
   window.addEventListener('scroll', handleScroll);
-  document.addEventListener('keydown', handleSearchReturn);
   return (
     <div className={styles.headerWrp}>
       <div className={styles.customHeader}>

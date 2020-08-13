@@ -2,7 +2,6 @@ $previewheight: 13em
 
 .container
   background: #2A2B37
-  margin-bottom: 1em
   display: grid
   width: 100%
   height: $previewheight
@@ -54,13 +53,14 @@ $previewheight: 13em
     transition-duration: 0.4s
     &:hover
         transition-duration: 0.4s
-        opacity: 85%
+        opacity: 0.8
         background: #2a2b3765
 
 
 .number
   color: #FF8576  
   font-weight: bold
+  margin-right: 10px
 
 
 .meta
@@ -68,8 +68,10 @@ $previewheight: 13em
     grid-area: 1 / 1 / 11 / 2
 
   &__lectures
-    padding-left: 3em
     color: #666666
+    overflow: hidden
+    white-space: nowrap
+    margin-right: 3px
     
 
 .levelText
@@ -109,17 +111,19 @@ $previewheight: 13em
 
 .bottomflex
   display: flex
+  flex-wrap: wrap
   flex-direction: row
   align-items: flex-end
   justify-items: center
   justify-content: flex-start
-  padding-bottom: 5px
-  padding-right: 5px
 
 .grid_row_flex
+  padding-left: 3em
   grid-area: 9 / 2 / 10 / 6
   justify-self: stretch
   align-self: stretch
+  padding-bottom: 5px
+  padding-right: 5px
 
 .topflex
   display: flex
