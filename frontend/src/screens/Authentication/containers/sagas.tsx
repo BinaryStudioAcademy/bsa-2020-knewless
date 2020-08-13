@@ -9,7 +9,7 @@ export function* login(request: any) {
 
     yield put(loginRoutine.success());
   } catch (e) {
-    yield put(loginRoutine.failure('Error'));
+    yield put(loginRoutine.failure(e.message));
   }
 }
 
@@ -24,7 +24,7 @@ export function* register(request: any) {
 
     yield put(registerRoutine.success());
   } catch (e) {
-    yield put(registerRoutine.failure('Error'));
+    yield put(registerRoutine.failure(e.message));
   }
 }
 

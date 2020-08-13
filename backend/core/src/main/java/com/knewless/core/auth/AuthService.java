@@ -1,6 +1,5 @@
 package com.knewless.core.auth;
 
-import com.knewless.core.exception.BadRequestException;
 import com.knewless.core.security.model.AuthResponse;
 import com.knewless.core.security.model.LoginRequest;
 import com.knewless.core.security.model.RefreshTokenResponse;
@@ -9,78 +8,72 @@ import com.knewless.core.security.oauth.TokenProvider;
 import com.knewless.core.user.UserRepository;
 import com.knewless.core.user.UserService;
 import com.knewless.core.user.model.User;
-import com.knewless.core.user.role.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
-
-import java.util.UUID;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class AuthService {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
+
+    private final TokenProvider tokenProvider;
+
+    private final UserRepository userRepository;
+
+    private final UserService customUserDetailsService;
+
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    private TokenProvider tokenProvider;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private UserService customUserDetailsService;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    public AuthService(AuthenticationManager authenticationManager, TokenProvider tokenProvider,
+                       UserRepository userRepository, UserService customUserDetailsService,
+                       PasswordEncoder passwordEncoder) {
+        this.authenticationManager = authenticationManager;
+        this.tokenProvider = tokenProvider;
+        this.userRepository = userRepository;
+        this.customUserDetailsService = customUserDetailsService;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     public AuthResponse login(LoginRequest loginRequest) {
-
-        Authentication authentication = authenticationManager.authenticate(
+        final var authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getEmail(),
                         loginRequest.getPassword()
                 )
         );
-
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        String token = tokenProvider.createAccessToken(authentication);
-        String refresh = tokenProvider.createRefreshToken(authentication);
-
+        final var token = tokenProvider.createAccessToken(authentication);
+        final var refresh = tokenProvider.createRefreshToken(authentication);
         return new AuthResponse(token, refresh);
     }
 
     public AuthResponse register(SignUpRequest signUpRequest) {
-        if(userRepository.existsByEmail(signUpRequest.getEmail())) {
-            throw new BadRequestException("Email address already in use.");
+        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with this email already registered.");
         }
-
-        // Creating user's account
-        User user = new User();
+        final var user = new User();
         user.setEmail(signUpRequest.getEmail());
         user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
-
         userRepository.save(user);
-
         return login(new LoginRequest(signUpRequest.getEmail(), signUpRequest.getPassword()));
     }
 
     public RefreshTokenResponse refreshToken(String token) {
         tokenProvider.validateToken(token);
-
-        UUID userId = tokenProvider.getUserIdFromToken(token);
-        UserDetails userDetails = customUserDetailsService.loadUserById(userId);
-
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        final var userId = tokenProvider.getUserIdFromToken(token);
+        final var userDetails = customUserDetailsService.loadUserById(userId);
+        final var authentication = new UsernamePasswordAuthenticationToken(
+                userDetails, null, userDetails.getAuthorities()
+        );
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
         return new RefreshTokenResponse(tokenProvider.createAccessToken(authentication));
     }
+
 }
