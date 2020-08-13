@@ -3,9 +3,8 @@ import { Icon, Label, Popup } from 'semantic-ui-react';
 import styles from './styles.module.sass';
 import Notifications from '../../../containers/Notifications';
 import PopupMenu from '../PopupMenu';
-import { IUser } from '../../../containers/AppRouter/models/IUser';
 
-const UserElement = user => (
+const UserElement = ({ user }) => (
   <div className={styles.profileWrp}>
     <Label
       basic
