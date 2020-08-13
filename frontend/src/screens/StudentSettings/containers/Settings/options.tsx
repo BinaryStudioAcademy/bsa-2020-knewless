@@ -4,6 +4,16 @@ export const locationOptions = countryList()
   .getData()
   .map(item => ({ key: item.label, value: item.label, text: item.label }));
 
+export const experienceOptions = [];
+for (let i = 0; i <= 80; i += 1) {
+  const year = {
+    key: i,
+    value: i,
+    text: i
+  };
+  experienceOptions.push(year);
+}
+
 export const yearOptions = [];
 for (let i = 1950; i <= 2020; i += 1) {
   const year = {

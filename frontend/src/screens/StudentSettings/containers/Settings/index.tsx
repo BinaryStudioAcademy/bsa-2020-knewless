@@ -4,6 +4,7 @@ import GrayOutlineButton from 'components/buttons/GrayOutlineButton';
 import GradientButton from 'components/buttons/GradientButton';
 import styles from './styles.module.sass';
 import {
+  experienceOptions,
   educationOptions,
   employmentOptions,
   industryOptions,
@@ -219,13 +220,14 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
           />
         </Form.Group>
         <Form.Group widths="2">
-          <Form.Input
+          <Form.Select
             fluid
             className={styles.formField}
-            label="Year of Experience"
+            label="Years of Experience"
             placeholder="0"
+            options={experienceOptions}
             value={experience}
-            onChange={e => setExperience(Number(e.target.value))}
+            onChange={(e, data) => setExperience(data.value as number)}
           />
           <Form.Select
             fluid
