@@ -1,7 +1,6 @@
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import LoaderWrapper from 'components/LoaderWrapper';
-import LandingPage from 'screens/Landing/containers/LandingPage';
 import PublicRoute from 'components/PublicRoute';
 import Header from '../../components/Header';
 import AddCourse from '../../screens/AddCourse/containers/AddCoursePage';
@@ -17,8 +16,10 @@ import { ACCESS_TOKEN } from '../../screens/Authentication/constants';
 import { IAppState } from '../../models/AppState';
 import { connect } from 'react-redux';
 import { IUser } from 'containers/AppRouter/models/IUser';
-import MainPageRoute from '../MainPageRoute';
+import RootRoute from '../RootRoute';
+import PrivateRoute from '../PrivateRoute';
 import WebSocketNotifications from 'containers/WebSocketNotifications';
+import { RoleTypes } from '../AppRouter/models/IRole';
 
 export interface IRoutingProps {
   isLoading: boolean;
@@ -38,21 +39,20 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({ isLoading, user }) =>
     <div>
       {/* {isAuthorized ? <Header /> : ''} */}
       <Switch>
-        <PublicRoute exact path="/lecture/:lectureId" component={LecturePage} />
         <Route>
           <Header />
           <SettingsRoute />
-          <PublicRoute exact path="/profile" component={StudentProfile} />
-          <PublicRoute exact path="/" component={LandingPage} />
-          <PublicRoute exact path="/add_path" component={AddPathPage} />
-          <PublicRoute exact path="/add_course" component={AddCourse} />
+          <RootRoute />
           <PublicRoute exact path="/login" component={LoginPage} />
-          <MainPageRoute />
           <PublicRoute exact path="/oauth/redirect" component={handler} />
           <PublicRoute exact path="/register" component={RegisterPage} />
           <PublicRoute exact path="/author/:authorId" component={AuthorPublicPage} />
-        </Route>
 
+          <PrivateRoute exact path="/lecture/:lectureId" component={LecturePage} />
+          <PrivateRoute exact path="/add_path" roles={[RoleTypes.AUTHOR]} component={AddPathPage} />
+          <PrivateRoute exact path="/add_course" roles={[RoleTypes.AUTHOR]} component={AddCourse} />
+          <PrivateRoute exact path="/profile" roles={[RoleTypes.USER]} component={StudentProfile} />
+        </Route>
         <div>
           <LoaderWrapper loading={isLoading}>
             <Switch>
