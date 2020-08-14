@@ -1,8 +1,8 @@
 import Logo from './logo';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import PathIcon from './icons/paths';
-import React, { useState } from 'react';
-import { Input, Icon, Label } from 'semantic-ui-react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Icon, Input, Label } from 'semantic-ui-react';
 import styles from './styles.module.sass';
 import LoginRegister from './LoginRegister';
 import UserElement from './UserElement';
@@ -11,9 +11,9 @@ import { IAppState } from '../../models/AppState';
 import { IUser } from '../../containers/AppRouter/models/IUser';
 
 enum RoutPointer {
-    home,
-    courses,
-    paths
+  home,
+  courses,
+  paths
 }
 
 interface IHeaderProps {
@@ -24,18 +24,28 @@ interface IHeaderProps {
 const Header = ({ currentUser, isAuthorized }: IHeaderProps) => {
   const [currentRout, setCurrentRout] = useState(RoutPointer.home);
   const [search, setSearch] = useState('');
+  const [searchStyle, setSearchStyle] = useState(styles.searchHidden);
+  const location = useLocation();
 
-  const [serchStyle, setSearchStyle] = useState(styles.searchHidden);
-
-  const handleScroll = () => {
+  const hidingSearch = useCallback(() => {
     const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
     if (scrollTop < 390) {
       setSearchStyle(styles.searchHidden);
     } else {
       setSearchStyle(styles.search);
     }
-  };
-  window.addEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    if (location.pathname === '/' && !isAuthorized) {
+      window.addEventListener('scroll', hidingSearch);
+      setSearchStyle(styles.searchHidden);
+    } else {
+      window.removeEventListener('scroll', hidingSearch);
+      setSearchStyle(styles.search);
+    }
+  }, [location, isAuthorized]);
+
   return (
     <div className={styles.headerWrp}>
       <div className={styles.customHeader}>
@@ -103,14 +113,14 @@ const Header = ({ currentUser, isAuthorized }: IHeaderProps) => {
             type="text"
             icon="search"
             value={search}
-            className={serchStyle}
+            className={searchStyle}
             placeholder="Search..."
             onChange={ev => setSearch(ev.target.value)}
             inverted
           />
         </div>
         <div className={styles.right_side}>
-          {isAuthorized ? <UserElement user={currentUser} /> : <LoginRegister /> }
+          {isAuthorized ? <UserElement user={currentUser} /> : <LoginRegister />}
         </div>
       </div>
     </div>
@@ -125,7 +135,4 @@ const mapStateToProps = (state: IAppState) => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  null
-)(Header);
+export default connect(mapStateToProps)(Header);
