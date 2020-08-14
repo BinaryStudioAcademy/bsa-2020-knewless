@@ -3,6 +3,7 @@ import * as settingsService from '../../services/settings.service';
 import { fetchSetStudentSettingsRoutine, fetchGetStudentSettingsRoutine } from '../../routines';
 import { Routine } from 'redux-saga-routines';
 import * as imageService from 'services/image.service';
+import { fetchUserRoutine } from 'containers/AppRouter/routines';
 
 function* getSettings() {
   try {
@@ -27,6 +28,7 @@ function* setSettings(action: Routine<any>) {
       author.avatar = link;
     }
     yield call(() => settingsService.setSettings(action.payload));
+    yield put(fetchUserRoutine.trigger());
   } catch (error) {
     console.log('Set settings failed!');
   }
