@@ -28,7 +28,7 @@ const UserElement = ({ user }) => (
       hoverable
     >
       <Popup.Content>
-        <PopupMenu />
+        <PopupMenu user={user} />
       </Popup.Content>
     </Popup>
   </div>
