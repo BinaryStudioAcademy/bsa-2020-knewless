@@ -1,6 +1,6 @@
 import { Button, Divider, Form, Grid, Header, Message, Segment } from 'semantic-ui-react';
 import { FACEBOOK_AUTH_URL, GOOGLE_AUTH_URL } from '../../screens/Authentication/constants';
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { IBindingCallback1 } from '../../models/Callbacks';
 import LogoWithText from '../LogoWithText';
@@ -30,20 +30,32 @@ const RegisterForm: FunctionComponent<IRegisterForm> = ({
     + '[a-zA-Z0-9-](?:.[a-zA-Z0-9-]+)*$');
   const passwordRegex = new RegExp('^(?=.*[a-zA-Z])(?=.*\\d)[A-Za-z\\d@$!%*?&]{8,32}$');
 
-  const emailChanged = data => {
+  const onEmailBlur = data => {
     setEmail(data);
     setIsEmailValid(data.length > 0 && mailRegex.test(data));
   };
 
-  const passwordChanged = data => {
+  const onEmailFocus = () => {
+    setIsEmailValid(true);
+  };
+
+  const onPasswordBlur = data => {
     setPassword(data);
     setIsPasswordValid(passwordRegex.test(data));
     setIsPasswordEqual(data === password2);
   };
 
-  const password2Changed = data => {
+  const onPasswordFocus = () => {
+    setIsPasswordValid(true);
+  };
+
+  const onPassword2Blur = data => {
     setPassword2(data);
     setIsPasswordEqual(data.length !== 0 && password === data);
+  };
+
+  const onPassword2Focus = () => {
+    setIsPasswordEqual(true);
   };
 
   const handleLoginClick = () => {
@@ -54,6 +66,10 @@ const RegisterForm: FunctionComponent<IRegisterForm> = ({
       setIsError(true);
     }
   };
+
+  useEffect(() => {
+    setIsError(false);
+  }, []);
 
   return (
     <div>
@@ -79,8 +95,9 @@ const RegisterForm: FunctionComponent<IRegisterForm> = ({
                 type="text"
                 labelPosition="left"
                 label="Email"
-                error={!isEmailValid}
-                onChange={ev => emailChanged(ev.target.value)}
+                error={!isEmailValid && email.length > 0}
+                onBlur={ev => onEmailBlur(ev.target.value)}
+                onFocus={() => onEmailFocus()}
               />
               <Form.Input
                 fluid
@@ -90,8 +107,9 @@ const RegisterForm: FunctionComponent<IRegisterForm> = ({
                 type="password"
                 labelPosition="left"
                 label="Password"
-                error={!isPasswordValid}
-                onChange={ev => passwordChanged(ev.target.value)}
+                error={!isPasswordValid && password.length > 0}
+                onBlur={ev => onPasswordBlur(ev.target.value)}
+                onFocus={() => onPasswordFocus()}
               />
               <Form.Input
                 fluid
@@ -101,13 +119,14 @@ const RegisterForm: FunctionComponent<IRegisterForm> = ({
                 type="password"
                 labelPosition="left"
                 label="Repeat password"
-                error={!isPasswordEqual}
-                onChange={ev => password2Changed(ev.target.value)}
+                error={!isPasswordEqual && password2.length > 0}
+                onBlur={ev => onPassword2Blur(ev.target.value)}
+                onFocus={() => onPassword2Focus()}
               />
               <Message
                 warning
                 list={[
-                  !isPasswordValid && 'Password should be at least 8 characters and contain one letter and digit'
+                  !isPasswordValid && 'Password contains at least 8 characters (letters and digits)'
                 ]}
               />
               <div className={styles.main_container__submit_block}>
