@@ -27,3 +27,10 @@ export async function getPaths() {
   return response.json();
 }
 
+export async function getStudent() {
+  const response = await callApi({
+    endpoint: '/api/student/info/',
+    type: 'GET'
+  });
+  return response.json();
+}

@@ -1,7 +1,7 @@
 import { takeEvery, put, call, all } from 'redux-saga/effects';
 import * as mainPageService from 'screens/MainPage/services/main.page.service';
 import {
-  fetchContinueCoursesRoutine, fetchRecommendedCoursesRoutine, fetchPathsRoutine
+  fetchContinueCoursesRoutine, fetchRecommendedCoursesRoutine, fetchPathsRoutine, fetchStudentRoutine
 } from '../../routines';
 import { AnyAction } from 'redux';
 
@@ -44,10 +44,24 @@ function* watchGetPaths() {
   yield takeEvery(fetchPathsRoutine.TRIGGER, getPaths);
 }
 
+function* getStudent() {
+  try {
+    const response = yield call(mainPageService.getStudent);
+    yield put(fetchStudentRoutine.success(response));
+  } catch (error) {
+    yield put(fetchStudentRoutine.failure(error?.message));
+  }
+}
+
+function* watchGetStudent() {
+  yield takeEvery(fetchStudentRoutine.TRIGGER, getStudent);
+}
+
 export default function* studentMainPageSagas() {
   yield all([
     watchGetStudentCourses(),
     watchGetRecommendedCourses(),
-    watchGetPaths()
+    watchGetPaths(),
+    watchGetStudent()
   ]);
 }

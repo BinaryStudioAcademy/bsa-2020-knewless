@@ -4,6 +4,8 @@ import com.knewless.core.author.AuthorRepository;
 import com.knewless.core.author.dto.AuthorSettingsDto;
 import com.knewless.core.author.mapper.AuthorMapper;
 import com.knewless.core.author.model.Author;
+import com.knewless.core.exception.ResourceNotFoundException;
+import com.knewless.core.student.dto.StudentMainInfoDto;
 import com.knewless.core.student.dto.StudentSettingsDto;
 import com.knewless.core.student.mapper.StudentMapper;
 import com.knewless.core.student.model.Student;
@@ -39,5 +41,11 @@ public class StudentService {
         updateSettings.setCreatedAt(oldSettings.get().getCreatedAt());
         return Optional.of(studentRepository.save(updateSettings))
                 .map(StudentMapper::fromEntity);
+    }
+
+    public Optional<StudentMainInfoDto> getStudentByUserId(UUID id) {
+        var studentDto = studentRepository.findByUserId(id).orElseThrow(
+                () -> new ResourceNotFoundException("Student", "id", id));
+        return StudentMapper.studentToStudentMainInfoDto(studentDto);
     }
 }

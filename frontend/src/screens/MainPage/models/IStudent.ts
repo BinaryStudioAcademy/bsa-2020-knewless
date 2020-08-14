@@ -3,7 +3,7 @@ export interface IStudent {
   firstName: string;
   lastName: string;
   email: string;
-  roleName: string;
+  job: string;
   avatar: string;
   nickname: string;
 }

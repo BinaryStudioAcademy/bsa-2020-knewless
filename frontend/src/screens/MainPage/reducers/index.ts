@@ -2,7 +2,7 @@ import { combineReducers } from 'redux';
 import { reducerCreator } from 'helpers/reducer.helper';
 import { mainPageData } from '../containers/MainStudentPage/reducer';
 import {
-  fetchContinueCoursesRoutine, fetchPathsRoutine, fetchRecommendedCoursesRoutine
+  fetchContinueCoursesRoutine, fetchPathsRoutine, fetchRecommendedCoursesRoutine, fetchStudentRoutine
 } from '../routines';
 
 const requests = combineReducers({
@@ -14,6 +14,9 @@ const requests = combineReducers({
   ),
   pathsRequest: reducerCreator(
     [fetchPathsRoutine.TRIGGER]
+  ),
+  studentRequest: reducerCreator(
+    [fetchStudentRoutine.TRIGGER]
   )
 });
 
