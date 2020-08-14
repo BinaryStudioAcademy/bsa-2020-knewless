@@ -76,7 +76,7 @@ services:
   
   # fileprocessor
   fileprocessor:
-    image: bsa2020knewless/dockerhub:fileprocessor
+    image: fileprocessor
     container_name: fileprocessor
     depends_on:
       - api-db
