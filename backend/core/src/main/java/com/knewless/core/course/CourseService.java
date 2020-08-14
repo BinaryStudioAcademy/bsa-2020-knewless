@@ -1,8 +1,8 @@
 package com.knewless.core.course;
 
-import com.knewless.core.course.dto.*;
 import com.knewless.core.author.AuthorRepository;
 import com.knewless.core.author.model.Author;
+import com.knewless.core.course.dto.*;
 import com.knewless.core.course.model.Course;
 import com.knewless.core.course.model.Level;
 import com.knewless.core.lecture.Dto.ShortLectureDto;
@@ -100,9 +100,10 @@ public class CourseService {
 		return CourseMapper.MAPPER.courseQueryResultToCourseDto(courseRepository.getCourseById(id));
 	}
 
-	public List<CourseWithMinutesProjection> getCoursesWithMinutesByUserId(UUID userId) {
+	public List<CourseWithMinutesDto> getCoursesWithMinutesByUserId(UUID userId) {
 		var author = authorRepository.findByUserId(userId).orElseThrow();
-		return courseRepository.findAllByAuthorWithMinutes(author.getId());
+		return courseRepository.findAllByAuthor(author.getId()).stream()
+				.map(CourseMapper.MAPPER::courseQueryToCourseWithMinutes).collect(Collectors.toList());
 	}
 
 	public List<AuthorCourseDto> getCoursesByAuthorId(UUID authorId) {

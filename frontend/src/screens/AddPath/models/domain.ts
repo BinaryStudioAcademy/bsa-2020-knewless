@@ -15,6 +15,7 @@ export interface ICourse {
   timeMinutes: number;
   level: string;
   image: string;
+  rating: number;
 }
 
 export interface ITag {

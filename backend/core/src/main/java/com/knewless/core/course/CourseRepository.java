@@ -1,6 +1,9 @@
 package com.knewless.core.course;
 
-import com.knewless.core.course.dto.*;
+import com.knewless.core.course.dto.AuthorCourseQueryResult;
+import com.knewless.core.course.dto.CourseIdByLectureIdProjection;
+import com.knewless.core.course.dto.CourseQueryResult;
+import com.knewless.core.course.dto.CourseToPlayerProjection;
 import com.knewless.core.course.model.Course;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -32,6 +35,10 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
     @Query(COURSE_SELECT + "WHERE c.id = :id")
     CourseQueryResult getCourseById(@Param("id") UUID id);
 
+    @SuppressWarnings("SpringDataRepositoryMethodReturnTypeInspection")
+    @Query(COURSE_SELECT + "where c.author.id = :authorId")
+    List<CourseQueryResult> findAllByAuthor(UUID authorId);
+
     @Query(COURSE_SELECT)
     List<CourseQueryResult> getCourses(Pageable pageable);
 
@@ -48,11 +55,4 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
             "FROM Course c WHERE c.author.id = :authorId " +
             "ORDER BY c.updatedAt")
     List<AuthorCourseQueryResult> getCoursesByAuthorId(@Param("authorId") UUID authorId);
-
-    @SuppressWarnings("SpringDataRepositoryMethodReturnTypeInspection")
-    @Query("select c.id as id, c.name as name, c.category.name as category, " +
-            "concat(c.author.firstName,' ' , c.author.lastName) as author, c.level as level, " +
-            "(select coalesce(sum(cl.duration), 0) from c.lectures as cl) as timeMinutes, c.image as image " +
-            "from Course c where c.author.id = :authorId")
-    List<CourseWithMinutesProjection> findAllByAuthorWithMinutes(UUID authorId);
 }

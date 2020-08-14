@@ -12,14 +12,14 @@ export interface ICourseCardProps {
   name: string;
   previewSrc: string;
   onClick: () => void;
-  rating?: number;
+  rating: number;
   // either addition or deletion
   isSelectedIcon?: boolean;
 }
 
 export const CourseCard: React.FC<ICourseCardProps> = ({
   category, author, timeMinutes, level, name, previewSrc,
-  isSelectedIcon = true, onClick, rating = 3
+  isSelectedIcon = true, onClick, rating
 }) => {
   const calcDuration = useCallback(() => minutesToDuration(timeMinutes), [timeMinutes]);
   const { timeUnit, duration } = calcDuration();

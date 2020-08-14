@@ -135,6 +135,7 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
         timeMinutes={course.timeMinutes}
         key={course.id}
         previewSrc={course.image}
+        rating={course.rating}
         onClick={() => click(course)}
         isSelectedIcon={isSelected}
       />

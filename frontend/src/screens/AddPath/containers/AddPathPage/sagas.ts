@@ -3,10 +3,11 @@ import { toastr } from 'react-redux-toastr';
 import { fetchCoursesRoutine, fetchTagsRoutine, savePathRoutine } from '../../routines';
 import * as addPageService from '../../services/add_page.service';
 import { AnyAction } from 'redux';
+import { ICourse } from '../../models/domain';
 
 function* loadCourses() {
   try {
-    const response = yield call(addPageService.getCourses);
+    const response: ICourse[] = yield call(addPageService.getCourses);
     yield put(fetchCoursesRoutine.success(response));
   } catch (error) {
     yield put(fetchCoursesRoutine.failure(error?.message));
