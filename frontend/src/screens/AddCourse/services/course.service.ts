@@ -1,6 +1,7 @@
 import { callApi } from 'helpers/api.helper';
 import lectures from '../models/lectures.json';
 import { ICourse } from '../models/ICourse';
+import { ISaveLecture } from '../components/UploadLectureModal';
 
 export const getLecturesByAuthor = async (id: string) => {
   const response = await callApi({
@@ -22,6 +23,15 @@ export const saveCourse = async (course: ICourse) => {
     type: 'POST',
     endpoint: 'api/course',
     requestData: course
+  });
+  return response.json();
+};
+
+export const saveLecture = async (lecture: ISaveLecture) => {
+  const response = await callApi({
+    type: 'POST',
+    endpoint: 'api/lecture',
+    requestData: lecture
   });
   return response.json();
 };

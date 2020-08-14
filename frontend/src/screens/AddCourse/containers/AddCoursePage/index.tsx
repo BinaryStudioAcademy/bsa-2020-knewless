@@ -17,13 +17,13 @@ import { CoursePreview } from '../../../../components/CoursePreview';
 import { IAppState } from 'models/AppState';
 import GrayOutlineButton from 'components/buttons/GrayOutlineButton';
 import GradientButton from 'components/buttons/GradientButton';
-import { UploadLectureModal } from '../../components/UploadLectureModal';
+import UploadLectureModal from '../../components/UploadLectureModal';
 import CourseImage from '../../../../assets/images/default_course_image.jpg';
 
 interface IAddCourseProps {
   lectures: ILecture [];
-  teacherId?: string;
-  loading: boolean;
+  userId?: string;
+  courseId: string;
   isLecturesLoaded: boolean;
   fetchLectures: IBindingCallback1<string>;
   saveCourse: IBindingCallback1<ICourse>;
@@ -31,22 +31,23 @@ interface IAddCourseProps {
 
 const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
   lectures,
-  teacherId,
-  loading,
+  userId,
+  courseId,
   fetchLectures: getLectures,
   saveCourse: save,
   isLecturesLoaded
 }) => {
+  const history = useHistory();
   const [pool, setPool] = useState(Array<ILecture>());
   useEffect(() => {
     if (lectures.length === 0 && !isLecturesLoaded) {
-      getLectures('f5f987b5-eaee-4709-93f4-94ac585cb812'); // getLectures(teacherId);
+      getLectures(userId);
     }
     setPool([...lectures.sort(compareName)]);
   }, [lectures, getLectures]);
 
   const handleBack = () => {
-    useHistory.push('/');
+    history.push('/');
   };
 
   const itemToJsxWithClick = (item: IFilterableItem, click: (item) => void, isSelected?: boolean) => {
@@ -70,8 +71,8 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
   const [level, setLevel] = useState('');
   const [buttonLoading, setButtonLoading] = useState(false);
   const [previewImage, setPreviewImage] = useState(CourseImage);
-  const history = useHistory();
   const [modalAddOpen, setModalAddOpen] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
 
   const handleUploadFile = async file => {
     setUploadImage(file);
@@ -94,18 +95,19 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
   const handleSave = (isRelease: boolean) => {
     if (!isSaveble) return;
     if (isRelease && !isReleseble) return;
+    setIsSaved(true);
     setButtonLoading(true);
     save({
-      userId: 'f5f987b5-eaee-4709-93f4-94ac585cb812',
+      userId,
       name: courseName,
       level,
       isReleased: isRelease,
       lectures: selected.map(i => i.id),
       description,
-      image: uploadImage
+      image: previewImage,
+      uploadImage
     });
     setButtonLoading(false);
-    history.push('/');
   };
 
   const handleCancel = () => {
@@ -172,12 +174,12 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
                 <Button
                   content="Save"
                   loading={buttonLoading}
-                  className={isSaveble ? styles.button_save : styles.button_save_disabled}
+                  className={isSaveble && !isSaved ? styles.button_save : styles.button_save_disabled}
                   onClick={() => handleSave(false)}
                 />
                 <GradientButton
                   loading={buttonLoading}
-                  className={isReleseble ? styles.button_release : styles.button_release_disabled}
+                  className={isReleseble && !isSaved ? styles.button_release : styles.button_release_disabled}
                   onClick={() => handleSave(true)}
                 >
                   Release
@@ -206,17 +208,17 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
         </div>
       </div>
       <Footer />
-      <UploadLectureModal
-        isOpen={modalAddOpen}
-        openAction={setModalAddOpen}
-      />
+      {courseId === '' ? '' : <UploadLectureModal isOpen={modalAddOpen} openAction={setModalAddOpen} />}
     </div>
   );
 };
 
 const mapStateToProps = (state: IAppState) => {
-  const { lectures, isLecturesLoaded } = state.addcourse.data;
+  const { lectures, isLecturesLoaded, courseId } = state.addcourse.data;
+  const { appRouter } = state;
   return {
+    userId: appRouter.user.id,
+    courseId,
     lectures,
     isLecturesLoaded,
     loading: state.addcourse.requests.dataRequest.loading

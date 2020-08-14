@@ -4,6 +4,9 @@ import { Modal, ModalContent, Input, Icon, Label } from 'semantic-ui-react';
 import GrayOutlineButton from 'components/buttons/GrayOutlineButton';
 import GradientButton from 'components/buttons/GradientButton';
 import { isVideo } from './helper';
+import { IAppState } from 'models/AppState';
+import { connect } from 'react-redux';
+import { fetchLecturesRoutine, saveLectureRoutine } from 'screens/AddCourse/routines';
 
 export interface ISaveLecture {
     name: string;
@@ -14,11 +17,10 @@ export interface ISaveLecture {
 interface IUploadLectureModalProps {
     isOpen: boolean;
     openAction: (isOpen: boolean) => void;
-    saveAction?: (uploadEntity: ISaveLecture) => void;
   }
 
 export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProps> = ({
-  isOpen = false, openAction, saveAction
+  isOpen = false, openAction
 }) => {
   const [description, setDescription] = useState('');
   const [name, setName] = useState('');
@@ -36,27 +38,24 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
       setIsValidName(false);
       return;
     }
-    const pattern = /^[a-zA-Z0-9!@#$&()\\-`.+,/" ]{2,40}$/;
+    const pattern = /^[a-zA-Z0-9!@#$&()\\-`.+,"/ ]{10,40}$/;
     setIsValidName(pattern.test(name));
   };
 
   const validateDescription = () => {
     if (description.length === 0) return;
-    const pattern = /^[a-zA-Z0-9!@#$&()\\-`.+,/" ]{10,120}$/;
+    const pattern = /^[a-zA-Z0-9!@#$&()\\-`.+,"/ ]{10,120}$/;
     setIsValidDescription(pattern.test(description));
   };
 
   const handleAddFile = e => {
     validateDescription();
     validateName();
-    setFile(undefined);
     const thisFile: File = e.target.files[0];
     if (thisFile && isVideo(thisFile.name)) {
       setFile(thisFile);
       setIsValidFile(true);
-    } else {
-      setIsValidFile(false);
-    }
+    } else if (thisFile) setIsValidFile(false);
   };
 
   const handleClose = () => {
@@ -72,6 +71,7 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
   const handleSave = () => {
     validateDescription();
     validateName();
+    setIsValidFile(file);
     if (!isSaveble) return;
     handleClose();
   };
@@ -98,15 +98,28 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
               >
                 <Icon name="file archive outline" size="huge" inverted />
               </Label>
-              <span
-                tabIndex={0}
-                role="button"
-                onClick={() => inputRef.current.click()}
-                className={styles.filenamecontainer}
-                onKeyDown={() => validateDescription()}
-              >
-                {file?.name?.length > 25 ? `${file.name.substring(0, 23)}...` : file.name}
-              </span>
+              <div className={styles.filenamecontainer}>
+                <div
+                  tabIndex={0}
+                  role="button"
+                  onClick={() => inputRef.current.click()}
+                  className={styles.filename}
+                  onKeyDown={() => validateDescription()}
+                >
+                  {file?.name?.length > 25 ? `${file.name.substring(0, 23)}...` : file.name}
+                </div>
+                <Icon
+                  name="delete"
+                  size="small"
+                  onClick={() => {
+                    setFile(undefined);
+                    setIsValidFile(true);
+                  }}
+                  inverted
+                  className={styles.deleteIcon}
+                  color="pink"
+                />
+              </div>
             </div>
           ) : ''}
         </div>
@@ -163,3 +176,10 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
     </Modal>
   );
 };
+
+const mapDispatchToProps = {
+  fetchLectures: fetchLecturesRoutine,
+  saveCourse: saveLectureRoutine
+};
+
+export default connect(null, mapDispatchToProps)(UploadLectureModal);

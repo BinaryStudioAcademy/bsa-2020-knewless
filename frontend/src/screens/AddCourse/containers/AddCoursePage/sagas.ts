@@ -1,17 +1,16 @@
 import { takeEvery, put, call, all } from 'redux-saga/effects';
-import { toastr } from 'react-redux-toastr';
-import { fetchLecturesRoutine, saveCourseRoutine } from 'screens/AddCourse/routines';
+import { fetchLecturesRoutine, saveCourseRoutine, saveLectureRoutine } from 'screens/AddCourse/routines';
 import * as courseService from '../../services/course.service';
+import * as imageService from 'services/image.service';
+import { toastr } from 'react-redux-toastr';
 import { Routine } from 'redux-saga-routines';
 
 function* getLectures(action: Routine<any>) {
   try {
     const response = yield call(courseService.getLecturesByAuthor, action.payload);
     yield put(fetchLecturesRoutine.success(response));
-    toastr.success('Lectures loaded!');
   } catch (error) {
     yield put(fetchLecturesRoutine.failure(error?.message));
-    toastr.error('Loading failed!');
   }
 }
 
@@ -21,12 +20,16 @@ function* watchGetLecturesRequest() {
 
 function* saveCourse(action: Routine<any>) {
   try {
+    const course = action.payload;
+    if (course?.uploadImage) {
+      const { link } = yield call(() => imageService.uploadImage(course.uploadImage));
+      course.image = link;
+    }
     const response = yield call(courseService.saveCourse, action.payload);
     yield put(saveCourseRoutine.success(response));
-    toastr.success('Lectures loaded!');
+    toastr.success('Course saved!');
   } catch (error) {
     yield put(saveCourseRoutine.failure(error?.message));
-    toastr.error('Loading failed!');
   }
 }
 
@@ -34,9 +37,23 @@ function* watchSaveCourseRequest() {
   yield takeEvery(saveCourseRoutine.TRIGGER, saveCourse);
 }
 
+function* saveLecture(action: Routine<any>) {
+  try {
+    const response = yield call(courseService.saveLecture, action.payload);
+    yield put(saveLectureRoutine.success(response));
+  } catch (error) {
+    yield put(saveLectureRoutine.failure(error?.message));
+  }
+}
+
+function* watchSaveLectureRequest() {
+  yield takeEvery(saveLectureRoutine.TRIGGER, saveLecture);
+}
+
 export default function* lectureSagas() {
   yield all([
     watchGetLecturesRequest(),
-    watchSaveCourseRequest()
+    watchSaveCourseRequest(),
+    watchSaveLectureRequest()
   ]);
 }

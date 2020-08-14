@@ -161,6 +161,14 @@
   font-weight: bold
   color: white
 
+
+\:global(i.icon).deleteIcon
+  opacity: 0.8
+  &:hover
+    cursor: pointer 
+
+
+
 \:global(.ui.basic.label).toolBarIcon
   background: inherit
   border: none
@@ -174,7 +182,7 @@
     color: white
     cursor: pointer
 
-.filenamecontainer
+.filename
   cursor: default
   color: white
   font-size: 12px
@@ -184,6 +192,11 @@
   outline: none
   &:hover
       cursor: pointer
+
+.filenamecontainer
+  display: flex
+  justify-content: flex-end
+  align-items: center
       
 
 
