@@ -208,7 +208,10 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
         </div>
       </div>
       <Footer />
-      {courseId === '' ? '' : <UploadLectureModal isOpen={modalAddOpen} openAction={setModalAddOpen} />}
+      <UploadLectureModal
+        isOpen={modalAddOpen}
+        openAction={setModalAddOpen}
+      />
     </div>
   );
 };

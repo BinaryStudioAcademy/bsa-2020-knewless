@@ -19,16 +19,16 @@ public interface AuthorRepository extends JpaRepository<Author, UUID> {
 
     Integer countBySchoolId(UUID schoolId);
 
-    Author findOneById(UUID authorId);
+    Optional<Author> findOneById(UUID authorId);
 
-    @Query("select a.school from Author a where a.id = :authorId") // here have to be list ?
-    School getSchoolByAuthorId(@Param("authorId") UUID authorId);
+    @Query("select a.school from Author a where a.id = :authorId")
+    Optional<School> getSchoolByAuthorId(@Param("authorId") UUID authorId);
 
     @Query(value = "select count(*) from subscriptions where source_type = 'author' and source_id = :authorId",
             nativeQuery = true)
-    Integer getNumberOfSubscriptions(@Param("authorId") UUID authorId);
+    Optional<Integer> getNumberOfSubscriptions(@Param("authorId") UUID authorId);
 
     @Query("select a.id from Author a where a.user.email = :currentUserEmail")
-    UUID checkForCurrentUser(@Param("currentUserEmail") String currentUserEmail);
+    Optional<UUID> checkForCurrentUser(@Param("currentUserEmail") String currentUserEmail);
 }
 

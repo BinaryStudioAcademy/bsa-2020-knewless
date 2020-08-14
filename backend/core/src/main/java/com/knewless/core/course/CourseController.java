@@ -56,7 +56,7 @@ public class CourseController {
     }
 
     @GetMapping("author")
-    public List<CourseWithMinutesProjection> getCoursesByAuthor(@CurrentUser UserPrincipal user) {
+    public List<CourseWithMinutesDto> getCoursesByAuthor(@CurrentUser UserPrincipal user) {
         return courseService.getCoursesWithMinutesByUserId(user.getId());
     }
 

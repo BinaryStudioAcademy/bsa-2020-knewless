@@ -3,6 +3,7 @@ import { Icon, Label, Popup } from 'semantic-ui-react';
 import styles from './styles.module.sass';
 import Notifications from '../../../containers/Notifications';
 import PopupMenu from '../PopupMenu';
+import AvatarWithGradient from '../../avatar/AvatarWithBackground';
 
 const UserElement = ({ user }) => (
   <div className={styles.profileWrp}>
@@ -18,17 +19,13 @@ const UserElement = ({ user }) => (
     <Popup
       id={styles.popup}
       on="click"
-      trigger={(
-        <div className={styles.imageborder}>
-          <img src={user.avatar} className={styles.avatar} alt={user.nickname} />
-        </div>
-        )}
+      trigger={<AvatarWithGradient className={styles.avatar} imageSrc={user.avatar} />}
       position="bottom right"
       flowing
       hoverable
     >
       <Popup.Content>
-        <PopupMenu />
+        <PopupMenu user={user} />
       </Popup.Content>
     </Popup>
   </div>

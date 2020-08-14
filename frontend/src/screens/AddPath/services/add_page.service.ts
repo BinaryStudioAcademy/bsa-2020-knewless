@@ -1,5 +1,6 @@
 import { callApi } from 'helpers/api.helper';
 import { IPath } from '../models/domain';
+import { history } from '../../../helpers/history.helper';
 
 export async function getCourses() {
   const response = await callApi({
@@ -32,4 +33,8 @@ export async function uploadPath(path: IPath) {
     }
   });
   return response.json();
+}
+
+export function forwardHome() {
+  history.push('/');
 }

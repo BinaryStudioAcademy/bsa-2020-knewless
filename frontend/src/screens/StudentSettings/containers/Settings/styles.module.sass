@@ -8,115 +8,95 @@ $width_btn: 115px
 $height_btn: 40px
 
 body
-    background: #2A2B37    
+  background: #2A2B37
+
 .settings
-    margin: auto
-    padding-top: $header-height
-    color: #ffff
-    width: 100%
-    display: flex
-    flex-direction: column
+  margin: auto
+  padding-top: $header-height
+  color: #ffff
+  width: 100%
+  display: flex
+  flex-direction: column
 
 #settingsTitle
-    margin: auto
-    width: 100%
-    padding-top: 30px
-    padding-bottom: 20px
-    max-width: $container_width + ($side_padding * 2)
-    padding-left: $side_padding
-    padding-right: $side_padding
-    color: #ffff
-    font-family: Custom Open Sans
-    font-style: normal
-    font-weight: 600
-    font-size: 1.5em
-    line-height: 1.5em 
+  margin: auto
+  width: 100%
+  padding-top: 30px
+  padding-bottom: 20px
+  max-width: $container_width + ($side_padding * 2)
+  padding-left: $side_padding
+  padding-right: $side_padding
+  color: #ffff
+  font-family: Custom Open Sans, serif
+  font-style: normal
+  font-weight: 600
+  font-size: 1.5em
+  line-height: 1.5em
 
 .formSettings
-    max-width: $container_width + ($side_padding * 2) !important
-    width: 100%
-    padding-left: $side_padding
-    padding-right: $side_padding
-    margin-left: auto !important
-    margin-right: auto !important
-    padding-bottom: 30px
-    .formField
-       margin-bottom: 30px !important
-    .formCheckBox
-       margin-bottom: 30px !important
-       margin-right: 20px !important    
-    #personalTitle
-       margin-top: 40px
-       margin-bottom: 20px
-       font-size: 1.25em
-    #demographicTitle
-       margin-top: 100px  
-       margin-bottom: 20px
-    .title
-        font-family: Custom Open Sans
-        font-style: normal
-        font-weight: 600
-        font-size: 16px
-        line-height: 22px
-    #textBio
-        overflow: auto
-        resize: none
-    .Btn
-        margin-left: 0.5em
-        margin-right: 1.5em
-    
-label
-    color: #ffff !important
-    font-family: Custom Open Sans
+  max-width: $container_width + ($side_padding * 2) !important
+  width: 100%
+  padding-left: $side_padding
+  padding-right: $side_padding
+  margin-left: auto !important
+  margin-right: auto !important
+  padding-bottom: 30px
+
+  .formField
+    margin-bottom: 30px !important
+
+  .formCheckBox
+    margin-bottom: 30px !important
+    margin-right: 20px !important
+
+  #personalTitle
+    margin-top: 40px
+    margin-bottom: 20px
+    font-size: 1.25em
+
+  #demographicTitle
+    margin-top: 100px
+    margin-bottom: 20px
+
+  .title
+    font-family: Custom Open Sans, serif
     font-style: normal
-    font-weight: normal !important
-    font-size: 1em !important
-    line-height: 1.5em !important
+    font-weight: 600
+    font-size: 16px
+    line-height: 22px
+
+  #textBio
+    overflow: auto
+    resize: none
+
+  .Btn
+    margin-left: 0.5em
+    margin-right: 1.5em
+
+label
+  color: #ffff !important
+  font-family: Custom Open Sans, serif
+  font-style: normal
+  font-weight: normal !important
+  font-size: 1em !important
+  line-height: 1.5em !important
+
 .wrapperAvatar
-    background: linear-gradient(52.17deg, #0084F8 9.02%, #FF8576 90.81%)
-    height: $height_wrap_img
+  background: linear-gradient(52.17deg, #0084F8 9.02%, #FF8576 90.81%)
+  height: $height_wrap_img
+  display: flex
+  justify-items: center
+  align-items: center
+  text-align: center
+  align-content: center
+
+  .avatar
+    width: $avatar_size
+    height: $avatar_size
+    border-radius: 50%
+    padding: 0
     display: flex
-    justify-items: center
-    align-items: center
-    text-align: center
+    align-self: center
     align-content: center
-    .avatar
-        width: $avatar_size
-        height: $avatar_size
-        border-radius: 50%
-        padding: 0
-        display: flex
-        align-self: center
-        align-content: center
-        margin: auto
-        overflow: hidden
-        .avatarImage
-          position: absolute
-          width: $avatar_size
-          height: $avatar_size
-          background-color: #2a2b3798
-          object-fit: cover
-          border-radius: 50%
-          z-index: 1
-                      
-        .avatarUploder
-          display: flex
-          justify-content: center
-          align-items: center
-          border-radius: 50%
-          margin: auto
-          width: $avatar_size
-          height: $avatar_size 
-          padding: 0
-          font-family: Custom Open Sans !important
-          font-style: normal
-          font-weight: normal !important
-          font-size: 1.25em !important
-          backround: none
-          z-index: 2
-          opacity: 0
-          border: none
-          &:hover
-              opacity: 1
-              background: #2a2b3765
-          
+    margin: auto
+    overflow: hidden

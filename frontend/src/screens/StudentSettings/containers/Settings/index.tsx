@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Form } from 'semantic-ui-react';
+import { Form } from 'semantic-ui-react';
 import GrayOutlineButton from 'components/buttons/GrayOutlineButton';
 import GradientButton from 'components/buttons/GradientButton';
 import styles from './styles.module.sass';
 import {
   educationOptions,
   employmentOptions,
+  experienceOptions,
   industryOptions,
   levelOptions,
   locationOptions,
@@ -19,6 +20,7 @@ import { IStudentSettings } from 'screens/StudentSettings/models/IStudentSetting
 import { IBindingAction, IBindingCallback1 } from 'models/Callbacks';
 import { resetSettingsModeRoutine, setUserRoleRoutine } from 'containers/AppRouter/routines';
 import { RoleTypes } from 'containers/AppRouter/models/IRole';
+import AvatarUploader from '../../../../components/avatar/AvatarUploader';
 
 export interface IStudentSettingsProps {
   studentSettings: IStudentSettings;
@@ -113,11 +115,7 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
       <div id={styles.settingsTitle}>Account Settings</div>
       <div className={styles.wrapperAvatar}>
         <div className={styles.avatar}>
-          <img src={avatar} alt="" className={styles.avatarImage} />
-          <Button as="label" className={styles.avatarUploder}>
-            Update
-            <input name="image" type="file" onChange={e => handleUploadFile(e.target.files[0])} hidden />
-          </Button>
+          <AvatarUploader handleFileUpload={e => handleUploadFile(e.target.files[0])} imageSrc={avatar} />
         </div>
       </div>
       <Form className={styles.formSettings}>
@@ -219,13 +217,14 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
           />
         </Form.Group>
         <Form.Group widths="2">
-          <Form.Input
+          <Form.Select
             fluid
             className={styles.formField}
-            label="Year of Experience"
+            label="Years of Experience"
             placeholder="0"
+            options={experienceOptions}
             value={experience}
-            onChange={e => setExperience(Number(e.target.value))}
+            onChange={(e, data) => setExperience(data.value as number)}
           />
           <Form.Select
             fluid
