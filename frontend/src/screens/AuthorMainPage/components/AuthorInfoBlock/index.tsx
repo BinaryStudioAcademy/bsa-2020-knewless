@@ -1,14 +1,14 @@
-import styles from '../../containers/MainPage/styles.module.sass';
 import { Button } from 'semantic-ui-react';
 import React from 'react';
 import { IAuthor } from '../../models/IAuthor';
+import styles from './styles.module.sass';
 
 interface IAuthorInfoBlockProps {
   author: IAuthor;
 }
 
 const AuthorInfoBlock: React.FunctionComponent<IAuthorInfoBlockProps> = (
-  { author: { name, avatar, school, followers } }
+  { author: { firstName, lastName, avatar, school, followers } }
 ) => {
   const handleSchoolCreation = e => {
     // handle
@@ -18,20 +18,16 @@ const AuthorInfoBlock: React.FunctionComponent<IAuthorInfoBlockProps> = (
     <div className={styles.user_info__container}>
       <div className={styles.container__centered}>
         <div className={styles.author_info}>
-          <div className={styles.author_info__border_right}>
-            <div className={styles.author_info__img_wrapper}>
-              <img
-                src={avatar}
-                className={styles.author_info__img}
-                alt="Author avatar"
-              />
-            </div>
-            <div className={styles.author_info_text}>
-              <p className={styles.author_info_text__title}>
-                {`${name}`}
-              </p>
-              <p className={styles.count}>{`${followers} Followers`}</p>
-            </div>
+          <div className={styles.author_info__img_wrapper}>
+            <img
+              src={avatar}
+              className={styles.author_info__img}
+              alt="Author avatar"
+            />
+          </div>
+          <div className={styles.author_info_text}>
+            <span className={styles.author_info_text__title}>{`${firstName} ${lastName}`}</span>
+            <span className={styles.count}>{`${followers} Followers`}</span>
           </div>
         </div>
         <div className={styles.school_container}>

@@ -58,7 +58,7 @@ const MainAuthorPage: React.FunctionComponent<IMainAuthorPageProps> = ({
             )) : <h4>You have no courses yet.</h4>}
           </AuthorCardsSegment>
         </div>
-        <div className={`${styles.wide_container} ${styles.content_row}`}>
+        <div className={`${styles.wide_container} ${styles.card_segment} ${styles.space_under}`}>
           <AuthorCardsSegment
             title="Your recently created Paths"
             onCreateClick={() => (history.push('/add_path'))}
