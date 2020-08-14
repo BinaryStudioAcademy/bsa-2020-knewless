@@ -89,8 +89,9 @@ public class AuthorService {
         var courses = this.courseRepository.getCoursesByAuthorId(authorId);
         var articles = this.articleRepository.getArticleDtoByAuthorId(authorId);
 
-        var school = this.authorRepository.getSchoolByAuthorId(authorId)
-                .orElseThrow(() -> new NotFoundException("Author " + authorId + " school not found"));
+        var school = this.authorRepository.getSchoolByAuthorId(authorId);
+        String schoolName = school.isPresent() ? school.get().getName() : "";
+        String schoolId = school.isPresent() ? school.get().getId().toString() : "";
 
         var currentUserId = this.authorRepository.checkForCurrentUser(userPrincipal.getEmail());
         var printFollowButton = currentUserId.isPresent() ? !currentUserId.get().equals(authorId) : true;
@@ -102,8 +103,8 @@ public class AuthorService {
                 author.getLastName(),
                 author.getAvatar(),
                 author.getBiography(),
-                school.getName(),
-                school.getId().toString(),
+                schoolName,
+                schoolId,
                 numberOfSubscriptions,
                 courses, articles, printFollowButton);
     }
