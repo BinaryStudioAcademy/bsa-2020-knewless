@@ -13,7 +13,7 @@ const AvatarUploader: React.FC<IAvatarUploader> = (
 ) => (
   <div className={styles.container}>
     <div className={styles.back} />
-    <Avatar {...props} noPlaceholder imageSrc={imageSrc} round={round} className={styles.avatar} />
+    <Avatar {...props} imageSrc={imageSrc} round={round} className={styles.avatar} />
     <Button as="label" className={styles.avatarUploader}>
       {labelText}
       <input name="image" type="file" onChange={handleFileUpload} hidden />
