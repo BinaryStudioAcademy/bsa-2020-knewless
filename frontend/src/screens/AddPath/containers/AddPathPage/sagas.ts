@@ -37,11 +37,12 @@ function* savePath({ payload }: AnyAction) {
   try {
     const response = yield call(addPageService.uploadPath, payload);
     yield put(savePathRoutine.success(response));
-    // todo: forward on the needed path
-    toastr.success(`Uploaded! new id: '${response}'. TODO: forward on that path`);
+    toastr.success('Saved successfully!');
+    addPageService.forwardHome();
   } catch (error) {
     yield put(savePathRoutine.failure(error?.message));
-    toastr.error('Failed to add new path');
+    // todo: change error to a proper one
+    toastr.error('Failed to save. Please select tag image.');
   }
 }
 

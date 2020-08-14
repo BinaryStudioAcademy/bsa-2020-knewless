@@ -1,5 +1,4 @@
 import React, { createRef, useCallback, useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import styles from './styles.module.sass';
 import { ICourse, IPath, ITag } from '../../models/domain';
 import { Footer } from '../../../../components/Footer';
@@ -37,7 +36,6 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
   triggerFetchCourses, triggerFetchTags, triggerSavePath
 }) => {
   const tagsRef = createRef();
-  const history = useHistory();
   const [selectedCourses, setSelectedCourses] = useState([]);
   const [storedCourses, setStoredCourses] = useState([]);
   const [pathName, setPathName] = useState('');
@@ -86,7 +84,6 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
         imageTag: pathImageTag
       };
       triggerSavePath(path);
-      history.push('/');
     }
   }
 
