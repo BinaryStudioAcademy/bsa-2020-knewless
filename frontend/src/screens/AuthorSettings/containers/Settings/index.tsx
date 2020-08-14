@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Form } from 'semantic-ui-react';
+import { Form } from 'semantic-ui-react';
 
 import styles from './styles.module.sass';
 import { locationOptions } from './options';
@@ -12,6 +12,7 @@ import GrayOutlineButton from 'components/buttons/GrayOutlineButton';
 import GradientButton from 'components/buttons/GradientButton';
 import { resetSettingsModeRoutine, setUserRoleRoutine } from 'containers/AppRouter/routines';
 import { RoleTypes } from 'containers/AppRouter/models/IRole';
+import AvatarUploader from '../../../../components/avatar/AvatarUploader';
 
 export interface IAuthorSettingsProps {
   authorSettings: IAuthorSettings;
@@ -84,11 +85,7 @@ const AuthorSettings: React.FunctionComponent<IAuthorSettingsProps> = ({
       <div id={styles.settingsTitle}>Account Settings</div>
       <div className={styles.wrapperAvatar}>
         <div className={styles.avatar}>
-          <img src={avatar} alt="" className={styles.avatarImage} />
-          <Button as="label" className={styles.avatarUploder}>
-            Update
-            <input name="image" type="file" onChange={e => handleUploadFile(e.target.files[0])} hidden />
-          </Button>
+          <AvatarUploader handleFileUpload={e => handleUploadFile(e.target.files[0])} imageSrc={avatar} />
         </div>
       </div>
       <Form className={styles.formSettings}>

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Form } from 'semantic-ui-react';
+import { Form } from 'semantic-ui-react';
 import GrayOutlineButton from 'components/buttons/GrayOutlineButton';
 import GradientButton from 'components/buttons/GradientButton';
 import styles from './styles.module.sass';
 import {
-  experienceOptions,
   educationOptions,
   employmentOptions,
+  experienceOptions,
   industryOptions,
   levelOptions,
   locationOptions,
@@ -20,6 +20,7 @@ import { IStudentSettings } from 'screens/StudentSettings/models/IStudentSetting
 import { IBindingAction, IBindingCallback1 } from 'models/Callbacks';
 import { resetSettingsModeRoutine, setUserRoleRoutine } from 'containers/AppRouter/routines';
 import { RoleTypes } from 'containers/AppRouter/models/IRole';
+import AvatarUploader from '../../../../components/avatar/AvatarUploader';
 
 export interface IStudentSettingsProps {
   studentSettings: IStudentSettings;
@@ -114,11 +115,7 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
       <div id={styles.settingsTitle}>Account Settings</div>
       <div className={styles.wrapperAvatar}>
         <div className={styles.avatar}>
-          <img src={avatar} alt="" className={styles.avatarImage} />
-          <Button as="label" className={styles.avatarUploder}>
-            Update
-            <input name="image" type="file" onChange={e => handleUploadFile(e.target.files[0])} hidden />
-          </Button>
+          <AvatarUploader handleFileUpload={e => handleUploadFile(e.target.files[0])} imageSrc={avatar} />
         </div>
       </div>
       <Form className={styles.formSettings}>

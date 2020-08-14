@@ -1,0 +1,19 @@
+.gradient
+  transition: all .6s ease-in-out
+  //background: linear-gradient(90deg, #FF8576, #0084F8, #FF8576) old
+  background: linear-gradient(90deg, #0084F8, #FF8576, #0084F8)
+  display: flex
+  align-items: center
+  justify-content: center
+  background-size: 200%
+  &:hover, &:focus
+    background-position: +100% 0
+
+
+.avatar
+  $inner_size: 85%
+  height: $inner_size
+  width: $inner_size
+
+.rounded
+  border-radius: 50%
