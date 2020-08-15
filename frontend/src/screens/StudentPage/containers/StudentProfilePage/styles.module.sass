@@ -70,7 +70,18 @@ body
     padding-left: $side_padding
     padding-right: $side_padding 
     margin: auto   
+.course
+    cursor: pointer
+    padding: 0 !important
+    margin: 0 !important
+    border-bottom: 1px solid #4a5053
+    &:last-child
+        border: none !important
 
+.completedCourseItem
+    cursor: pointer
+    padding: 0 !important
+    margin: 0 !important
 .wrapperTime
     background: linear-gradient(52.17deg, #0084F8 9.02%, #FF8576 90.81%)
     height: $height_wrap_img
@@ -82,8 +93,10 @@ body
 .currentCourse
     background: #2A2B37 
     box-shadow: 0px 30px 40px rgba(0, 0, 0, 0.1)
-    border-radius: 6px
 .completedCourse
     background: none
-    min-height: 300px    
+    min-height: 300px
+.empty
+    padding: 20px 10px
+    font-size: 1.25em       
 

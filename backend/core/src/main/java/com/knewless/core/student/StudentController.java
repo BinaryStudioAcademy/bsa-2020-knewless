@@ -2,6 +2,7 @@ package com.knewless.core.student;
 
 
 import com.knewless.core.security.oauth.UserPrincipal;
+import com.knewless.core.student.dto.StudentProfileDto;
 import com.knewless.core.student.dto.StudentMainInfoDto;
 import com.knewless.core.student.dto.StudentSettingsDto;
 import com.knewless.core.user.model.CurrentUser;
@@ -26,6 +27,11 @@ public class StudentController {
                                                     @RequestBody StudentSettingsDto settings) {
         settings.setUserId(userPrincipal.getId());
         return studentService.setStudentSettings(settings);
+    }
+
+    @GetMapping("/profile")
+    public StudentProfileDto getStudentProfile(@CurrentUser UserPrincipal userPrincipal) {
+        return studentService.getStudentProfile(userPrincipal.getId());
     }
 
     @GetMapping("/info")

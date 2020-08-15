@@ -4,6 +4,9 @@ import com.knewless.core.author.AuthorRepository;
 import com.knewless.core.author.dto.AuthorSettingsDto;
 import com.knewless.core.author.mapper.AuthorMapper;
 import com.knewless.core.author.model.Author;
+import com.knewless.core.currentUserCource.CurrentUserCourseService;
+import com.knewless.core.currentUserCource.model.CurrentUserCourse;
+import com.knewless.core.student.dto.StudentProfileDto;
 import com.knewless.core.exception.ResourceNotFoundException;
 import com.knewless.core.student.dto.StudentMainInfoDto;
 import com.knewless.core.student.dto.StudentSettingsDto;
@@ -23,6 +26,8 @@ public class StudentService {
     private StudentRepository studentRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private CurrentUserCourseService currentUserCourseService;
 
 
     public Optional<StudentSettingsDto> getStudentSettings(UUID userId) {
@@ -41,6 +46,14 @@ public class StudentService {
         updateSettings.setCreatedAt(oldSettings.get().getCreatedAt());
         return Optional.of(studentRepository.save(updateSettings))
                 .map(StudentMapper::fromEntity);
+    }
+
+    public StudentProfileDto getStudentProfile(UUID userId) {
+        User user = userRepository.findById(userId).get();
+        StudentProfileDto profile = new StudentProfileDto();
+        profile.setTotalContentWatched(studentRepository.findByUser(user).get().getTotalContentWatched());
+        profile.setCourses(currentUserCourseService.getLearningCourses(userId));
+        return profile;
     }
 
     public Optional<StudentMainInfoDto> getStudentByUserId(UUID id) {

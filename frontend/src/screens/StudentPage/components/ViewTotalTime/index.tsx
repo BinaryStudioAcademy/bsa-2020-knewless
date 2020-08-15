@@ -1,6 +1,5 @@
 import React from 'react';
 import styles from './styles.module.sass';
-import { Icon } from 'semantic-ui-react';
 import watch from 'assets/images/watch.png';
 
 interface IViewTotalTimeProps {

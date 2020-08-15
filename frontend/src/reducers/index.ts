@@ -4,6 +4,7 @@ import data from '../screens/Home/reducers';
 import notify from '../containers/Notifications/reducer';
 import authorSettings from '../screens/AuthorSettings/reducer';
 import studentSettings from '../screens/StudentSettings/reducer';
+import studentProfile from '../screens/StudentPage/reducer';
 import mainPage from '../screens/MainPage/reducers';
 import authorMainPage from '../screens/AuthorMainPage/reducers';
 import landing from '../screens/Landing/reducers';
@@ -18,6 +19,7 @@ export default combineReducers({
   toastr,
   authorSettings,
   studentSettings,
+  studentProfile,
   data,
   notify,
   lecturePage,

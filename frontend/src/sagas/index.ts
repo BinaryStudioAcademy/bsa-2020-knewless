@@ -3,6 +3,7 @@ import homeSagas from 'screens/Home/sagas';
 import studentSettingsSagas from '../screens/StudentSettings/sagas';
 import notificationSagas from 'containers/Notifications/sagas';
 import authorSettingsSagas from '../screens/AuthorSettings/sagas';
+import studentProfileSagas from '../screens/StudentPage/sagas';
 import mainPageSagas from '../screens/MainPage/containers/MainStudentPage/sagas';
 import authorMainPageSagas from '../screens/AuthorMainPage/containers/MainPage/sagas';
 import landingSagas from 'screens/Landing/sagas';
@@ -19,6 +20,7 @@ export default function* rootSaga() {
     notificationSagas(),
     authorSettingsSagas(),
     studentSettingsSagas(),
+    studentProfileSagas(),
     mainPageSagas(),
     authorMainPageSagas(),
     landingSagas(),

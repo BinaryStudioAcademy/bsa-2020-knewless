@@ -1,42 +1,56 @@
-import React from 'react';
-import { Progress } from 'semantic-ui-react';
+import React, { useCallback } from 'react';
 import styles from './styles.module.sass';
-import { ICourse } from 'screens/StudentPage/models/ICourse';
+import { minutesToDuration } from 'components/PathCard/helper';
+import { Label, Progress } from 'semantic-ui-react';
+import { StyledRating } from 'components/StyledRating';
 
-const img = 'https://zendenwebdesign.com/wp-content/uploads/2017/10/Top-7-Programing-Languages-for-Web-Development.jpg';
-
-interface ICurrentCourseProps {
-  course: ICourse;
+export interface ICurrentCourseProps {
+  category: string;
+  author: string;
+  timeMinutes: number;
+  level: string;
+  name: string;
+  previewSrc: string;
+  rating: number;
 }
-const CurrentCourse: React.FC<ICurrentCourseProps> = props => {
-  const { course } = props;
-  const handleOnClick = () => {
-    console.log('click');
-  };
+
+export const CurrentCourse: React.FC<ICurrentCourseProps> = ({
+  category, author, timeMinutes, level, name, previewSrc,
+  rating
+}) => {
+  const calcDuration = useCallback(() => minutesToDuration(timeMinutes), [timeMinutes]);
+  const { timeUnit, duration } = calcDuration();
   return (
-    <div className={styles.courseCard}>
-      <div className={styles.wrapperImage}>
+    <div className={styles.container}>
+      <div className={styles.image_container}>
+        <div className={styles.image_cover} />
+        <img
+          className={styles.image_preview}
+          src={previewSrc || 'https://i.imgur.com/LFR6UaK.jpg'}
+          alt="Lecture preview"
+        />
+      </div>
+      <div className={styles.dependency__container}>
+        <span className={styles.dependency__name} title={name}>{name}</span>
+        <span className={styles.dependency__category}>{category}</span>
+        <div className={styles.dependency__meta_container}>
+          <div className={styles.dependency__meta__info_row}>
+            <span className={styles.dependency__meta__author}>{author}</span>
+            <div>
+              <span className={styles.dependency__meta__time_duration}>{duration}</span>
+              <span className={styles.dependency__meta__time_unit}>{timeUnit}</span>
+            </div>
+            <span className={styles.dependency__level}>{level}</span>
+          </div>
+          <StyledRating rating={rating} className={styles.dependency__rating} />
+        </div>
         <div className={styles.progress}>
-          <img src={course.image} alt="img" className={styles.imageCourse} />
-        </div>
-      </div>
-      <div className={styles.content}>
-        <div className={styles.category}>
-          Category
-        </div>
-        <div className={styles.title}>
-          {course.name}
-        </div>
-      </div>
-      <div className={styles.progress}>
-        <div className={styles.progressTime}>12h 2m</div>
-        <div className={styles.wrapperProgress}>
-          <Progress percent={80} className={styles.pg}>{course.progress}</Progress>
+          <div className={styles.progressTime}>12h 2m</div>
+          <div className={styles.wrapperProgress}>
+            <Progress percent={80} className={styles.progressBar}>80%</Progress>
+          </div>
         </div>
       </div>
     </div>
   );
 };
-
-export default CurrentCourse;
-
