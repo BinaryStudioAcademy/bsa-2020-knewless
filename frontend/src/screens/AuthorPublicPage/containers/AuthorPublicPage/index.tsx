@@ -1,8 +1,5 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { GoBook } from 'react-icons/go';
-import { IconContext } from 'react-icons';
-import { TiHeart } from 'react-icons/ti';
 import { Link } from 'react-router-dom';
 
 import { IBindingCallback1 } from 'models/Callbacks';
@@ -28,7 +25,7 @@ const AuthorPublicPage: React.FunctionComponent<IAuthorPublic> = ({
   }, []);
 
   return (
-    <div>
+    <div style={{ height: '0' }}>
       <div className="headerLine-wrapper" />
       <div className="authorMainContainer">
         <div className="authorAvatar-wrapper">
@@ -87,7 +84,6 @@ const AuthorPublicPage: React.FunctionComponent<IAuthorPublic> = ({
                 </div>
               </div>
             </div>
-            <div className="separatorRectangleFirst" />
 
             <div className="cardSchoolLink-wrapper">
               <div className="cardStyle-authorPublic">
@@ -100,7 +96,6 @@ const AuthorPublicPage: React.FunctionComponent<IAuthorPublic> = ({
               </div>
             </div>
 
-            <div className="separatorRectangleSecond" />
             <div className="cardArticlesNumber-wrapper">
               <div className="cardStyle-authorPublic">
                 <div className="cardMainInfo cardTextField">
