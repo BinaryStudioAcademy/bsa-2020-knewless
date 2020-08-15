@@ -1,9 +1,12 @@
 import { combineReducers } from 'redux';
 import { reducerCreator } from 'helpers/reducer.helper';
 import { authorMainPageData } from '../containers/MainPage/reducer';
-import { fetchAuthorCoursesRoutine, fetchAuthorPathsRoutine } from '../routines';
+import { fetchAuthorRoutine, fetchAuthorCoursesRoutine, fetchAuthorPathsRoutine } from '../routines';
 
 const requests = combineReducers({
+  authorRequest: reducerCreator(
+    [fetchAuthorRoutine.TRIGGER]
+  ),
   authorCoursesRequest: reducerCreator(
     [fetchAuthorCoursesRoutine.TRIGGER]
   ),

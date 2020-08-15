@@ -1,9 +1,6 @@
 package com.knewless.core.author;
 
 import com.knewless.core.article.ArticleRepository;
-import com.knewless.core.article.articleReaction.model.ArticleReaction;
-import com.knewless.core.article.model.Article;
-import com.knewless.core.author.dto.AuthorArticlesDto;
 import com.knewless.core.author.dto.AuthorBriefInfoDto;
 import com.knewless.core.author.dto.AuthorPublicDto;
 import com.knewless.core.author.dto.AuthorSettingsDto;
@@ -11,21 +8,15 @@ import com.knewless.core.author.mapper.AuthorInfoMapper;
 import com.knewless.core.author.mapper.AuthorMapper;
 import com.knewless.core.author.model.Author;
 import com.knewless.core.course.CourseRepository;
-import com.knewless.core.school.SchoolRepository;
-import com.knewless.core.school.dto.SchoolBriefInfoDto;
+import com.knewless.core.exception.ResourceNotFoundException;
 import com.knewless.core.school.mapper.SchoolInfoMapper;
-import com.knewless.core.school.model.School;
 import com.knewless.core.security.oauth.UserPrincipal;
-import com.knewless.core.tag.dto.ArticleTagDto;
 import com.knewless.core.user.UserRepository;
 import com.knewless.core.user.model.User;
-import com.knewless.core.user.role.model.RoleType;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -33,24 +24,19 @@ import java.util.UUID;
 public class AuthorService {
 
     private final AuthorRepository authorRepository;
-
     private final UserRepository userRepository;
-
     private final CourseRepository courseRepository;
     private final ArticleRepository articleRepository;
-    private final SchoolRepository schoolRepository;
 
     @Autowired
     public AuthorService(AuthorRepository authorRepository,
                          UserRepository userRepository,
                          CourseRepository courseRepository,
-                         ArticleRepository articleRepository,
-                         SchoolRepository schoolRepository) {
+                         ArticleRepository articleRepository) {
         this.authorRepository = authorRepository;
         this.userRepository = userRepository;
         this.courseRepository = courseRepository;
         this.articleRepository = articleRepository;
-        this.schoolRepository = schoolRepository;
     }
 
     public Optional<AuthorSettingsDto> getAuthorSettings(UUID userId) {
@@ -71,14 +57,18 @@ public class AuthorService {
                 .map(AuthorMapper::fromEntity);
     }
 
-    public AuthorBriefInfoDto getAuthorInfoById(UUID id) throws NotFoundException {
-        final var notFoundException = new NotFoundException("Author with id '" + id + "' not found");
-        final var user = this.userRepository.findById(id).orElseThrow(() -> notFoundException);
-        final var author = this.authorRepository.findByUserId(id).orElseThrow(() -> notFoundException);
+    public AuthorBriefInfoDto getAuthorInfoByUserId(UUID userId) {
+        final var author = this.authorRepository.findByUserId(userId).orElseThrow(
+                () -> new ResourceNotFoundException("Author", "id", userId)
+        );
         final var authorSchool = author.getSchool();
-        final var membersCount = this.authorRepository.countBySchoolId(authorSchool.getId());
-        final var schoolBriefInfo = SchoolInfoMapper.from(authorSchool, membersCount);
-        return AuthorInfoMapper.fromEntities(author, user, schoolBriefInfo);
+        final var isAuthorHasSchool = authorSchool != null;
+        final var schoolMembersCount = isAuthorHasSchool
+                ? this.authorRepository.countBySchoolId(authorSchool.getId())
+                : 0;
+        final var schoolBriefInfo = SchoolInfoMapper.from(authorSchool, schoolMembersCount);
+        final var authorFollowersCount = this.authorRepository.getNumberOfSubscriptions(author.getId()).orElse(0);
+        return AuthorInfoMapper.fromEntities(author, authorFollowersCount, schoolBriefInfo);
     }
 
     public AuthorPublicDto getAuthorPublicDto(UUID authorId, UserPrincipal userPrincipal) throws NotFoundException {

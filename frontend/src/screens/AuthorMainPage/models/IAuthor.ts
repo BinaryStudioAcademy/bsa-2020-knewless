@@ -6,6 +6,6 @@ export interface IAuthor {
   lastName: string;
   role: string;
   avatar: string;
-  school: ISchool;
+  schoolInfo: ISchool;
   followers: number;
 }

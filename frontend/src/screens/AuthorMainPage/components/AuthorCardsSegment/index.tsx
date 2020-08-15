@@ -14,8 +14,8 @@ export const AuthorCardsSegment: React.FunctionComponent<IAuthorCardsSegment> = 
   { title, onCreateClick, onViewAllClick, loading, children }
 ) => (
   <>
-    <h1 className={styles.title}>
-      {title}
+    <div className={styles.header}>
+      <div className={styles.header__title}>{title}</div>
       <Button
         as="a"
         onClick={onViewAllClick}
@@ -27,19 +27,18 @@ export const AuthorCardsSegment: React.FunctionComponent<IAuthorCardsSegment> = 
         View all &gt;
       </Button>
       {onCreateClick && (
-        <div className={styles.btns_right}>
-          <Button
-            as="a"
-            onClick={onCreateClick}
-            basic
-            compact
-            id={styles.borderless_btn}
-          >
-            Create new
-          </Button>
-        </div>
+        <Button
+          as="a"
+          onClick={onCreateClick}
+          basic
+          compact
+          id={styles.borderless_btn}
+          className={styles.btn_right}
+        >
+          Create new
+        </Button>
       )}
-    </h1>
+    </div>
     <div className={styles.cards_layout}>
       <InlineLoaderWrapper loading={loading} centered>
         {children}

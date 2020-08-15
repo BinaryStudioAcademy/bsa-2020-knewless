@@ -4,6 +4,7 @@ import { fetchSetAuthorSettingsRoutine, fetchGetAuthorSettingsRoutine } from '..
 import { Routine } from 'redux-saga-routines';
 import * as imageService from 'services/image.service';
 import { fetchUserRoutine } from 'containers/AppRouter/routines';
+import { fetchAuthorRoutine } from '../../../AuthorMainPage/routines';
 
 function* getSettings() {
   try {
@@ -28,6 +29,7 @@ function* setSettings(action: Routine<any>) {
       author.avatar = link;
     }
     yield call(() => settingsService.setSettings(action.payload));
+    yield put(fetchAuthorRoutine.trigger());
     yield put(fetchUserRoutine.trigger());
   } catch (error) {
     console.log('Set settings failed!');
