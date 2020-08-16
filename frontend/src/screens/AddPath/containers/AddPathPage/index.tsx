@@ -19,6 +19,8 @@ import { TagSelector } from '../../../../components/TagSelector';
 import { GradientButton } from '../../../../components/buttons/GradientButton';
 import GrayOutlineButton from '../../../../components/buttons/GrayOutlineButton';
 import { PathPreview } from '../../components/PathPreview';
+import { history } from '../../../../helpers/history.helper';
+import Confirmation from '../../../../components/Confirmation';
 
 export interface ISavePathProps {
   courses: ICourse[];
@@ -45,6 +47,7 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
   const [storedTags, setStoredTags] = useState([]);
   const [nameValid, setNameValid] = useState(true);
   const [errors, setErrors] = useState({ name: undefined });
+  const [isConfirming, setIsConfirming] = useState(false);
 
   useEffect(() => {
     triggerFetchCourses();
@@ -143,6 +146,11 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
     const minutes = selectedCourses.map(c => c.timeMinutes).reduce((a, b) => a + b, 0);
     return minutesToDuration(minutes);
   }, [selectedCourses]);
+
+  const forwardAddCourse = () => {
+    setIsConfirming(false);
+    history.push('/add_course');
+  };
 
   return (
     <>
@@ -244,6 +252,7 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
                     dependencyName="course"
                     itemToJsx={itemToJsxWithClick}
                     sortFn={compareName}
+                    addNewDependencyFn={() => setIsConfirming(true)}
                   />
                   )}
                 </InlineLoaderWrapper>
@@ -252,6 +261,14 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
           </div>
         </div>
         <Footer />
+        <Confirmation
+          open={isConfirming}
+          title="Data will be reset!"
+          text="Your unsaved changes will be lost."
+          onConfirm={forwardAddCourse}
+          onCancel={() => setIsConfirming(false)}
+          className={styles.confirmation}
+        />
       </div>
     </>
   );

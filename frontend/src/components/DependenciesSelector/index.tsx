@@ -12,10 +12,12 @@ export interface IDepsSelectorProps {
   itemToJsx: (item: IFilterableItem, click: (item) => void, isSelected: boolean) => JSX.Element;
   dependencyName: string;
   sortFn?: (item1: IFilterableItem, item2: IFilterableItem) => number;
+  addNewDependencyFn: () => void;
 }
 
 export const DependenciesSelector: React.FC<IDepsSelectorProps> = (
-  { selected, stored, selectedToStored, storedToSelected, itemToJsx, dependencyName, sortFn }
+  { selected, stored, selectedToStored, storedToSelected, itemToJsx, dependencyName, sortFn,
+    addNewDependencyFn }
 ) => {
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -36,6 +38,8 @@ export const DependenciesSelector: React.FC<IDepsSelectorProps> = (
             itemToJsx={item => itemToJsx(item, selectedToStored, true)}
             sortFn={sortFn}
             scrolling
+            placeholderTitle={`You can add ${dependencyName.toLowerCase()}s`}
+            placeholderDescription="Just click the button above."
           />
         </div>
       </div>
@@ -47,6 +51,9 @@ export const DependenciesSelector: React.FC<IDepsSelectorProps> = (
             itemToJsx={item => itemToJsx(item, storedToSelected, false)}
             sortFn={sortFn}
             scrolling
+            placeholderTitle="It's empty"
+            placeholderDescription={`But you can create more ${dependencyName.toLowerCase()}s!`}
+            placeholderFn={addNewDependencyFn}
           />
         </ModalContent>
       </Modal>
