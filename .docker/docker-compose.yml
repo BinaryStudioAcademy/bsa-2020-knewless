@@ -104,6 +104,7 @@ services:
       - push
     ports:
       - '80:80'
+      - '443:443'
     env_file:
       - ~/.env/client.env
     logging:
@@ -114,6 +115,12 @@ services:
     volumes:
       - /data/certs:/etc/nginx/certs
       - /knewless/assets:/knewless/assets
+      - /etc/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - /etc/nginx/dhparam.pem:/etc/nginx/dhparam.pem
+      - /etc/letsencrypt/live/knewless.tk/cert.pem:/etc/letsencrypt/live/knewless.tk/cert.pem
+      - /etc/letsencrypt/live/knewless.tk/chain.pem:/etc/letsencrypt/live/knewless.tk/chain.pem
+      - /etc/letsencrypt/live/knewless.tk/fullchain.pem:/etc/letsencrypt/live/knewless.tk/fullchain.pem
+      - /etc/letsencrypt/live/knewless.tk/privkey.pem:/etc/letsencrypt/live/knewless.tk/privkey.pem
 
 volumes:
   pgdata_api:
