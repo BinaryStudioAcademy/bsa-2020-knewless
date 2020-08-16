@@ -11,7 +11,7 @@
   .dividerMenu
     padding: 0
     margin: 0
-    background: #121421 !important
+    background: #e0e0e0 !important
     height: 1px
     border: 0
 
@@ -36,8 +36,23 @@
       cursor: pointer
       background: #e9e9e9d7
 
-.username
-  padding-top: 1em !important
-  padding-bottom: 1em !important
+.email
   width: 100%
-  border-radius: 0 !important
+  font-weight: 300
+  display: flex !important
+
+  & > div
+    color: #121421
+
+  &_prefix
+    overflow: hidden
+    text-overflow: ellipsis
+
+    &_overflowed
+      position: relative
+      left: -0.21em
+
+.no_overflow
+  max-width: 200px
+  overflow: hidden
+  text-overflow: ellipsis

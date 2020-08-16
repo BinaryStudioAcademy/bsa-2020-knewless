@@ -1,5 +1,5 @@
-import React from 'react';
-import { Label, List } from 'semantic-ui-react';
+import React, { createRef, useEffect, useState } from 'react';
+import { List } from 'semantic-ui-react';
 import styles from './styles.module.sass';
 import { useHistory } from 'react-router-dom';
 import { ACCESS_TOKEN, REFRESH_TOKEN } from 'screens/Authentication/constants';
@@ -26,15 +26,33 @@ const PopupMenu: React.FC<IPopupMenuProps> = ({ user }) => {
     history.push('/');
     history.go();
   };
+  const [prefixOverflow, setPrefixOverflow] = useState<boolean>(false);
+  const prefixRef = createRef<HTMLDivElement>();
+  const emailPrefix = (email: string) => (email.substring(0, email.indexOf('@')));
+  const emailPostfix = (email: string) => (email.substring(email.indexOf('@')));
+  useEffect(() => {
+    const e = prefixRef.current;
+    setPrefixOverflow(e.offsetHeight < e.scrollHeight - 1 || e.offsetWidth < e.scrollWidth);
+  }, [user?.email]);
 
   return (
     <>
-      {user && user.email && <Label content={user.email} className={styles.username} /> }
       <List verticalAlign="middle" className={styles.popupMenu}>
         <List.Item className={styles.itemMenu} onClick={handleOnClickProfile}>
           <List.Icon className={styles.iconMenu} name="user outline" verticalAlign="middle" />
-          <List.Content>
-            <List.Description className={styles.titleMenu} as="a">Profile</List.Description>
+          <List.Content className={styles.no_overflow}>
+            <List.Header>Profile</List.Header>
+            {user && user.email && (
+            <List.Description className={styles.email}>
+              <div
+                ref={prefixRef}
+                className={styles.email_prefix}
+              >
+                {emailPrefix(user.email)}
+              </div>
+              <div className={prefixOverflow ? styles.email_prefix_overflowed : ''}>{emailPostfix(user.email)}</div>
+            </List.Description>
+            )}
           </List.Content>
         </List.Item>
         <List.Item className={styles.itemMenu} onClick={handleOnClickHistory}>
