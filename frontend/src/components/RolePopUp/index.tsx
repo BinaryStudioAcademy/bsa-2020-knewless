@@ -3,7 +3,7 @@ import styles from './styles.module.sass';
 import Logo from '../Header/logo';
 import { useHistory } from 'react-router-dom';
 import { Button } from 'semantic-ui-react';
-import { RoleTypes } from '../../containers/AppRouter/models/IRole';
+import { RoleTypes } from '@containers/AppRouter/models/IRole';
 
 interface IRolePopUpProps {
   setSettingsMode: (role: RoleTypes) => void;

@@ -1,9 +1,8 @@
 import { Button } from 'semantic-ui-react';
 import React from 'react';
 import { IAuthor } from '../../models/IAuthor';
-import noAvatar from 'assets/images/no_avatar.jpg';
 import styles from './styles.module.sass';
-import AvatarWithGradient from '../../../../components/avatar/AvatarWithBackground';
+import AvatarWithGradient from '@components/avatar/AvatarWithBackground';
 
 interface IAuthorInfoBlockProps {
   author: IAuthor;

@@ -1,9 +1,9 @@
 import React from 'react';
 import { Icon, Label, Popup } from 'semantic-ui-react';
 import styles from './styles.module.sass';
-import Notifications from '../../../containers/Notifications';
+import Notifications from '@containers/Notifications';
 import PopupMenu from '../PopupMenu';
-import AvatarWithGradient from '../../avatar/AvatarWithBackground';
+import AvatarWithGradient from '@components/avatar/AvatarWithBackground';
 
 const UserElement = ({ user }) => (
   <div className={styles.profileWrp}>

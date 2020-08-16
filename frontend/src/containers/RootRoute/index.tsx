@@ -1,12 +1,12 @@
 import React from 'react';
-import { IAppState } from '../../models/AppState';
+import { IAppState } from '@models/AppState';
 import { connect } from 'react-redux';
-import PublicRoute from '../../components/PublicRoute';
-import LandingPage from '../../screens/Landing/containers/LandingPage';
+import PublicRoute from '@components/PublicRoute';
+import LandingPage from '@screens/Landing/containers/LandingPage';
 import { IUser } from '../AppRouter/models/IUser';
 import { RoleTypes } from '../AppRouter/models/IRole';
-import MainAuthorPage from '../../screens/AuthorMainPage/containers/MainPage';
-import MainStudentPage from '../../screens/MainPage/containers/MainStudentPage';
+import MainAuthorPage from '@screens/AuthorMainPage/containers/MainPage';
+import MainStudentPage from '@screens/MainPage/containers/MainStudentPage';
 
 interface IRootRouteProps {
   user: IUser;

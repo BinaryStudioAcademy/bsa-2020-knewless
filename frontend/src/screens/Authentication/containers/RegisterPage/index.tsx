@@ -1,13 +1,13 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
-import { IBindingAction } from '../../../../models/Callbacks';
+import { IBindingAction } from '@models/Callbacks';
 import { connect } from 'react-redux';
 
 import styles from '../styles.module.sass';
-import AuthImage from '../../../../components/AuthImage';
-import { IAppState } from '../../../../models/AppState';
-import { registerRoutine } from '../../../Home/routines';
-import RegisterForm from '../../../../components/RegisterForm';
+import AuthImage from '@components/AuthImage';
+import { IAppState } from '@models/AppState';
+import { registerRoutine } from '@screens/Home/routines';
+import RegisterForm from '@components/RegisterForm';
 
 export interface IRegisterRequest {
   email: string;

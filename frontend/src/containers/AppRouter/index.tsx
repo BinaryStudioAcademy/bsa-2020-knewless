@@ -1,15 +1,15 @@
 import React, { useEffect } from 'react';
 import { Router } from 'react-router-dom';
-import { history } from '../../helpers/history.helper';
-import RolePopUp from '../../components/RolePopUp';
+import { history } from '@helpers/history.helper';
+import RolePopUp from '@components/RolePopUp';
 import Routing from '../Routing';
-import { IAppState } from '../../models/AppState';
+import { IAppState } from '@models/AppState';
 import { connect } from 'react-redux';
 import { fetchUserRoutine, setSettingsModeRoutine } from './routines';
-import { IBindingAction, IBindingFunction } from '../../models/Callbacks';
+import { IBindingAction, IBindingFunction } from '@models/Callbacks';
 import { IUser } from './models/IUser';
 import { RoleTypes } from './models/IRole';
-import { ACCESS_TOKEN, REFRESH_TOKEN } from '../../screens/Authentication/constants';
+import { ACCESS_TOKEN, REFRESH_TOKEN } from '@screens/Authentication/constants';
 
 interface IAppRouterProps {
   user: IUser;

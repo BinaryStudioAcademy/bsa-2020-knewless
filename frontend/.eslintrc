@@ -3,10 +3,16 @@
     "extends": [
       "airbnb",
       "eslint:recommended",
-      "plugin:@typescript-eslint/recommended"
+      "plugin:@typescript-eslint/recommended",
+      "plugin:@typescript-eslint/recommended-requiring-type-checking"
     ],
+    "parserOptions": {
+      "project": "./tsconfig.json",
+      "tsConfigRootDir": "."
+    },
     "plugins": [
-      "@typescript-eslint"
+      "@typescript-eslint",
+      "import"
     ],
     "env": {
       "browser": true,
@@ -46,15 +52,16 @@
     },
     "ignorePatterns": [
       "setupProxy.js",
-      "config-overrides.js",
-      "node_modules/"
+      "node_modules/",
+      "craco.config.js"
     ],
     "settings": {
       "import/resolver": {
         "node": {
           "extensions": [".js", ".jsx", ".ts", ".tsx"],
           "moduleDirectory": ["node_modules", "src/"]
-        }
+        },
+        "typescript": {}
       }
     }
   }

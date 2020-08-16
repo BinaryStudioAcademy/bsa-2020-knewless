@@ -1,4 +1,4 @@
-import { IRequestState } from '../../../models/IRequestState';
+import { IRequestState } from '@models/IRequestState';
 import { IDataAuth } from './IDataAuth';
 
 export interface IAuthState {

@@ -1,4 +1,4 @@
-import { callApi } from '../../../helpers/api.helper';
+import { callApi } from '@helpers/api.helper';
 
 export async function getContinueCourses(id: string) {
   console.log(id);

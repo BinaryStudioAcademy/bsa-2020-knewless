@@ -1,24 +1,24 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { fetchLecturesRoutine, saveCourseRoutine } from 'screens/AddCourse/routines';
 import { IBindingCallback1 } from 'models/Callbacks';
 import { ICourse } from '../../models/ICourse';
-import { Input, Dropdown, Button } from 'semantic-ui-react';
-import { Footer } from '../../../../components/Footer';
+import { Button, Dropdown, Input } from 'semantic-ui-react';
+import { Footer } from '@components/Footer';
 import { useHistory } from 'react-router-dom';
 import styles from './styles.module.sass';
 import { levelOptions } from '../../models/options';
 import { compareName, getMinutes } from '../../services/helper.service';
-import { IFilterableItem } from '../../../../components/FilterableList';
+import { IFilterableItem } from '@components/FilterableList';
 import { ILecture } from '../../models/ILecture';
 import { LectureCard } from '../../components/LectureCard';
 import { AddCourseDependenciesSelector } from '../../components/AddCourseDependenciesSelector';
-import { CoursePreview } from '../../../../components/CoursePreview';
+import { CoursePreview } from '@components/CoursePreview';
 import { IAppState } from 'models/AppState';
-import GrayOutlineButton from 'components/buttons/GrayOutlineButton';
-import GradientButton from 'components/buttons/GradientButton';
+import GrayOutlineButton from '@components/buttons/GrayOutlineButton';
+import GradientButton from '@components/buttons/GradientButton';
 import { UploadLectureModal } from '../../components/UploadLectureModal';
-import CourseImage from '../../../../assets/images/default_course_image.jpg';
+import CourseImage from '@images/default_course_image.jpg';
 
 interface IAddCourseProps {
   lectures: ILecture [];

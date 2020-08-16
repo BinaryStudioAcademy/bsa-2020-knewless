@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from 'semantic-ui-react';
-import { InlineLoaderWrapper } from '../../../../components/InlineLoaderWrapper';
+import { InlineLoaderWrapper } from '@components/InlineLoaderWrapper';
 import styles from './styles.module.sass';
 
 export interface IAuthorCardsSegment {

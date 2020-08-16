@@ -3,7 +3,7 @@ import { List } from 'semantic-ui-react';
 import styles from './styles.module.sass';
 import { useHistory } from 'react-router-dom';
 import { ACCESS_TOKEN, REFRESH_TOKEN } from 'screens/Authentication/constants';
-import { IUser } from '../../../containers/AppRouter/models/IUser';
+import { IUser } from '@containers/AppRouter/models/IUser';
 
 export interface IPopupMenuProps {
   user: IUser;

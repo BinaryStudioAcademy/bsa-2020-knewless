@@ -1,4 +1,4 @@
-import { callApi } from '../../helpers/api.helper';
+import { callApi } from '@helpers/api.helper';
 import { RoleTypes } from './models/IRole';
 
 export const getCurrentUser = async () => {

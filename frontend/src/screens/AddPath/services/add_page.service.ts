@@ -1,6 +1,6 @@
 import { callApi } from 'helpers/api.helper';
 import { IPath } from '../models/domain';
-import { history } from '../../../helpers/history.helper';
+import { history } from '@helpers/history.helper';
 
 export async function getCourses() {
   const response = await callApi({

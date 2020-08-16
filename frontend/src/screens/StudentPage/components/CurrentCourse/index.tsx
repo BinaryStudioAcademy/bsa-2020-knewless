@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import styles from './styles.module.sass';
 import { minutesToDuration } from 'components/PathCard/helper';
-import { Label, Progress } from 'semantic-ui-react';
+import { Progress } from 'semantic-ui-react';
 import { StyledRating } from 'components/StyledRating';
 
 export interface ICurrentCourseProps {

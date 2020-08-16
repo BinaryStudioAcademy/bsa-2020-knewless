@@ -20,7 +20,7 @@ import { IStudentSettings } from 'screens/StudentSettings/models/IStudentSetting
 import { IBindingAction, IBindingCallback1 } from 'models/Callbacks';
 import { resetSettingsModeRoutine, setUserRoleRoutine } from 'containers/AppRouter/routines';
 import { RoleTypes } from 'containers/AppRouter/models/IRole';
-import AvatarUploader from '../../../../components/avatar/AvatarUploader';
+import AvatarUploader from '@components/avatar/AvatarUploader';
 
 export interface IStudentSettingsProps {
   studentSettings: IStudentSettings;

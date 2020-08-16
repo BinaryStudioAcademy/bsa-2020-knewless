@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
 import styles from './styles.module.sass';
-import { minutesToDuration } from '../../../../components/PathCard/helper';
+import { minutesToDuration } from '@components/PathCard/helper';
 import { Label } from 'semantic-ui-react';
-import { StyledRating } from '../../../../components/StyledRating';
+import { StyledRating } from '@components/StyledRating';
 
 export interface ICourseCardProps {
   category: string;

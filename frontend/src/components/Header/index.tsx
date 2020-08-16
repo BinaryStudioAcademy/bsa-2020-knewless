@@ -7,8 +7,8 @@ import styles from './styles.module.sass';
 import LoginRegister from './LoginRegister';
 import UserElement from './UserElement';
 import { connect } from 'react-redux';
-import { IAppState } from '../../models/AppState';
-import { IUser } from '../../containers/AppRouter/models/IUser';
+import { IAppState } from '@models/AppState';
+import { IUser } from '@containers/AppRouter/models/IUser';
 
 enum RoutPointer {
   home,

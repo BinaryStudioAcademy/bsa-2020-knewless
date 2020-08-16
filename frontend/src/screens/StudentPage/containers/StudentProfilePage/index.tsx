@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import styles from './styles.module.sass';
 import ViewTotalTime from 'screens/StudentPage/components/ViewTotalTime';
 import { connect } from 'react-redux';
 import { fetchGetStudentProfileRoutine } from '../../routines';
 import { CurrentCourse } from 'screens/StudentPage/components/CurrentCourse';
 import { CompletedCourse } from 'screens/StudentPage/components/CompletedCourse';
-import { Label, List } from 'semantic-ui-react';
+import { List } from 'semantic-ui-react';
 import { IStudentProfile } from 'screens/StudentPage/models/IStudentProfile';
 import { IBindingAction } from 'models/Callbacks';
 

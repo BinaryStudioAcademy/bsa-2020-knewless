@@ -1,5 +1,4 @@
 import { callApi } from 'helpers/api.helper';
-import lectures from '../models/lectures.json';
 import { ICourse } from '../models/ICourse';
 
 export const getLecturesByAuthor = async (id: string) => {

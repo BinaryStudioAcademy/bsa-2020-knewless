@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './styles.module.sass';
 import { INavigationSectionProps, NavigationSection } from '../NavigationSection';
-import LogoWithText from '../../../../components/LogoWithText';
+import LogoWithText from '@components/LogoWithText';
 
 interface IBottomNavigationProps {
   navigations: INavigationSectionProps[];

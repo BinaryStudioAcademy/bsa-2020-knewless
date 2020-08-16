@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './styles.module.sass';
-import watch from 'assets/images/watch.png';
+import watch from '@images/watch.png';
 
 interface IViewTotalTimeProps {
     totalTime: number;

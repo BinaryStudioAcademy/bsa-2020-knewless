@@ -3,7 +3,7 @@ import { IUser } from './models/IUser';
 import * as appRouterService from './service';
 import { fetchUserRoutine, setRoleLoadingRoutine, setSettingsModeRoutine, setUserRoleRoutine } from './routines';
 import { AnyAction } from 'redux';
-import { loginRoutine } from '../../screens/Home/routines';
+import { loginRoutine } from '@screens/Home/routines';
 
 function* getCurrentUser() {
   try {

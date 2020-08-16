@@ -1,4 +1,4 @@
-import { IRequestState } from '../../../models/IRequestState';
+import { IRequestState } from '@models/IRequestState';
 import { IMainPageData } from './IMainStudentPageData';
 
 export interface IMainStudentPageState {

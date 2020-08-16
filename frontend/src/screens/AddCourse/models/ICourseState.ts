@@ -1,4 +1,4 @@
-import { IRequestState } from '../../../models/IRequestState';
+import { IRequestState } from '@models/IRequestState';
 import { ICourseData } from './ICourseData';
 
 export interface ICourseState {

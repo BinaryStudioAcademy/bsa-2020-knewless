@@ -1,7 +1,7 @@
 import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
-import { ACCESS_TOKEN } from '../../screens/Authentication/constants';
-import { IAppState } from '../../models/AppState';
+import { ACCESS_TOKEN } from '@screens/Authentication/constants';
+import { IAppState } from '@models/AppState';
 import { connect } from 'react-redux';
 import { RoleTypes } from '../AppRouter/models/IRole';
 

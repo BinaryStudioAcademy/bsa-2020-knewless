@@ -1,5 +1,5 @@
 import React from 'react';
-import noAvatar from '../../../assets/images/no_avatar.jpg';
+import noAvatar from '@images/no_avatar.jpg';
 import styles from './styles.module.sass';
 
 // eslint-disable-next-line max-len

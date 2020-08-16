@@ -1,6 +1,6 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import styles from './styles.module.sass';
-import { Label, Icon } from 'semantic-ui-react';
+import { Icon, Label } from 'semantic-ui-react';
 
 export interface ILectureCardProps {
   timeMinutes: number;

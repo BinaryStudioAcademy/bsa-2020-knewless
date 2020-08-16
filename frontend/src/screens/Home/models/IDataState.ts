@@ -1,5 +1,5 @@
 import { IData } from './IData';
-import { IRequestState } from '../../../models/IRequestState';
+import { IRequestState } from '@models/IRequestState';
 
 export interface IDataState {
   requests: {

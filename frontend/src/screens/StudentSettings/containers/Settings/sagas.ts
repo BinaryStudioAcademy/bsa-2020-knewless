@@ -1,10 +1,10 @@
-import { takeEvery, put, call, all } from 'redux-saga/effects';
+import { all, call, put, takeEvery } from 'redux-saga/effects';
 import * as settingsService from '../../services/settings.service';
-import { fetchSetStudentSettingsRoutine, fetchGetStudentSettingsRoutine } from '../../routines';
+import { fetchGetStudentSettingsRoutine, fetchSetStudentSettingsRoutine } from '../../routines';
 import { Routine } from 'redux-saga-routines';
 import * as imageService from 'services/image.service';
 import { fetchUserRoutine } from 'containers/AppRouter/routines';
-import { fetchStudentRoutine } from '../../../MainPage/routines';
+import { fetchStudentRoutine } from '@screens/MainPage/routines';
 
 function* getSettings() {
   try {

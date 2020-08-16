@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { IItem } from '../sharedInterface/IItem';
 import { filter } from '../service';
 import Item from '../element';
 import { Input } from 'semantic-ui-react';
-import styles from './styles.module.sass';
 
 interface IPullSetProps {
     items: Array<IItem>;

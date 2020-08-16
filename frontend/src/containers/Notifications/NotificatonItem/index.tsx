@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './styles.module.sass';
-import { timeComparator } from '../../../helpers/date.helper';
+import { timeComparator } from '@helpers/date.helper';
 import { Icon } from 'semantic-ui-react';
 
 const NotificationItem = ({ notification, readNotif }) => (

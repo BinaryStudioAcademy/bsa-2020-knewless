@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { IAuthor } from '../../models/IAuthor';
-import { IAppState } from '../../../../models/AppState';
+import { IAppState } from '@models/AppState';
 import { AuthorPathCard, IAuthorPathCardProps } from '../../components/AuthorPathCard';
 import { AuthorCourseCard, IAuthorCourseCardProps } from '../../components/AuthorCourseCard';
 import { AuthorCardsSegment } from '../../components/AuthorCardsSegment';
 import AuthorInfoBlock from '../../components/AuthorInfoBlock';
-import { fetchAuthorRoutine, fetchAuthorCoursesRoutine, fetchAuthorPathsRoutine } from '../../routines';
+import { fetchAuthorCoursesRoutine, fetchAuthorPathsRoutine, fetchAuthorRoutine } from '../../routines';
 import { useHistory } from 'react-router-dom';
 import { IUser } from 'containers/AppRouter/models/IUser';
 import { IBindingAction } from 'models/Callbacks';

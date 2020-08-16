@@ -1,6 +1,6 @@
 import { authReducer } from '../containers/reducer';
 import { combineReducers } from 'redux';
-import { reducerCreator } from '../../../helpers/reducer.helper';
+import { reducerCreator } from '@helpers/reducer.helper';
 import { loginRoutine, registerRoutine } from '../../Home/routines';
 
 const requests = combineReducers({
