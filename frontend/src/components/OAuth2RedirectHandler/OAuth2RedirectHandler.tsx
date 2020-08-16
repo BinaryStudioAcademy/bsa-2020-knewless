@@ -1,8 +1,8 @@
 import React, { FunctionComponent } from 'react';
-import { ACCESS_TOKEN, REFRESH_TOKEN } from '../../screens/Authentication/constants';
+import { ACCESS_TOKEN, REFRESH_TOKEN } from '@screens/Authentication/constants';
 import { Redirect } from 'react-router-dom';
-import { IBindingAction } from '../../models/Callbacks';
-import { loginRoutine } from '../../screens/Home/routines';
+import { IBindingAction } from '@models/Callbacks';
+import { loginRoutine } from '@screens/Home/routines';
 import { connect } from 'react-redux';
 
 interface IOAuthProps {

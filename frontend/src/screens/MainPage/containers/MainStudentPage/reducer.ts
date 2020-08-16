@@ -4,7 +4,7 @@ import { IMainPageData } from '../../models/IMainStudentPageData';
 import { ICourseCardProps } from 'components/CourseCard';
 import { IPathCardProps } from 'components/PathCard';
 import {
-  fetchContinueCoursesRoutine, fetchPathsRoutine, fetchRecommendedCoursesRoutine
+  fetchContinueCoursesRoutine, fetchPathsRoutine, fetchRecommendedCoursesRoutine, fetchStudentRoutine
 } from '../../routines';
 
 const initialState: IMainPageData = {
@@ -30,6 +30,11 @@ export const mainPageData = (state = initialState, action: Routine<any>) => {
       return {
         ...state,
         paths: [...action.payload]
+      };
+    case fetchStudentRoutine.SUCCESS:
+      return {
+        ...state,
+        student: action.payload
       };
     default:
       return state;

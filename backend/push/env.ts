@@ -8,7 +8,7 @@ export const env = {
         rabbitmqConnectionString: getOsEnv('RABBIT_CONNECTION'),
         rabbitmqExchangeName: getOsEnv('EXCHANGE_NAME'),
         pushQueueName: getOsEnv('PUSH_QUEUE_NAME'),
-        pushRoutingKey: getOsEnv('PUSH_POUTING_KEY'),
+        pushRoutingKey: getOsEnv('PUSH_ROUTING_KEY'),
         tokenSecret: getOsEnv('TOKEN_SECRET'),
         port: getOsEnv('PUSH_APP')
     }

@@ -1,4 +1,4 @@
-import { IFilterableItem } from '../../../components/FilterableList';
+import { IFilterableItem } from '@components/FilterableList';
 import { ILecture } from '../models/ILecture';
 
 export const filter = (element: IFilterableItem, filterValue: string): any => {

@@ -1,20 +1,23 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { IAuthor } from '../../models/IAuthor';
-import { IAppState } from '../../../../models/AppState';
+import { IAppState } from '@models/AppState';
 import { AuthorPathCard, IAuthorPathCardProps } from '../../components/AuthorPathCard';
 import { AuthorCourseCard, IAuthorCourseCardProps } from '../../components/AuthorCourseCard';
 import { AuthorCardsSegment } from '../../components/AuthorCardsSegment';
 import AuthorInfoBlock from '../../components/AuthorInfoBlock';
-import { fetchAuthorCoursesRoutine, fetchAuthorPathsRoutine } from '../../routines';
-import { author as authorMock } from '../../services/author.page.mock';
+import { fetchAuthorCoursesRoutine, fetchAuthorPathsRoutine, fetchAuthorRoutine } from '../../routines';
 import { useHistory } from 'react-router-dom';
+import { IUser } from 'containers/AppRouter/models/IUser';
+import { IBindingAction } from 'models/Callbacks';
 import styles from './styles.module.sass';
 
 export interface IMainAuthorPageProps {
   author: IAuthor;
+  user: IUser;
   authorCourses: IAuthorCourseCardProps[];
   authorPaths: IAuthorPathCardProps[];
+  fetchAuthor: IBindingAction;
   fetchAuthorCourses: (id: string) => void;
   fetchAuthorPaths: (id: string) => void;
   coursesLoading: boolean;
@@ -23,19 +26,24 @@ export interface IMainAuthorPageProps {
 
 const MainAuthorPage: React.FunctionComponent<IMainAuthorPageProps> = ({
   author,
+  user,
   authorCourses,
   authorPaths,
+  fetchAuthor: getAuthor,
   fetchAuthorCourses: getAuthorCourses,
   fetchAuthorPaths: getAuthorPaths,
   coursesLoading,
   pathsLoading
 }) => {
   useEffect(() => {
+    if (user.id) {
+      getAuthor();
+    }
     if (author.id) {
       getAuthorCourses(author.id);
       getAuthorPaths(author.id);
     }
-  }, [author.id]);
+  }, [user.id, author.id]);
   const history = useHistory();
   return (
     <div className={styles.main_page}>
@@ -55,7 +63,7 @@ const MainAuthorPage: React.FunctionComponent<IMainAuthorPageProps> = ({
                   imageSrc={c.imageSrc}
                 />
               </div>
-            )) : <h4>You have no courses yet.</h4>}
+            )) : <div className={styles.no_courses}><p>You have no courses yet.</p></div>}
           </AuthorCardsSegment>
         </div>
         <div className={`${styles.wide_container} ${styles.card_segment} ${styles.space_under}`}>
@@ -74,7 +82,7 @@ const MainAuthorPage: React.FunctionComponent<IMainAuthorPageProps> = ({
                   duration={p.duration}
                 />
               </div>
-            )) : <h4>You have no paths yet.</h4>}
+            )) : <div className={styles.no_courses}><p>You have no paths yet.</p></div>}
           </AuthorCardsSegment>
         </div>
       </div>
@@ -83,9 +91,10 @@ const MainAuthorPage: React.FunctionComponent<IMainAuthorPageProps> = ({
 };
 
 const mapStateToProps = (state: IAppState) => {
-  const { authorCourses, authorPaths } = state.authorMainPage.data;
+  const { author, authorCourses, authorPaths } = state.authorMainPage.data;
   return {
-    author: authorMock,
+    user: state.appRouter.user,
+    author,
     authorCourses,
     authorPaths,
     coursesLoading: state.authorMainPage.requests.authorCoursesRequest.loading,
@@ -94,6 +103,7 @@ const mapStateToProps = (state: IAppState) => {
 };
 
 const mapDispatchToProps = {
+  fetchAuthor: fetchAuthorRoutine,
   fetchAuthorCourses: fetchAuthorCoursesRoutine,
   fetchAuthorPaths: fetchAuthorPathsRoutine
 };

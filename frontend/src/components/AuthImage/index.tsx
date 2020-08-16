@@ -1,6 +1,6 @@
 import React from 'react';
 import { Image } from 'semantic-ui-react';
-import image from '../../assets/images/login.jpg';
+import image from '@images/login.jpg';
 import style from './styles.module.sass';
 
 const AuthImage = () => (

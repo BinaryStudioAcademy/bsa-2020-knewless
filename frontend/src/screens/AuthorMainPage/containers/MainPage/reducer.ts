@@ -1,9 +1,9 @@
 import { Routine } from 'redux-saga-routines';
 import { IAuthor } from '../../models/IAuthor';
-import { ICourseCardProps } from '../../../../components/CourseCard';
-import { IPathCardProps } from '../../../../components/PathCard';
+import { ICourseCardProps } from '@components/CourseCard';
+import { IPathCardProps } from '@components/PathCard';
 import { IAuthorMainPageData } from '../../models/IAuthorMainPageData';
-import { fetchAuthorCoursesRoutine, fetchAuthorPathsRoutine } from '../../routines';
+import { fetchAuthorCoursesRoutine, fetchAuthorPathsRoutine, fetchAuthorRoutine } from '../../routines';
 
 const initialState: IAuthorMainPageData = {
   author: { } as IAuthor,
@@ -13,6 +13,11 @@ const initialState: IAuthorMainPageData = {
 
 export const authorMainPageData = (state = initialState, action: Routine<any>) => {
   switch (action.type) {
+    case fetchAuthorRoutine.SUCCESS:
+      return {
+        ...state,
+        author: action.payload
+      };
     case fetchAuthorCoursesRoutine.SUCCESS:
       return {
         ...state,

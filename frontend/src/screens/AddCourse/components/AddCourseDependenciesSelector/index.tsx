@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styles from './styles.module.sass';
 import { Modal, ModalContent, ModalHeader } from 'semantic-ui-react';
 import { AddCourseFilterableList, IFilterableItem } from '../AddCourseFilterableList';
-import GrayOutlineButton from 'components/buttons/GrayOutlineButton';
+import GrayOutlineButton from '@components/buttons/GrayOutlineButton';
 
 export interface IDepsSelectorProps {
   selected: IFilterableItem[];

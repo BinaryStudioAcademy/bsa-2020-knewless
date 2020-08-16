@@ -29,11 +29,6 @@
     width: 124px
     height: 124px
     position: relative
-    border: double 10px transparent
-    border-radius: 50%
-    background-image: linear-gradient(white, white), linear-gradient(90deg, #0084F8 0%, #FF8576 100%)
-    background-origin: border-box
-    background-clip: content-box, border-box
     margin-right: 1.4rem
     display: flex
   &__img
@@ -91,10 +86,15 @@
     align-items: center
 
 #no_school_btn
-  background: linear-gradient(90deg, #0084F8 0%, #FF8576 100%)
   border-radius: 0
-  max-width: 18rem
+  max-width: 15rem
   position: relative
+  transition: all .6s ease-in-out
+  background: linear-gradient(70.06deg,#FF8576, #0084F8, #FF8576)
+  color: #ffff
+  background-size: 300%
+  &:hover
+    background-position: -50% 0
 
 .btn_text
   font-family: Montserrat, serif
@@ -143,3 +143,18 @@
       flex: 10
       max-width: 100%
       max-height: 100%
+
+@media screen and (max-width: 968px)
+  .school_container
+    display: flex
+    justify-content: center
+    align-items: center
+  .no_school
+    &__container
+      flex-direction: column
+    &__msg
+      margin-right: 0
+    &__btns
+      width: auto
+      align-self: center
+

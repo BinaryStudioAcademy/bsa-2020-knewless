@@ -2,9 +2,12 @@ package com.knewless.core.student.mapper;
 
 import com.knewless.core.author.dto.AuthorSettingsDto;
 import com.knewless.core.author.model.Author;
+import com.knewless.core.student.dto.StudentMainInfoDto;
 import com.knewless.core.student.dto.StudentSettingsDto;
 import com.knewless.core.student.model.Student;
 import com.knewless.core.user.model.User;
+
+import java.util.Optional;
 
 public class StudentMapper {
     public static StudentSettingsDto fromEntity(Student student) {
@@ -55,5 +58,17 @@ public class StudentMapper {
         result.setEducation(student.getEducation());
         result.setYear(student.getYear());
         return result;
+    }
+
+    public static Optional<StudentMainInfoDto> studentToStudentMainInfoDto(Student student) {
+        if (student == null)
+            return Optional.empty();
+        var result = new StudentMainInfoDto();
+        result.setId(student.getId());
+        result.setFirstName(student.getFirstName());
+        result.setLastName(student.getLastName());
+        result.setAvatar(student.getAvatar());
+        result.setJob(student.getJob());
+        return Optional.of(result);
     }
 }

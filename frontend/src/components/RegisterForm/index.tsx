@@ -1,12 +1,12 @@
 import { Button, Divider, Form, Grid, Header, Message, Segment } from 'semantic-ui-react';
-import { FACEBOOK_AUTH_URL, GOOGLE_AUTH_URL } from '../../screens/Authentication/constants';
+import { FACEBOOK_AUTH_URL, GOOGLE_AUTH_URL } from '@screens/Authentication/constants';
 import React, { FunctionComponent, useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { IBindingCallback1 } from '../../models/Callbacks';
+import { IBindingCallback1 } from '@models/Callbacks';
 import LogoWithText from '../LogoWithText';
 
 import styles from './styles.module.sass';
-import { IRegisterRequest } from '../../screens/Authentication/containers/RegisterPage';
+import { IRegisterRequest } from '@screens/Authentication/containers/RegisterPage';
 import GradientButton from '../buttons/GradientButton';
 
 interface IRegisterForm {

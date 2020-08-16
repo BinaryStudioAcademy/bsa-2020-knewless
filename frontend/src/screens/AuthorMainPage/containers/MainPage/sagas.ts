@@ -1,7 +1,20 @@
 import { takeEvery, put, call, all } from 'redux-saga/effects';
 import * as mainPageService from '../../services/author.main.page.service';
-import { fetchAuthorCoursesRoutine, fetchAuthorPathsRoutine } from '../../routines';
+import { fetchAuthorRoutine, fetchAuthorCoursesRoutine, fetchAuthorPathsRoutine } from '../../routines';
 import { AnyAction } from 'redux';
+
+function* getAuthor() {
+  try {
+    const response = yield call(mainPageService.getAuthor);
+    yield put(fetchAuthorRoutine.success(response));
+  } catch (error) {
+    yield put(fetchAuthorRoutine.failure(error?.message));
+  }
+}
+
+function* watchGetAuthor() {
+  yield takeEvery(fetchAuthorRoutine.TRIGGER, getAuthor);
+}
 
 function* getAuthorCourses({ payload }: AnyAction) {
   try {
@@ -31,6 +44,7 @@ function* watchGetAuthorPaths() {
 
 export default function* authorMainPageSagas() {
   yield all([
+    watchGetAuthor(),
     watchGetAuthorCourses(),
     watchGetAuthorPaths()
   ]);

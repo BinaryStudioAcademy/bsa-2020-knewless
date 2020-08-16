@@ -9,3 +9,5 @@ export const fetchRecommendedCoursesRoutine = createRoutine(
   (id: string) => id
 );
 export const fetchPathsRoutine = createRoutine('FETCH_PATHS_DATA');
+
+export const fetchStudentRoutine = createRoutine('FETCH_STUDENT');

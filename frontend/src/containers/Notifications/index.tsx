@@ -1,13 +1,13 @@
 import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { Popup, Dropdown, Label, Icon } from 'semantic-ui-react';
+import { Dropdown, Icon, Label, Popup } from 'semantic-ui-react';
 import NotificationItem from './NotificatonItem';
-import imgMessage from '../../assets/images/giphy.gif';
+import imgMessage from '@images/giphy.gif';
 import {
-  fetchUnreadNotificationsRoutine,
-  readNotificationRoutine,
   deleteAllNotificationsRoutine,
-  readAllNotificationsRoutine
+  fetchUnreadNotificationsRoutine,
+  readAllNotificationsRoutine,
+  readNotificationRoutine
 } from './routines';
 import { connect } from 'react-redux';
 import styles from './styles.module.sass';

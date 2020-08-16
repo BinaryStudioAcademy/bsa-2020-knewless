@@ -8,20 +8,21 @@ import { CardsSegment } from 'components/CardsSegment';
 import { CourseCard, ICourseCardProps } from 'components/CourseCard';
 import { IPathCardProps, PathCard } from 'components/PathCard';
 import {
-  fetchContinueCoursesRoutine, fetchPathsRoutine, fetchRecommendedCoursesRoutine
+  fetchContinueCoursesRoutine, fetchPathsRoutine, fetchRecommendedCoursesRoutine, fetchStudentRoutine
 } from '../../routines';
 import { IAppState } from 'models/AppState';
-
-import { student as studentMock } from '../../services/mock';
+import { IUser } from 'containers/AppRouter/models/IUser';
 
 export interface IMainStudentPageProps {
   student: IStudent;
+  user: IUser;
   paths: IPathCardProps[];
   continueCourses: ICourseCardProps[];
   recommendedCourses: ICourseCardProps[];
   fetchContinueCourses: (id: string) => void;
   fetchRecommendedCourses: (id: string) => void;
   fetchPaths: IBindingAction;
+  fetchStudent: IBindingAction;
   continueCoursesLoading: boolean;
   recommendedCoursesLoading: boolean;
   pathsLoading: boolean;
@@ -29,23 +30,28 @@ export interface IMainStudentPageProps {
 
 const MainStudentPage: React.FunctionComponent<IMainStudentPageProps> = ({
   student,
+  user,
   continueCourses,
   recommendedCourses,
   paths,
   fetchContinueCourses: getStudentCourses,
   fetchRecommendedCourses: getRecommendedCourses,
   fetchPaths: getPaths,
+  fetchStudent: getStudent,
   continueCoursesLoading,
   recommendedCoursesLoading,
   pathsLoading
 }) => {
   useEffect(() => {
+    if (user.id) {
+      getStudent();
+      getStudentCourses(user.id);
+    }
     if (student.id) {
-      getStudentCourses(student.id);
       getRecommendedCourses(student.id);
       getPaths();
     }
-  }, [student.id]);
+  }, [user.id, student.id]);
 
   return (
     <div className={styles.mainPage}>
@@ -59,7 +65,7 @@ const MainStudentPage: React.FunctionComponent<IMainStudentPageProps> = ({
             onViewAllClick={() => (console.log('clicked view all courses'))}
             loading={continueCoursesLoading}
           >
-            {continueCourses.slice(0, 3).map(c => (
+            {(continueCourses && continueCourses.length > 0) ? continueCourses.slice(0, 3).map(c => (
               <div className={styles.course_card}>
                 <CourseCard
                   category={c.category}
@@ -73,7 +79,7 @@ const MainStudentPage: React.FunctionComponent<IMainStudentPageProps> = ({
                   hideButton
                 />
               </div>
-            ))}
+            )) : <div className={styles.no_courses}><p>You have no courses yet.</p></div>}
           </CardsSegment>
         </div>
         <div className={`${styles.wide_container} ${styles.content_row}`}>
@@ -122,9 +128,11 @@ const MainStudentPage: React.FunctionComponent<IMainStudentPageProps> = ({
 };
 
 const mapStateToProps = (state: IAppState) => {
-  const { continueCourses, recommendedCourses, paths } = state.mainPage.mainPageData;
+  const { student, continueCourses, recommendedCourses, paths } = state.mainPage.mainPageData;
+  const { user } = state.appRouter;
   return {
-    student: studentMock,
+    student,
+    user,
     continueCourses,
     recommendedCourses,
     paths,
@@ -137,7 +145,8 @@ const mapStateToProps = (state: IAppState) => {
 const mapDispatchToProps = {
   fetchContinueCourses: fetchContinueCoursesRoutine,
   fetchRecommendedCourses: fetchRecommendedCoursesRoutine,
-  fetchPaths: fetchPathsRoutine
+  fetchPaths: fetchPathsRoutine,
+  fetchStudent: fetchStudentRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainStudentPage);

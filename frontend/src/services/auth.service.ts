@@ -1,5 +1,5 @@
-import { callApi } from '../helpers/api.helper';
-import { ACCESS_TOKEN, REFRESH_TOKEN } from '../screens/Authentication/constants';
+import { callApi } from '@helpers/api.helper';
+import { ACCESS_TOKEN, REFRESH_TOKEN } from '@screens/Authentication/constants';
 
 export const authUser = async ({ endpoint, payload }) => {
   const response = await callApi({

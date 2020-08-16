@@ -1,7 +1,11 @@
 export interface ICourse {
-    image: string;
+    id: string;
     name: string;
-    duration: number;
-    progress: number;
+    category: string;
+    author: string;
+    timeMinutes: number;
+    level: string;
+    image: string;
+    rating: number;
   }
   

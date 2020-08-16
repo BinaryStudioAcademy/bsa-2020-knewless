@@ -1,4 +1,4 @@
-import { callApi } from '../../../helpers/api.helper';
+import { callApi } from '@helpers/api.helper';
 
 export async function getContinueCourses(id: string) {
   console.log(id);
@@ -27,3 +27,10 @@ export async function getPaths() {
   return response.json();
 }
 
+export async function getStudent() {
+  const response = await callApi({
+    endpoint: '/api/student/info/',
+    type: 'GET'
+  });
+  return response.json();
+}

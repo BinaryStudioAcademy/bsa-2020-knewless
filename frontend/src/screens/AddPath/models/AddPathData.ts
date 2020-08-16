@@ -1,5 +1,5 @@
 import { ICourse, ITag } from './domain';
-import { IAppState } from '../../../models/AppState';
+import { IAppState } from '@models/AppState';
 
 export interface IAddPathData {
   tags: ITag[];

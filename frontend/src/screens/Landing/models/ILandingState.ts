@@ -1,5 +1,5 @@
 import { ILandingData } from './ILandingData';
-import { IRequestState } from '../../../models/IRequestState';
+import { IRequestState } from '@models/IRequestState';
 
 export interface ILandingState {
   requests: {

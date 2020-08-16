@@ -15,7 +15,7 @@ const WebSocketNotifications: React.FC<IWebSocketNotificationsProps> = ({
   token,
   newNotification: notify
 }) => {
-  const [socket] = useState(io('/socket.io', { query: { token } }));
+  const [socket] = useState(io({ query: { token } }));
 
   useEffect(() => {
     socket.on('notification', (message: INotification) => {

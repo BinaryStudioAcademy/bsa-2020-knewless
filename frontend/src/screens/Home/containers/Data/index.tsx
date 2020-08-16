@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { fetchDataRoutine } from 'screens/Home/routines';
 import { IBindingAction } from 'models/Callbacks';
 import { IData } from 'screens/Home/models/IData';
-import { IAppState } from '../../../../models/AppState';
+import { IAppState } from '@models/AppState';
 
 export interface IDataProps {
   data: IData;

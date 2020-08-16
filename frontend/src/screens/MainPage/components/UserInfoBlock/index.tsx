@@ -3,13 +3,14 @@ import { Form, Button } from 'semantic-ui-react';
 import goalMenuConfig from './config/goalMenuConfig.json';
 import styles from './styles.module.sass';
 import { IStudent } from 'screens/MainPage/models/IStudent';
+import noAvatar from 'assets/images/no_avatar.jpg';
 
 interface IUserInfoBlockProps {
   student: IStudent;
 }
 
 const UserInfoBlock: React.FunctionComponent<IUserInfoBlockProps> = (
-  { student: { firstName, roleName, avatar } }
+  { student: { firstName, job, avatar } }
 ) => {
   const handleSubmit = (e: FormEvent) => {
     // handle submit
@@ -20,16 +21,16 @@ const UserInfoBlock: React.FunctionComponent<IUserInfoBlockProps> = (
         <div className={styles.userInfo}>
           <div className={styles.userImageWrp}>
             <img
-              src={avatar}
+              src={avatar || noAvatar}
               className={styles.userImage}
               alt="User avatar"
             />
           </div>
           <div className={styles.greeting}>
             <p className={styles.greetingText}>
-              {`Hello, ${firstName}!`}
+              {firstName ? `Hello, ${firstName}!` : ''}
             </p>
-            <p className={styles.studentRole}>{roleName}</p>
+            <p className={styles.studentRole}>{job}</p>
           </div>
         </div>
         <div className={styles.goalInfo}>

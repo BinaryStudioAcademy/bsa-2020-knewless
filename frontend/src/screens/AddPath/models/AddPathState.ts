@@ -1,6 +1,6 @@
 import { IAddPathData } from './AddPathData';
-import { IRequestState } from '../../../models/IRequestState';
-import { IAppState } from '../../../models/AppState';
+import { IRequestState } from '@models/IRequestState';
+import { IAppState } from '@models/AppState';
 
 export interface IAddPathState {
   requests: {

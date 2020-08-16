@@ -1,5 +1,5 @@
 import React, { createRef, useEffect, useState } from 'react';
-import { IPathCardProps, PathCard } from '../../../../components/PathCard';
+import { IPathCardProps, PathCard } from '@components/PathCard';
 import { ITag } from '../../models/domain';
 import { Image, Popup, PopupContent, PopupHeader } from 'semantic-ui-react';
 import styles from './styles.module.sass';

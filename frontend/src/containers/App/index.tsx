@@ -4,13 +4,15 @@ import ReduxToastr from 'react-redux-toastr';
 import { store } from '../../store';
 import AppRouter from '../AppRouter';
 
+import 'styles/toastrStyles.sass';
+
 const App: React.FC = () => (
   <Provider store={store}>
     <ReduxToastr
-      timeOut={4000}
+      timeOut={3000}
       newestOnTop={false}
       preventDuplicates
-      position="top-left"
+      position="top-center"
       getState={state => state.toastr}
       transitionIn="fadeIn"
       transitionOut="fadeOut"

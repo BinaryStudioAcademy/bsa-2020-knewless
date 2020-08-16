@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { fetchLecturesRoutine, saveCourseRoutine } from 'screens/AddCourse/routines';
 import { IBindingCallback1 } from 'models/Callbacks';
@@ -13,7 +13,7 @@ import { IFilterableItem } from '../../../../components/FilterableList';
 import { ILecture } from '../../models/ILecture';
 import { LectureCard } from '../../components/LectureCard';
 import { AddCourseDependenciesSelector } from '../../components/AddCourseDependenciesSelector';
-import { CoursePreview } from '../../../../components/CoursePreview';
+import { CoursePreview } from '@components/CoursePreview';
 import { IAppState } from 'models/AppState';
 import GrayOutlineButton from 'components/buttons/GrayOutlineButton';
 import GradientButton from 'components/buttons/GradientButton';

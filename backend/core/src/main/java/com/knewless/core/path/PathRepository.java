@@ -27,7 +27,7 @@ public interface PathRepository extends JpaRepository<Path, UUID> {
             "FROM p.courses as pc INNER JOIN pc.lectures as pcl), p.updatedAt) " +
             "FROM Path p INNER JOIN p.courses AS c " +
             "WHERE c.author.id = :authorId " +
-            "ORDER BY p.updatedAt")
+            "ORDER BY p.updatedAt DESC")
     List<AuthorPathQueryResult> getPathsByAuthorId(@Param("authorId") UUID authorId);
 
 }

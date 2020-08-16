@@ -8,11 +8,11 @@ import { connect } from 'react-redux';
 import { fetchGetAuthorSettingsRoutine, fetchSetAuthorSettingsRoutine } from '../../routines';
 import { IAuthorSettings } from 'screens/AuthorSettings/models/IAuthorSettings';
 import { IBindingAction, IBindingCallback1 } from 'models/Callbacks';
-import GrayOutlineButton from 'components/buttons/GrayOutlineButton';
-import GradientButton from 'components/buttons/GradientButton';
+import GrayOutlineButton from '@components/buttons/GrayOutlineButton';
+import GradientButton from '@components/buttons/GradientButton';
 import { resetSettingsModeRoutine, setUserRoleRoutine } from 'containers/AppRouter/routines';
 import { RoleTypes } from 'containers/AppRouter/models/IRole';
-import AvatarUploader from '../../../../components/avatar/AvatarUploader';
+import AvatarUploader from '@components/avatar/AvatarUploader';
 
 export interface IAuthorSettingsProps {
   authorSettings: IAuthorSettings;

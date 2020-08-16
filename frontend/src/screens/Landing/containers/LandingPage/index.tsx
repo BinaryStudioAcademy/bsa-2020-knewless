@@ -1,17 +1,17 @@
 import React, { createRef, useEffect, useState } from 'react';
 import { Input, Label, Loader } from 'semantic-ui-react';
 import styles from './styles.module.sass';
-import video from '../../../../assets/videos/landing_video.webm';
-import { CourseCard, ICourseCardProps } from '../../../../components/CourseCard';
-import { IPathCardProps, PathCard } from '../../../../components/PathCard';
+import video from '@videos/landing_video.webm';
+import { CourseCard, ICourseCardProps } from '@components/CourseCard';
+import { IPathCardProps, PathCard } from '@components/PathCard';
 import { BottomNavigation } from '../../components/BottomNavigation';
 import { connect } from 'react-redux';
-import { IBindingAction } from '../../../../models/Callbacks';
+import { IBindingAction } from '@models/Callbacks';
 import { INavigationSectionProps } from '../../components/NavigationSection';
-import { IAppState } from '../../../../models/AppState';
+import { IAppState } from '@models/AppState';
 import { fetchDataRoutine } from 'screens/Landing/routines';
-import { CardsSegment } from '../../../../components/CardsSegment';
-import { Footer } from '../../../../components/Footer';
+import { CardsSegment } from '@components/CardsSegment';
+import { Footer } from '@components/Footer';
 
 // eslint-disable-next-line
 export interface ILandingProps {

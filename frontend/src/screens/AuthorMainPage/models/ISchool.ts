@@ -1,6 +1,6 @@
 export interface ISchool {
   id: string;
   name: string;
-  logoLink: string;
+  logo: string;
   membersCount: string;
 }

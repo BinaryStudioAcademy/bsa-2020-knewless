@@ -2,7 +2,6 @@
     color: white
 
 .authorMainContainer
-    overflow: auto
     color: white
     background: #121421
     display: grid
@@ -32,27 +31,19 @@
 .cardsGridlines
     height: 100%
     display: grid
-    grid-template-columns: 33.1% 0.35% 33.1% 0.35% 33.1%
+    grid-template-columns: calc(100% / 3 + 2px) calc(100% / 3 + 2px) calc(100% / 3 - 4px)
     grid-template-rows: 5% 90% 5%
-    grid-template-areas: " . . . . . " " coursesNumber separatorFirst schoolCard separatorSecond articlesNumber " " . . . . . "
+    grid-template-areas: " . . . " " coursesNumber schoolCard articlesNumber " " . . . "
 
 .cardCoursesNumber-wrapper
     grid-area: coursesNumber
     color: white
-
-.separatorRectangleFirst
-    grid-area: separatorFirst
-
-.separatorRectangleSecond
-    grid-area: separatorSecond
-
-.separatorRectangleFirst, .separatorRectangleSecond
-    background: rgba(255, 255, 255, 0.1)
-    border-radius: 3px
+    border-right: 2px solid rgba(255, 255, 255, 0.1)
 
 .cardSchoolLink-wrapper, .cardSchoolLink-wrapper:hover
     grid-area: schoolCard
     color: white
+    border-right: 2px solid rgba(255, 255, 255, 0.1)
 
 .cardArticlesNumber-wrapper
     grid-area: articlesNumber
@@ -252,6 +243,7 @@
 
 .authorBiography
     padding-top: 7%
+    word-break: break-all
 
 .ui.card.authorArticle-wrapper
     width: 100%
@@ -264,3 +256,11 @@
     transform: none !important
     border-bottom: 2px  solid
     border-bottom-color: #434558
+
+.headerLine-wrapper
+    margin-top: 120px
+    position: fixed
+    width: 100%
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3)
+    z-index: 10000
+

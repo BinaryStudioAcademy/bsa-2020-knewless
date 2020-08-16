@@ -1,7 +1,6 @@
 import React from 'react';
 import styles from './styles.module.sass';
-import { Icon } from 'semantic-ui-react';
-import watch from 'assets/images/watch.png';
+import watch from '@images/watch.png';
 
 interface IViewTotalTimeProps {
     totalTime: number;
@@ -21,7 +20,7 @@ const ViewTotalTime: React.FC<IViewTotalTimeProps> = props => {
   totalTime = days ? totalTime - days * DAY : totalTime;
   const hours = (totalTime > HOUR || days) ? Math.trunc(totalTime / HOUR) : undefined;
   totalTime = hours ? totalTime - hours * HOUR : totalTime;
-  const mins = (totalTime > MIN || hours) ? Math.trunc(totalTime / MIN) : undefined;
+  const mins = (totalTime > MIN || hours) ? Math.trunc(totalTime / MIN) : 0;
   return (
     <div className={styles.timeBlock}>
       <img className={styles.iconTime} src={watch} alt="Clock" />
@@ -45,12 +44,10 @@ const ViewTotalTime: React.FC<IViewTotalTimeProps> = props => {
               <div className={styles.typeText}>h</div>
             </>
           )}
-          {mins && (
-            <>
-              <div className={styles.timeText}>{mins}</div>
-              <div className={styles.typeText}>m</div>
-            </>
-          )}
+          <>
+            <div className={styles.timeText}>{mins}</div>
+            <div className={styles.typeText}>m</div>
+          </>
         </div>
         <div className={styles.textLabel}>
           Total view time

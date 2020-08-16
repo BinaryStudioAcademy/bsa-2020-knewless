@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { IItem } from '../sharedInterface/IItem';
 import { Button } from 'semantic-ui-react';
 

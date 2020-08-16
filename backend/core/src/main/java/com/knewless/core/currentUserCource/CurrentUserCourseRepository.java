@@ -14,4 +14,7 @@ public interface CurrentUserCourseRepository extends JpaRepository<CurrentUserCo
     @Query("SELECT DISTINCT cc.course.id FROM CurrentUserCourse cc WHERE cc.user.id = :id")
     List<UUID> getContinueLearningCoursesId(@Param("id") UUID userId, Pageable pageable);
 
+    @Query("SELECT DISTINCT cc.course.id FROM CurrentUserCourse cc WHERE cc.user.id = :id")
+    List<UUID> getLearningCoursesId(@Param("id") UUID userId);
+
 }

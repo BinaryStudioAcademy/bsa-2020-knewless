@@ -1,7 +1,6 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import styles from './styles.module.sass';
-import { Button, Label, Icon } from 'semantic-ui-react';
-import { timeHandler } from './helper';
+import { Button, Icon, Label } from 'semantic-ui-react';
 
 export interface ICoursePreviewProps {
   image: string;

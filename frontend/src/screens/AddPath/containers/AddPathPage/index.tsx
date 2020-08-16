@@ -1,24 +1,26 @@
 import React, { createRef, useCallback, useEffect, useState } from 'react';
 import styles from './styles.module.sass';
 import { ICourse, IPath, ITag } from '../../models/domain';
-import { Footer } from '../../../../components/Footer';
+import { Footer } from '@components/Footer';
 import { Form, Input, Label, TextArea } from 'semantic-ui-react';
-import { DependenciesSelector } from '../../../../components/DependenciesSelector';
-import { IFilterableItem } from '../../../../components/FilterableList';
+import { DependenciesSelector } from '@components/DependenciesSelector';
+import { IFilterableItem } from '@components/FilterableList';
 import { CourseCard } from '../../components/ClickableCourseCard';
-import { compareName } from '../../../../components/FilterableList/helper';
-import { minutesToDuration } from '../../../../components/PathCard/helper';
+import { compareName } from '@components/FilterableList/helper';
+import { minutesToDuration } from '@components/PathCard/helper';
 import { fetchCoursesRoutine, fetchTagsRoutine, savePathRoutine } from '../../routines';
-import { IAppState } from '../../../../models/AppState';
+import { IAppState } from '@models/AppState';
 import { extractCourses, extractTags } from '../../models/AddPathData';
 import { connect } from 'react-redux';
 import { areCoursesLoading, areTagsLoading, isPathUploading } from '../../models/AddPathState';
-import { InlineLoaderWrapper } from '../../../../components/InlineLoaderWrapper';
-import noImage from 'assets/images/no_image.png';
-import { TagSelector } from '../../../../components/TagSelector';
-import { GradientButton } from '../../../../components/buttons/GradientButton';
-import GrayOutlineButton from '../../../../components/buttons/GrayOutlineButton';
+import { InlineLoaderWrapper } from '@components/InlineLoaderWrapper';
+import noImage from '@images/no_image.png';
+import { TagSelector } from '@components/TagSelector';
+import { GradientButton } from '@components/buttons/GradientButton';
+import GrayOutlineButton from '@components/buttons/GrayOutlineButton';
 import { PathPreview } from '../../components/PathPreview';
+import { history } from '../../../../helpers/history.helper';
+import Confirmation from '../../../../components/Confirmation';
 
 export interface ISavePathProps {
   courses: ICourse[];
@@ -45,6 +47,7 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
   const [storedTags, setStoredTags] = useState([]);
   const [nameValid, setNameValid] = useState(true);
   const [errors, setErrors] = useState({ name: undefined });
+  const [isConfirming, setIsConfirming] = useState(false);
 
   useEffect(() => {
     triggerFetchCourses();
@@ -143,6 +146,11 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
     const minutes = selectedCourses.map(c => c.timeMinutes).reduce((a, b) => a + b, 0);
     return minutesToDuration(minutes);
   }, [selectedCourses]);
+
+  const forwardAddCourse = () => {
+    setIsConfirming(false);
+    history.push('/add_course');
+  };
 
   return (
     <>
@@ -244,6 +252,7 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
                     dependencyName="course"
                     itemToJsx={itemToJsxWithClick}
                     sortFn={compareName}
+                    addNewDependencyFn={() => setIsConfirming(true)}
                   />
                   )}
                 </InlineLoaderWrapper>
@@ -252,6 +261,14 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
           </div>
         </div>
         <Footer />
+        <Confirmation
+          open={isConfirming}
+          title="Data will be reset!"
+          text="Your unsaved changes will be lost."
+          onConfirm={forwardAddCourse}
+          onCancel={() => setIsConfirming(false)}
+          className={styles.confirmation}
+        />
       </div>
     </>
   );

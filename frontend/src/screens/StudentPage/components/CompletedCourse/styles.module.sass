@@ -1,48 +1,113 @@
-@import "src/styles/common"
-@import "src/styles/common_variables"
+$info_padding: 1.5em
+$info_gap: 0.3em
+$name_size: 1.5em
+$first_row_size: 2em
+$meta_size: 1.9em
+$meta_font_size: 0.9em
+$card_height: ($info_gap*2) + ($info_padding*2) + $first_row_size + $meta_size*2
+$image_height: ($info_gap*2) + $first_row_size + $meta_size*2
+$image_width: 10em
+$size_progress: 60px
 
-$size_progress: 70px
-$size_ready: 30px
-.courseCard
-    padding: 20px 5px
-    display: flex
-    flex-direction: row
-    width: 100%
-    cursor: pointer
-    &:hover
+.container
+  padding-left: 20px
+  display: grid
+  grid-template-columns: $image_width 1fr
+  height: $card_height
+  position: relative
+  border-bottom: 1px solid #4a5053
+  &:hover
         background: #1b1c29
+        .progress
+            background: #1b1c29
+.image
+  &_container
+    grid-area: 1 / 1 / span 2 / span 1
+    max-height: $image_height
+    overflow: hidden
+    margin-bottom: $info_padding
+    margin-top: $info_padding
 
-.content
-    margin-left: 10px
-    display: flex
-    flex-direction: column   
+  &_preview
+    max-height: $image_height
+    object-fit: cover
+    position: relative
 
-.category
-    color: #FF8576
-    font-family: Montserrat
-    font-style: normal
-    font-weight: bold
-    font-size: 10px
-    line-height: 12px
-    display: flex
-    align-items: center
+  &_cover
+    position: absolute
+    background: linear-gradient(81.21deg, #3378BD 9.02%, #FF8576 90.81%)
+    opacity: 0
+    z-index: 1
+    height: $image_height
+    width: $image_width
+
+.dependency
+  &__container
+    position: relative
+    grid-area: 1 / 2
+    padding: $info_padding
+    display: grid
+    gap: $info_gap
+    grid-template-rows: $first_row_size $meta_size $meta_size
+    grid-template-columns: 1fr
+
+  &__name
+    grid-area: 1 / 1 / span 1 / span 3
+    font-size: $name_size
+    overflow: hidden
+    word-break: keep-all
+    text-overflow: ellipsis
+    white-space: nowrap
+
+  &__category
+    font-size: $meta_font_size - 0.1em
+    font-family: Montserrat, serif
+    grid-area: 2 / 1 / span 1 / span 4
     text-transform: uppercase
-.title
-    padding-top: 10px
-    color: #fffff
-    font-family: Custom Open Sans
-    font-style: normal
-    font-weight: normal
-    font-size: 20px
-    line-height: 24px
-        
+    color: #F27A54
+
+  &__level
+    text-transform: uppercase
+    grid-area: 1 / 4
+
+
+  &__meta
+    &_container
+      grid-area: 3 / 1
+      display: flex
+      flex-direction: row
+      gap: 1.5em
+      align-items: flex-end
+      overflow: hidden
+      column-width: 1px
+      flex-wrap: wrap
+      & > *
+        font-size: $meta_font_size
+        font-family: Montserrat, serif
+
+    &__time
+      &_duration
+        font-weight: bold
+        color: #F27A54
+      &_unit
+        margin-left: 0.5em
+
+    &__info_row
+      height: 100%
+      white-space: nowrap
+      display: flex
+      align-items: flex-end
+      column-gap: 1.5em
+
 .wrapperProgress
+    margin-left: auto
     background: linear-gradient(52.17deg, #0084F8 9.02%, #FF8576 90.81%)
     border-radius: 50%
     overflow: hidden
     width: $size_progress
     height: $size_progress
     align-self: center
+    grid-row: 2
 .progress
     margin: 2px
     padding: 2px
@@ -55,19 +120,3 @@ $size_ready: 30px
     justify-content: center
     align-items: center
     font-size: 1.15em
-.ready
-    background: #2A2B37
-    border-radius: 50%
-    display: flex
-    justify-content: center
-    justify-items: center
-    align-content: center
-    align-items: center
-    width: $size_ready
-    height: $size_ready
-    text-align: center
-    align-self: center
-    margin-left: auto
-.icon
-    margin: 0 !important
-    padding: 0 !important  
