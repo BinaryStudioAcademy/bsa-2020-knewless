@@ -37,6 +37,16 @@ const getFetchArgs = (args: IFetchArgsData): IFetchArgs => {
     body = JSON.stringify(args.requestData);
   }
 
+  if (args.attachment && args.requestData) {
+    const formData = new FormData();
+    formData.append('image', args.attachment);
+    const blob = new Blob([JSON.stringify(args.requestData)], {
+      type: 'application/json'
+    });
+    formData.append('request', blob);
+    body = formData;
+  }
+
   const token = localStorage.getItem('accessToken');
   if (token) {
     headers.set('Authorization', `Bearer ${token}`);

@@ -4,23 +4,25 @@ import { Modal, ModalContent, Input, Icon, Label } from 'semantic-ui-react';
 import GrayOutlineButton from 'components/buttons/GrayOutlineButton';
 import GradientButton from 'components/buttons/GradientButton';
 import { isVideo } from './helper';
+import { IBindingCallback1 } from 'models/Callbacks';
 import { IAppState } from 'models/AppState';
 import { connect } from 'react-redux';
 import { fetchLecturesRoutine, saveLectureRoutine } from 'screens/AddCourse/routines';
 
 export interface ISaveLecture {
+    video: File;
     name: string;
     description: string;
-    video: File;
 }
 
 interface IUploadLectureModalProps {
     isOpen: boolean;
     openAction: (isOpen: boolean) => void;
+    saveLecture: IBindingCallback1<ISaveLecture>;
   }
 
 export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProps> = ({
-  isOpen = false, openAction
+  isOpen = false, openAction, saveLecture: save
 }) => {
   const [description, setDescription] = useState('');
   const [name, setName] = useState('');
@@ -28,6 +30,7 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
   const [isValidName, setIsValidName] = useState(true);
   const [isValidDescription, setIsValidDescription] = useState(true);
   const [isValidFile, setIsValidFile] = useState(true);
+  const [buttonLoading, setButtonLoading] = useState(false);
   const inputRef = createRef<HTMLInputElement>();
 
   const isSaveble = (isValidName && isValidDescription && isValidFile
@@ -38,13 +41,13 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
       setIsValidName(false);
       return;
     }
-    const pattern = /^[a-zA-Z0-9!@#$&()\\-`.+,"/ ]{10,40}$/;
+    const pattern = /^[a-zA-Z0-9!:;=<>@#$&()\\-`.+,"/ ]{3,40}$/;
     setIsValidName(pattern.test(name));
   };
 
   const validateDescription = () => {
     if (description.length === 0) return;
-    const pattern = /^[a-zA-Z0-9!@#$&()\\-`.+,"/ ]{10,120}$/;
+    const pattern = /^[a-zA-Z0-9!:;=<>@#$&()\\-`.+,"/ ]{10,120}$/;
     setIsValidDescription(pattern.test(description));
   };
 
@@ -73,14 +76,21 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
     validateName();
     setIsValidFile(file);
     if (!isSaveble) return;
+    setButtonLoading(true);
+    save({
+      video: file,
+      name,
+      description
+    });
+    setButtonLoading(false);
     handleClose();
   };
 
-  const warning = `${isValidFile ? '' : 'You should add valid video-file. '} 
+  const warning = `${isValidFile ? '' : 'You should add video with m4v, avi, mpg, mp4, mkv file extension.'} 
     ${isValidName ? ''
-    : 'Name should consists of 2-40 Latin letters, numbers or special characters. '}
+    : 'Name should consists of 3-40 Latin letters, numbers or special characters.'} 
     ${isValidDescription ? ''
-    : 'Description should consists of 10-120 Latin letters, numbers or special characters, or be skipped'}`;
+    : 'Description should consists of 10 or more Latin letters, numbers or special characters, or be skipped.'}`;
 
   return (
     <Modal size="small" open={isOpen} onClose={() => handleClose()}>
@@ -157,11 +167,12 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
           />
           {warning.length > 25
             ? (
-              <Label basic className={styles.warninglabel} promt>{warning}</Label>
+              <Label basic className={styles.warninglabel} promt="true">{warning}</Label>
             ) : '' }
         </div>
         <GradientButton
           onClick={() => handleSave()}
+          loading={buttonLoading}
           className={isSaveble ? styles.save_button : styles.save_button_inactive}
         >
           Save
@@ -179,7 +190,7 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
 
 const mapDispatchToProps = {
   fetchLectures: fetchLecturesRoutine,
-  saveCourse: saveLectureRoutine
+  saveLecture: saveLectureRoutine
 };
 
 export default connect(null, mapDispatchToProps)(UploadLectureModal);

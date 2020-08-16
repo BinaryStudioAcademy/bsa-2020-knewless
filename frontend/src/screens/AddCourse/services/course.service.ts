@@ -27,11 +27,23 @@ export const saveCourse = async (course: ICourse) => {
   return response.json();
 };
 
-export const saveLecture = async (lecture: ISaveLecture) => {
+export const saveLectureVideo = async lecture => {
+  const request = { id: lecture.id };
+  const response = await callApi({
+    type: 'POST',
+    endpoint: 'api/lecture/upload',
+    requestData: request,
+    attachment: lecture.video
+  });
+  return response.json();
+};
+
+export const addLectureToDb = async lecture => {
+  const request = { name: lecture.name, description: lecture.description };
   const response = await callApi({
     type: 'POST',
     endpoint: 'api/lecture',
-    requestData: lecture
+    requestData: request
   });
   return response.json();
 };

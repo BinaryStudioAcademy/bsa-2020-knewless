@@ -3,4 +3,5 @@ export interface ILecture {
   name: string;
   description?: string;
   timeMinutes?: number;
+  link?: string;
 }

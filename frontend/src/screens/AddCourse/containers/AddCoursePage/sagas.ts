@@ -39,8 +39,15 @@ function* watchSaveCourseRequest() {
 
 function* saveLecture(action: Routine<any>) {
   try {
-    const response = yield call(courseService.saveLecture, action.payload);
-    yield put(saveLectureRoutine.success(response));
+    const addEntity = { name: action.payload.name, description: action.payload.description };
+    const responseAdd = yield call(courseService.addLectureToDb, addEntity);
+    yield put(saveLectureRoutine.success(responseAdd));
+    const saveEntity = { id: responseAdd.id, video: action.payload.video };
+    window.onbeforeunload = () => true;
+    const responseSave = yield call(courseService.saveLectureVideo, saveEntity);
+    yield put(saveLectureRoutine.success(responseSave));
+    window.onbeforeunload = undefined;
+    toastr.success(`Lecture ${action.paiload.name} saved!`);
   } catch (error) {
     yield put(saveLectureRoutine.failure(error?.message));
   }

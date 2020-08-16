@@ -23,7 +23,7 @@ $height_btn: 40px
   padding-left: $side_padding
   padding-right: $side_padding
   display: flex
-  margin-top: 4em
+  margin-top: 3em
   flex-direction: row
   width: 100%
 
@@ -130,6 +130,7 @@ $height_btn: 40px
 
 .list_container
   width: 50%
+  max-height: 75vh
 
 .customInput
   height: 100%
@@ -144,6 +145,13 @@ $height_btn: 40px
 \:global(.ui.dropdown).lvldrop span
   color: black
 
+\:global(.ui.dropdown).lvldrop_error
+  background-color: #fff6f6
+  border-color: #e0b4b4
+  color: #9f3a38
+  box-shadow: none
+  span
+    color: black
 
 .buttonGroup
   margin-top: 20px
@@ -207,4 +215,24 @@ $height_btn: 40px
     opacity: 0.5
     cursor: default !important
 
-          
+\:global(.ui.basic.label).warninglabel
+  border-radius: 0
+  background-color: #f7d0d0
+  font-size: 0.7em
+  z-index: 2
+  width: 100%
+  height: auto
+  min-height: 23px
+  text-align: center
+
+\:global(.ui.basic.label).warninglabel_hidden
+  border-radius: 0
+  opacity: 0
+  visibility: hidden
+  height: auto
+  min-height: 23px
+  background-color: #f7d0d0
+  font-size: 0.7em
+  z-index: 2
+  width: 100%
+  text-align: center

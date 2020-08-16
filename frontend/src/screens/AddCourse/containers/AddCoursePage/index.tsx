@@ -3,12 +3,12 @@ import { connect } from 'react-redux';
 import { fetchLecturesRoutine, saveCourseRoutine } from 'screens/AddCourse/routines';
 import { IBindingCallback1 } from 'models/Callbacks';
 import { ICourse } from '../../models/ICourse';
-import { Input, Dropdown, Button } from 'semantic-ui-react';
+import { Input, Dropdown, Button, Label } from 'semantic-ui-react';
 import { Footer } from '../../../../components/Footer';
 import { useHistory } from 'react-router-dom';
 import styles from './styles.module.sass';
 import { levelOptions } from '../../models/options';
-import { compareName, getMinutes } from '../../services/helper.service';
+import { compareName, getMinutes, isImage } from '../../services/helper.service';
 import { IFilterableItem } from '../../../../components/FilterableList';
 import { ILecture } from '../../models/ILecture';
 import { LectureCard } from '../../components/LectureCard';
@@ -32,18 +32,20 @@ interface IAddCourseProps {
 const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
   lectures,
   userId,
-  courseId,
   fetchLectures: getLectures,
   saveCourse: save,
   isLecturesLoaded
 }) => {
   const history = useHistory();
+  const [selected, setSelected] = useState(Array<ILecture>());
   const [pool, setPool] = useState(Array<ILecture>());
   useEffect(() => {
     if (lectures.length === 0 && !isLecturesLoaded) {
       getLectures(userId);
     }
-    setPool([...lectures.sort(compareName)]);
+    const updated = [...lectures.sort(compareName)];
+    const filtered = updated.filter(l => !selected.map(s => s.id).includes(l.id));
+    setPool(filtered);
   }, [lectures, getLectures]);
 
   const handleBack = () => {
@@ -64,8 +66,11 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
     );
   };
 
+  const [isValidName, setIsValidName] = useState(true);
+  const [isValidLevel, setIsValidLevel] = useState(true);
+  const [isValidDescription, setIsValidDescription] = useState(true);
+  const [isValidImage, setIsValidImage] = useState(true);
   const [uploadImage, setUploadImage] = useState(null);
-  const [selected, setSelected] = useState(Array<ILecture>());
   const [description, setDescription] = useState('');
   const [courseName, setCourseName] = useState('');
   const [level, setLevel] = useState('');
@@ -74,9 +79,32 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
   const [modalAddOpen, setModalAddOpen] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
 
+  const validateName = () => {
+    if (courseName.length === 0) {
+      setIsValidName(false);
+      return;
+    }
+    const pattern = /^[a-zA-Z0-9!:;=<>@#$&()\\-`.+,"/ ]{3,40}$/;
+    setIsValidName(pattern.test(courseName));
+  };
+
+  const validateDescription = () => {
+    if (description.length === 0) return;
+    const pattern = /^[a-zA-Z0-9!:;=<>@#$&()\\-`.+,"/ ]{10,120}$/;
+    setIsValidDescription(pattern.test(description));
+  };
+
+  const validateLevel = () => {
+    if (level === '' || level === null || level === undefined) setIsValidLevel(false);
+  };
+
   const handleUploadFile = async file => {
-    setUploadImage(file);
-    setPreviewImage(URL.createObjectURL(file));
+    const thisFile: File = file;
+    if (thisFile && isImage(thisFile.name)) {
+      setUploadImage(thisFile);
+      setPreviewImage(URL.createObjectURL(thisFile));
+      setIsValidImage(true);
+    } else if (thisFile) setIsValidImage(false);
   };
 
   const removeLectureFromPool = useCallback((dependency: IFilterableItem) => {
@@ -89,8 +117,10 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
     setPool(prev => [...prev, dependency as ILecture]);
   }, [pool, selected]);
 
-  const isSaveble = (description !== '' && courseName !== '' && level !== '');
-  const isReleseble = !(!isSaveble || selected.length < 1);
+  const isSaveble = (level !== '' && !isSaved && isValidName && isValidDescription && isValidImage
+    && courseName.length > 1 && (description.length === 0 || description.length > 9));
+
+  const isReleseble = isSaveble && selected.length > 0;
 
   const handleSave = (isRelease: boolean) => {
     if (!isSaveble) return;
@@ -111,6 +141,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
   };
 
   const handleCancel = () => {
+    getLectures(userId);
     setPool([...lectures.sort(compareName)]);
     setSelected(Array<ILecture>());
     setDescription('');
@@ -118,12 +149,33 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
     setLevel('');
   };
 
+  const handleUpdateLectures = () => {
+    getLectures(userId);
+    const updated = [...lectures.sort(compareName)];
+    const filtered = updated.filter(l => !selected.map(s => s.id).includes(l.id));
+    setPool(filtered);
+  };
+
+  const warning = `${isValidImage ? '' : 'You should add image with jpg, png, jpeg file extension, or use default.'} 
+    ${isValidName ? ''
+    : 'Name should consists of 2-40 Latin letters, numbers or special characters.'} 
+    ${isValidDescription ? ''
+    : 'Description should consists of 10 or more Latin letters, numbers or special characters, or be skipped.'}
+    ${isValidLevel ? '' : 'Level field shouldn\'t be empty.'}`;
+
   return (
     <div className={styles.main_container}>
       <div className={styles.main_content}>
         <div className={styles.dividerwrp}>
           <h3 className={styles.title}>New Course</h3>
         </div>
+        <Label
+          basic
+          className={warning.length > 20 ? styles.warninglabel : styles.warninglabel_hidden}
+          promt="true"
+        >
+          {warning}
+        </Label>
         <div className={styles.wide_container}>
           <div className={styles.settingsInput}>
             <div className={styles.top}>
@@ -132,19 +184,23 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
                 <Input
                   fluid
                   type="text"
+                  error={!isValidName}
                   value={courseName}
+                  onBlur={() => validateName()}
                   className={styles.customInput}
-                  onChange={ev => setCourseName(ev.target.value)}
+                  onChange={ev => { setCourseName(ev.target.value); setIsValidName(true); }}
                   inverted
                 />
               </div>
               <div className={styles.dropdown}>
                 <div className={styles.textcontainer}>Complexity level:</div>
                 <Dropdown
+                  error={!isValidLevel}
+                  onBlur={() => validateLevel()}
                   className={styles.lvldrop}
                   clearable
                   value={level}
-                  onChange={(e, data) => setLevel(data.value as string)}
+                  onChange={(e, data) => { setLevel(data.value as string); setIsValidLevel(true); }}
                   search
                   selection
                   options={levelOptions}
@@ -154,9 +210,10 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
             <div className={styles.textcontainer}>Description:</div>
             <div className={styles.textareacontainer}>
               <textarea
-                onChange={ev => setDescription(ev.target.value)}
-                className={styles.customtextarea}
+                className={isValidDescription ? styles.customtextarea : styles.customtextarea_error}
+                onChange={ev => { setDescription(ev.target.value); setIsValidDescription(true); }}
                 value={description}
+                onBlur={() => validateDescription()}
               />
             </div>
             <div className={styles.textcontainer}>Preview:</div>
@@ -203,6 +260,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
               itemToJsx={itemToJsxWithClick}
               sortFn={compareName}
               openModalAction={setModalAddOpen}
+              updateLectures={handleUpdateLectures}
             />
           </div>
         </div>

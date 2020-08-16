@@ -46,7 +46,7 @@ public class CourseService {
 		return result.stream()
 				.map(l -> new ShortLectureDto(
 						l.getId(),
-						l.getName() == null ? "mockName" + (int) (Math.random() * 200) : l.getName(),
+						l.getName() == null ? "mockName" : l.getName(),
 						l.getDescription(),
 						l.getDuration()))
 				.collect(Collectors.toList());

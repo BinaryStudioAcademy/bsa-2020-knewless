@@ -26,3 +26,20 @@ export function getMinutes(lectures: Array<ILecture>): number {
   if (lectures.length === 1) return lectures[0].timeMinutes;
   return lectures.map(l => l.timeMinutes).reduce((t1, t2) => t1 + t2);
 }
+
+export function getExtension(filename: string) {
+  const parts = filename.split('.');
+  return parts[parts.length - 1];
+}
+
+export function isImage(filename: string) {
+  const ext = getExtension(filename);
+  switch (ext.toLowerCase()) {
+    case 'jpg':
+    case 'png':
+    case 'jpeg':
+      return true;
+    default:
+  }
+  return false;
+}

@@ -6,6 +6,7 @@ import com.knewless.core.lecture.homework.model.Homework;
 import com.knewless.core.lecture.lectureComment.model.LectureComment;
 import com.knewless.core.lecture.lectureReaction.model.LectureReaction;
 import com.knewless.core.tag.model.Tag;
+import com.knewless.core.user.model.User;
 import lombok.*;
 
 import javax.persistence.*;
@@ -35,6 +36,10 @@ public class Lecture extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
     @JoinColumn(name = "course_id")
     private Course course;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "homework_id")
