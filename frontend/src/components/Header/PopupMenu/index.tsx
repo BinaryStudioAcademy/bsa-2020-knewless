@@ -1,9 +1,10 @@
-import React, { createRef, useEffect, useState } from 'react';
+import React from 'react';
 import { List } from 'semantic-ui-react';
 import styles from './styles.module.sass';
 import { useHistory } from 'react-router-dom';
 import { ACCESS_TOKEN, REFRESH_TOKEN } from 'screens/Authentication/constants';
 import { IUser } from '@containers/AppRouter/models/IUser';
+import MiddleEllipsis from 'react-middle-ellipsis';
 
 export interface IPopupMenuProps {
   user: IUser;
@@ -26,14 +27,6 @@ const PopupMenu: React.FC<IPopupMenuProps> = ({ user }) => {
     history.push('/');
     history.go();
   };
-  const [prefixOverflow, setPrefixOverflow] = useState<boolean>(false);
-  const prefixRef = createRef<HTMLDivElement>();
-  const emailPrefix = (email: string) => (email.substring(0, email.indexOf('@')));
-  const emailPostfix = (email: string) => (email.substring(email.indexOf('@')));
-  useEffect(() => {
-    const e = prefixRef.current;
-    setPrefixOverflow(e.offsetHeight < e.scrollHeight - 1 || e.offsetWidth < e.scrollWidth);
-  }, [user?.email]);
 
   return (
     <>
@@ -44,13 +37,11 @@ const PopupMenu: React.FC<IPopupMenuProps> = ({ user }) => {
             <List.Header>Profile</List.Header>
             {user && user.email && (
             <List.Description className={styles.email}>
-              <div
-                ref={prefixRef}
-                className={styles.email_prefix}
-              >
-                {emailPrefix(user.email)}
-              </div>
-              <div className={prefixOverflow ? styles.email_prefix_overflowed : ''}>{emailPostfix(user.email)}</div>
+              <MiddleEllipsis>
+                <span className={`ellipseMe ${styles.email_line}`}>
+                  {user.email}
+                </span>
+              </MiddleEllipsis>
             </List.Description>
             )}
           </List.Content>

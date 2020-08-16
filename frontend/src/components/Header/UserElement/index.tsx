@@ -21,7 +21,6 @@ const UserElement = ({ user }) => (
       on="click"
       trigger={<AvatarWithGradient className={styles.avatar} imageSrc={user.avatar} />}
       position="bottom right"
-      flowing
       hoverable
     >
       <Popup.Content>
