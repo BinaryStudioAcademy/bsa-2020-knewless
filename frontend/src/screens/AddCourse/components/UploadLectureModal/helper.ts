@@ -16,4 +16,3 @@ export function isVideo(filename: string) {
   }
   return false;
 }
-

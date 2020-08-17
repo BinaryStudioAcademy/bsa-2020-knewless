@@ -13,13 +13,25 @@ export interface IDepsSelectorProps {
   dependencyName: string;
   sortFn?: (item1: IFilterableItem, item2: IFilterableItem) => number;
   openModalAction: (open: boolean) => void;
+  updateLectures: () => void;
 }
 
 export const AddCourseDependenciesSelector: React.FC<IDepsSelectorProps> = (
-  { selected, stored, selectedToStored, storedToSelected, itemToJsx, dependencyName, sortFn, openModalAction }
+  { selected,
+    stored,
+    selectedToStored,
+    storedToSelected,
+    itemToJsx,
+    dependencyName,
+    sortFn,
+    openModalAction,
+    updateLectures: update }
 ) => {
   const [modalChooseOpen, setModalChooseOpen] = useState(false);
-
+  const handleOpen = () => {
+    update();
+    setModalChooseOpen(true);
+  };
   return (
     <>
       <div className={styles.container}>
@@ -29,7 +41,7 @@ export const AddCourseDependenciesSelector: React.FC<IDepsSelectorProps> = (
             <GrayOutlineButton
               content="Select lectures"
               className={styles.add_button}
-              onClick={() => setModalChooseOpen(true)}
+              onClick={() => handleOpen()}
             />
           </div>
         </div>

@@ -2,5 +2,6 @@ import { ILecture } from '../models/ILecture';
 
 export interface ICourseData {
   lectures: Array<ILecture>,
-  isLecturesLoaded: boolean
+  isLecturesLoaded: boolean,
+  courseId: string
 }

@@ -7,5 +7,6 @@ export interface ICourse {
     lectures?: Array<string>;
     level: string;
     description: string;
-    isReleased: boolean
+    isReleased: boolean;
+    uploadImage?: File;
 }
