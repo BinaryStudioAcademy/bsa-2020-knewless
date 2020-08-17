@@ -15,4 +15,5 @@ public class SaveLectureDto {
     private UUID id;
     private String name;
     private String description;
+    private double duration;
 }

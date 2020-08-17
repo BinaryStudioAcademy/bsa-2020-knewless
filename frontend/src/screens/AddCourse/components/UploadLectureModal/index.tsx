@@ -13,6 +13,7 @@ export interface ISaveLecture {
     video: File;
     name: string;
     description: string;
+    duration: number;
 }
 
 interface IUploadLectureModalProps {
@@ -28,12 +29,13 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
   const [name, setName] = useState('');
   const [file, setFile] = useState(null);
   const [isValidName, setIsValidName] = useState(true);
+  const [duration, setDuration] = useState(0);
   const [isValidDescription, setIsValidDescription] = useState(true);
   const [isValidFile, setIsValidFile] = useState(true);
   const [buttonLoading, setButtonLoading] = useState(false);
   const inputRef = createRef<HTMLInputElement>();
 
-  const isSaveble = (isValidName && isValidDescription && isValidFile
+  const isSaveble = (duration > 0 && isValidName && isValidDescription && isValidFile
     && name.length > 1 && file && (description.length === 0 || description.length > 9));
 
   const validateName = () => {
@@ -55,7 +57,14 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
     validateDescription();
     validateName();
     const thisFile: File = e.target.files[0];
+
     if (thisFile && isVideo(thisFile.name)) {
+      const vid = document.createElement('video');
+      const fileURL = URL.createObjectURL(thisFile);
+      vid.src = fileURL;
+      vid.ondurationchange = function() {
+        setDuration(vid.duration);
+      };
       setFile(thisFile);
       setIsValidFile(true);
     } else if (thisFile) setIsValidFile(false);
@@ -80,15 +89,14 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
     save({
       video: file,
       name,
-      description
+      description,
+      duration
     });
     setButtonLoading(false);
     handleClose();
   };
 
   const warning = `${isValidFile ? '' : 'You should add video with m4v, avi, mpg, mp4, mkv file extension.'} 
-    ${isValidName ? ''
-    : 'Name should consists of 3-40 Latin letters, numbers or special characters.'} 
     ${isValidDescription ? ''
     : 'Description should consists of 10 or more Latin letters, numbers or special characters, or be skipped.'}`;
 
@@ -136,16 +144,28 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
         <div className={styles.topRow}>
           <div className={styles.inputWrapper}>
             <div className={styles.textcontainer}>Name:</div>
-            <Input
-              fluid
-              type="text"
-              error={!isValidName}
-              value={name}
-              className={styles.customInput}
-              onChange={e => { setName(e.currentTarget.value); setIsValidName(true); }}
-              onBlur={() => validateName()}
-              inverted
-            />
+            <div className={styles.input_warning_container}>
+              <Input
+                fluid
+                type="text"
+                error={!isValidName}
+                value={name}
+                className={styles.customInput}
+                onChange={e => { setName(e.currentTarget.value); setIsValidName(true); }}
+                onBlur={() => validateName()}
+                inverted
+              />
+              {isValidName ? '' : 
+                (
+                  <Label
+                    basic
+                    className={styles.warninglabel}
+                    promt="true"
+                  >
+                    Should consists of 3-40 Latin letters, numbers or special characters.
+                  </Label>
+                )}
+            </div>
           </div>
           <div className={styles.rightside}>
             <GrayOutlineButton
@@ -153,7 +173,7 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
               as="label"
             >
               Upload
-              <input ref={inputRef} name="video" type="file" onChange={e => handleAddFile(e)} hidden />
+              <input ref={inputRef} name="video/mp4" type="file" onChange={e => handleAddFile(e)} hidden />
             </GrayOutlineButton>
           </div>
         </div>

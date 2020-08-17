@@ -36,7 +36,7 @@ public class LectureService {
         this.userRepository = userRepository;
     }
 
-    public LectureCreateResponseDto saveLecture(MultipartFile file, String filename, UUID lectureId) {
+    public LectureCreateResponseDto saveLecture(MultipartFile file, String filename, UUID lectureId, double duration) {
         System.out.println("save service");
         String[] concatString = filename.split("\\.");
         String fileType = concatString[concatString.length - 1];
@@ -44,7 +44,8 @@ public class LectureService {
         String relativePath = folderId + "/" + folderId + "-origin." + fileType;
         String videoLink = VIDEO_URL + relativePath;
         Message message = new Message();
-        lectureRepository.setLinkDuration(lectureId, videoLink, 10);
+        int timeInMinutes = (int) (duration/60 + 1);
+        lectureRepository.setLinkDuration(lectureId, videoLink, timeInMinutes);
         message.setEntityId(lectureId);
         message.setFolderId(folderId);
         message.setType(MessageType.REQUEST);

@@ -117,7 +117,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
     setPool(prev => [...prev, dependency as ILecture]);
   }, [pool, selected]);
 
-  const isSaveble = (level !== '' && !isSaved && isValidName && isValidDescription && isValidImage
+  const isSaveble = (level !== '' && !isSaved && isValidName && isValidDescription
     && courseName.length > 1 && (description.length === 0 || description.length > 9));
 
   const isReleseble = isSaveble && selected.length > 0;
@@ -156,55 +156,65 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
     setPool(filtered);
   };
 
-  const warning = `${isValidImage ? '' : 'You should add image with jpg, png, jpeg file extension, or use default.'} 
-    ${isValidName ? ''
-    : 'Name should consists of 2-40 Latin letters, numbers or special characters.'} 
-    ${isValidDescription ? ''
-    : 'Description should consists of 10 or more Latin letters, numbers or special characters, or be skipped.'}
-    ${isValidLevel ? '' : 'Level field shouldn\'t be empty.'}`;
-
   return (
     <div className={styles.main_container}>
       <div className={styles.main_content}>
         <div className={styles.dividerwrp}>
           <h3 className={styles.title}>New Course</h3>
         </div>
-        <Label
-          basic
-          className={warning.length > 20 ? styles.warninglabel : styles.warninglabel_hidden}
-          promt="true"
-        >
-          {warning}
-        </Label>
         <div className={styles.wide_container}>
           <div className={styles.settingsInput}>
             <div className={styles.top}>
               <div className={styles.inputfield}>
                 <div className={styles.textcontainer}>Course Name:</div>
-                <Input
-                  fluid
-                  type="text"
-                  error={!isValidName}
-                  value={courseName}
-                  onBlur={() => validateName()}
-                  className={styles.customInput}
-                  onChange={ev => { setCourseName(ev.target.value); setIsValidName(true); }}
-                  inverted
-                />
+                <div className={styles.input_warning_container}>
+                  <Input
+                    fluid
+                    type="text"
+                    error={!isValidName}
+                    value={courseName}
+                    onBlur={() => validateName()}
+                    className={styles.customInput}
+                    onChange={ev => { setCourseName(ev.target.value); setIsValidName(true); }}
+                    inverted
+                  />
+                  {isValidName ? '' : 
+                  (
+                    <Label
+                      basic
+                      className={styles.warninglabel}
+                      promt="true"
+                    >
+                      Should consists of 2-40 Latin letters, numbers or special characters.
+                    </Label>
+                  )}
+                </div>
               </div>
               <div className={styles.dropdown}>
                 <div className={styles.textcontainer}>Complexity level:</div>
-                <Dropdown
-                  error={!isValidLevel}
-                  onBlur={() => validateLevel()}
-                  className={styles.lvldrop}
-                  clearable
-                  value={level}
-                  onChange={(e, data) => { setLevel(data.value as string); setIsValidLevel(true); }}
-                  search
-                  selection
-                  options={levelOptions}
-                />
+                <div className={styles.dropdown_warning_container}>
+                  <Dropdown
+                    error={!isValidLevel}
+                    onBlur={() => validateLevel()}
+                    className={styles.lvldrop}
+                    clearable
+                    value={level}
+                    onChange={(e, data) => { setLevel(data.value as string); setIsValidLevel(true); }}
+                    search
+                    selection
+                    options={levelOptions}
+                  />
+                  {isValidLevel ? '' : 
+                  (
+                    <Label
+                      basic
+                      className={styles.warninglabel}
+                      promt="true"
+                    >
+                      Shouldn't be empty.
+                    </Label>
+                  )}
+                </div>
               </div>
             </div>
             <div className={styles.textcontainer}>Description:</div>
@@ -215,17 +225,39 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
                 value={description}
                 onBlur={() => validateDescription()}
               />
+              {isValidDescription ? '' : 
+                (
+                  <Label
+                    basic
+                    className={styles.warninglabel}
+                    promt="true"
+                  >
+                    Description should consists of 10 or more Latin letters, numbers or special characters, or be skipped.
+                  </Label>
+                )}
             </div>
             <div className={styles.textcontainer}>Preview:</div>
-            <CoursePreview
-              image={previewImage}
-              lecturesNumber={selected.length}
-              name={courseName}
-              level={level}
-              durationMinutes={getMinutes(selected)}
-              action={handleUploadFile}
-              description={description}
-            />
+              <div className={styles.preview_warning_container}>
+                <CoursePreview
+                  image={previewImage}
+                  lecturesNumber={selected.length}
+                  name={courseName}
+                  level={level}
+                  durationMinutes={getMinutes(selected)}
+                  action={handleUploadFile}
+                  description={description}
+                />
+                {isValidImage ? '' : 
+                (
+                  <Label
+                    basic
+                    className={styles.warninglabel}
+                    promt="true"
+                  >
+                    You should add image with jpg, png, jpeg file extension, or use default.
+                  </Label>
+                )}
+              </div>
             <div className={styles.buttonGroup}>
               <div className={styles.buttonSaveGroup}>
                 <Button
