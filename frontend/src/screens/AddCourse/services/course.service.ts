@@ -27,7 +27,7 @@ export const saveCourse = async (course: ICourse) => {
 };
 
 export const saveLectureVideo = async lecture => {
-  const request = { id: lecture.id };
+  const request = { id: lecture.id, duration: lecture.duration };
   const response = await callApi({
     type: 'POST',
     endpoint: 'api/lecture/upload',

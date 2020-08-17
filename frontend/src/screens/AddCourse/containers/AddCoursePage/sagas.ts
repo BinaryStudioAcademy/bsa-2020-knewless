@@ -42,7 +42,7 @@ function* saveLecture(action: Routine<any>) {
     const addEntity = { name: action.payload.name, description: action.payload.description };
     const responseAdd = yield call(courseService.addLectureToDb, addEntity);
     yield put(saveLectureRoutine.success(responseAdd));
-    const saveEntity = { id: responseAdd.id, video: action.payload.video };
+    const saveEntity = { id: responseAdd.id, duration: action.payload.duration, video: action.payload.video };
     window.onbeforeunload = () => true;
     const responseSave = yield call(courseService.saveLectureVideo, saveEntity);
     yield put(saveLectureRoutine.success(responseSave));
