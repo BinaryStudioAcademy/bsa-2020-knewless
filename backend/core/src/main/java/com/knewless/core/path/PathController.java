@@ -7,6 +7,7 @@ import com.knewless.core.security.oauth.UserPrincipal;
 import com.knewless.core.user.model.CurrentUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,9 +32,9 @@ public class PathController {
         return pathService.getPaths(PageRequest.of(page, size));
     }
 
-    @GetMapping("/author/{authorId}")
-    private ResponseEntity<List<AuthorPathDto>> getAuthorPaths(@PathVariable UUID authorId) {
-        return ResponseEntity.ok(pathService.getPathsByAuthorId(authorId));
+    @GetMapping("/author-latest/{authorId}")
+    private ResponseEntity<List<AuthorPathDto>> getAuthorLatestPaths(@PathVariable UUID authorId) {
+        return ResponseEntity.ok(pathService.getLatestPathsByAuthorId(authorId));
     }
 
 	//	todo: add validators

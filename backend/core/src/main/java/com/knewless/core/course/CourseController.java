@@ -50,9 +50,9 @@ public class CourseController {
         return courseService.getCourseByLectureId(lectureId);
     }
 
-    @GetMapping("/author/{authorId}")
-    private ResponseEntity<List<AuthorCourseDto>> getAuthorCourses(@PathVariable UUID authorId) {
-        return ResponseEntity.ok(courseService.getCoursesByAuthorId(authorId));
+    @GetMapping("/author-latest/{authorId}")
+    public ResponseEntity<List<AuthorCourseDto>> getAuthorLatestCourses(@PathVariable UUID authorId) {
+        return ResponseEntity.ok(courseService.getLatestCoursesByAuthorId(authorId));
     }
 
     @GetMapping("author")
@@ -65,4 +65,5 @@ public class CourseController {
                                       @RequestParam(defaultValue = "10") int size) {
         return courseService.getCourses(PageRequest.of(page, size));
     }
+
 }

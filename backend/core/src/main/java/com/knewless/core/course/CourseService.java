@@ -11,7 +11,6 @@ import com.knewless.core.lecture.homework.HomeworkRepository;
 import com.knewless.core.lecture.homework.model.Homework;
 import com.knewless.core.lecture.model.Lecture;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -111,9 +110,10 @@ public class CourseService {
                 .map(CourseMapper.MAPPER::courseQueryToCourseWithMinutes).collect(Collectors.toList());
     }
 
-    public List<AuthorCourseDto> getCoursesByAuthorId(UUID authorId) {
-        return courseRepository.getCoursesByAuthorId(authorId).stream()
+    public List<AuthorCourseDto> getLatestCoursesByAuthorId(UUID authorId) {
+        return courseRepository.getLatestCoursesByAuthorId(authorId).stream()
                 .map(CourseMapper.MAPPER::authorCourseQueryResultToAuthorCourseDto)
                 .collect(Collectors.toUnmodifiableList());
     }
+
 }

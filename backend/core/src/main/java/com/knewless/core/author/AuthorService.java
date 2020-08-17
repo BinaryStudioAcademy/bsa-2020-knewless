@@ -76,7 +76,7 @@ public class AuthorService {
         var author = this.authorRepository.findOneById(authorId)
                 .orElseThrow(() -> new NotFoundException("Author with id " + authorId + " not found"));
 
-        var courses = this.courseRepository.getCoursesByAuthorId(authorId);
+        var courses = this.courseRepository.getLatestCoursesByAuthorId(authorId);
         var articles = this.articleRepository.getArticleDtoByAuthorId(authorId);
 
         var school = this.authorRepository.getSchoolByAuthorId(authorId);
