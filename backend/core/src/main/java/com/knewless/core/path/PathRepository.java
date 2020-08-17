@@ -25,9 +25,9 @@ public interface PathRepository extends JpaRepository<Path, UUID> {
             "p.imageTag.source, SIZE(p.courses), " +
             "(SELECT COALESCE(SUM(pcl.duration), 0) " +
             "FROM p.courses as pc INNER JOIN pc.lectures as pcl), p.updatedAt) " +
-            "FROM Path p INNER JOIN p.courses AS c " +
-            "WHERE c.author.id = :authorId " +
+            "FROM Path p " +
+            "WHERE p.author.id = :authorId " +
             "ORDER BY p.updatedAt DESC")
-    List<AuthorPathQueryResult> getPathsByAuthorId(@Param("authorId") UUID authorId);
+    List<AuthorPathQueryResult> getLatestPathsByAuthorId(@Param("authorId") UUID authorId);
 
 }

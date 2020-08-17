@@ -23,68 +23,71 @@ import java.util.stream.Collectors;
 @Service
 public class PathService {
 
-	private final PathRepository pathRepository;
-	private final CourseRepository courseRepository;
-	private final TagRepository tagRepository;
-	private final AuthorRepository authorRepository;
+    private final PathRepository pathRepository;
 
-	@Autowired
-	public PathService(PathRepository pathRepository, CourseRepository courseRepository,
-					   TagRepository tagRepository, AuthorRepository authorRepository) {
-		this.pathRepository = pathRepository;
-		this.courseRepository = courseRepository;
-		this.tagRepository = tagRepository;
-		this.authorRepository = authorRepository;
-	}
+    private final CourseRepository courseRepository;
 
-	public List<PathDto> getPaths(Pageable pageable) {
-		var pathInfo = pathRepository.getAllPaths(pageable);
-		return pathInfo.stream().map(p -> {
-			var path = PathMapper.MAPPER.pathQueryResultToPathDto(p);
-			path.setDuration(getDuration(p.getMinutes()));
-			return path;
-		}).collect(Collectors.toList());
-	}
+    private final TagRepository tagRepository;
 
-	public PathDurationDto getDuration(long minutes) {
-		Duration d = Duration.ofMinutes(minutes);
-		var timeWithUnits = new LinkedHashMap<Long, String>();
+    private final AuthorRepository authorRepository;
 
-		timeWithUnits.put(d.toDaysPart() / 7, "Weeks");
-		timeWithUnits.put(d.toDaysPart(), "Days");
-		timeWithUnits.put((long) d.toHoursPart(), "Hours");
+    @Autowired
+    public PathService(PathRepository pathRepository, CourseRepository courseRepository,
+                       TagRepository tagRepository, AuthorRepository authorRepository) {
+        this.pathRepository = pathRepository;
+        this.courseRepository = courseRepository;
+        this.tagRepository = tagRepository;
+        this.authorRepository = authorRepository;
+    }
 
-		for (Map.Entry<Long, String> entry : timeWithUnits.entrySet()) {
-			Long value = entry.getKey();
-			if (value >= 1) {
-				return new PathDurationDto(value, entry.getValue());
-			}
-		}
-		return new PathDurationDto(minutes, "Minutes");
-	}
+    public List<PathDto> getPaths(Pageable pageable) {
+        var pathInfo = pathRepository.getAllPaths(pageable);
+        return pathInfo.stream().map(p -> {
+            var path = PathMapper.MAPPER.pathQueryResultToPathDto(p);
+            path.setDuration(getDuration(p.getMinutes()));
+            return path;
+        }).collect(Collectors.toList());
+    }
 
-	public List<AuthorPathDto> getPathsByAuthorId(UUID authorId) {
-		final var pathInfo = pathRepository.getPathsByAuthorId(authorId);
-		return pathInfo.stream()
-				.map(p -> {
-					var path = PathMapper.MAPPER.authorPathQueryResultToAuthorPathDto(p);
-					path.setDuration(getDuration(p.getMinutes()));
-					return path;
-				})
-				.collect(Collectors.toList());
-	}
+    public PathDurationDto getDuration(long minutes) {
+        Duration d = Duration.ofMinutes(minutes);
+        var timeWithUnits = new LinkedHashMap<Long, String>();
 
-	@Transactional
-	public UUID create(UUID userId, PathCreationRequestDto request) {
-		Path path = new Path();
-		var courses = courseRepository.findAllById(request.getCourses());
-		var tags = tagRepository.findAllById(request.getTags());
-		path.setName(request.getName());
-		path.setDescription(request.getDescription());
-		path.setImageTag(tagRepository.getOne(request.getImageTag()));
-		path.setAuthor(authorRepository.findByUserId(userId).orElseThrow());
-		path.setTags(tags);
-		path.setCourses(courses);
-		return pathRepository.save(path).getId();
-	}
+        timeWithUnits.put(d.toDaysPart() / 7, "Weeks");
+        timeWithUnits.put(d.toDaysPart(), "Days");
+        timeWithUnits.put((long) d.toHoursPart(), "Hours");
+
+        for (Map.Entry<Long, String> entry : timeWithUnits.entrySet()) {
+            Long value = entry.getKey();
+            if (value >= 1) {
+                return new PathDurationDto(value, entry.getValue());
+            }
+        }
+        return new PathDurationDto(minutes, "Minutes");
+    }
+
+    public List<AuthorPathDto> getLatestPathsByAuthorId(UUID authorId) {
+        return pathRepository.getLatestPathsByAuthorId(authorId).stream()
+                .map(p -> {
+                    var path = PathMapper.MAPPER.authorPathQueryResultToAuthorPathDto(p);
+                    path.setDuration(getDuration(p.getMinutes()));
+                    return path;
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public UUID create(UUID userId, PathCreationRequestDto request) {
+        Path path = new Path();
+        var courses = courseRepository.findAllById(request.getCourses());
+        var tags = tagRepository.findAllById(request.getTags());
+        path.setName(request.getName());
+        path.setDescription(request.getDescription());
+        path.setImageTag(tagRepository.getOne(request.getImageTag()));
+        path.setAuthor(authorRepository.findByUserId(userId).orElseThrow());
+        path.setTags(tags);
+        path.setCourses(courses);
+        return pathRepository.save(path).getId();
+    }
+
 }

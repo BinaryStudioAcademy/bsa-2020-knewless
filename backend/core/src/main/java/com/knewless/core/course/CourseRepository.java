@@ -54,5 +54,6 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
             "SIZE(c.reactions), c.updatedAt) " +
             "FROM Course c WHERE c.author.id = :authorId " +
             "ORDER BY c.updatedAt DESC")
-    List<AuthorCourseQueryResult> getCoursesByAuthorId(@Param("authorId") UUID authorId);
+    List<AuthorCourseQueryResult> getLatestCoursesByAuthorId(@Param("authorId") UUID authorId);
+
 }
