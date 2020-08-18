@@ -8,6 +8,7 @@ import { CompletedCourse } from 'screens/StudentPage/components/CompletedCourse'
 import { List } from 'semantic-ui-react';
 import { IStudentProfile } from 'screens/StudentPage/models/IStudentProfile';
 import { IBindingAction } from 'models/Callbacks';
+import { RowPlaceholder } from '@components/placeholder/RowPlaceholder';
 
 interface IStudentProfileProps{
   studentProfile: IStudentProfile;
@@ -37,29 +38,30 @@ const StudentProfile: React.FunctionComponent<IStudentProfileProps> = ({
       </div>
       <div className={styles.detailsProfile}>
         <div className={styles.title}>Currently learning</div>
-        <div className={styles.currentCourse}>
-          <List relaxed>
-            {profile.courses ? profile.courses.map(course => (
-              <List.Item className={styles.course} onClick={handleOnClickCourse}>
-                <CurrentCourse
-                  author={course.author}
-                  category={course.category}
-                  level={course.level}
-                  name={course.name}
-                  timeMinutes={course.timeMinutes}
-                  key={course.id}
-                  previewSrc={course.image}
-                  rating={course.rating}
-                />
-              </List.Item>
-            ))
-              : <div className={styles.empty}>No courses here :(</div>}
-          </List>
-        </div>
+        {profile.courses && profile.courses.length !== 0 ? (
+          <div className={styles.currentCourse}>
+            <List relaxed>
+              {profile.courses.map(course => (
+                <List.Item className={styles.course} onClick={handleOnClickCourse}>
+                  <CurrentCourse
+                    author={course.author}
+                    category={course.category}
+                    level={course.level}
+                    name={course.name}
+                    timeMinutes={course.timeMinutes}
+                    key={course.id}
+                    previewSrc={course.image}
+                    rating={course.rating}
+                  />
+                </List.Item>
+              ))}
+            </List>
+          </div>
+        ) : <RowPlaceholder />}
         <div className={styles.title}>Completed courses</div>
         <div className={styles.completedCourse}>
           <List relaxed>
-            {profile.courses ? profile.courses.map(course => (
+            {profile.courses && profile.courses.length !== 0 ? profile.courses.map(course => (
               <List.Item className={styles.completedCourseItem}>
                 <CompletedCourse
                   author={course.author}
@@ -73,7 +75,7 @@ const StudentProfile: React.FunctionComponent<IStudentProfileProps> = ({
                 />
               </List.Item>
             ))
-              : <div className={styles.empty}>No courses here :(</div>}
+              : <RowPlaceholder webOnLeft={false} />}
           </List>
         </div>
       </div>

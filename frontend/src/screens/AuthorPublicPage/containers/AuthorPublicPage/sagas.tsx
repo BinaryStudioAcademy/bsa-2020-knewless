@@ -8,10 +8,9 @@ function* getAuthorData(action: Routine<any>) {
   try {
     const response = yield call(publicAuthorPageService.getData, action.payload);
     yield put(fetchAuthorDataRoutine.success(response));
-    toastr.success('Data loaded!');
   } catch (error) {
     yield put(fetchAuthorDataRoutine.failure(error?.message));
-    toastr.error('Loading failed!');
+    toastr.error('Oops... there was some problems :(');
   }
 }
 

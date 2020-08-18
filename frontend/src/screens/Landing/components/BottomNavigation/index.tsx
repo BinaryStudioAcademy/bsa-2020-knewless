@@ -16,13 +16,13 @@ export const BottomNavigation: React.FunctionComponent<IBottomNavigationProps> =
         <LogoWithText />
       </div>
       <p className={styles.about}>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-        Nulla faucibus egestas elit, at eleifend elit ornare ut.
+        We, a BSA students&rsquo; team, created this website for you
+        to improve your skills and us to share our knowledge.
       </p>
     </div>
     <div className={styles.navigation}>
       {navigations?.map(section => (
-        <NavigationSection title={section.title} links={section.links} />
+        <NavigationSection key={section.title} title={section.title} links={section.links} />
       ))}
     </div>
   </div>

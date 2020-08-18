@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { Input } from 'semantic-ui-react';
 import { filterByName } from './helper';
 import styles from './styles.module.sass';
-import { ListPlaceholder } from '../ListPlaceholder';
+import { ListPlaceholder } from '../placeholder/ListPlaceholder';
 
 export interface IFilterableListProps {
   items: IFilterableItem[];

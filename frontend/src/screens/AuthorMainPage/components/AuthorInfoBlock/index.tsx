@@ -20,7 +20,7 @@ const AuthorInfoBlock: React.FunctionComponent<IAuthorInfoBlockProps> = (
       <div className={styles.container__centered}>
         <div className={styles.author_info}>
           <div className={styles.author_info__img_wrapper}>
-            <AvatarWithGradient imageSrc={avatar} />
+            <AvatarWithGradient imageSrc={avatar} animated={false} />
           </div>
           <div className={styles.author_info_text}>
             <span className={styles.author_info_text__title}>{`${firstName} ${lastName}`}</span>

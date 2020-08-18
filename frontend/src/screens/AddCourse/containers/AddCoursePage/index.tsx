@@ -3,13 +3,13 @@ import { connect } from 'react-redux';
 import { fetchLecturesRoutine, saveCourseRoutine } from 'screens/AddCourse/routines';
 import { IBindingCallback1, IBindingAction } from 'models/Callbacks';
 import { ICourse } from '../../models/ICourse';
-import { Input, Dropdown, Button, Label } from 'semantic-ui-react';
-import { Footer } from '../../../../components/Footer';
+import { Button, Dropdown, Input, Label } from 'semantic-ui-react';
+import { Footer } from '@components/Footer';
 import { useHistory } from 'react-router-dom';
 import styles from './styles.module.sass';
 import { levelOptions } from '../../models/options';
 import { compareName, getMinutes, isImage } from '../../services/helper.service';
-import { IFilterableItem } from '../../../../components/FilterableList';
+import { IFilterableItem } from '@components/FilterableList';
 import { ILecture } from '../../models/ILecture';
 import { LectureCard } from '../../components/LectureCard';
 import { AddCourseDependenciesSelector } from '../../components/AddCourseDependenciesSelector';
@@ -18,7 +18,7 @@ import { IAppState } from 'models/AppState';
 import GrayOutlineButton from 'components/buttons/GrayOutlineButton';
 import GradientButton from 'components/buttons/GradientButton';
 import UploadLectureModal from '../../components/UploadLectureModal';
-import CourseImage from '../../../../assets/images/default_course_image.jpg';
+import CourseImage from '@images/default_course_image.jpg';
 
 interface IAddCourseProps {
   lectures: ILecture [];
@@ -97,7 +97,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
     if (level === '' || level === null || level === undefined) setIsValidLevel(false);
   };
 
-  const handleUploadFile = async file => {
+  const handleUploadFile = file => {
     const thisFile: File = file;
     if (thisFile && isImage(thisFile.name)) {
       setUploadImage(thisFile);
@@ -171,16 +171,16 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
                     onChange={ev => { setCourseName(ev.target.value); setIsValidName(true); }}
                     inverted
                   />
-                  {isValidName ? '' : 
-                  (
-                    <Label
-                      basic
-                      className={styles.warninglabel}
-                      promt="true"
-                    >
-                      Should consists of 2-40 Latin letters, numbers or special characters.
-                    </Label>
-                  )}
+                  {isValidName ? ''
+                    : (
+                      <Label
+                        basic
+                        className={styles.warninglabel}
+                        promt="true"
+                      >
+                        Should consists of 2-40 Latin letters, numbers or special characters.
+                      </Label>
+                    )}
                 </div>
               </div>
               <div className={styles.dropdown}>
@@ -197,16 +197,16 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
                     selection
                     options={levelOptions}
                   />
-                  {isValidLevel ? '' : 
-                  (
-                    <Label
-                      basic
-                      className={styles.warninglabel}
-                      promt="true"
-                    >
-                      Shouldn't be empty.
-                    </Label>
-                  )}
+                  {isValidLevel ? ''
+                    : (
+                      <Label
+                        basic
+                        className={styles.warninglabel}
+                        promt="true"
+                      >
+                        Shouldn&#39;t be empty.
+                      </Label>
+                    )}
                 </div>
               </div>
             </div>
@@ -218,30 +218,31 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
                 value={description}
                 onBlur={() => validateDescription()}
               />
-              {isValidDescription ? '' : 
-                (
+              {isValidDescription ? ''
+                : (
                   <Label
                     basic
                     className={styles.warninglabel}
                     promt="true"
                   >
-                    Description should consists of 10 or more Latin letters, numbers or special characters, or be skipped.
+                    Description should consists of 10 or more Latin letters,
+                    numbers or special characters, or be skipped.
                   </Label>
                 )}
             </div>
             <div className={styles.textcontainer}>Preview:</div>
-              <div className={styles.preview_warning_container}>
-                <CoursePreview
-                  image={previewImage}
-                  lecturesNumber={selected.length}
-                  name={courseName}
-                  level={level}
-                  durationMinutes={getMinutes(selected)}
-                  action={handleUploadFile}
-                  description={description}
-                />
-                {isValidImage ? '' : 
-                (
+            <div className={styles.preview_warning_container}>
+              <CoursePreview
+                image={previewImage}
+                lecturesNumber={selected.length}
+                name={courseName}
+                level={level}
+                durationMinutes={getMinutes(selected)}
+                action={handleUploadFile}
+                description={description}
+              />
+              {isValidImage ? ''
+                : (
                   <Label
                     basic
                     className={styles.warninglabel}
@@ -250,7 +251,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
                     You should add image with jpg, png, jpeg file extension, or use default.
                   </Label>
                 )}
-              </div>
+            </div>
             <div className={styles.buttonGroup}>
               <div className={styles.buttonSaveGroup}>
                 <Button

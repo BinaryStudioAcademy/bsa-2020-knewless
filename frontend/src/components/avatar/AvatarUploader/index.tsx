@@ -6,14 +6,20 @@ import Avatar, { IAvatarProps } from '../Avatar';
 export interface IAvatarUploader extends IAvatarProps {
   labelText?: string;
   handleFileUpload: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  className?: any;
 }
 
 const AvatarUploader: React.FC<IAvatarUploader> = (
-  { labelText = 'Update', handleFileUpload, imageSrc, round = true, ...props }
+  { labelText = 'Update', handleFileUpload, imageSrc, round = true, className, ...props }
 ) => (
   <div className={styles.container}>
     <div className={styles.back} />
-    <Avatar {...props} imageSrc={imageSrc} round={round} className={styles.avatar} />
+    <Avatar
+      {...props}
+      imageSrc={imageSrc}
+      round={round}
+      className={`${styles.avatar} ${className}`}
+    />
     <Button as="label" className={styles.avatarUploader}>
       {labelText}
       <input name="image" type="file" onChange={handleFileUpload} hidden />
