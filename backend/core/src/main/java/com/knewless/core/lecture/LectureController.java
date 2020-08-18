@@ -38,7 +38,7 @@ public class LectureController {
     public LectureCreateResponseDto saveLecture(@CurrentUser UserPrincipal userPrincipal,
                                                 @RequestParam(value="image", required = true) MultipartFile image,
                                                 @PathVariable UUID id,
-                                                @PathVariable int duration) throws NotFoundException {
+                                                @PathVariable double duration) throws NotFoundException {
         return lectureService.saveLecture(image, image.getOriginalFilename(), id, duration);
     }
     

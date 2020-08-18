@@ -38,8 +38,8 @@ public class LectureService {
         this.userRepository = userRepository;
     }
 
-    public LectureCreateResponseDto saveLecture(MultipartFile file, String filename, UUID lectureId, int duration) throws NotFoundException {
-        lectureRepository.setDuration(lectureId, duration);
+    public LectureCreateResponseDto saveLecture(MultipartFile file, String filename, UUID lectureId, double duration) throws NotFoundException {
+        lectureRepository.setDuration(lectureId, (int) (Math.round(duration)));
         Lecture savedLecture = lectureRepository.findById(lectureId)
                 .orElseThrow(() -> new NotFoundException("Lecture with id " + lectureId + " not found"));
         String folderId = fileManager.saveVideo(file, filename);
@@ -51,7 +51,7 @@ public class LectureService {
         return LectureCreateResponseDto.builder()
                         .id(savedLecture.getId())
                         .description(savedLecture.getDescription())
-                        .timeMinutes(duration)
+                        .timeMinutes((int)(duration/60) + 1)
                         .name(savedLecture.getName())
                         .build();
     }
@@ -86,7 +86,7 @@ public class LectureService {
                         l.getName() == null ? "mockName" : l.getName(),
                         l.getDescription(),
                         l.getSourceUrl(),
-                        l.getDuration()))
+                        l.getDuration()/60 + 1))
                 .collect(Collectors.toList());
     }
 
