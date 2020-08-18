@@ -42,7 +42,7 @@ public class LectureController {
                                           image.getOriginalFilename(),
                                           id);
     }
-
+    
     @PostMapping
     public LectureCreateResponseDto addLectureToDb(@CurrentUser UserPrincipal userPrincipal,
                                                    @RequestBody SaveLectureDto request) {
