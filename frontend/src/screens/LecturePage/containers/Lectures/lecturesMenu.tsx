@@ -18,7 +18,7 @@ const LecturesMenu: React.FunctionComponent<ILecturesMenuProps> = ({
   menuProps, setMenu
 }) => (
   <div style={{ height: '100%' }}>
-    <Menu className="lecturesMenu" pointing secondary>
+    <Menu className="lecturesMenu" pointing secondary widths="2">
       <Menu.Item
         name="Lectures"
         className="lecturesButtonStyle"

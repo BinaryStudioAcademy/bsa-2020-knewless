@@ -1,3 +1,5 @@
+@import "styles/fonts"
+
 .info
     color: white
 
@@ -216,15 +218,43 @@
     display: flex
     align-items: center
     justify-content: left
+    &:hover
+        .textButtonUnfollow
+            background-position: -50% 0
+            
+.unfollow
+    width: 100%
+    height: 100%
+    display: flex
+    margin: auto
+    justify-content: center
+    align-items: center
+    text-align: center    
+    background:#121421
+.textButtonUnfollow
+    padding: 1px
+    font-family: "Custom Open Sans", sans-serif !important
+    font-size: 1.2em !important
+    font-weight: 600 !important
+    background: -webkit-linear-gradient(70.06deg,#FF8576, #0084F8, #FF8576)
+    background-size: 300%
+    -webkit-background-clip: text
+    -webkit-text-fill-color: transparent
+    transition: all .6s ease-in-out
 
+.textButtonFollow
+    padding: 1px
+    font-family: "Custom Open Sans", sans-serif !important
+    font-size: 1.2em !important
+    font-weight: 600 !important
+           
 .ui.button.authorFollowButton
-    font-size: 120%
     height: 4.8vh
     min-height: 4.8vh
     text-align: center
-    padding: 0
+    padding: 2px
     margin-right: 5%
-    min-width: 40%;
+    min-width: 40%
 
 .authorLikeHeartButton
     margin-bottom: 1%

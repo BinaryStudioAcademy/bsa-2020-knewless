@@ -9,10 +9,22 @@ export const getData = async (authorId: string) => {
   return response.json();
 };
 
-export const followAuthor = async (authorId: string) => {
+export const followAuthor = async source => {
   const response = await callApi({
-    endpoint: `api/author/overview/${authorId}/follow`,
-    type: 'GET'
+    endpoint: '/api/subscription/subscribe',
+    type: 'POST',
+    requestData: source
+  });
+
+  return response.json();
+};
+
+export const unfollowAuthor = async source => {
+  console.log(source);
+  const response = await callApi({
+    endpoint: '/api/subscription/unsubscribe',
+    type: 'POST',
+    requestData: source
   });
 
   return response.json();

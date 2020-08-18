@@ -2,7 +2,7 @@ import { takeEvery, put, call, all } from 'redux-saga/effects';
 import { toastr } from 'react-redux-toastr';
 import * as publicAuthorPageService from 'screens/AuthorPublicPage/services/publicAuthorPageService';
 import { Routine } from 'redux-saga-routines';
-import { fetchAuthorDataRoutine, followAuthorRoutine } from 'screens/AuthorPublicPage/routines';
+import { fetchAuthorDataRoutine, followAuthorRoutine, unfollowAuthorRoutine } from 'screens/AuthorPublicPage/routines';
 
 function* getAuthorData(action: Routine<any>) {
   try {
@@ -16,17 +16,31 @@ function* getAuthorData(action: Routine<any>) {
 
 function* followAuthor(action: Routine<any>) {
   try {
-    const response = yield call(publicAuthorPageService.followAuthor, action.payload);
-    console.log('followAuthor saga: ', action.payload);
-    yield put(followAuthorRoutine.success(response));
+    const subscription = {
+      sourceId: action.payload,
+      sourceType: 'AUTHOR'
+    };
+    const response = yield call(publicAuthorPageService.followAuthor, subscription);
   } catch (error) {
     yield put(followAuthorRoutine.failure(error?.message));
   }
 }
 
+function* unfollowAuthor(action: Routine<any>) {
+  try {
+    const subscription = {
+      sourceId: action.payload,
+      sourceType: 'AUTHOR'
+    };
+    const response = yield call(publicAuthorPageService.unfollowAuthor, subscription);
+  } catch (error) {
+    yield put(followAuthorRoutine.failure(error?.message));
+  }
+}
 function* watchGetDataRequest() {
   yield takeEvery(fetchAuthorDataRoutine.TRIGGER, getAuthorData);
   yield takeEvery(followAuthorRoutine.TRIGGER, followAuthor);
+  yield takeEvery(unfollowAuthorRoutine.TRIGGER, unfollowAuthor);
 }
 
 export default function* dataSagas() {

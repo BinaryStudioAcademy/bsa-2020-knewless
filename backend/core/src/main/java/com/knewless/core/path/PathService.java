@@ -1,12 +1,15 @@
 package com.knewless.core.path;
 
 import com.knewless.core.author.AuthorRepository;
+import com.knewless.core.author.model.Author;
 import com.knewless.core.course.CourseRepository;
+import com.knewless.core.db.SourceType;
 import com.knewless.core.path.dto.AuthorPathDto;
 import com.knewless.core.path.dto.PathCreationRequestDto;
 import com.knewless.core.path.dto.PathDto;
 import com.knewless.core.path.dto.PathDurationDto;
 import com.knewless.core.path.model.Path;
+import com.knewless.core.subscription.SubscriptionService;
 import com.knewless.core.tag.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -23,23 +26,24 @@ import java.util.stream.Collectors;
 @Service
 public class PathService {
 
-    private final PathRepository pathRepository;
+	private final PathRepository pathRepository;
+	private final CourseRepository courseRepository;
+	private final TagRepository tagRepository;
+	private final AuthorRepository authorRepository;
+	private final SubscriptionService subscriptionService;
 
-    private final CourseRepository courseRepository;
+	@Autowired
+	public PathService(PathRepository pathRepository, CourseRepository courseRepository,
+					   TagRepository tagRepository, AuthorRepository authorRepository,
+					   SubscriptionService subscriptionService) {
+		this.pathRepository = pathRepository;
+		this.courseRepository = courseRepository;
+		this.tagRepository = tagRepository;
+		this.authorRepository = authorRepository;
+		this.subscriptionService = subscriptionService;
+	}
 
-    private final TagRepository tagRepository;
-
-    private final AuthorRepository authorRepository;
-
-    @Autowired
-    public PathService(PathRepository pathRepository, CourseRepository courseRepository,
-                       TagRepository tagRepository, AuthorRepository authorRepository) {
-        this.pathRepository = pathRepository;
-        this.courseRepository = courseRepository;
-        this.tagRepository = tagRepository;
-        this.authorRepository = authorRepository;
-    }
-
+   
     public List<PathDto> getPaths(Pageable pageable) {
         var pathInfo = pathRepository.getAllPaths(pageable);
         return pathInfo.stream().map(p -> {
@@ -76,18 +80,21 @@ public class PathService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional
-    public UUID create(UUID userId, PathCreationRequestDto request) {
-        Path path = new Path();
-        var courses = courseRepository.findAllById(request.getCourses());
-        var tags = tagRepository.findAllById(request.getTags());
-        path.setName(request.getName());
-        path.setDescription(request.getDescription());
-        path.setImageTag(tagRepository.getOne(request.getImageTag()));
-        path.setAuthor(authorRepository.findByUserId(userId).orElseThrow());
-        path.setTags(tags);
-        path.setCourses(courses);
-        return pathRepository.save(path).getId();
-    }
-
+	@Transactional
+	public UUID create(UUID userId, PathCreationRequestDto request) {
+		Path path = new Path();
+		var courses = courseRepository.findAllById(request.getCourses());
+		var tags = tagRepository.findAllById(request.getTags());
+		path.setName(request.getName());
+		path.setDescription(request.getDescription());
+		path.setImageTag(tagRepository.getOne(request.getImageTag()));
+		path.setAuthor(authorRepository.findByUserId(userId).orElseThrow());
+		path.setTags(tags);
+		path.setCourses(courses);
+		Author author = authorRepository.findByUserId(userId).orElseThrow();
+		String message = author.getFirstName()+" "+ author.getLastName()+" added new path.";
+		var result = pathRepository.save(path).getId();
+		subscriptionService.notifySubscribers(author.getId(), SourceType.AUTHOR, result, SourceType.PATH, message);
+		return result;
+	}
 }

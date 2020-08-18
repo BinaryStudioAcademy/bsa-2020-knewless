@@ -1,7 +1,11 @@
 package com.knewless.core.notification;
 
 import com.knewless.core.notification.dto.NotificationDto;
+import com.knewless.core.notification.mapper.NotificationMapper;
 import com.knewless.core.notification.model.Notification;
+import com.knewless.core.user.UserRepository;
+import com.knewless.core.user.UserService;
+import com.knewless.core.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -16,6 +20,8 @@ public class NotificationService {
 
     @Autowired
     NotificationRepository notificationRepository;
+    @Autowired
+    UserRepository userRepository;
 
     public List<NotificationDto> getUnreadNotifications(UUID userId) {
         return notificationRepository.findUsersUnreadNotifications(userId)
@@ -39,6 +45,12 @@ public class NotificationService {
         return unread;
     }
 
+    public void createNotification(NotificationDto notificationDto, UUID userId) {
+        User user = userRepository.findById(userId).get();
+        notificationRepository.save(NotificationMapper.fromDto(notificationDto, user));
+
+    }
+
     public void deleteNotification(UUID id) {
         notificationRepository.deleteById(id);
     }
@@ -51,7 +63,7 @@ public class NotificationService {
         notificationRepository.readAllUserNotifications(userId);
     }
 
-    public List<NotificationDto> getAll(UUID userId){
+    public List<NotificationDto> getAll(UUID userId) {
         return notificationRepository.findAllByUser(userId).stream()
                 .map(NotificationDto::fromEntity).collect(Collectors.toList());
     }

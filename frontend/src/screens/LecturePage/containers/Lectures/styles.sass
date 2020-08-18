@@ -7,7 +7,7 @@ body, #root
     border-image-slice: 1
 
 .ui.secondary.pointing.menu.lecturesMenu
-    padding-left: 5%
+    padding: 0
     height: 12%
     @include linear-gradient(border-bottom, 1px, 120.32deg, rgb(0, 132, 248) 9.02%, rgb(255, 133, 118) 90.81%)
     @include linear-gradient(border-top, 1px, 120.32deg, rgb(0, 132, 248) 9.02%, rgb(255, 133, 118) 90.81%)
@@ -15,7 +15,6 @@ body, #root
 .ui.secondary.pointing.menu.lecturesMenu .item
     color: white
     height: 100%
-    width: 35%
     display: flex
     justify-content: center
     font-size: 16px
@@ -25,7 +24,7 @@ body, #root
 .ui.secondary.pointing.menu.lecturesMenu  .item:not(active):hover
     color: white
     border-bottom: 4px solid transparent
-    background: black 70%
+    background: #36405acc
 
 .ui.secondary.pointing.menu.lecturesMenu  .active.item, .ui.secondary.pointing.menu .active.item.lecturesButtonStyle
     color: white
@@ -35,7 +34,7 @@ body, #root
     color: white
     @include linear-gradient(border-bottom, 4px, 45.32deg, rgb(0, 132, 248) 9.02%, rgb(255, 133, 118) 90.81%)
 
-.ui.secondary.pointing.menu.lecturesMenu  .item.lecturesButtonStyle
+.item.lecturesButtonStyle
     width: 40%
 
 .mainContainer
@@ -55,7 +54,7 @@ body, #root
     grid-area: courseName
     display: flex
     align-items: center
-    padding-left: 3%
+    padding-left: 6%
     background: #182033
     color: white
     border: 1px white
@@ -67,7 +66,7 @@ body, #root
     display: flex
     align-items: flex-start
     justify-content: left
-    padding-left: 3%
+    padding-left: 6%
     background: #182033
     color: white
 
@@ -118,28 +117,36 @@ body, #root
     border-bottom: 2px  solid
     border-bottom-color: #434558
 
-.ui.card.lecture.active
-    background: #3b3c4d !important
+.ui.card.lecture.active 
+    background: #283658cb !important
 
 .ui.card.lecture:hover, a.ui.card.lecture.active:hover
-    background: black 70% !important
+    background: #36405acc !important
     border-bottom: 2px  solid #434558
-
+.ui.card.lecture:hover  .numberText
+    background: #36405acc !important   
+a.ui.card.lecture.active:hover .numberText
+    background: #36405acc !important
 a.ui.card.lecture.active .cardNumber
-    height: 50%
-    width: 50%
+    height: 55%
+    width: 55%
+    padding: 2px
     border-radius: 50% !important
     background: linear-gradient(60.32deg, rgb(0, 132, 248) 9.02%, rgb(255, 133, 118) 90.81%)
     display: flex
     align-items: center
     justify-content: center
 
+a.ui.card.lecture.active .numberText
+    background: #283658cb !important
+
 .ui.card.lecture:hover .cardNumber
     background: #9a9cb2
 
 .cardNumber
-    height: 50%
-    width: 50%
+    height: 55%
+    width: 55%
+    padding: 2px
     border-radius: 50% !important
     background: #cccccc
     display: flex
@@ -147,14 +154,15 @@ a.ui.card.lecture.active .cardNumber
     justify-content: center
 
 .numberText
-    width: 80%
-    height: 80%
+    width: 100%
+    height: 100%
+    margin: auto
     border-radius: 50% !important
     background: #182033
     display: flex
     align-items: center
     justify-content: center
-    font-size: 21px
+    font-size:  1.15em
     color: #f5f5f5
 
 .numberWrapper
@@ -173,7 +181,7 @@ a.ui.card.lecture.active .cardNumber
     display: flex
     align-items: flex-end
     justify-content: left
-    font-size: 21px
+    font-size: 1.2em
     color: #f5f5f5
     padding-bottom: 0.5% !important
 
@@ -182,6 +190,8 @@ a.ui.card.lecture.active .cardNumber
     height: 100%
     width: 100%
     padding: 0 !important
+    margin-top: 7px !important
+    margin-bottom: 5px !important
     display: flex
     align-items: flex-start
     justify-content: left
