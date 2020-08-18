@@ -2,6 +2,7 @@ package com.knewless.core.lecture;
 
 import com.knewless.core.fileManager.FileManager;
 import com.knewless.core.lecture.Dto.LectureCreateResponseDto;
+import com.knewless.core.lecture.Dto.ShortLectureDto;
 import com.knewless.core.lecture.model.Lecture;
 import com.knewless.core.messaging.Message;
 import com.knewless.core.messaging.MessageSender;
@@ -13,14 +14,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
+import javassist.NotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class LectureService {
-    @Value(value = "${fs.video_url}")
-    private String VIDEO_URL;
 
     private final LectureRepository lectureRepository;
     private final FileManager fileManager;
@@ -36,49 +38,53 @@ public class LectureService {
         this.userRepository = userRepository;
     }
 
-    public LectureCreateResponseDto saveLecture(MultipartFile file, String filename, UUID lectureId, double duration) {
-        System.out.println("save service");
-        String[] concatString = filename.split("\\.");
-        String fileType = concatString[concatString.length - 1];
+    public LectureCreateResponseDto saveLecture(MultipartFile file, String filename, UUID lectureId) throws NotFoundException {
+        Lecture savedLecture = lectureRepository.findById(lectureId)
+                .orElseThrow(() -> new NotFoundException("Lecture with id " + lectureId + " not found"));
         String folderId = fileManager.saveVideo(file, filename);
-        String relativePath = folderId + "/" + folderId + "-origin." + fileType;
-        String videoLink = VIDEO_URL + relativePath;
         Message message = new Message();
-        int timeInMinutes = (int) (duration/60 + 1);
-        lectureRepository.setLinkDuration(lectureId, videoLink, timeInMinutes);
         message.setEntityId(lectureId);
         message.setFolderId(folderId);
         message.setType(MessageType.REQUEST);
         messageSender.sendToFileProcessor(message);
-        Optional<Lecture> optionalSavedLecture = lectureRepository.findById(lectureId);
-        LectureCreateResponseDto result = LectureCreateResponseDto.builder()
-                .link(videoLink)
-                .id(optionalSavedLecture.get().getId())
-                .description(optionalSavedLecture.get().getDescription())
-                .timeMinutes(optionalSavedLecture.get().getDuration())
-                .name(optionalSavedLecture.get().getName())
-                .build();
         return LectureCreateResponseDto.builder()
-                        .link(videoLink)
-                        .id(optionalSavedLecture.get().getId())
-                        .description(optionalSavedLecture.get().getDescription())
-                        .timeMinutes(optionalSavedLecture.get().getDuration())
-                        .name(optionalSavedLecture.get().getName())
+                        .id(savedLecture.getId())
+                        .description(savedLecture.getDescription())
+                        .timeMinutes(savedLecture.getDuration())
+                        .name(savedLecture.getName())
                         .build();
     }
 
-
-    public LectureCreateResponseDto addLectureToDb(String name, String description, UUID userId) {
-        System.out.println("add service");
+    public LectureCreateResponseDto addLectureToDb(String name, String description, UUID userId, double duration) {
         User user = userRepository.getOne(userId);
-        Lecture lecture = Lecture.builder().name(name).description(description).user(user).build();
+        int timeInMinutes = (int) (duration/60 + 1);
+        Lecture lecture = Lecture.builder().name(name).description(description).duration(timeInMinutes).user(user).build();
         Lecture savedLecture = lectureRepository.save(lecture);
         return LectureCreateResponseDto.builder()
                 .id(savedLecture.getId())
-                .link("")
                 .description(savedLecture.getDescription())
-                .timeMinutes(0)
+                .timeMinutes(savedLecture.getDuration())
                 .name(savedLecture.getName())
                 .build();
     }
+
+    public List<ShortLectureDto> getLecturesByUserId(UUID id) {
+        List<Lecture> allLectures = lectureRepository.getLecturesByUserId(id);
+        List<Lecture> result = new ArrayList<>();
+        allLectures.forEach(lec -> {
+            if (!result.stream().map(Lecture::getSourceUrl).collect(Collectors.toList()).contains(lec.getSourceUrl())) {
+                result.add(lec);
+            }
+        });
+
+        return result.stream()
+                .map(l -> new ShortLectureDto(
+                        l.getId(),
+                        l.getName() == null ? "mockName" : l.getName(),
+                        l.getDescription(),
+                        l.getSourceUrl(),
+                        l.getDuration()))
+                .collect(Collectors.toList());
+    }
+
 }

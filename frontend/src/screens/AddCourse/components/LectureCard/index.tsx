@@ -6,12 +6,13 @@ export interface ILectureCardProps {
   timeMinutes: number;
   name: string;
   description: string;
+  lectureURL?: string;
   onClick: () => void;
   isSelected?: boolean;
 }
 
 export const LectureCard: React.FC<ILectureCardProps> = ({
-  timeMinutes, name, onClick, isSelected
+  timeMinutes, name, onClick, isSelected, lectureURL
 }) => (
   <div className={styles.lecture__container}>
     <div className={styles.meta__playIcon}>
@@ -30,7 +31,7 @@ export const LectureCard: React.FC<ILectureCardProps> = ({
       {timeMinutes === 0 ? '' : `${timeMinutes} minutes` }
     </div>
     <div className={styles.meta__actionButton}>
-      {timeMinutes === 0 ? (
+      {lectureURL === null ? (
         <Popup
           trigger={<Icon loading name="spinner" />}
           content="Video is currently being processed on the server..."

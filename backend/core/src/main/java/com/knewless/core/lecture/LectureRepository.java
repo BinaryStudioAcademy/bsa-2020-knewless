@@ -15,7 +15,7 @@ import java.util.UUID;
 public interface LectureRepository extends JpaRepository<Lecture, UUID> {
 
 
-@Query("SELECT new com.knewless.core.lecture.Dto.ShortLectureDto(l.id, l.name, l.description, l.duration) FROM Lecture l " +
+@Query("SELECT new com.knewless.core.lecture.Dto.ShortLectureDto(l.id, l.name, l.description, l.sourceUrl, l.duration) FROM Lecture l " +
         "WHERE l.user.id = :id")
 List<ShortLectureDto> getShortLecturesByUserId(@Param("id")UUID id);
 
@@ -23,10 +23,4 @@ List<ShortLectureDto> getShortLecturesByUserId(@Param("id")UUID id);
         "WHERE l.user.id = :id")
 List<Lecture> getLecturesByUserId(@Param("id")UUID id);
 
-@Transactional
-@Modifying
-@Query("UPDATE Lecture l " +
-        "SET l.sourceUrl = :link, l.duration = :duration " +
-        "WHERE l.id = :id")
-void setLinkDuration(@Param("id")UUID id, @Param("link")String link, @Param("duration")int duration);
 }

@@ -7,7 +7,7 @@ import { Routine } from 'redux-saga-routines';
 
 function* getLectures(action: Routine<any>) {
   try {
-    const response = yield call(courseService.getLecturesByAuthor, action.payload);
+    const response = yield call(courseService.getLecturesByUser);
     yield put(fetchLecturesRoutine.success(response));
   } catch (error) {
     yield put(fetchLecturesRoutine.failure(error?.message));
@@ -39,7 +39,11 @@ function* watchSaveCourseRequest() {
 
 function* saveLecture(action: Routine<any>) {
   try {
-    const addEntity = { name: action.payload.name, description: action.payload.description };
+    const addEntity = { 
+      name: action.payload.name,
+      description: action.payload.description,
+      duration: action.payload.duration 
+    };
     const responseAdd = yield call(courseService.addLectureToDb, addEntity);
     yield put(saveLectureRoutine.success(responseAdd));
     const saveEntity = { id: responseAdd.id, duration: action.payload.duration, video: action.payload.video };
