@@ -55,7 +55,7 @@ const AuthorSettings: React.FunctionComponent<IAuthorSettingsProps> = ({
     setTwitter(settings.twitter);
     setBiography(settings.biography);
   }, [settings]);
-  const handleUploadFile = async file => {
+  const handleUploadFile = file => {
     setUploadImage(file);
     setAvatar(URL.createObjectURL(file));
   };
@@ -85,7 +85,11 @@ const AuthorSettings: React.FunctionComponent<IAuthorSettingsProps> = ({
       <div id={styles.settingsTitle}>Account Settings</div>
       <div className={styles.wrapperAvatar}>
         <div className={styles.avatar}>
-          <AvatarUploader handleFileUpload={e => handleUploadFile(e.target.files[0])} imageSrc={avatar} />
+          <AvatarUploader
+            className={styles.uploader}
+            handleFileUpload={e => handleUploadFile(e.target.files[0])}
+            imageSrc={avatar}
+          />
         </div>
       </div>
       <Form className={styles.formSettings}>

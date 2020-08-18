@@ -65,7 +65,7 @@ const Notifications = ({ user, notifications, fetchNotifications: fetch,
         ) : (
           <div className={styles.empty}>
             <img src={imgMessage} alt="Waiting..." />
-            <h3 className={styles.emptyTitle}>It&apos;s quiet in here...</h3>
+            <h3 className={styles.emptyTitle}>It&apos;s empty here...</h3>
             <p>Check back later for some awesome stuff</p>
           </div>
         )}

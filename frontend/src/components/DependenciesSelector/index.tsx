@@ -38,7 +38,7 @@ export const DependenciesSelector: React.FC<IDepsSelectorProps> = (
             itemToJsx={item => itemToJsx(item, selectedToStored, true)}
             sortFn={sortFn}
             scrolling
-            placeholderTitle={`You can add ${dependencyName.toLowerCase()}s`}
+            placeholderTitle={`You can add more ${dependencyName.toLowerCase()}s`}
             placeholderDescription="Just click the button above."
           />
         </div>
@@ -51,7 +51,7 @@ export const DependenciesSelector: React.FC<IDepsSelectorProps> = (
             itemToJsx={item => itemToJsx(item, storedToSelected, false)}
             sortFn={sortFn}
             scrolling
-            placeholderTitle="It's empty"
+            placeholderTitle="It's empty here"
             placeholderDescription={`But you can create more ${dependencyName.toLowerCase()}s!`}
             placeholderFn={addNewDependencyFn}
           />

@@ -1,5 +1,5 @@
 import React from 'react';
-import GrayOutlineButton from '../buttons/GrayOutlineButton';
+import GrayOutlineButton from '@components/buttons/GrayOutlineButton';
 import styles from './styles.module.sass';
 import placeholderImage from '@images/empty_list.png';
 

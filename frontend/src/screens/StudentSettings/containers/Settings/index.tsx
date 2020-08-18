@@ -78,7 +78,7 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
     setEducation(settings.education);
     setYear(settings.year);
   }, [settings]);
-  const handleUploadFile = async file => {
+  const handleUploadFile = file => {
     setUploadImage(file);
     setAvatar(URL.createObjectURL(file));
   };
@@ -115,7 +115,11 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
       <div id={styles.settingsTitle}>Account Settings</div>
       <div className={styles.wrapperAvatar}>
         <div className={styles.avatar}>
-          <AvatarUploader handleFileUpload={e => handleUploadFile(e.target.files[0])} imageSrc={avatar} />
+          <AvatarUploader
+            className={styles.uploader}
+            handleFileUpload={e => handleUploadFile(e.target.files[0])}
+            imageSrc={avatar}
+          />
         </div>
       </div>
       <Form className={styles.formSettings}>

@@ -3,6 +3,7 @@ import styles from './styles.module.sass';
 import { Icon, SemanticICONS } from 'semantic-ui-react';
 
 export interface INavLink {
+  id?: string;
   text: string;
   url: string;
   icon?: SemanticICONS;
@@ -20,7 +21,7 @@ export const NavigationSection: React.FunctionComponent<INavigationSectionProps>
     <h5 className={styles.title}>{title}</h5>
     <div className={`${styles.link_list} ${styles.section}`}>
       {links.map(link => (
-        <div className={styles.link_line}>
+        <div key={link.id} className={styles.link_line}>
           <a href={link.url}>
             { link.icon && <Icon name={link.icon} className={styles.icon} /> }
             {link.text}

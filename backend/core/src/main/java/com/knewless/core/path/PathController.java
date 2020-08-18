@@ -7,10 +7,10 @@ import com.knewless.core.security.oauth.UserPrincipal;
 import com.knewless.core.user.model.CurrentUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,9 +37,8 @@ public class PathController {
         return ResponseEntity.ok(pathService.getLatestPathsByAuthorId(authorId));
     }
 
-	//	todo: add validators
 	@PutMapping("create")
-	public UUID create(@RequestBody PathCreationRequestDto requestDto, @CurrentUser UserPrincipal userPrincipal) {
+	public UUID create(@Valid @RequestBody PathCreationRequestDto requestDto, @CurrentUser UserPrincipal userPrincipal) {
 		return pathService.create(userPrincipal.getId(), requestDto);
 	}
 }
