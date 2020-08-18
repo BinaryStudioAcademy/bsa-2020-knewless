@@ -19,8 +19,8 @@ import { TagSelector } from '@components/TagSelector';
 import { GradientButton } from '@components/buttons/GradientButton';
 import GrayOutlineButton from '@components/buttons/GrayOutlineButton';
 import { PathPreview } from '../../components/PathPreview';
-import { history } from '../../../../helpers/history.helper';
-import Confirmation from '../../../../components/Confirmation';
+import { history } from '@helpers/history.helper';
+import Confirmation from '@components/Confirmation';
 
 export interface ISavePathProps {
   courses: ICourse[];

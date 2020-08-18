@@ -95,7 +95,7 @@ export const LandingPage: React.FunctionComponent<ILandingProps> = ({
             loading={loading}
           >
             {loading || courses.map(c => (
-              <div className={styles.course_card}>
+              <div key={c.id} className={styles.course_card}>
                 <CourseCard
                   name={c.name}
                   category={c.category}
@@ -119,6 +119,7 @@ export const LandingPage: React.FunctionComponent<ILandingProps> = ({
             {loading || paths.map(p => (
               <div className={styles.path_card}>
                 <PathCard
+                  key={p.id}
                   name={p.name}
                   logoSrc={p.logoSrc}
                   courses={p.courses}

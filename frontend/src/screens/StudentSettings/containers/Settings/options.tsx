@@ -25,7 +25,7 @@ for (let i = 1950; i <= 2020; i += 1) {
 }
 
 export const levelOptions = [
-  { key: 0, value: 'Begginer', text: 'Begginer' },
+  { key: 0, value: 'Beginner', text: 'Beginner' },
   { key: 1, value: 'Intermediate', text: 'Intermediate' },
   { key: 2, value: 'Advanced', text: 'Advanced' }
 ];
@@ -53,6 +53,6 @@ export const employmentOptions = [
 export const educationOptions = [
   { key: 0, value: 'Middle School', text: 'Middle School' },
   { key: 1, value: 'High School', text: 'High School' },
-  { key: 2, value: 'Barchelor`s degree', text: 'Barchelor`s degree' },
+  { key: 2, value: 'Bachelor`s degree', text: 'Bachelor`s degree' },
   { key: 3, value: 'Master`s degree', text: 'Master`s degree' }
 ];

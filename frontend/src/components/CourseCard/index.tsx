@@ -10,6 +10,7 @@ export interface ICardCategory {
 }
 
 export interface ICourseCardProps {
+  id?: string;
   category: ICardCategory;
   imageSrc: string;
   name: string;

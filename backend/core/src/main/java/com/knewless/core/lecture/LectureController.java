@@ -34,19 +34,18 @@ public class LectureController {
     private LectureService lectureService;
 
     @ResponseStatus(HttpStatus.CREATED)
-    @RequestMapping("/{id}")
+    @PostMapping("/{id}/{duration}")
     public LectureCreateResponseDto saveLecture(@CurrentUser UserPrincipal userPrincipal,
                                                 @RequestParam(value="image", required = true) MultipartFile image,
-                                                @PathVariable UUID id) throws NotFoundException {
-        return lectureService.saveLecture(image,
-                                          image.getOriginalFilename(),
-                                          id);
+                                                @PathVariable UUID id,
+                                                @PathVariable int duration) throws NotFoundException {
+        return lectureService.saveLecture(image, image.getOriginalFilename(), id, duration);
     }
     
     @PostMapping
     public LectureCreateResponseDto addLectureToDb(@CurrentUser UserPrincipal userPrincipal,
                                                    @RequestBody SaveLectureDto request) {
-        return lectureService.addLectureToDb(request.getName(), request.getDescription(), userPrincipal.getId(), request.getDuration());
+        return lectureService.addLectureToDb(request.getName(), request.getDescription(), userPrincipal.getId());
     }
 
     @GetMapping("/user")

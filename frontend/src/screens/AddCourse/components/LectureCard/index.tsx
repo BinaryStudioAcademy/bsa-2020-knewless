@@ -31,7 +31,7 @@ export const LectureCard: React.FC<ILectureCardProps> = ({
       {timeMinutes === 0 ? '' : `${timeMinutes} minutes` }
     </div>
     <div className={styles.meta__actionButton}>
-      {lectureURL === null ? (
+      {timeMinutes === 0 ? (
         <Popup
           trigger={<Icon loading name="spinner" />}
           content="Video is currently being processed on the server..."
