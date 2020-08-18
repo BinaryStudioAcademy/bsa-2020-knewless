@@ -23,7 +23,7 @@ public interface AuthorRepository extends JpaRepository<Author, UUID> {
     @Query("select a.school from Author a where a.id = :authorId")
     Optional<School> getSchoolByAuthorId(@Param("authorId") UUID authorId);
 
-    @Query(value = "select count(*) from subscriptions where source_type = 'author' and source_id = :authorId",
+    @Query(value = "select count(*) from subscriptions where source_type = 'AUTHOR' and source_id = :authorId",
             nativeQuery = true)
     Optional<Integer> getNumberOfSubscriptions(@Param("authorId") UUID authorId);
 

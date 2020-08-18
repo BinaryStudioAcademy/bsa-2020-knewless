@@ -1,12 +1,11 @@
 import React, { useEffect } from 'react';
+import { Icon } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-
 import { IBindingCallback1 } from 'models/Callbacks';
-import { fetchAuthorDataRoutine, followAuthorRoutine } from '../../routines';
+import { fetchAuthorDataRoutine, followAuthorRoutine, unfollowAuthorRoutine } from '../../routines';
 import { IAuthorData } from 'screens/AuthorPublicPage/models/IAuthorData';
 import { GradientButton } from 'components/buttons/GradientButton';
-
 import './styles.sass';
 import AuthorPublicMenu from './authorPublicMenu';
 
@@ -15,14 +14,24 @@ export interface IAuthorPublic {
   fetchAuthorData: IBindingCallback1<string>;
   authorData: IAuthorData;
   followAuthor: IBindingCallback1<string>;
+  unfollowAuthor: IBindingCallback1<string>;
 }
 
 const AuthorPublicPage: React.FunctionComponent<IAuthorPublic> = ({
-  match, fetchAuthorData, authorData, followAuthor
+  match, fetchAuthorData, authorData, followAuthor, unfollowAuthor
 }) => {
   useEffect(() => {
     fetchAuthorData(match.params.authorId);
   }, []);
+
+  const handleOnClickFollow = () => {
+    followAuthor(match.params.authorId);
+    fetchAuthorData(match.params.authorId);
+  };
+  const handleOnClickUnfollow = () => {
+    unfollowAuthor(match.params.authorId);
+    fetchAuthorData(match.params.authorId);
+  };
 
   return (
     <div style={{ height: '0' }}>
@@ -53,14 +62,26 @@ const AuthorPublicPage: React.FunctionComponent<IAuthorPublic> = ({
               <div className="buttonsFollowLikeAuthor">
                 <GradientButton
                   className="authorFollowButton"
-                  onClick={() => { followAuthor(match.params.authorId); }}
+                  onClick={handleOnClickFollow}
                 >
-                  Follow
+                  <div className="textButtonFollow">Follow</div>
                 </GradientButton>
               </div>
             )
-            : null}
-
+            : (
+              <div className="buttonsFollowLikeAuthor">
+                <GradientButton
+                  className="authorFollowButton"
+                  onClick={handleOnClickUnfollow}
+                >
+                  <div className="unfollow">
+                    <div className="textButtonUnfollow">
+                      Following
+                    </div>
+                  </div>
+                </GradientButton>
+              </div>
+            )}
           <div className="subscribersNumber">
             <p className="authorNumberFollowers">
               {authorData.numberOfSubscribers}
@@ -122,7 +143,8 @@ const mapStateToProps = (state: any) => ({
 
 const mapDispatchToProps = {
   fetchAuthorData: fetchAuthorDataRoutine,
-  followAuthor: followAuthorRoutine
+  followAuthor: followAuthorRoutine,
+  unfollowAuthor: unfollowAuthorRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AuthorPublicPage);

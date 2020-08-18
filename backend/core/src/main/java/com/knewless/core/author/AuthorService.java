@@ -8,9 +8,11 @@ import com.knewless.core.author.mapper.AuthorInfoMapper;
 import com.knewless.core.author.mapper.AuthorMapper;
 import com.knewless.core.author.model.Author;
 import com.knewless.core.course.CourseRepository;
+import com.knewless.core.db.SourceType;
 import com.knewless.core.exception.ResourceNotFoundException;
 import com.knewless.core.school.mapper.SchoolInfoMapper;
 import com.knewless.core.security.oauth.UserPrincipal;
+import com.knewless.core.subscription.SubscriptionService;
 import com.knewless.core.user.UserRepository;
 import com.knewless.core.user.model.User;
 import javassist.NotFoundException;
@@ -27,16 +29,19 @@ public class AuthorService {
     private final UserRepository userRepository;
     private final CourseRepository courseRepository;
     private final ArticleRepository articleRepository;
+    private final SubscriptionService subscriptionService;
 
     @Autowired
     public AuthorService(AuthorRepository authorRepository,
                          UserRepository userRepository,
                          CourseRepository courseRepository,
-                         ArticleRepository articleRepository) {
+                         ArticleRepository articleRepository,
+                         SubscriptionService subscriptionService) {
         this.authorRepository = authorRepository;
         this.userRepository = userRepository;
         this.courseRepository = courseRepository;
         this.articleRepository = articleRepository;
+        this.subscriptionService = subscriptionService;
     }
 
     public Optional<AuthorSettingsDto> getAuthorSettings(UUID userId) {
@@ -84,7 +89,7 @@ public class AuthorService {
         String schoolId = school.isPresent() ? school.get().getId().toString() : "";
 
         var currentUserId = this.authorRepository.checkForCurrentUser(userPrincipal.getEmail());
-        var printFollowButton = currentUserId.isPresent() ? !currentUserId.get().equals(authorId) : true;
+         var printFollowButton = !subscriptionService.isSubscribe(userPrincipal.getId(), authorId, SourceType.AUTHOR);
 
         var numberOfSubscriptions = this.authorRepository.getNumberOfSubscriptions(authorId)
                 .orElseThrow(() -> new NotFoundException("Cant find number of author subscribers " + authorId));

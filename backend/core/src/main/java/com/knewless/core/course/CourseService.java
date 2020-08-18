@@ -5,11 +5,13 @@ import com.knewless.core.author.model.Author;
 import com.knewless.core.course.dto.*;
 import com.knewless.core.course.model.Course;
 import com.knewless.core.course.model.Level;
+import com.knewless.core.db.SourceType;
 import com.knewless.core.lecture.Dto.ShortLectureDto;
 import com.knewless.core.lecture.LectureRepository;
 import com.knewless.core.lecture.homework.HomeworkRepository;
 import com.knewless.core.lecture.homework.model.Homework;
 import com.knewless.core.lecture.model.Lecture;
+import com.knewless.core.subscription.SubscriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -24,14 +26,17 @@ public class CourseService {
     private final LectureRepository lectureRepository;
     private final AuthorRepository authorRepository;
     private final HomeworkRepository homeworkRepository;
+    private final SubscriptionService subscriptionService;
 
     @Autowired
     public CourseService(CourseRepository courseRepository, LectureRepository lectureRepository,
-                         AuthorRepository authorRepository, HomeworkRepository homeworkRepository) {
+                         AuthorRepository authorRepository, HomeworkRepository homeworkRepository,
+                         SubscriptionService subscriptionService) {
         this.courseRepository = courseRepository;
         this.lectureRepository = lectureRepository;
         this.authorRepository = authorRepository;
         this.homeworkRepository = homeworkRepository;
+        this.subscriptionService = subscriptionService;
     }
 
     public List<ShortLectureDto> getLecturesByUserId(UUID id) {
@@ -43,14 +48,14 @@ public class CourseService {
             }
         });
 
-		return result.stream()
-				.map(l -> new ShortLectureDto(
-						l.getId(),
-						l.getName() == null ? "mockName" : l.getName(),
-						l.getDescription(),
-						l.getDuration()))
-				.collect(Collectors.toList());
-	}
+        return result.stream()
+                .map(l -> new ShortLectureDto(
+                        l.getId(),
+                        l.getName() == null ? "mockName" : l.getName(),
+                        l.getDescription(),
+                        l.getDuration()))
+                .collect(Collectors.toList());
+    }
 
     public CreateCourseResponseDto createCourse(CreateCourseRequestDto request) {
         System.out.println(request.getUserId());
@@ -79,6 +84,8 @@ public class CourseService {
             ophw.ifPresent(l::setHomework);
         });
         lectureRepository.saveAll(thisLectures);
+        String message = author.getFirstName() + " " + author.getLastName() + " added new course.";
+        subscriptionService.notifySubscribers(author.getId(), SourceType.AUTHOR, course.getId(), SourceType.COURSE, message);
         return new CreateCourseResponseDto(course.getId(), true);
     }
 
