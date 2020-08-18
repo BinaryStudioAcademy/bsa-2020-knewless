@@ -11,22 +11,13 @@ export const getLecturesByUser = async () => {
   return result;
 };
 
-/* export const getLecturesByAuthor = async (id: string) => new Promise(resolve => {
-  setTimeout(() => resolve({
-    lectures
-  }), 500);
-}); */
-
 export const saveCourse = async (course: ICourse) => {
-  console.log(course);
   const response = await callApi({
     type: 'POST',
-    endpoint: 'api/course',
+    endpoint: 'api/course/create',
     requestData: course
   });
-  const result = response.json();
-  console.log(result);
-  return result;
+  return response.json();
 };
 
 // export const saveLectureVideo = async lecture => {
@@ -41,10 +32,9 @@ export const saveCourse = async (course: ICourse) => {
 // };
 
 export const saveLectureVideo = async lecture => {
-  const request = { id: lecture.id, duration: lecture.duration };
   const response = await callApi({
     type: 'POST',
-    endpoint: `api/lecture/${lecture.id}`,
+    endpoint: `api/lecture/${lecture.id}/${lecture.duration}`,
     attachment: lecture.video
   });
   return response.json();

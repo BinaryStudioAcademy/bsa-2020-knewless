@@ -83,13 +83,13 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
       setIsValidName(false);
       return;
     }
-    const pattern = /^[a-zA-Z0-9!:;=<>@#$&()\\-`.+,"/ ]{3,}$/;
+    const pattern = /^[a-zA-Z0-9!:;=<>@#_$&()\\`.+,"-/ ]{2,40}$/;
     setIsValidName(pattern.test(courseName));
   };
 
   const validateDescription = () => {
     if (description.length === 0) return;
-    const pattern = /^[a-zA-Z0-9!:;=<>@#$&()\\-`.+,"/ ]{10,}$/;
+    const pattern = /^[a-zA-Z0-9!:;=<>@#_$&()\\`.+,"-/ ]{10,}$/;
     setIsValidDescription(pattern.test(description));
   };
 

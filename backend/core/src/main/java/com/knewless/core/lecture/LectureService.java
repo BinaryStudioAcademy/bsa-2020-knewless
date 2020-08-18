@@ -38,7 +38,8 @@ public class LectureService {
         this.userRepository = userRepository;
     }
 
-    public LectureCreateResponseDto saveLecture(MultipartFile file, String filename, UUID lectureId) throws NotFoundException {
+    public LectureCreateResponseDto saveLecture(MultipartFile file, String filename, UUID lectureId, int duration) throws NotFoundException {
+        lectureRepository.setDuration(lectureId, duration);
         Lecture savedLecture = lectureRepository.findById(lectureId)
                 .orElseThrow(() -> new NotFoundException("Lecture with id " + lectureId + " not found"));
         String folderId = fileManager.saveVideo(file, filename);
@@ -50,15 +51,14 @@ public class LectureService {
         return LectureCreateResponseDto.builder()
                         .id(savedLecture.getId())
                         .description(savedLecture.getDescription())
-                        .timeMinutes(savedLecture.getDuration())
+                        .timeMinutes(duration)
                         .name(savedLecture.getName())
                         .build();
     }
 
-    public LectureCreateResponseDto addLectureToDb(String name, String description, UUID userId, double duration) {
+    public LectureCreateResponseDto addLectureToDb(String name, String description, UUID userId) {
         User user = userRepository.getOne(userId);
-        int timeInMinutes = (int) (duration/60 + 1);
-        Lecture lecture = Lecture.builder().name(name).description(description).duration(timeInMinutes).user(user).build();
+        Lecture lecture = Lecture.builder().name(name).description(description).user(user).build();
         Lecture savedLecture = lectureRepository.save(lecture);
         return LectureCreateResponseDto.builder()
                 .id(savedLecture.getId())
@@ -73,6 +73,9 @@ public class LectureService {
         List<Lecture> result = new ArrayList<>();
         allLectures.forEach(lec -> {
             if (!result.stream().map(Lecture::getSourceUrl).collect(Collectors.toList()).contains(lec.getSourceUrl())) {
+                result.add(lec);
+            }
+            if (lec.getSourceUrl()==null && !result.stream().map(Lecture::getName).collect(Collectors.toList()).contains(lec.getName())) {
                 result.add(lec);
             }
         });

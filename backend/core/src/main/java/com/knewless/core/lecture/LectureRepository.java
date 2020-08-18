@@ -23,4 +23,10 @@ List<ShortLectureDto> getShortLecturesByUserId(@Param("id")UUID id);
         "WHERE l.user.id = :id")
 List<Lecture> getLecturesByUserId(@Param("id")UUID id);
 
+    @Transactional
+    @Modifying
+    @Query("UPDATE Lecture l " +
+            "SET l.duration = :duration " +
+            "WHERE l.id = :id")
+    void setDuration(@Param("id")UUID id, @Param("duration")int duration);
 }

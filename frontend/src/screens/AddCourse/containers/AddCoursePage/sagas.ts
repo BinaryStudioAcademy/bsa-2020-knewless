@@ -41,8 +41,7 @@ function* saveLecture(action: Routine<any>) {
   try {
     const addEntity = { 
       name: action.payload.name,
-      description: action.payload.description,
-      duration: action.payload.duration 
+      description: action.payload.description 
     };
     const responseAdd = yield call(courseService.addLectureToDb, addEntity);
     yield put(saveLectureRoutine.success(responseAdd));
