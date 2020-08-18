@@ -1,3 +1,3 @@
 export interface ILecturesList {
-    choosedVideo: string;
+    chosenVideo: string;
 }

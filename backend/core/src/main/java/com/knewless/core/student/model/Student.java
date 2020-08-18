@@ -64,6 +64,4 @@ public class Student extends BaseEntity {
     @Column(name = "year")
     private int year;
 
-    @Column(name = "total_content_watched")
-    private int totalContentWatched;
 }

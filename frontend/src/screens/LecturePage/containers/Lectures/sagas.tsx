@@ -1,7 +1,8 @@
-import { takeEvery, put, call, all } from 'redux-saga/effects';
+import { all, call, put, takeEvery, takeLatest } from 'redux-saga/effects';
 import { toastr } from 'react-redux-toastr';
-import { fetchCourseDtoRoutine } from 'screens/LecturePage/routines';
+import { fetchCourseDtoRoutine, saveWatchTimeRoutine } from 'screens/LecturePage/routines';
 import * as lecturesService from 'screens/LecturePage/services/lectures.api';
+import * as playerService from '../../services/player.service';
 import { Routine } from 'redux-saga-routines';
 
 function* getData(action: Routine<any>) {
@@ -19,8 +20,28 @@ function* watchGetDataRequest() {
   yield takeEvery(fetchCourseDtoRoutine.TRIGGER, getData);
 }
 
-export default function* dataSagas() {
+export function* dataSagas() {
   yield all([
     watchGetDataRequest()
+  ]);
+}
+
+function* saveWatchTime(action: Routine<any>) {
+  try {
+    const { watchTime, lectureId, fraction } = action.payload;
+    yield call(playerService.saveWatchTime, watchTime, fraction, lectureId);
+    yield put(saveWatchTimeRoutine.success());
+  } catch (e) {
+    yield put(saveWatchTimeRoutine.failure(e?.message));
+  }
+}
+
+function* watchTriggerSaveWatchTime() {
+  yield takeLatest(saveWatchTimeRoutine.TRIGGER, saveWatchTime);
+}
+
+export function* playerSagas() {
+  yield all([
+    watchTriggerSaveWatchTime()
   ]);
 }

@@ -6,6 +6,7 @@ import { IAuthorMainPageState } from '@screens/AuthorMainPage/models/IAuthorMain
 import { IAuthState } from '@screens/Authentication/models/IAuthState';
 import { IAppRouterState } from '@containers/AppRouter/models/IAppRouterState';
 import { IAddPathState } from '@screens/AddPath/models/AddPathState';
+import { ILecturePageState } from '@screens/LecturePage/models/ILecturePageState';
 
 export interface IAppState {
   toastr: any;
@@ -17,4 +18,5 @@ export interface IAppState {
   auth: IAuthState;
   appRouter: IAppRouterState;
   addPathPage: IAddPathState;
+  lecturePage: ILecturePageState;
 }

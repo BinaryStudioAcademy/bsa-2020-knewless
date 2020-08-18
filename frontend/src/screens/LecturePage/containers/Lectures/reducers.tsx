@@ -1,6 +1,6 @@
 import { Routine } from 'redux-saga-routines';
-import { fetchCourseDtoRoutine, setMenuActiveItemRoutine, chooseVideoRoutine } from 'screens/LecturePage/routines';
-import { CourseData } from 'screens/LecturePage/models/CourseData';
+import { chooseVideoRoutine, fetchCourseDtoRoutine, setMenuActiveItemRoutine } from 'screens/LecturePage/routines';
+import { ICourseData } from '@screens/LecturePage/models/ICourseData';
 import { ILecturesMenu } from 'screens/LecturePage/models/ILecturesMenu';
 import { ILecturesList } from 'screens/LecturePage/models/ILecturesList';
 
@@ -20,7 +20,7 @@ const basicCourseData = {
   }
 };
 
-export const lectureDto = (state: CourseData = basicCourseData, action: Routine<any>) => {
+export const lectureDto = (state: ICourseData = basicCourseData, action: Routine<any>) => {
   switch (action.type) {
     case fetchCourseDtoRoutine.SUCCESS:
       return action.payload;
@@ -45,10 +45,10 @@ export const lectureMenu = (state: ILecturesMenu = basicILecturesMenu, action: R
 };
 
 const basicILecturesList = {
-  choosedVideo: 'no choosed videos'
+  chosenVideo: 'no chosen videos'
 };
 
-export const choosedVideo = (state: ILecturesList = basicILecturesList, action: Routine<any>) => {
+export const chosenVideo = (state: ILecturesList = basicILecturesList, action: Routine<any>) => {
   switch (action.type) {
     case chooseVideoRoutine.TRIGGER:
       return action.payload;

@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import { reducerCreator } from 'helpers/reducer.helper';
-import { lectureDto, lectureMenu, choosedVideo } from '../containers/Lectures/reducers';
+import { chosenVideo, lectureDto, lectureMenu } from '../containers/Lectures/reducers';
 import { fetchCourseDtoRoutine } from '../routines';
 
 const requests = combineReducers({
@@ -10,6 +10,6 @@ const requests = combineReducers({
 export default combineReducers({
   lectureDto,
   lectureMenu,
-  choosedVideo,
+  chosenVideo,
   requests
 });
