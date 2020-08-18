@@ -7,7 +7,7 @@ import { Routine } from 'redux-saga-routines';
 
 function* getLectures(action: Routine<any>) {
   try {
-    const response = yield call(courseService.getLecturesByAuthor, action.payload);
+    const response = yield call(courseService.getLecturesByUser);
     yield put(fetchLecturesRoutine.success(response));
   } catch (error) {
     yield put(fetchLecturesRoutine.failure(error?.message));
@@ -27,8 +27,10 @@ function* saveCourse(action: Routine<any>) {
     }
     const response = yield call(courseService.saveCourse, action.payload);
     yield put(saveCourseRoutine.success(response));
+    console.log(response);
     toastr.success('Course saved!');
   } catch (error) {
+    console.log(error);
     yield put(saveCourseRoutine.failure(error?.message));
   }
 }
@@ -39,7 +41,10 @@ function* watchSaveCourseRequest() {
 
 function* saveLecture(action: Routine<any>) {
   try {
-    const addEntity = { name: action.payload.name, description: action.payload.description };
+    const addEntity = { 
+      name: action.payload.name,
+      description: action.payload.description 
+    };
     const responseAdd = yield call(courseService.addLectureToDb, addEntity);
     yield put(saveLectureRoutine.success(responseAdd));
     const saveEntity = { id: responseAdd.id, duration: action.payload.duration, video: action.payload.video };
@@ -47,7 +52,7 @@ function* saveLecture(action: Routine<any>) {
     const responseSave = yield call(courseService.saveLectureVideo, saveEntity);
     yield put(saveLectureRoutine.success(responseSave));
     window.onbeforeunload = undefined;
-    toastr.success(`Lecture ${action.paiload.name} saved!`);
+    toastr.success(`Lecture ${responseSave.name} saved!`);
   } catch (error) {
     yield put(saveLectureRoutine.failure(error?.message));
   }

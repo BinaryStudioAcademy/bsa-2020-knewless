@@ -5,7 +5,6 @@ import GrayOutlineButton from 'components/buttons/GrayOutlineButton';
 import GradientButton from 'components/buttons/GradientButton';
 import { isVideo } from './helper';
 import { IBindingCallback1 } from 'models/Callbacks';
-import { IAppState } from 'models/AppState';
 import { connect } from 'react-redux';
 import { fetchLecturesRoutine, saveLectureRoutine } from 'screens/AddCourse/routines';
 
@@ -43,13 +42,13 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
       setIsValidName(false);
       return;
     }
-    const pattern = /^[a-zA-Z0-9!:;=<>@#$&()\\-`.+,"/ ]{3,40}$/;
+    const pattern = /^[a-zA-Z0-9!:;=<>@#_$&()\\`.+,"-/ ]{3,40}$/;
     setIsValidName(pattern.test(name));
   };
 
   const validateDescription = () => {
     if (description.length === 0) return;
-    const pattern = /^[a-zA-Z0-9!:;=<>@#$&()\\-`.+,"/ ]{10,120}$/;
+    const pattern = /^[a-zA-Z0-9!:;=<>@#_$&()\\`.+,"-/ ]{10,}$/;
     setIsValidDescription(pattern.test(description));
   };
 
@@ -63,7 +62,7 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
       const fileURL = URL.createObjectURL(thisFile);
       vid.src = fileURL;
       vid.ondurationchange = function() {
-        setDuration(vid.duration);
+        setDuration(Math.round(vid.duration));
       };
       setFile(thisFile);
       setIsValidFile(true);

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { fetchLecturesRoutine, saveCourseRoutine } from 'screens/AddCourse/routines';
-import { IBindingCallback1 } from 'models/Callbacks';
+import { IBindingCallback1, IBindingAction } from 'models/Callbacks';
 import { ICourse } from '../../models/ICourse';
 import { Button, Dropdown, Input, Label } from 'semantic-ui-react';
 import { Footer } from '@components/Footer';
@@ -22,16 +22,14 @@ import CourseImage from '@images/default_course_image.jpg';
 
 interface IAddCourseProps {
   lectures: ILecture [];
-  userId?: string;
   courseId: string;
   isLecturesLoaded: boolean;
-  fetchLectures: IBindingCallback1<string>;
+  fetchLectures: IBindingAction;
   saveCourse: IBindingCallback1<ICourse>;
 }
 
 const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
   lectures,
-  userId,
   fetchLectures: getLectures,
   saveCourse: save,
   isLecturesLoaded
@@ -41,7 +39,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
   const [pool, setPool] = useState(Array<ILecture>());
   useEffect(() => {
     if (lectures.length === 0 && !isLecturesLoaded) {
-      getLectures(userId);
+      getLectures();
     }
     const updated = [...lectures.sort(compareName)];
     const filtered = updated.filter(l => !selected.map(s => s.id).includes(l.id));
@@ -62,6 +60,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
         key={lecture.id}
         onClick={() => click(lecture)}
         isSelected={isSelected}
+        lectureURL={lecture.lectureURL}
       />
     );
   };
@@ -84,13 +83,13 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
       setIsValidName(false);
       return;
     }
-    const pattern = /^[a-zA-Z0-9!:;=<>@#$&()\\-`.+,"/ ]{3,40}$/;
+    const pattern = /^[a-zA-Z0-9!:;=<>@#_$&()\\`.+,"-/ ]{2,40}$/;
     setIsValidName(pattern.test(courseName));
   };
 
   const validateDescription = () => {
     if (description.length === 0) return;
-    const pattern = /^[a-zA-Z0-9!:;=<>@#$&()\\-`.+,"/ ]{10,120}$/;
+    const pattern = /^[a-zA-Z0-9!:;=<>@#_$&()\\`.+,"-/ ]{10,}$/;
     setIsValidDescription(pattern.test(description));
   };
 
@@ -128,7 +127,6 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
     setIsSaved(true);
     setButtonLoading(true);
     save({
-      userId,
       name: courseName,
       level,
       isReleased: isRelease,
@@ -141,16 +139,11 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
   };
 
   const handleCancel = () => {
-    getLectures(userId);
-    setPool([...lectures.sort(compareName)]);
-    setSelected(Array<ILecture>());
-    setDescription('');
-    setCourseName('');
-    setLevel('');
+    history.push("/");
   };
 
   const handleUpdateLectures = () => {
-    getLectures(userId);
+    getLectures();
     const updated = [...lectures.sort(compareName)];
     const filtered = updated.filter(l => !selected.map(s => s.id).includes(l.id));
     setPool(filtered);

@@ -13,7 +13,7 @@ import java.util.UUID;
 @Builder
 public class LectureCreateResponseDto {
    private UUID id;
-   private String link;
+   private String lectureURL;
    private String name;
    private String description;
    private int timeMinutes;

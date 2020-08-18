@@ -6,7 +6,6 @@ import java.util.UUID;
 
 @Data
 public class CreateCourseRequestDto {
-    private UUID userId;
     private String name;
     private String image;
     private String level;

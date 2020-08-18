@@ -23,11 +23,6 @@ public class CourseController {
         this.courseService = courseService;
     }
 
-    @GetMapping("/lectures/user/{id}")
-    public List<ShortLectureDto> getLecturesByUserId(@PathVariable UUID id) {
-        return courseService.getLecturesByUserId(id);
-    }
-
     @GetMapping("/recommended/{id}")
     private List<CourseDto> getRecommendedCourses(@PathVariable("id") UUID id,
                                                   @RequestParam(defaultValue = "0") int page,
@@ -40,9 +35,10 @@ public class CourseController {
         return courseService.getCourseById(id);
     }
 
-    @PostMapping
-    private CreateCourseResponseDto createCourse(@RequestBody CreateCourseRequestDto request) {
-        return courseService.createCourse(request);
+    @PostMapping("/create")
+    private CreateCourseResponseDto createCourse(@CurrentUser UserPrincipal user,
+                                                 @RequestBody CreateCourseRequestDto request) {
+        return courseService.createCourse(request, user.getId());
     }
 
     @GetMapping("/lecture/{lectureId}")
