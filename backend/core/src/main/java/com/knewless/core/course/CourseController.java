@@ -35,6 +35,11 @@ public class CourseController {
         return courseService.getCourseById(id);
     }
 
+    @GetMapping("/{id}/info")
+    private CourseFullInfoDto getAllCourseInfoById(@PathVariable("id") UUID id) {
+        return courseService.getAllCourseInfoById(id);
+    }
+
     @PostMapping("/create")
     private CreateCourseResponseDto createCourse(@CurrentUser UserPrincipal user,
                                                  @RequestBody CreateCourseRequestDto request) {

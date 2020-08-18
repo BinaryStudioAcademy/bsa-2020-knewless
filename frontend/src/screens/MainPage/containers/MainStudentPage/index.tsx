@@ -68,6 +68,7 @@ const MainStudentPage: React.FunctionComponent<IMainStudentPageProps> = ({
             {(continueCourses && continueCourses.length > 0) ? continueCourses.slice(0, 3).map(c => (
               <div className={styles.course_card}>
                 <CourseCard
+                  id={c.id}
                   category={c.category}
                   name={c.name}
                   author={c.author}
@@ -75,7 +76,6 @@ const MainStudentPage: React.FunctionComponent<IMainStudentPageProps> = ({
                   imageSrc={c.imageSrc}
                   level={c.level}
                   rating={c.rating}
-                  onOpenClick={c.onOpenClick}
                   hideButton
                 />
               </div>
@@ -91,6 +91,7 @@ const MainStudentPage: React.FunctionComponent<IMainStudentPageProps> = ({
             {recommendedCourses.slice(0, 3).map(c => (
               <div className={styles.course_card}>
                 <CourseCard
+                  id={c.id}
                   category={c.category}
                   name={c.name}
                   author={c.author}
@@ -98,7 +99,6 @@ const MainStudentPage: React.FunctionComponent<IMainStudentPageProps> = ({
                   imageSrc={c.imageSrc}
                   level={c.level}
                   rating={c.rating}
-                  onOpenClick={c.onOpenClick}
                 />
               </div>
             ))}

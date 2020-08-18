@@ -97,6 +97,7 @@ export const LandingPage: React.FunctionComponent<ILandingProps> = ({
             {loading || courses.map(c => (
               <div key={c.id} className={styles.course_card}>
                 <CourseCard
+                  id={c.id}
                   name={c.name}
                   category={c.category}
                   author={c.author}
@@ -104,7 +105,6 @@ export const LandingPage: React.FunctionComponent<ILandingProps> = ({
                   imageSrc={c.imageSrc}
                   level={c.level}
                   rating={c.rating}
-                  onOpenClick={c.onOpenClick}
                 />
               </div>
             ))}

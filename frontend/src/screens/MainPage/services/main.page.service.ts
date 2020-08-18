@@ -1,7 +1,6 @@
 import { callApi } from '@helpers/api.helper';
 
 export async function getContinueCourses(id: string) {
-  console.log(id);
   const response = await callApi({
     endpoint: `/api/course/continue/${id}`,
     type: 'GET'

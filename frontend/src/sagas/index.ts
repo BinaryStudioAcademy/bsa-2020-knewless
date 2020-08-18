@@ -13,6 +13,7 @@ import addCourseSagas from 'screens/AddCourse/sagas';
 import publicAuthorSagas from '../screens/AuthorPublicPage/sagas';
 import appRouterSagas from 'containers/AppRouter/sagas';
 import addPathSagas from '../screens/AddPath/sagas';
+import coursePageSagas from '@screens/CoursePage/sagas';
 
 export default function* rootSaga() {
   yield all([
@@ -29,6 +30,7 @@ export default function* rootSaga() {
     addCourseSagas(),
     publicAuthorSagas(),
     appRouterSagas(),
-    addPathSagas()
+    addPathSagas(),
+    coursePageSagas()
   ]);
 }

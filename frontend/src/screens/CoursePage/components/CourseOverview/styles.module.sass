@@ -1,0 +1,52 @@
+@import '../../styles/variables'
+
+.description
+  color: #FFF
+
+.description_content
+  display: flex
+  flex-direction: column
+  padding: 10vh $indent_right 11vh 0
+
+.description__course_name
+  font-family: "Custom Open Sans", sans-serif
+  font-weight: 600
+  font-size: 3.2em
+  margin-bottom: 0.9rem
+
+.description__meta_info
+  display: flex
+  flex-direction: row
+  margin-bottom: 4rem
+  p, a
+    font-size: 1em
+  a
+    text-decoration: none
+    color: #58C2F1
+  .rating
+    margin-right: 0.6em
+
+.description__buttons
+  display: flex
+  justify-content: space-between
+  width: $buttons_width
+
+.course_image
+  position: relative
+
+.course_image::before
+  content: ''
+  position: absolute
+  top: 0
+  left: 0
+  width: 100%
+  height: 100%
+  opacity: 0.6
+  z-index: 2
+  background: linear-gradient(70.06deg, #0084F8, #FF8576)
+
+.course_image img
+  position: absolute
+  width: 100%
+  height: 100%
+  object-fit: cover

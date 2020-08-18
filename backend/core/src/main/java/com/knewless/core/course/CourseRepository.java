@@ -18,12 +18,13 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
     //language=SpringDataQL
     String COURSE_SELECT = "SELECT new com.knewless.core.course.dto.CourseQueryResult(c.id, " +
             "c.name, c.level, concat(c.author.firstName,' ' , c.author.lastName), " +
-            "c.category.name, c.image, " +
+            "category.name, c.image, " +
             "(SELECT COALESCE(SUM(cl.duration), 0) FROM c.lectures as cl), " +
             "(SELECT COALESCE(SUM(CASE WHEN cr.reaction = TRUE THEN 1 ELSE 0 END), 0) " +
             "FROM c.reactions as cr WHERE cr.reaction = TRUE), " +
             "SIZE(c.reactions)) " +
-            "FROM Course c ";
+            "FROM Course c " +
+            "LEFT JOIN c.category category ";
 
     CourseToPlayerProjection findOneById(UUID courseId);
 
@@ -54,6 +55,7 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
             "SIZE(c.reactions), c.updatedAt) " +
             "FROM Course c WHERE c.author.id = :authorId " +
             "ORDER BY c.updatedAt DESC")
+
     List<AuthorCourseQueryResult> getLatestCoursesByAuthorId(@Param("authorId") UUID authorId);
 
 }
