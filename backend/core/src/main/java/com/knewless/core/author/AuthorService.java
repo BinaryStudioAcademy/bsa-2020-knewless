@@ -9,7 +9,7 @@ import com.knewless.core.author.mapper.AuthorMapper;
 import com.knewless.core.author.model.Author;
 import com.knewless.core.course.CourseRepository;
 import com.knewless.core.db.SourceType;
-import com.knewless.core.exception.ResourceNotFoundException;
+import com.knewless.core.exception.custom.ResourceNotFoundException;
 import com.knewless.core.school.mapper.SchoolInfoMapper;
 import com.knewless.core.security.oauth.UserPrincipal;
 import com.knewless.core.subscription.SubscriptionService;

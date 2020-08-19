@@ -1,6 +1,6 @@
 package com.knewless.core.security.oauth.oauth2;
 
-import com.knewless.core.exception.OAuth2AuthenticationProcessingException;
+import com.knewless.core.exception.custom.OAuth2AuthenticationProcessingException;
 import com.knewless.core.security.oauth.UserPrincipal;
 import com.knewless.core.security.oauth.oauth2.user.OAuth2UserInfo;
 import com.knewless.core.security.oauth.oauth2.user.OAuth2UserInfoFactory;
@@ -9,7 +9,6 @@ import com.knewless.core.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {

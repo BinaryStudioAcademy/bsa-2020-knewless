@@ -3,7 +3,6 @@ package com.knewless.core.author;
 import com.knewless.core.article.ArticleRepository;
 import com.knewless.core.author.dto.AuthorBriefInfoDto;
 import com.knewless.core.author.dto.AuthorSettingsDto;
-import com.knewless.core.exception.ResourceNotFoundException;
 import com.knewless.core.security.oauth.UserPrincipal;
 import com.knewless.core.user.model.CurrentUser;
 import javassist.NotFoundException;

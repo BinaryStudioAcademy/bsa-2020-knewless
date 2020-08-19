@@ -1,7 +1,7 @@
 package com.knewless.core.student;
 
 import com.knewless.core.currentUserCource.CurrentUserCourseService;
-import com.knewless.core.exception.ResourceNotFoundException;
+import com.knewless.core.exception.custom.ResourceNotFoundException;
 import com.knewless.core.history.WatchHistoryService;
 import com.knewless.core.student.dto.StudentMainInfoDto;
 import com.knewless.core.student.dto.StudentProfileDto;
