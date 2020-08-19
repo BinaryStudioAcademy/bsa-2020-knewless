@@ -1,7 +1,7 @@
 package com.knewless.core.author;
 
-import com.knewless.core.author.dto.AuthorBriefInfoDto;
 import com.knewless.core.author.dto.AuthorSettingsDto;
+import com.knewless.core.exception.custom.ResourceNotFoundException;
 import com.knewless.core.security.oauth.UserPrincipal;
 import com.knewless.core.user.model.CurrentUser;
 import com.knewless.core.validation.SingleMessageResponse;
@@ -53,9 +53,12 @@ public class AuthorController {
         return ResponseEntity.ok(authorService.setAuthorSettings(settings));
     }
 
-    @GetMapping("/self-info")
-    public ResponseEntity<AuthorBriefInfoDto> getAuthorInfo(@CurrentUser UserPrincipal userPrincipal) {
-        return ResponseEntity.ok(this.authorService.getAuthorInfoByUserId(userPrincipal.getId()));
+    public ResponseEntity<?> getAuthorInfo(@CurrentUser UserPrincipal userPrincipal) {
+        try {
+            return ResponseEntity.ok(this.authorService.getAuthorInfoByUserId(userPrincipal.getId()));
+        } catch(ResourceNotFoundException ex) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping("/overview/{authorId}")

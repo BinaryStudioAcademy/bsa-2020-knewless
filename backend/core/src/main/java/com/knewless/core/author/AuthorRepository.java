@@ -12,7 +12,8 @@ import java.util.UUID;
 
 public interface AuthorRepository extends JpaRepository<Author, UUID> {
 
-    Optional<Author> findByUserId(UUID id);
+    @Query("select a from Author a where a.user.id = :userId")
+    Optional<Author> findByUserId(@Param("userId") UUID userId);
 
     Optional<Author> findByUser(User user);
 
