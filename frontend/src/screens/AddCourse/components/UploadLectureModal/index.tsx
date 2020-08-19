@@ -62,7 +62,7 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
       const fileURL = URL.createObjectURL(thisFile);
       vid.src = fileURL;
       vid.ondurationchange = function() {
-        setDuration(duration);
+        setDuration(vid.duration);
       };
       setFile(thisFile);
       setIsValidFile(true);

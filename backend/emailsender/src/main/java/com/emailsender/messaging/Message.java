@@ -2,11 +2,11 @@ package com.emailsender.messaging;
 
 import lombok.Data;
 
-import java.util.UUID;
+import java.io.Serializable;
 
 @Data
-public class Message {
-    private UUID linkId;
+public class Message implements Serializable {
+    private String link;
     private String email;
-    private MessageType type;
+    private EmailType type;
 }

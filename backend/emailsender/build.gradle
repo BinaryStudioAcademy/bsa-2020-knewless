@@ -20,8 +20,11 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-amqp'
-	compileOnly 'org.projectlombok:lombok'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'com.sun.mail:javax.mail:1.6.2'
+	implementation "io.jsonwebtoken:jjwt-jackson:0.10.5"
+	implementation 'org.springframework:spring-context-support:5.2.5.RELEASE'
+	implementation 'org.springframework.boot:spring-boot-starter-mail:2.2.5.RELEASE'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'

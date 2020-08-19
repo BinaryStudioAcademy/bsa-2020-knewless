@@ -1,4 +1,4 @@
-package com.emailsender.messaging;
+package com.emailsender.config;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
