@@ -62,7 +62,11 @@ const LoginForm: FunctionComponent<ILoginForm> = ({
               onChange={ev => passwordChanged(ev.target.value)}
             />
             <div>
-              <GradientButton className={styles.main_container__button_login} loading={isLoginLoading}>
+              <GradientButton
+                className={styles.main_container__button_login}
+                loading={isLoginLoading}
+                disabled={!login || !password}
+              >
                 LOGIN
               </GradientButton>
               <Divider className={styles.main_container__divider} horizontal>Or</Divider>

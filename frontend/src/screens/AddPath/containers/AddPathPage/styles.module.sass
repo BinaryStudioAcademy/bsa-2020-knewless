@@ -112,14 +112,6 @@ $title_container_height: 55px
     flex-basis: 0
     flex-grow: 1
 
-
-.error_message
-  position: absolute !important
-  top: -0.8em
-  opacity: 0.8
-  &:hover
-    opacity: 1
-
 $width_btn: 100px
 $height_btn: 40px
 
@@ -132,3 +124,21 @@ $height_btn: 40px
 
 .confirmation
   max-width: 400px
+
+\:global(.ui.basic.label).warningLabel
+  width: 100%
+  background-color: #f7d0d0
+  z-index: 2
+  padding: 0
+  margin: -3px 0 0
+  text-align: center
+  font-size: 0.8em
+  font-weight: 700
+  line-height: 1.3em
+  border-radius: 0 0 5px 5px
+  color: black
+
+.no_bottom_rounding_field
+  input[type="text"], textarea
+    border-bottom-left-radius: 0 !important
+    border-bottom-right-radius: 0 !important

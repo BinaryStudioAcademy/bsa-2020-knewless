@@ -48,9 +48,11 @@ public class CourseService {
         this.tagService = tagService;
     }
 
-    public CreateCourseResponseDto createCourse(CreateCourseRequestDto request, UUID userid) {
-        Author author = authorRepository.findByUserId(userid).orElseThrow();
-        List<Lecture> allLectures = lectureRepository.getLecturesByUserId(userid);
+    public CreateCourseResponseDto createCourse(CreateCourseRequestDto request, UUID userId) {
+        Author author = authorRepository.findByUserId(userId).orElseThrow(
+                () -> new ResourceNotFoundException("Author", "userId", userId)
+        );
+        List<Lecture> allLectures = lectureRepository.getLecturesByUserId(userId);
         List<UUID> idLecturesToSave = request.getLectures();
         allLectures.removeIf(l -> !idLecturesToSave.contains(l.getId()));
         List<Lecture> thisLectures = new ArrayList<>();

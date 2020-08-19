@@ -1,13 +1,19 @@
 import { Button, Divider, Form, Grid, Header, Message, Segment } from 'semantic-ui-react';
 import { FACEBOOK_AUTH_URL, GOOGLE_AUTH_URL } from '@screens/Authentication/constants';
-import React, { FunctionComponent, useEffect, useState } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { IBindingCallback1 } from '@models/Callbacks';
 import LogoWithText from '../LogoWithText';
-
 import styles from './styles.module.sass';
 import { IRegisterRequest } from '@screens/Authentication/containers/RegisterPage';
 import GradientButton from '../buttons/GradientButton';
+import {
+  EMAIL_MESSAGE,
+  isValidEmail,
+  isValidPassword,
+  PASSWORD_MESSAGE,
+  PASSWORDS_NOT_MATCH
+} from '@helpers/validation.helper';
 
 interface IRegisterForm {
   register: IBindingCallback1<IRegisterRequest>;
@@ -20,61 +26,34 @@ const RegisterForm: FunctionComponent<IRegisterForm> = ({
 }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [password2, setPassword2] = useState('');
-  const [isEmailValid, setIsEmailValid] = useState(false);
-  const [isPasswordEqual, setIsPasswordEqual] = useState(false);
-  const [isPasswordValid, setIsPasswordValid] = useState(false);
-  const [isError, setIsError] = useState(false);
+  const [repeatPassword, setRepeatPassword] = useState('');
+  const [isEmailValid, setIsEmailValid] = useState(true);
+  const [isPasswordValid, setIsPasswordValid] = useState(true);
+  const [isPasswordsMatch, setIsPasswordsMatch] = useState(true);
 
-  const mailRegex = new RegExp('^\\w[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]{1,34}@[a-zA-Z0-9-]\\w+'
-    + '[a-zA-Z0-9-](?:.[a-zA-Z0-9-]+)*$');
-  const passwordRegex = new RegExp('^(?=.*[a-zA-Z])(?=.*\\d)[A-Za-z\\d@$!%*?&]{8,32}$');
-
-  const onEmailBlur = data => {
-    setEmail(data);
-    setIsEmailValid(data.length > 0 && mailRegex.test(data));
+  const validateEmail = (newName?: string) => setIsEmailValid(
+    isValidEmail(typeof newName === 'string' ? newName : email)
+  );
+  const validatePassword = (newName?: string) => {
+    const lastChangeValue = typeof newName === 'string' ? newName : password;
+    setIsPasswordValid(isValidPassword(lastChangeValue));
+    setIsPasswordsMatch(lastChangeValue === repeatPassword);
   };
+  const validateRepeatPassword = (newName?: string) => setIsPasswordsMatch(
+    (typeof newName === 'string' ? newName : repeatPassword) === password
+  );
+  const isRequiredFieldsValid = (): boolean => isValidEmail(email) && isValidPassword(password)
+    && password === repeatPassword;
 
-  const onEmailFocus = () => {
-    setIsEmailValid(true);
-  };
-
-  const onPasswordBlur = data => {
-    setPassword(data);
-    setIsPasswordValid(passwordRegex.test(data));
-    setIsPasswordEqual(data === password2);
-  };
-
-  const onPasswordFocus = () => {
-    setIsPasswordValid(true);
-  };
-
-  const onPassword2Blur = data => {
-    setPassword2(data);
-    setIsPasswordEqual(data.length !== 0 && password === data);
-  };
-
-  const onPassword2Focus = () => {
-    setIsPasswordEqual(true);
-  };
-
-  const handleLoginClick = () => {
-    setIsError(false);
-    if (isPasswordValid && isPasswordEqual && isEmailValid) {
+  const handleLoginClick = e => {
+    e.preventDefault();
+    if (isRequiredFieldsValid) {
       register({ email, password });
-    } else {
-      setIsError(true);
     }
   };
 
-  useEffect(() => {
-    setIsError(false);
-  }, []);
-
   return (
     <div>
-      {isError
-      && <div className={styles.main_container__error_message}>All fields are required. Please double check</div>}
       <Grid textAlign="center" className={styles.main_container}>
         <Grid.Column className={styles.main_container__column}>
           <Header as="h2" textAlign="center" className={styles.main_container__header}>
@@ -84,7 +63,7 @@ const RegisterForm: FunctionComponent<IRegisterForm> = ({
             name="loginForm"
             size="large"
             onSubmit={handleLoginClick}
-            warning={password.length > 0 && !isPasswordValid}
+            warning={!isEmailValid || !isPasswordValid || !isPasswordsMatch}
           >
             <Segment className={styles.main_container__form}>
               <Form.Input
@@ -95,9 +74,10 @@ const RegisterForm: FunctionComponent<IRegisterForm> = ({
                 type="text"
                 labelPosition="left"
                 label="Email"
-                error={!isEmailValid && email.length > 0}
-                onBlur={ev => onEmailBlur(ev.target.value)}
-                onFocus={() => onEmailFocus()}
+                required
+                onChange={e => { setEmail(e.target.value); validateEmail(e.target.value); }}
+                error={!isEmailValid}
+                onBlur={validateEmail}
               />
               <Form.Input
                 fluid
@@ -107,9 +87,10 @@ const RegisterForm: FunctionComponent<IRegisterForm> = ({
                 type="password"
                 labelPosition="left"
                 label="Password"
-                error={!isPasswordValid && password.length > 0}
-                onBlur={ev => onPasswordBlur(ev.target.value)}
-                onFocus={() => onPasswordFocus()}
+                required
+                onChange={e => { setPassword(e.target.value); validatePassword(e.target.value); }}
+                error={!isPasswordValid}
+                onBlur={validatePassword}
               />
               <Form.Input
                 fluid
@@ -119,20 +100,24 @@ const RegisterForm: FunctionComponent<IRegisterForm> = ({
                 type="password"
                 labelPosition="left"
                 label="Repeat password"
-                error={!isPasswordEqual && password2.length > 0}
-                onBlur={ev => onPassword2Blur(ev.target.value)}
-                onFocus={() => onPassword2Focus()}
+                required
+                onChange={e => { setRepeatPassword(e.target.value); validateRepeatPassword(e.target.value); }}
+                error={!isPasswordsMatch}
+                onBlur={validateRepeatPassword}
               />
               <Message
                 warning
                 list={[
-                  !isPasswordValid && 'Password contains at least 8 characters (letters and digits)'
+                  !isEmailValid && EMAIL_MESSAGE,
+                  !isPasswordValid && PASSWORD_MESSAGE,
+                  !isPasswordsMatch && PASSWORDS_NOT_MATCH
                 ]}
               />
               <div className={styles.main_container__submit_block}>
                 <GradientButton
                   className={styles.main_container__button_auth}
                   loading={isRegisterLoading}
+                  disabled={!isRequiredFieldsValid()}
                 >
                   SIGN UP
                 </GradientButton>

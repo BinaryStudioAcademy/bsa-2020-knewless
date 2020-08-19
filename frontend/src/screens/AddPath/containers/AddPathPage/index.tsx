@@ -21,6 +21,12 @@ import GrayOutlineButton from '@components/buttons/GrayOutlineButton';
 import { PathPreview } from '../../components/PathPreview';
 import { history } from '@helpers/history.helper';
 import Confirmation from '@components/Confirmation';
+import {
+  DESCRIPTION_MESSAGE,
+  isValidPathDescription,
+  isValidPathName,
+  PATH_NAME_MESSAGE
+} from '@helpers/validation.helper';
 
 export interface ISavePathProps {
   courses: ICourse[];
@@ -45,8 +51,8 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
   const [pathImageTag, setPathImageTag] = useState(undefined);
   const [selectedTags, setSelectedTags] = useState([]);
   const [storedTags, setStoredTags] = useState([]);
-  const [nameValid, setNameValid] = useState(true);
-  const [errors, setErrors] = useState({ name: undefined });
+  const [isPathNameValid, setIsPathNameValid] = useState(true);
+  const [isDescriptionValid, setIsDescriptionValid] = useState(true);
   const [isConfirming, setIsConfirming] = useState(false);
 
   useEffect(() => {
@@ -64,21 +70,19 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
     setSelectedTags([]);
   }, [tags]);
 
-  function validateName(newName?: string) {
-    const testedName = typeof newName === 'string' ? newName : pathName;
-    const isValid = testedName.trim() !== '';
-    setNameValid(isValid);
-    if (!isValid) {
-      setErrors(prev => ({ ...prev, name: 'Name must not be empty!' }));
-    } else {
-      setErrors(prev => ({ ...prev, name: undefined }));
-    }
-    return isValid;
+  function validatePathName(newName?: string) {
+    const lastChangesName = typeof newName === 'string' ? newName : pathName;
+    setIsPathNameValid(!!lastChangesName && isValidPathName(lastChangesName));
   }
 
+  function validateDescription(newName?: string) {
+    setIsDescriptionValid(isValidPathDescription(typeof newName === 'string' ? newName : pathDescription));
+  }
+
+  const isRequiredFieldsValid = (): boolean => isPathNameValid && isDescriptionValid;
+
   function handleSavePath() {
-    const isValid = validateName();
-    if (isValid) {
+    if (isRequiredFieldsValid()) {
       const path: IPath = {
         name: pathName,
         description: pathDescription,
@@ -166,22 +170,25 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
                   <span className={styles.form__label}>Name:</span>
                   <Input
                     name="Name"
-                    className={styles.form__name_input}
+                    className={
+                      `${!isPathNameValid && styles.no_bottom_rounding_field}`
+                    }
                     onChange={ev => {
-                      setPathName(ev.target.value);
-                      validateName(ev.target.value);
+                      const { value } = ev.target;
+                      setPathName(value);
+                      validatePathName(value);
                     }}
-                    onBlur={validateName}
-                    error={!nameValid}
+                    onBlur={() => validatePathName()}
+                    error={!isPathNameValid}
                     fluid
                   />
-                  {errors.name && (
-                  <Label
-                    className={styles.error_message}
-                    pointing="below"
-                    content={errors.name}
-                    color="red"
-                  />
+                  {!isPathNameValid && (
+                    <Label
+                      basic
+                      className={styles.warningLabel}
+                      promt="true"
+                      content={PATH_NAME_MESSAGE}
+                    />
                   )}
                 </div>
                 <div className={`${styles.form__tags} ${styles.form__group}`}>
@@ -190,14 +197,14 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
                     <InlineLoaderWrapper loading={tagsLoading} centered>
                       {console.log('stored tags: ', storedTags)}
                       {!tagsLoading && (
-                      <TagSelector
-                        ref={tagsRef}
-                        onDelete={onTagDeletion}
-                        onAddition={onTagAddition}
-                        suggestions={storedTags}
-                        tags={selectedTags}
-                        id="PathTags"
-                      />
+                        <TagSelector
+                          ref={tagsRef}
+                          onDelete={onTagDeletion}
+                          onAddition={onTagAddition}
+                          suggestions={storedTags}
+                          tags={selectedTags}
+                          id="PathTags"
+                        />
                       )}
                     </InlineLoaderWrapper>
                   </div>
@@ -206,10 +213,26 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
                   <span className={styles.form__label}>Description:</span>
                   <Form className={styles.form__description_wrapper}>
                     <TextArea
-                      className={styles.form__description_area}
+                      className={
+                        `${styles.form__description_area} ${!isDescriptionValid && styles.no_bottom_rounding_field}`
+                      }
                       rows="5"
-                      onChange={(ev: any) => setPathDescription(ev.target.value)}
+                      onChange={(ev: any) => {
+                        const { value } = ev.target;
+                        setPathDescription(value);
+                        validateDescription(value);
+                      }}
+                      error={!isDescriptionValid}
+                      onBlur={() => validateDescription()}
                     />
+                    {!isDescriptionValid && (
+                      <Label
+                        basic
+                        className={styles.warningLabel}
+                        promt="true"
+                        content={DESCRIPTION_MESSAGE}
+                      />
+                    )}
                   </Form>
                 </div>
                 <div className={`${styles.form__preview} ${styles.form__group}`}>
@@ -233,7 +256,7 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
                       onClick={handleCancel}
                     />
                     <GradientButton
-                      disabled={!nameValid}
+                      disabled={!isPathNameValid}
                       className={styles.btn_save}
                       content="Save"
                       onClick={handleSavePath}
@@ -245,16 +268,16 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
               <div className={styles.form__list_container}>
                 <InlineLoaderWrapper loading={coursesLoading} centered>
                   {!coursesLoading && (
-                  <DependenciesSelector
-                    selected={selectedCourses}
-                    stored={storedCourses}
-                    selectedToStored={moveSelectedToStored}
-                    storedToSelected={moveStoredToSelected}
-                    dependencyName="course"
-                    itemToJsx={itemToJsxWithClick}
-                    sortFn={compareName}
-                    addNewDependencyFn={() => setIsConfirming(true)}
-                  />
+                    <DependenciesSelector
+                      selected={selectedCourses}
+                      stored={storedCourses}
+                      selectedToStored={moveSelectedToStored}
+                      storedToSelected={moveStoredToSelected}
+                      dependencyName="course"
+                      itemToJsx={itemToJsxWithClick}
+                      sortFn={compareName}
+                      addNewDependencyFn={() => setIsConfirming(true)}
+                    />
                   )}
                 </InlineLoaderWrapper>
               </div>

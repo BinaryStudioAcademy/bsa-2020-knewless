@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Form } from 'semantic-ui-react';
-
 import styles from './styles.module.sass';
 import { locationOptions } from './options';
 import { useHistory } from 'react-router-dom';
@@ -12,6 +11,20 @@ import GrayOutlineButton from '@components/buttons/GrayOutlineButton';
 import GradientButton from '@components/buttons/GradientButton';
 import { resetSettingsModeRoutine, setUserRoleRoutine } from 'containers/AppRouter/routines';
 import { RoleTypes } from 'containers/AppRouter/models/IRole';
+import {
+  BIOGRAPHY_MESSAGE,
+  COMPANY_MESSAGE,
+  FIRST_NAME_MESSAGE,
+  isValidBiography,
+  isValidCompany, isValidJob,
+  isValidNameSurname,
+  isValidTwitter,
+  isValidUrl, JOB_MESSAGE,
+  LAST_NAME_MESSAGE,
+  REQUIRED_FIELD_MESSAGE,
+  TWITTER_MESSAGE,
+  URL_MESSAGE
+} from '@helpers/validation.helper';
 import AvatarUploader from '@components/avatar/AvatarUploader';
 
 export interface IAuthorSettingsProps {
@@ -34,16 +47,16 @@ const AuthorSettings: React.FunctionComponent<IAuthorSettingsProps> = ({
     return () => resetSettingsMode();
   }, []);
   const history = useHistory();
-  const [firstName, setFirstName] = useState(settings.firstName);
-  const [lastName, setLastName] = useState(settings.lastName);
+  const [firstName, setFirstName] = useState(settings.firstName || '');
+  const [lastName, setLastName] = useState(settings.lastName || '');
   const [avatar, setAvatar] = useState(settings.avatar);
   const [uploadImage, setUploadImage] = useState(null);
-  const [location, setLocation] = useState(settings.location);
-  const [company, setCompany] = useState(settings.company);
-  const [job, setJob] = useState(settings.job);
-  const [website, setWebsite] = useState(settings.website);
-  const [twitter, setTwitter] = useState(settings.twitter);
-  const [biography, setBiography] = useState(settings.biography);
+  const [location, setLocation] = useState(settings.location || '');
+  const [company, setCompany] = useState(settings.company || '');
+  const [job, setJob] = useState(settings.job || '');
+  const [website, setWebsite] = useState(settings.website || '');
+  const [twitter, setTwitter] = useState(settings.twitter || '');
+  const [biography, setBiography] = useState(settings.biography || '');
   useEffect(() => {
     setAvatar(settings.avatar);
     setFirstName(settings.firstName);
@@ -59,26 +72,75 @@ const AuthorSettings: React.FunctionComponent<IAuthorSettingsProps> = ({
     setUploadImage(file);
     setAvatar(URL.createObjectURL(file));
   };
-  const handleSubmit = () => {
-    setUserRole(RoleTypes.AUTHOR);
-    const updatedSettings = {
-      id: settings.id,
-      firstName,
-      lastName,
-      avatar,
-      location,
-      company,
-      job,
-      website,
-      twitter,
-      biography,
-      uploadImage
-    };
-    setSettings(updatedSettings);
-    history.push('/');
+
+  const [isFirstNameValid, setIsFirstNameValid] = useState(true);
+  const [isLastNameValid, setIsLastNameValid] = useState(true);
+  const [isCompanyValid, setIsCompanyValid] = useState(true);
+  const [isWebsiteValid, setIsWebsiteValid] = useState(true);
+  const [isTwitterValid, setIsTwitterValid] = useState(true);
+  const [isBiographyValid, setIsBiographyValid] = useState(true);
+  const [isJobValid, setIsJobValid] = useState(true);
+  const [isLocationValid, setIsLocationValid] = useState(true);
+
+  const isRequiredFieldsValid = (): boolean => !!firstName && !!lastName && !!location && !!company && !!job
+    && !!website && !!twitter && isFirstNameValid && isLastNameValid && isCompanyValid && isWebsiteValid
+    && isTwitterValid && isBiographyValid && isLocationValid && isJobValid;
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    if (isRequiredFieldsValid()) {
+      setUserRole(RoleTypes.AUTHOR);
+      const updatedSettings = {
+        id: settings.id,
+        firstName,
+        lastName,
+        avatar,
+        location,
+        company,
+        job,
+        website,
+        twitter,
+        biography,
+        uploadImage
+      };
+      setSettings(updatedSettings);
+      history.push('/');
+    }
   };
   const handleCancel = () => {
     history.push('/');
+  };
+  const validateFirstName = (newName?: string) => {
+    const lastChangeValue = typeof newName === 'string' ? newName : firstName;
+    setIsFirstNameValid(!!firstName && isValidNameSurname(lastChangeValue));
+  };
+  const validateLastName = (newName?: string) => {
+    const lastChangeValue = typeof newName === 'string' ? newName : lastName;
+    setIsLastNameValid(!!lastChangeValue && isValidNameSurname(lastChangeValue));
+  };
+  const validateCompany = (newName?: string) => {
+    const lastChangeValue = typeof newName === 'string' ? newName : company;
+    setIsCompanyValid(!!lastChangeValue && isValidCompany(lastChangeValue));
+  };
+  const validateWebsite = (newName?: string) => {
+    const lastChangeValue = typeof newName === 'string' ? newName : website;
+    setIsWebsiteValid(!!lastChangeValue && isValidUrl(lastChangeValue));
+  };
+  const validateTwitter = (newName?: string) => {
+    const lastChangeValue = typeof newName === 'string' ? newName : twitter;
+    setIsTwitterValid(!!lastChangeValue && isValidTwitter(lastChangeValue));
+  };
+  const validateBiography = (newName?: string) => {
+    const lastChangeValue = typeof newName === 'string' ? newName : biography;
+    setIsBiographyValid(!!lastChangeValue && isValidBiography(lastChangeValue));
+  };
+  const validateLocation = (newName?: string) => {
+    const lastChangeValue = typeof newName === 'string' ? newName : location;
+    setIsLocationValid(!!lastChangeValue && lastChangeValue.length > 1);
+  };
+  const validateJob = (newName?: string) => {
+    const lastChangeValue = typeof newName === 'string' ? newName : job;
+    setIsJobValid(!!lastChangeValue && isValidJob(lastChangeValue));
   };
   return (
     <div className={styles.settings}>
@@ -92,86 +154,152 @@ const AuthorSettings: React.FunctionComponent<IAuthorSettingsProps> = ({
           />
         </div>
       </div>
-      <Form className={styles.formSettings}>
+      <Form
+        className={styles.formSettings}
+        onKeyPress={e => {
+          if (e.key === 'Enter') e.preventDefault();
+        }}
+      >
         <div id={styles.personalTitle} className={styles.title}>Personal info</div>
         <Form.Group widths="equal">
           <Form.Input
             fluid
-            className={styles.formField}
+            className={`${styles.formField} ${!isFirstNameValid && styles.roundedBottomField}`}
             label="First Name"
             placeholder="First Name"
             value={firstName}
-            onChange={e => setFirstName(e.target.value)}
+            onChange={e => {
+              const { value } = e.target;
+              setFirstName(value);
+              validateFirstName(value);
+            }}
+            required
+            error={isFirstNameValid ? false : FIRST_NAME_MESSAGE}
+            onBlur={() => validateFirstName()}
           />
           <Form.Input
             fluid
-            className={styles.formField}
+            className={`${styles.formField} ${!isLastNameValid && styles.roundedBottomField}`}
             label="Last Name"
             placeholder="Last Name"
             value={lastName}
-            onChange={e => setLastName(e.target.value)}
+            onChange={e => {
+              const { value } = e.target;
+              setLastName(value);
+              validateLastName(value);
+            }}
+            required
+            error={isLastNameValid ? false : LAST_NAME_MESSAGE}
+            onBlur={() => validateLastName()}
           />
         </Form.Group>
         <Form.Group widths="equal">
           <Form.Input
             fluid
-            className={styles.formField}
+            className={`${styles.formField} ${!isCompanyValid && styles.roundedBottomField}`}
             label="Company name"
             value={company}
-            onChange={e => setCompany(e.target.value)}
+            onChange={e => {
+              const { value } = e.target;
+              setCompany(value);
+              validateCompany(value);
+            }}
             placeholder="Company name"
+            required
+            error={isCompanyValid ? false : COMPANY_MESSAGE}
+            onBlur={() => validateCompany()}
           />
           <Form.Input
             fluid
-            className={styles.formField}
+            className={`${styles.formField} ${!isJobValid && styles.roundedBottomField}`}
             label="Job title"
             placeholder="Job title"
             value={job}
-            onChange={e => setJob(e.target.value)}
+            onChange={e => {
+              const { value } = e.target;
+              setJob(value);
+              validateJob(value);
+            }}
+            required
+            error={isJobValid ? false : JOB_MESSAGE}
+            onBlur={() => validateJob()}
           />
         </Form.Group>
         <Form.Group widths="2">
           <Form.Input
             fluid
-            className={styles.formField}
+            className={`${styles.formField} ${!isWebsiteValid && styles.roundedBottomField}`}
             label="Personal website"
             placeholder="Personal website"
             value={website}
-            onChange={e => setWebsite(e.target.value)}
+            onChange={e => {
+              const { value } = e.target;
+              setWebsite(value);
+              validateWebsite(value);
+            }}
+            required
+            error={isWebsiteValid ? false : URL_MESSAGE}
+            onBlur={() => validateWebsite()}
           />
           <Form.Input
             fluid
-            className={styles.formField}
+            className={`${styles.formField} ${!isTwitterValid && styles.roundedBottomField}`}
             label="Twitter"
             placeholder="Twitter"
             value={twitter}
-            onChange={e => setTwitter(e.target.value)}
+            onChange={e => {
+              const { value } = e.target;
+              setTwitter(value);
+              validateTwitter(value);
+            }}
+            required
+            error={isTwitterValid ? false : TWITTER_MESSAGE}
+            onBlur={() => validateTwitter()}
           />
         </Form.Group>
         <Form.Group widths="2">
           <Form.Select
             fluid
-            className={styles.formField}
+            className={`${styles.formField} ${!isLocationValid && styles.roundedBottomField}`}
             label="Location"
             placeholder="Select"
             options={locationOptions}
             value={location}
-            onChange={(e, data) => setLocation(data.value as string)}
+            onChange={(e, data) => {
+              const value = data.value as string;
+              setLocation(value);
+              validateLocation(value);
+            }}
+            required
+            error={isLocationValid ? false : REQUIRED_FIELD_MESSAGE}
+            onBlur={() => validateLocation()}
           />
         </Form.Group>
         <Form.Group widths="equal">
           <Form.TextArea
-            className={styles.formField}
+            className={`${styles.formField} ${!isBiographyValid && styles.roundedBottomField}`}
             label="Biography"
             value={biography}
             id={styles.textBio}
-            onChange={(e, data) => setBiography(data.value as string)}
+            onChange={(e, data) => {
+              const value = data.value as string;
+              setBiography(value);
+              validateBiography(value);
+            }}
             placeholder="Tell about yourself"
+            error={isBiographyValid ? false : BIOGRAPHY_MESSAGE}
+            onBlur={() => validateBiography()}
           />
         </Form.Group>
-        <Form.Group className={styles.formField}>
+        <Form.Group className={`${styles.formField} ${styles.formButtons}`}>
           <GrayOutlineButton className={styles.Btn} onClick={() => handleCancel()}>Cancel </GrayOutlineButton>
-          <GradientButton className={styles.Btn} onClick={() => handleSubmit()}>Save</GradientButton>
+          <GradientButton
+            className={styles.Btn}
+            onClick={e => handleSubmit(e)}
+            disabled={!isRequiredFieldsValid()}
+          >
+            Save
+          </GradientButton>
         </Form.Group>
       </Form>
     </div>
