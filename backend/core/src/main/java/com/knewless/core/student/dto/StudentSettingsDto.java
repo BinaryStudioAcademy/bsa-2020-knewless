@@ -2,6 +2,7 @@ package com.knewless.core.student.dto;
 
 import lombok.Data;
 
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -24,5 +25,6 @@ public class StudentSettingsDto {
     private String employment;
     private String education;
     private int year;
+    private List<UUID> tags;
 
 }

@@ -9,7 +9,6 @@ function* getData(action: Routine<any>) {
   try {
     const response = yield call(lecturesService.getData, action.payload);
     yield put(fetchCourseDtoRoutine.success(response));
-    toastr.success('Data loaded!');
   } catch (error) {
     yield put(fetchCourseDtoRoutine.failure(error?.message));
     toastr.error('Loading failed!');

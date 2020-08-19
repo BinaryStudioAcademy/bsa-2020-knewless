@@ -13,6 +13,7 @@ interface ITagSelectorProps {
   // to apply tag-control manually: ref.addTag(), ref.removeTag() etc.
   ref?: React.Ref<unknown>;
   minQueryLength?: number;
+  placeholderText?: string
 }
 
 // eslint-disable-next-line @typescript-eslint/interface-name-prefix
@@ -25,7 +26,7 @@ export interface Tag {
 // Usage example: screens\AddPath\containers\AddPathPage\index.tsx
 export const TagSelector: React.FC<ITagSelectorProps> = ({
   onDelete, onAddition, id, noSuggestionsText = 'Tag not found',
-  tags, suggestions, ref, minQueryLength = 1
+  tags, suggestions, ref, minQueryLength = 1, placeholderText = 'Add new tag'
 }) => (
   <ReactTags
     ref={ref}
@@ -37,5 +38,6 @@ export const TagSelector: React.FC<ITagSelectorProps> = ({
     id={id}
     autoresize={false}
     minQueryLength={minQueryLength}
+    placeholderText={placeholderText}
   />
 );

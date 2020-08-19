@@ -1,6 +1,7 @@
 import { Routine } from 'redux-saga-routines';
 import { IStudentSettings } from '../../models/IStudentSettings';
-import { fetchGetStudentSettingsRoutine } from '../../routines';
+import { ITag } from '../../models/ITag';
+import { fetchGetStudentSettingsRoutine, fetchAllTagsRoutine } from '../../routines';
 
 const initSettings = {
   id: undefined,
@@ -19,12 +20,29 @@ const initSettings = {
   role: undefined,
   employment: undefined,
   education: undefined,
-  year: undefined
+  year: undefined,
+  tags: []
 };
 
 export const studentSettings = (state: IStudentSettings = initSettings, action: Routine<any>) => {
   switch (action.type) {
     case fetchGetStudentSettingsRoutine.SUCCESS:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
+const basicTag = {
+  id: undefined,
+  name: undefined,
+  imageSrc: undefined
+}
+
+export const getAllTags = (state: ITag[] = [basicTag], action: Routine<any>) => {
+  switch(action.type) {
+    case fetchAllTagsRoutine.SUCCESS:
+      console.log(action.payload);
       return action.payload;
     default:
       return state;

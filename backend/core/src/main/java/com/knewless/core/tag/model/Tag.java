@@ -21,11 +21,8 @@ public class Tag extends BaseEntity {
 	
 	@Column(name = "source")
 	private String source;
-	
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
-	@JoinTable(name = "user_tag",
-			joinColumns = @JoinColumn(name = "tag_id"),
-			inverseJoinColumns = @JoinColumn(name = "user_id"))
+
+	@ManyToMany(mappedBy = "tags", cascade = {CascadeType.REFRESH, CascadeType.PERSIST})
 	private Set<User> users = Set.of();
 	
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)

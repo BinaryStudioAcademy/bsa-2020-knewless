@@ -17,3 +17,11 @@ export const getSettings = async () => {
   });
   return response.json();
 };
+
+export const getTags = async () => {
+  const response = await callApi({
+    endpoint: 'api/tags',
+    type: 'GET'
+  });
+  return response.json();
+};

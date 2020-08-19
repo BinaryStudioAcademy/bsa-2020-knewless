@@ -15,19 +15,50 @@ import {
 } from './options';
 import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { fetchGetStudentSettingsRoutine, fetchSetStudentSettingsRoutine } from '../../routines';
+import { fetchGetStudentSettingsRoutine, fetchSetStudentSettingsRoutine, fetchAllTagsRoutine } from '../../routines';
 import { IStudentSettings } from 'screens/StudentSettings/models/IStudentSettings';
 import { IBindingAction, IBindingCallback1 } from 'models/Callbacks';
 import { resetSettingsModeRoutine, setUserRoleRoutine } from 'containers/AppRouter/routines';
 import { RoleTypes } from 'containers/AppRouter/models/IRole';
 import AvatarUploader from '@components/avatar/AvatarUploader';
+import { ITag } from '../../models/ITag';
+import { TagSelector } from '@components/TagSelector';
+
+const tagSelectorStyles = {
+  maxWidth: '100%',
+  margin: '0',
+  padding: '0',
+  border: '0',
+  outline: 'none',
+  fontSize: '1.1em',
+  lineHeight: 'inherit',
+  background: 'none',
+  color: '#fff'
+}
 
 export interface IStudentSettingsProps {
+  allTags: ITag[],
   studentSettings: IStudentSettings;
   fetchStudentSettings: IBindingAction;
   fetchSetStudentSettings: IBindingCallback1<IStudentSettings>;
   setUserRole: IBindingCallback1<RoleTypes>;
   resetSettingsMode: IBindingAction;
+  fetchAllTags: IBindingAction;
+}
+
+function presentStudentTagsAssembler (allTags: ITag[], presentTags: string[]) {
+  var resultTags = [];
+
+  if(presentTags[0] === undefined || allTags[0].id === undefined) return null;
+
+  for(let i = 0; i < presentTags.length; i++) {
+    for(let j = 0; j < allTags.length; j++) {
+      if(allTags[j].id === presentTags[i]) {
+        resultTags.push(allTags[j]);
+      }
+    }
+  }
+  return resultTags;
 }
 
 const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
@@ -35,10 +66,14 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
   fetchStudentSettings: getSettings,
   fetchSetStudentSettings: setSettings,
   setUserRole,
-  resetSettingsMode
+  resetSettingsMode,
+  fetchAllTags,
+  allTags
 }) => {
   useEffect(() => {
     getSettings();
+    console.log(settings); // you have to delete this
+    fetchAllTags();
     return () => resetSettingsMode();
   }, []);
   const history = useHistory();
@@ -60,6 +95,9 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
   const [education, setEducation] = useState(settings.education);
   const [year, setYear] = useState(settings.year);
 
+  const [storedTags, setStoredTags] = useState([]);
+  const [selectedTags, setSelectedTags] = useState([]);
+
   useEffect(() => {
     setAvatar(settings.avatar);
     setFirstName(settings.firstName);
@@ -78,6 +116,14 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
     setEducation(settings.education);
     setYear(settings.year);
   }, [settings]);
+
+  useEffect(() => {
+    setStoredTags(allTags);
+    setSelectedTags(settings.tags[0] === undefined
+      ? []
+      : presentStudentTagsAssembler(allTags, settings.tags));
+  }, [allTags]);
+
   const handleUploadFile = file => {
     setUploadImage(file);
     setAvatar(URL.createObjectURL(file));
@@ -102,14 +148,33 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
       employment,
       education,
       year,
-      uploadImage
+      uploadImage,
+      tags: selectedTags.map(t => t.id)
     };
+    console.log('Settings: ', updatedSettings);
     setSettings(updatedSettings);
     history.push('/');
   };
   const handleCancel = () => {
     history.push('/');
   };
+
+  function onTagAddition (tag) {
+    setSelectedTags(prev => [...prev, tag]);
+    setStoredTags(prev => prev.filter(t => t.id !== tag.id));
+  }
+
+  function onTagDeletion (i) {
+    console.log('index in selected Tags: ', i)
+    const deletedTag = selectedTags[i];
+    console.log('seletedTags[i] : ', selectedTags[i]);
+    if (deletedTag !== undefined) {
+      setSelectedTags(prev => prev.filter((_, index) => index !== i));
+      setStoredTags(prev => [...prev, deletedTag]);
+    }
+    console.log('selected tags after deletion: ', selectedTags);
+  }
+
   return (
     <div className={styles.settings}>
       <div id={styles.settingsTitle}>Account Settings</div>
@@ -189,6 +254,17 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
             placeholder="Tell about yourself"
           />
         </Form.Group>
+        <div className={styles.tagSelector}>
+          <div className={styles.interests}>Interests:</div>
+          <TagSelector
+            id={styles.selectorId}
+            onDelete={onTagDeletion}
+            onAddition={onTagAddition}
+            suggestions={storedTags}
+            tags={selectedTags}
+            placeholderText={'Add new'}
+          />
+        </div>
         <div id={styles.demographicTitle} className={styles.title}> Demographic Info</div>
         <Form.Group width="4">
           <Form.Checkbox
@@ -291,6 +367,7 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
             onChange={(e, data) => setYear(data.value as number)}
           />
         </Form.Group>
+
         <Form.Group className={styles.formField}>
           <GrayOutlineButton className={styles.Btn} onClick={() => handleCancel()}>Cancel </GrayOutlineButton>
           <GradientButton className={styles.Btn} onClick={() => handleSubmit()}>Save</GradientButton>
@@ -300,18 +377,17 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
   );
 };
 
-const mapStateToProps = (state: any) => {
-  const { studentSettings: { studentSettings } } = state;
-  return {
-    studentSettings
-  };
-};
+const mapStateToProps = (state: any) => ({
+  studentSettings: state.studentSettings.studentSettings,
+  allTags: state.studentSettings.getAllTags
+});
 
 const mapDispatchToProps = {
   fetchStudentSettings: fetchGetStudentSettingsRoutine,
   fetchSetStudentSettings: fetchSetStudentSettingsRoutine,
   setUserRole: setUserRoleRoutine,
-  resetSettingsMode: resetSettingsModeRoutine
+  resetSettingsMode: resetSettingsModeRoutine,
+  fetchAllTags: fetchAllTagsRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(StudentSettings);
