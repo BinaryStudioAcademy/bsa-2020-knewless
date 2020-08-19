@@ -26,7 +26,7 @@ List<Lecture> getLecturesByUserId(@Param("id")UUID id);
     @Transactional
     @Modifying
     @Query("UPDATE Lecture l " +
-            "SET l.duration = :duration " +
+            "SET l.duration = :duration, l.sourceUrl = :path " +
             "WHERE l.id = :id")
-    void setDuration(@Param("id")UUID id, @Param("duration")int duration);
+    void setDurationPath(@Param("id")UUID id, @Param("duration")int duration, @Param("path")String path);
 }

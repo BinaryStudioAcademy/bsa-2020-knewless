@@ -3,12 +3,14 @@ package com.knewless.core.course.dto;
 import com.knewless.core.course.model.Level;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.UUID;
 
-@AllArgsConstructor
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class AuthorCourseQueryResult {
     private UUID id;
     private String name;

@@ -54,7 +54,6 @@ $height_btn: 40px
   flex-grow: 1
   display: flex
   flex-direction: column
-  width: 100%
   margin-bottom: 5vh
 
 .settingsInput
@@ -69,11 +68,11 @@ $height_btn: 40px
   display: flex
   justify-content: space-between
   align-items: stretch
-  margin-bottom: 2em
+  margin-bottom: 2.5em
 
 textarea
   padding: 10px
-  
+
 .customtextarea
   padding: 10px
   outline: none
@@ -85,9 +84,9 @@ textarea
   height: 100%
   color: black
   background: white
-  padding: auto
-  font-family: Custom Open Sans
+  font-family: Custom Open Sans, sans-serif
   font-style: normal
+
   &_error
     padding: 10px
     outline: none
@@ -97,23 +96,24 @@ textarea
     position: relative
     width: 100%
     height: 100%
-    padding: auto
-    font-family: Custom Open Sans
+    font-family: Custom Open Sans, sans-serif
     font-style: normal
     background-color: #fff6f6
     border-color: #e0b4b4
     color: #9f3a38
     box-shadow: none
+    border-bottom-left-radius: 0 !important
+    border-bottom-right-radius: 0 !important
 
 .textareacontainer
-  margin-bottom: 30px
+  margin-bottom: 1.5em
   position: relative
   width: 100%
   height: 15em
   background: inherit
   padding: auto
   color: white
-  font-family: Custom Open Sans
+  font-family: Custom Open Sans, sans-serif
   font-style: normal
   display: flex
   flex-direction: column
@@ -131,7 +131,7 @@ textarea
   cursor: default
   margin-bottom: 5px
   color: white
-  font-family: Custom Open Sans
+  font-family: Custom Open Sans, sans-serif
   font-style: normal
 
 .list_container
@@ -146,9 +146,8 @@ textarea
   padding: auto
   margin-left: 1em
   width: auto
-  font-family: Custom Open Sans
+  font-family: Custom Open Sans, serif
   font-style: normal
-  height: 
   display: flex
   flex-direction: column
   justify-content: space-between
@@ -177,62 +176,63 @@ textarea
   border-radius: 3px !important
 
 \:global(.ui.button).button_save
-    width: $width_btn
-    height: $height_btn
-    font-family: 'Montserrat', sans-serif
-    font-style: normal
-    font-weight: bold
-    font-size: 1em
-    line-height: 1em
-    margin-right: 1.6em
-    align-items: center
-    color: #FFFFFF
-    background: #20649b
-    border-radius: 3px
-  
+  width: $width_btn
+  height: $height_btn
+  font-family: 'Montserrat', sans-serif
+  font-style: normal
+  font-weight: bold
+  font-size: 1em
+  line-height: 1em
+  margin-right: 1.6em
+  align-items: center
+  color: #FFFFFF
+  background: #20649b
+  border-radius: 3px
+
 \:global(.ui.button).button_release
-    border-radius: 3px
-    font-size: 1em
-    width: $width_btn
-    height: $height_btn
+  border-radius: 3px
+  font-size: 1em
+  width: $width_btn
+  height: $height_btn
 
 \:global(.ui.button).button_release_disabled
-    border-radius: 3px
-    width: $width_btn
-    height: $height_btn
-    opacity: 0.5
-    cursor: default
-    
+  border-radius: 3px
+  width: $width_btn
+  height: $height_btn
+  opacity: 0.5
+  cursor: default
+
 
 \:global(.ui.button).button_save_disabled
-    width: $width_btn
-    height: $height_btn
-    font-family: 'Montserrat', sans-serif
-    font-style: normal
-    font-weight: bold
-    font-size: 1em
-    line-height: 1em
-    margin-right: 1.6em
-    align-items: center
-    color: #FFFFFF
-    background: #454849
-    border-radius: 3px
-    opacity: 0.5
-    cursor: default !important
+  width: $width_btn
+  height: $height_btn
+  font-family: 'Montserrat', sans-serif
+  font-style: normal
+  font-weight: bold
+  font-size: 1em
+  line-height: 1em
+  margin-right: 1.6em
+  align-items: center
+  color: #FFFFFF
+  background: #454849
+  border-radius: 3px
+  opacity: 0.5
+  cursor: default !important
 
 \:global(.ui.basic.label).warninglabel
-  border-top-left-radius: 0 
-  border-top-right-radius: 0
   background-color: #f7d0d0
   z-index: 2
-  margin: 0
   padding: 0
-  margin-top: -3px
+  margin: -3px 0 0
   text-align: center
-  font-size: 0.7em
+  font-size: 0.8em
+  font-weight: 700
+  line-height: 1.3em
+  border-radius: 0 0 5px 5px
+  color: black
 
 .input_warning_container
-  padding: auto
+  padding-bottom: 0
   position: relative
   height: 40px
   width: 100%

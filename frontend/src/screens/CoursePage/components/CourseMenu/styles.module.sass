@@ -1,0 +1,89 @@
+@import '../../styles/variables'
+
+.menu
+  color: #FFF
+  position: relative
+
+.menu__header
+  width: 29rem
+  margin-bottom: 2rem
+
+.menu__options
+  display: grid
+  grid-template-columns: 0.8fr 1fr 0.8fr
+  grid-template-rows: 1fr 0.1rem
+  justify-items: start
+
+.menu__button
+  display: flex
+  padding: 0.2rem 1rem 0.7rem 0.3rem
+  cursor: pointer
+  background: transparent
+  outline: none
+  border: none
+  *
+    transition: all 0.3s ease-in-out
+
+.button_selected
+  p
+    color: #58C2F1
+  .icon_fill path
+    fill: #58C2F1
+  .icon_stroke path
+    stroke: #58C2F1
+
+.button_ordinary
+  p
+    color: #596C7E
+  &:hover
+    p
+      color: #58C2F1
+    .icon_fill path
+      fill: #58C2F1
+    .icon_stroke path
+      stroke: #58C2F1
+
+.icon_fill
+  margin-right: 0.4rem
+
+.icon_stroke
+  margin-right: 0.3rem
+
+.icon_fill_selected
+  path
+   fill: #58C2F1
+
+.icon_stroke_selected
+  path
+    stroke: #58C2F1
+
+.separator
+  background: #596C7E
+  width: 100%
+
+.selected_separator
+  background: linear-gradient(83.47deg, #0084F8 9.02%, #FF8576 90.81%)
+  width: 100%
+
+.menu__content_container
+  position: relative
+  margin-right: $indent_right
+  margin-bottom: 8vh
+  max-height: 20rem
+  overflow-y: auto
+
+.lectures div div:last-child div
+  display: none
+
+.lecture
+  outline: none
+  background: none
+  width: 100%
+  height: auto
+  border: none
+  cursor: pointer
+  *
+    cursor: pointer
+    transition: all 0.3s
+
+

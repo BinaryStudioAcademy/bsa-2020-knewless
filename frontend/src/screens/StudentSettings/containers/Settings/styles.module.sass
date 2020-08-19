@@ -21,11 +21,8 @@ body
 #settingsTitle
   margin: auto
   width: 100%
-  padding-top: 30px
-  padding-bottom: 20px
   max-width: $container_width + ($side_padding * 2)
-  padding-left: $side_padding
-  padding-right: $side_padding
+  padding: 30px $side_padding 20px
   color: #ffff
   font-family: Custom Open Sans, serif
   font-style: normal
@@ -43,7 +40,26 @@ body
   padding-bottom: 30px
 
   .formField
-    margin-bottom: 30px !important
+    margin-bottom: 1em !important
+
+    \:global(.ui.pointing.label)
+      &
+        background-color: #f7d0d0 !important
+        color: black !important
+        margin: 0 !important
+        width: 100% !important
+        border-radius: 0 0 5px 5px !important
+
+  .formButtons
+    margin-top: 3em !important
+
+  .roundedBottomField
+    input[type="text"], textarea
+      border-bottom-left-radius: 0 !important
+      border-bottom-right-radius: 0 !important
+
+  \:global(.ui.pointing.label)::before
+    display: none !important
 
   .formCheckBox
     margin-bottom: 30px !important
@@ -57,6 +73,13 @@ body
   #demographicTitle
     margin-top: 100px
     margin-bottom: 20px
+
+  #demographicTitle:after
+    display: inline-block
+    vertical-align: top
+    margin: -.2em 0 0 .2em
+    content: '*'
+    color: #db2828
 
   .title
     font-family: Custom Open Sans, serif
@@ -101,5 +124,25 @@ label
     margin: auto
     overflow: hidden
 
+.tagSelector > div > div > div > input
+  max-width: 100% !important
+  margin: 0 !important
+  padding: 0 !important
+  border: 0 !important
+  outline: none !important
+  font-size: 1.1em !important
+  line-height: inherit !important
+  background: none !important
+  color: #fff !important
+
+.tagSelector > .react-tags > .react-tags__search
+  padding: 0 !important
+
 .uploader
   background: white
+
+.tagSelector
+  margin-bottom: 3%
+
+.interests
+  margin-bottom: 1%

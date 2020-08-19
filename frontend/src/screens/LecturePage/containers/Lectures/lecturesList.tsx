@@ -2,18 +2,15 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Card } from 'semantic-ui-react';
 import { MdTimer } from 'react-icons/md';
-
-import { IBindingCallback1 } from 'models/Callbacks';
-import { chooseVideoRoutine } from '../../routines';
-import { CourseData } from '../../models/CourseData';
+import { ICourseData } from '../../models/ICourseData';
 import { ILecturesList } from '../../models/ILecturesList';
 
 import './styles.sass';
 
 export interface ILecturesListProps {
     listProps: ILecturesList;
-    course: CourseData;
-    setChoosedVideo: IBindingCallback1<ILecturesList>;
+    course: ICourseData;
+    setChosenVideo: Function;
 }
 
 function secondsToTime(mins: any): string { // have to be fixed with moment.js
@@ -22,18 +19,17 @@ function secondsToTime(mins: any): string { // have to be fixed with moment.js
   const divisorForMinutes = mins % 60;
   const minutes = Math.floor(divisorForMinutes);
 
-  const result = `${hours}h ${minutes}m 0s`;
-  return result;
+  return `${hours}h ${minutes}m 0s`;
 }
 
 const LecturesList: React.FunctionComponent<ILecturesListProps> = ({
-  course, listProps, setChoosedVideo
+  course, listProps, setChosenVideo
 }) => (
   <div>
     {course.lectures.map((l, i) => (
       <Card
-        className={listProps.choosedVideo === l.id ? 'lecture active' : 'lecture'}
-        onClick={() => setChoosedVideo({ choosedVideo: l.id })}
+        className={listProps.chosenVideo === l.id ? 'lecture active' : 'lecture'}
+        onClick={() => setChosenVideo({ chosenVideo: l.id })}
         animated={false}
       >
         <div className="numberWrapper">
@@ -61,12 +57,11 @@ const LecturesList: React.FunctionComponent<ILecturesListProps> = ({
 );
 
 const mapStateToProps = (state: any) => ({
-  listProps: state.lecturePage.choosedVideo,
+  listProps: state.lecturePage.chosenVideo,
   course: state.lecturePage.lectureDto
 });
 
 const mapDispatchToProps = {
-  setChoosedVideo: chooseVideoRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(LecturesList);

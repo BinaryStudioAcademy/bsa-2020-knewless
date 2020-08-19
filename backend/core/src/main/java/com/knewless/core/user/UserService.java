@@ -1,7 +1,7 @@
 package com.knewless.core.user;
 
 import com.knewless.core.author.AuthorRepository;
-import com.knewless.core.exception.ResourceNotFoundException;
+import com.knewless.core.exception.custom.ResourceNotFoundException;
 import com.knewless.core.security.oauth.UserPrincipal;
 import com.knewless.core.student.StudentRepository;
 import com.knewless.core.user.dto.UserDto;

@@ -1,5 +1,6 @@
 package com.knewless.core.auth;
 
+import com.knewless.core.exception.UserAlreadyRegisteredException;
 import com.knewless.core.security.model.AuthResponse;
 import com.knewless.core.security.model.LoginRequest;
 import com.knewless.core.security.model.RefreshTokenResponse;
@@ -9,13 +10,11 @@ import com.knewless.core.user.UserRepository;
 import com.knewless.core.user.UserService;
 import com.knewless.core.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class AuthService {
@@ -54,9 +53,11 @@ public class AuthService {
         return new AuthResponse(token, refresh);
     }
 
-    public AuthResponse register(SignUpRequest signUpRequest) {
+    public AuthResponse register(SignUpRequest signUpRequest) throws UserAlreadyRegisteredException {
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with this email already registered.");
+            throw new UserAlreadyRegisteredException(
+                    "User with email '" + signUpRequest.getEmail() + "' is already registered."
+            );
         }
         final var user = new User();
         user.setEmail(signUpRequest.getEmail());

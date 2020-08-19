@@ -4,18 +4,19 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.*;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class LoginRequest {
-    @Email
-    @NotBlank
-    @Email
+
+    @NotNull
+    @Size(min = 5, max = 71, message = "Email length must be 5-71(with @) symbols.")
     private String email;
 
-    @NotBlank
+    @NotNull
+    @Size(min = 8, max = 32, message = "Password length must be 8-32 symbols.")
     private String password;
+
 }

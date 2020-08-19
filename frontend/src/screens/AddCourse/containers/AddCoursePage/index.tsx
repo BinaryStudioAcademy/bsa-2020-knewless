@@ -19,6 +19,14 @@ import GrayOutlineButton from 'components/buttons/GrayOutlineButton';
 import GradientButton from 'components/buttons/GradientButton';
 import UploadLectureModal from '../../components/UploadLectureModal';
 import CourseImage from '@images/default_course_image.jpg';
+import {
+  COURSE_NAME_MESSAGE,
+  DESCRIPTION_MESSAGE,
+  IMAGE_FORMAT_MESSAGE,
+  isValidCourseDescription,
+  isValidCourseName,
+  REQUIRED_FIELD_MESSAGE
+} from '@helpers/validation.helper';
 
 interface IAddCourseProps {
   lectures: ILecture [];
@@ -78,24 +86,14 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
   const [modalAddOpen, setModalAddOpen] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
 
-  const validateName = () => {
-    if (courseName.length === 0) {
-      setIsValidName(false);
-      return;
-    }
-    const pattern = /^[a-zA-Z0-9!:;=<>@#_$&()\\`.+,"-/ ]{2,40}$/;
-    setIsValidName(pattern.test(courseName));
+  const validateName = (newName?: string) => {
+    const lastChangesName = typeof newName === 'string' ? newName : courseName;
+    setIsValidName(!!lastChangesName && isValidCourseName(lastChangesName));
   };
-
-  const validateDescription = () => {
-    if (description.length === 0) return;
-    const pattern = /^[a-zA-Z0-9!:;=<>@#_$&()\\`.+,"-/ ]{10,}$/;
-    setIsValidDescription(pattern.test(description));
-  };
-
-  const validateLevel = () => {
-    if (level === '' || level === null || level === undefined) setIsValidLevel(false);
-  };
+  const validateDescription = (newName?: string) => setIsValidDescription(
+    isValidCourseDescription(typeof newName === 'string' ? newName : description)
+  );
+  const validateLevel = () => setIsValidLevel(!!level);
 
   const handleUploadFile = file => {
     const thisFile: File = file;
@@ -139,7 +137,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
   };
 
   const handleCancel = () => {
-    history.push("/");
+    history.push('/');
   };
 
   const handleUpdateLectures = () => {
@@ -159,7 +157,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
           <div className={styles.settingsInput}>
             <div className={styles.top}>
               <div className={styles.inputfield}>
-                <div className={styles.textcontainer}>Course Name:</div>
+                <div className={styles.textcontainer}>Name:</div>
                 <div className={styles.input_warning_container}>
                   <Input
                     fluid
@@ -168,19 +166,21 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
                     value={courseName}
                     onBlur={() => validateName()}
                     className={styles.customInput}
-                    onChange={ev => { setCourseName(ev.target.value); setIsValidName(true); }}
+                    onChange={ev => {
+                      const { value } = ev.target;
+                      setCourseName(value);
+                      validateName(value);
+                    }}
                     inverted
                   />
-                  {isValidName ? ''
-                    : (
-                      <Label
-                        basic
-                        className={styles.warninglabel}
-                        promt="true"
-                      >
-                        Should consists of 2-40 Latin letters, numbers or special characters.
-                      </Label>
-                    )}
+                  {!isValidName && (
+                    <Label
+                      basic
+                      className={styles.warninglabel}
+                      promt="true"
+                      content={COURSE_NAME_MESSAGE}
+                    />
+                  )}
                 </div>
               </div>
               <div className={styles.dropdown}>
@@ -192,21 +192,23 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
                     className={styles.lvldrop}
                     clearable
                     value={level}
-                    onChange={(e, data) => { setLevel(data.value as string); setIsValidLevel(true); }}
+                    onChange={(e, data) => {
+                      setLevel(data.value as string);
+                      setIsValidLevel(true);
+                    }}
                     search
                     selection
                     options={levelOptions}
                   />
-                  {isValidLevel ? ''
-                    : (
-                      <Label
-                        basic
-                        className={styles.warninglabel}
-                        promt="true"
-                      >
-                        Shouldn&#39;t be empty.
-                      </Label>
-                    )}
+                  {!isValidLevel && (
+                    <Label
+                      basic
+                      className={styles.warninglabel}
+                      promt="true"
+                    >
+                      {REQUIRED_FIELD_MESSAGE}
+                    </Label>
+                  )}
                 </div>
               </div>
             </div>
@@ -214,21 +216,23 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
             <div className={styles.textareacontainer}>
               <textarea
                 className={isValidDescription ? styles.customtextarea : styles.customtextarea_error}
-                onChange={ev => { setDescription(ev.target.value); setIsValidDescription(true); }}
+                onChange={ev => {
+                  const { value } = ev.target;
+                  setDescription(value);
+                  validateDescription(value);
+                }}
                 value={description}
                 onBlur={() => validateDescription()}
               />
-              {isValidDescription ? ''
-                : (
-                  <Label
-                    basic
-                    className={styles.warninglabel}
-                    promt="true"
-                  >
-                    Description should consists of 10 or more Latin letters,
-                    numbers or special characters, or be skipped.
-                  </Label>
-                )}
+              {!isValidDescription && (
+                <Label
+                  basic
+                  className={styles.warninglabel}
+                  promt="true"
+                >
+                  {DESCRIPTION_MESSAGE}
+                </Label>
+              )}
             </div>
             <div className={styles.textcontainer}>Preview:</div>
             <div className={styles.preview_warning_container}>
@@ -248,7 +252,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
                     className={styles.warninglabel}
                     promt="true"
                   >
-                    You should add image with jpg, png, jpeg file extension, or use default.
+                    {IMAGE_FORMAT_MESSAGE}
                   </Label>
                 )}
             </div>

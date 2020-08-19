@@ -14,6 +14,7 @@ import addcourse from '../screens/AddCourse/reducers';
 import authorPublicData from '../screens/AuthorPublicPage/reducers';
 import { appRouter } from 'containers/AppRouter/reducer';
 import addPathPage from '../screens/AddPath/reducers';
+import coursePage from '../screens/CoursePage/reducers';
 
 export default combineReducers({
   toastr,
@@ -30,5 +31,6 @@ export default combineReducers({
   auth,
   authorPublicData,
   appRouter,
-  addPathPage
+  addPathPage,
+  coursePage
 });

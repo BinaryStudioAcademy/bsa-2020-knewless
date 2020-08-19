@@ -1,8 +1,10 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { Button, Card, CardContent, CardHeader, CardMeta, Icon, Image } from 'semantic-ui-react';
 import styles from './styles.module.sass';
 import GradientButton from '../buttons/GradientButton';
 import { StyledRating } from '../StyledRating';
+import defaultCourseImage from 'assets/images/default_course_image.jpg';
 
 export interface ICardCategory {
   name: string;
@@ -18,11 +20,11 @@ export interface ICourseCardProps {
   duration: string;
   level: string;
   rating: number;
-  onOpenClick: () => void;
   hideButton?: boolean;
 }
 
 export const CourseCard: React.FunctionComponent<ICourseCardProps> = ({
+  id,
   category,
   imageSrc,
   name,
@@ -30,29 +32,36 @@ export const CourseCard: React.FunctionComponent<ICourseCardProps> = ({
   duration,
   level,
   rating,
-  onOpenClick,
   hideButton
-}) => (
-  <Card className={styles.course_card}>
-    <Image src={imageSrc} wrapped ui={false} className={styles.card_image} />
-    <CardContent className={styles.inner_wrapper}>
-      <Button basic onClick={category.onClick} className={styles.btn_category}>{category.name}</Button>
-      <CardHeader className={styles.title}>{name}</CardHeader>
-      <CardMeta className={styles.meta_info}>
-        <span>{author}</span>
-        <span>{duration}</span>
-        <span>{level}</span>
-      </CardMeta>
-      <StyledRating rating={rating} disabled />
-      {
-        !hideButton
-        && (
-        <GradientButton icon labelPosition="right" onClick={onOpenClick} className={styles.btn_more}>
-          Find out more
-          <Icon name="angle right" className={styles.btn_more_arrow} />
-        </GradientButton>
-        )
-      }
-    </CardContent>
-  </Card>
-);
+}) => {
+  const history = useHistory();
+  return (
+    <Card className={styles.course_card}>
+      <Image src={imageSrc || defaultCourseImage} wrapped ui={false} className={styles.card_image} />
+      <CardContent className={styles.inner_wrapper}>
+        <Button basic onClick={category.onClick} className={styles.btn_category}>{category.name}</Button>
+        <CardHeader className={styles.title}>{name}</CardHeader>
+        <CardMeta className={styles.meta_info}>
+          <span>{author}</span>
+          <span>{duration}</span>
+          <span>{level}</span>
+        </CardMeta>
+        <StyledRating rating={rating} disabled />
+        {
+          !hideButton
+          && (
+            <GradientButton
+              icon
+              labelPosition="right"
+              onClick={() => history.push(`/course/${id}`)}
+              className={styles.btn_more}
+            >
+              Find out more
+              <Icon name="angle right" className={styles.btn_more_arrow} />
+            </GradientButton>
+          )
+        }
+      </CardContent>
+    </Card>
+  );
+};

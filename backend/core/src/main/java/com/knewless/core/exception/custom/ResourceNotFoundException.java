@@ -1,4 +1,4 @@
-package com.knewless.core.exception;
+package com.knewless.core.exception.custom;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

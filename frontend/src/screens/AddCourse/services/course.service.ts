@@ -7,8 +7,7 @@ export const getLecturesByUser = async () => {
     endpoint: `api/lecture/user`,
     type: 'GET'
   });
-  const result = response.json();
-  return result;
+  return response.json();
 };
 
 export const saveCourse = async (course: ICourse) => {
@@ -23,7 +22,8 @@ export const saveCourse = async (course: ICourse) => {
 export const saveLectureVideo = async lecture => {
   const response = await callApi({
     type: 'POST',
-    endpoint: `api/lecture/${lecture.id}/${lecture.duration}`,
+    endpoint: `api/lecture/save`,
+    queryParams: {id: lecture.id, duration: lecture.duration},
     attachment: lecture.video
   });
   return response.json();

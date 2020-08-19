@@ -1,7 +1,7 @@
 package com.knewless.core.security.oauth.oauth2.user;
 
 
-import com.knewless.core.exception.OAuth2AuthenticationProcessingException;
+import com.knewless.core.exception.custom.OAuth2AuthenticationProcessingException;
 import com.knewless.core.security.model.AuthProvider;
 
 import java.util.Map;

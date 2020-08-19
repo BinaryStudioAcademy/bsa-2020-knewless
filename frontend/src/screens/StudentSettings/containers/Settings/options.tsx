@@ -1,11 +1,15 @@
 import countryList from 'react-select-country-list';
 
+const MIN_YEAR_OF_BIRTH = 1950;
+const THIS_YEAR = new Date().getFullYear();
+const MAX_EXPERIENCE_YEAR = THIS_YEAR - MIN_YEAR_OF_BIRTH;
+
 export const locationOptions = countryList()
   .getData()
   .map(item => ({ key: item.label, value: item.label, text: item.label }));
 
 export const experienceOptions = [];
-for (let i = 0; i <= 80; i += 1) {
+for (let i = 0; i <= MAX_EXPERIENCE_YEAR; i += 1) {
   const year = {
     key: i,
     value: i,
@@ -15,7 +19,7 @@ for (let i = 0; i <= 80; i += 1) {
 }
 
 export const yearOptions = [];
-for (let i = 1950; i <= 2020; i += 1) {
+for (let i = MIN_YEAR_OF_BIRTH; i <= THIS_YEAR; i += 1) {
   const year = {
     key: i,
     value: i,
@@ -53,6 +57,6 @@ export const employmentOptions = [
 export const educationOptions = [
   { key: 0, value: 'Middle School', text: 'Middle School' },
   { key: 1, value: 'High School', text: 'High School' },
-  { key: 2, value: 'Bachelor`s degree', text: 'Bachelor`s degree' },
-  { key: 3, value: 'Master`s degree', text: 'Master`s degree' }
+  { key: 2, value: 'Bachelor\'s degree', text: 'Bachelor\'s degree' },
+  { key: 3, value: 'Master\'s degree', text: 'Master\'s degree' }
 ];

@@ -1,0 +1,26 @@
+@import 'src/styles/common_variables'
+@import '../../styles/variables'
+
+.content
+  padding-left: $side_padding
+  padding-top: $header_height
+  background-color: #121421
+  min-height: 100vh
+  display: flex
+  flex-direction: column
+  *
+    word-break: break-word
+
+.navigation_layer
+  background: #2A2B37
+  padding: 4em 0
+  color: white
+
+.wide_container
+  $container_width: 1400px
+  $side_padding: 80px
+  max-width: $container_width + ($side_padding * 2)
+  margin-left: auto
+  margin-right: auto
+  padding-left: $side_padding
+  padding-right: $side_padding

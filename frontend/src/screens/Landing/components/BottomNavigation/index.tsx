@@ -16,8 +16,8 @@ export const BottomNavigation: React.FunctionComponent<IBottomNavigationProps> =
         <LogoWithText />
       </div>
       <p className={styles.about}>
-        We, a BSA students&rsquo; team, created this website for you
-        to improve your skills and us to share our knowledge.
+      We are a BSA students&rsquo; team, who have created this website
+      for you to improve your skills and for us to share our knowledge.
       </p>
     </div>
     <div className={styles.navigation}>

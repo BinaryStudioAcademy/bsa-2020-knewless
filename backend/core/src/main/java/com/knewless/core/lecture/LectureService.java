@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javassist.NotFoundException;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -31,6 +33,7 @@ public class LectureService {
     private final UserRepository userRepository;
     private final EmailService emailService;
 
+
     @Autowired
     public LectureService(LectureRepository lectureRepository, FileManager fileManager,
                           MessageSender messageSender, UserRepository userRepository, EmailService emailService) {
@@ -41,11 +44,16 @@ public class LectureService {
         this.emailService = emailService;
     }
 
-    public LectureCreateResponseDto saveLecture(MultipartFile file, String filename, UUID lectureId, double duration) throws NotFoundException {
-        lectureRepository.setDuration(lectureId, (int) (Math.round(duration)));
+    public LectureCreateResponseDto saveLecture(MultipartFile file, String filename, UUID lectureId, int duration) throws NotFoundException {
         Lecture savedLecture = lectureRepository.findById(lectureId)
                 .orElseThrow(() -> new NotFoundException("Lecture with id " + lectureId + " not found"));
         String folderId = fileManager.saveVideo(file, filename);
+        System.out.println("video saved");
+        String[] concatString = filename.split("\\.");
+        String fileType = concatString[concatString.length - 1];
+        String relativePath = File.separator + "assets" + File.separator + "video" + File.separator + folderId +
+                File.separator + folderId + "-origin." + fileType;
+        lectureRepository.setDurationPath(lectureId, duration, relativePath);
         Message message = new Message();
         message.setEntityId(lectureId);
         message.setFolderId(folderId);
@@ -54,7 +62,7 @@ public class LectureService {
         return LectureCreateResponseDto.builder()
                         .id(savedLecture.getId())
                         .description(savedLecture.getDescription())
-                        .timeMinutes((int)(duration/60) + 1)
+                        .timeMinutes((duration/60) + 1)
                         .name(savedLecture.getName())
                         .build();
     }
@@ -89,7 +97,7 @@ public class LectureService {
                         l.getName() == null ? "mockName" : l.getName(),
                         l.getDescription(),
                         l.getSourceUrl(),
-                        l.getDuration()/60 + 1))
+                        l.getDuration() == 0? l.getDuration() : l.getDuration()/60 + 1))
                 .collect(Collectors.toList());
     }
 

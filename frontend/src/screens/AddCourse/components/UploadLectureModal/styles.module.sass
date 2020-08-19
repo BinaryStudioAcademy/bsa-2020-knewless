@@ -15,6 +15,7 @@
   padding: auto
   font-family: Custom Open Sans
   font-style: normal
+
   &_error
     padding: 10px
     outline: none
@@ -55,15 +56,17 @@
   margin-bottom: 3px
 
 \:global(.ui.basic.label).warninglabel
-  border-top-left-radius: 0 
-  border-top-right-radius: 0
+  width: 100%
   background-color: #f7d0d0
   z-index: 2
-  margin: 0
   padding: 0
-  margin-top: -3px
+  margin: -3px 0 0
   text-align: center
-  font-size: 0.7em
+  font-size: 0.8em
+  font-weight: 700
+  line-height: 1.3em
+  border-radius: 0 0 5px 5px
+  color: black
 
 .customInput
   height: 100%
@@ -86,7 +89,7 @@
   max-height: 80vh !important
   height: auto !important
   border-radius: 0 !important
-  
+
 
 .topRow
   width: 100%
@@ -107,7 +110,8 @@
 .progressinactive
   background: #2A2B37 !important
   border-radius: 0 !important
-.progressinactive>div
+
+.progressinactive > div
   background: #2A2B37 !important
   border-radius: 0 !important
 
@@ -121,6 +125,7 @@
   font-size: 0.8em !important
   width: 100px
   height: 100%
+
   &_error
     margin-left: 8px !important
     border-radius: 3px !important
@@ -133,6 +138,7 @@
   border-radius: 3px !important
   width: 100px
   height: 50px
+
   &_inactive
     border-radius: 3px !important
     width: 100px
@@ -176,9 +182,9 @@
 
 \:global(i.icon).deleteIcon
   opacity: 0.8
-  &:hover
-    cursor: pointer 
 
+  &:hover
+    cursor: pointer
 
 
 \:global(.ui.basic.label).toolBarIcon
@@ -202,13 +208,14 @@
   font-style: normal
   margin-top: 3px
   outline: none
+
   &:hover
-      cursor: pointer
+    cursor: pointer
 
 .filenamecontainer
   display: flex
   justify-content: flex-end
   align-items: center
-      
+
 
 

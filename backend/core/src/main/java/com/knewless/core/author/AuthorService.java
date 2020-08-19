@@ -6,15 +6,13 @@ import com.knewless.core.author.dto.AuthorPublicDto;
 import com.knewless.core.author.dto.AuthorSettingsDto;
 import com.knewless.core.author.mapper.AuthorInfoMapper;
 import com.knewless.core.author.mapper.AuthorMapper;
-import com.knewless.core.author.model.Author;
 import com.knewless.core.course.CourseRepository;
 import com.knewless.core.db.SourceType;
-import com.knewless.core.exception.ResourceNotFoundException;
+import com.knewless.core.exception.custom.ResourceNotFoundException;
 import com.knewless.core.school.mapper.SchoolInfoMapper;
 import com.knewless.core.security.oauth.UserPrincipal;
 import com.knewless.core.subscription.SubscriptionService;
 import com.knewless.core.user.UserRepository;
-import com.knewless.core.user.model.User;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,9 +24,13 @@ import java.util.UUID;
 public class AuthorService {
 
     private final AuthorRepository authorRepository;
+
     private final UserRepository userRepository;
+
     private final CourseRepository courseRepository;
+
     private final ArticleRepository articleRepository;
+
     private final SubscriptionService subscriptionService;
 
     @Autowired
@@ -45,20 +47,24 @@ public class AuthorService {
     }
 
     public Optional<AuthorSettingsDto> getAuthorSettings(UUID userId) {
-        User user = userRepository.findById(userId).get();
-        return authorRepository.findByUser(user).map(AuthorMapper::fromEntity);
+        final var user = this.userRepository.findById(userId).orElseThrow(
+                () -> new ResourceNotFoundException("AuthorSettings", "userId", userId)
+        );
+        return this.authorRepository.findByUser(user).map(AuthorMapper::fromEntity);
     }
 
     public Optional<AuthorSettingsDto> setAuthorSettings(AuthorSettingsDto settings) {
-        User user = userRepository.findById(settings.getUserId()).get();
-        Optional<Author> oldSettings = authorRepository.findByUser(user);
-        if (!oldSettings.isPresent()) {
-            return Optional.of(authorRepository.save(AuthorMapper.fromDto(settings, user)))
+        final var user = this.userRepository.findById(settings.getUserId()).orElseThrow(
+                () -> new ResourceNotFoundException("User", "id", settings.getUserId())
+        );
+        final var oldSettings = this.authorRepository.findByUser(user);
+        if (oldSettings.isEmpty()) {
+            return Optional.of(this.authorRepository.save(AuthorMapper.fromDto(settings, user)))
                     .map(AuthorMapper::fromEntity);
         }
-        Author updateSettings = AuthorMapper.fromDto(settings, user);
+        final var updateSettings = AuthorMapper.fromDto(settings, user);
         updateSettings.setCreatedAt(oldSettings.get().getCreatedAt());
-        return Optional.of(authorRepository.save(updateSettings))
+        return Optional.of(this.authorRepository.save(updateSettings))
                 .map(AuthorMapper::fromEntity);
     }
 
@@ -89,7 +95,7 @@ public class AuthorService {
         String schoolId = school.isPresent() ? school.get().getId().toString() : "";
 
         var currentUserId = this.authorRepository.checkForCurrentUser(userPrincipal.getEmail());
-         var printFollowButton = !subscriptionService.isSubscribe(userPrincipal.getId(), authorId, SourceType.AUTHOR);
+        var printFollowButton = !subscriptionService.isSubscribe(userPrincipal.getId(), authorId, SourceType.AUTHOR);
 
         var numberOfSubscriptions = this.authorRepository.getNumberOfSubscriptions(authorId)
                 .orElseThrow(() -> new NotFoundException("Cant find number of author subscribers " + authorId));

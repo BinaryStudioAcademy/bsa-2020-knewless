@@ -1,14 +1,15 @@
 package com.knewless.core.auth;
 
-import com.knewless.core.security.model.AuthResponse;
+import com.knewless.core.exception.UserAlreadyRegisteredException;
 import com.knewless.core.security.model.LoginRequest;
-import com.knewless.core.security.model.RefreshTokenResponse;
 import com.knewless.core.security.model.SignUpRequest;
+import com.knewless.core.validation.SingleMessageResponse;
+import com.knewless.core.validation.ValidationMessageCreator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 
@@ -24,21 +25,39 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, Errors validationResult) {
+        if (validationResult.hasErrors()) {
+            return ResponseEntity.badRequest()
+                    .body(new SingleMessageResponse(
+                                    ValidationMessageCreator.createString(validationResult, " ")
+                            )
+                    );
+        }
         return ResponseEntity.ok(authService.login(loginRequest));
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<AuthResponse> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
-        return ResponseEntity.ok(authService.register(signUpRequest));
+    public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest, Errors validationResult) {
+        if (validationResult.hasErrors()) {
+            return ResponseEntity.badRequest()
+                    .body(new SingleMessageResponse(
+                            ValidationMessageCreator.createString(validationResult, " ")
+                            )
+                    );
+        }
+        try {
+            return ResponseEntity.ok(authService.register(signUpRequest));
+        } catch (UserAlreadyRegisteredException ex) {
+            return ResponseEntity.badRequest().body(new SingleMessageResponse(ex.getMessage()));
+        }
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<RefreshTokenResponse> refreshToken(@RequestHeader("Refresh-token") String token) {
+    public ResponseEntity<?> refreshToken(@RequestHeader("Refresh-token") String token) {
         try {
             return ResponseEntity.ok(authService.refreshToken(token));
         } catch (Exception ex) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, ex.getMessage(), ex);
+            return new ResponseEntity<>(new SingleMessageResponse(ex.getMessage()), HttpStatus.UNAUTHORIZED);
         }
     }
 

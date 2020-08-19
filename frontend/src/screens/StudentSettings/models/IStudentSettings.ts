@@ -17,5 +17,5 @@ export interface IStudentSettings {
     education: string,
     year: number,
     uploadAvatar?: File
+    tags: string[]
   }
-  

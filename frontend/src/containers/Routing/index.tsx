@@ -18,6 +18,7 @@ import PrivateRoute from '../PrivateRoute';
 import WebSocketNotifications from 'containers/WebSocketNotifications';
 import { RoleTypes } from '../AppRouter/models/IRole';
 import { history } from '@helpers/history.helper';
+import CoursePage from '@screens/CoursePage/containers/CoursePage';
 
 export interface IRoutingProps {
   isLoading: boolean;
@@ -50,10 +51,11 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({ isLoading }) => {
           {isHeaderShown ? <Header /> : null}
           <SettingsRoute />
           <RootRoute />
+          <PublicRoute exact path="/course/:courseId" component={CoursePage} />
           <PublicRoute exact path="/login" component={LoginPage} />
           <PublicRoute exact path="/oauth/redirect" component={handler} />
           <PublicRoute exact path="/register" component={RegisterPage} />
-          <PublicRoute exact path="/author/:authorId" component={AuthorPublicPage} />
+          <PrivateRoute exact path="/author/:authorId" component={AuthorPublicPage} />
           <PrivateRoute exact path="/lecture/:lectureId" component={LecturePage} />
           <PrivateRoute exact path="/add_path" roles={[RoleTypes.AUTHOR]} component={AddPathPage} />
           <PrivateRoute exact path="/add_course" roles={[RoleTypes.AUTHOR]} component={AddCourse} />

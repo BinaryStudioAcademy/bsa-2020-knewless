@@ -28,7 +28,7 @@ export const LectureCard: React.FC<ILectureCardProps> = ({
       {name}
     </div>
     <div className={styles.meta__time}>
-      {timeMinutes === 0 ? '' : `${timeMinutes} minutes` }
+      {timeMinutes === 0 ? '' : timeMinutes > 1 ? `${timeMinutes} minutes` : `${timeMinutes} minute`}
     </div>
     <div className={styles.meta__actionButton}>
       {timeMinutes === 0 ? (

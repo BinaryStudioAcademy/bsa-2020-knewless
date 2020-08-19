@@ -8,8 +8,8 @@ export function* login(request: any) {
     setToken(response.accessToken, response.refreshToken);
 
     yield put(loginRoutine.success());
-  } catch (e) {
-    yield put(loginRoutine.failure(e.message));
+  } catch (ex) {
+    yield put(loginRoutine.failure(ex.message));
   }
 }
 
@@ -23,8 +23,8 @@ export function* register(request: any) {
     setToken(response.accessToken, response.accessToken);
 
     yield put(registerRoutine.success());
-  } catch (e) {
-    yield put(registerRoutine.failure(e.message));
+  } catch (ex) {
+    yield put(registerRoutine.failure(ex.message));
   }
 }
 

@@ -1,12 +1,19 @@
-import React, { useState, createRef } from 'react';
+import React, { createRef, useState } from 'react';
 import styles from './styles.module.sass';
-import { Modal, ModalContent, Input, Icon, Label } from 'semantic-ui-react';
+import { Icon, Input, Label, Modal, ModalContent } from 'semantic-ui-react';
 import GrayOutlineButton from 'components/buttons/GrayOutlineButton';
 import GradientButton from 'components/buttons/GradientButton';
 import { isVideo } from './helper';
 import { IBindingCallback1 } from 'models/Callbacks';
 import { connect } from 'react-redux';
 import { fetchLecturesRoutine, saveLectureRoutine } from 'screens/AddCourse/routines';
+import {
+  DESCRIPTION_MESSAGE,
+  IMAGE_FORMAT_MESSAGE, isValidLectureDescription,
+  isValidLectureName,
+  isValidPathName,
+  LECTURE_MESSAGE, VIDEO_FORMAT_MESSAGE
+} from '@helpers/validation.helper';
 
 export interface ISaveLecture {
     video: File;
@@ -37,19 +44,13 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
   const isSaveble = (duration > 0 && isValidName && isValidDescription && isValidFile
     && name.length > 1 && file && (description.length === 0 || description.length > 9));
 
-  const validateName = () => {
-    if (name.length === 0) {
-      setIsValidName(false);
-      return;
-    }
-    const pattern = /^[a-zA-Z0-9!:;=<>@#_$&()\\`.+,"-/ ]{3,40}$/;
-    setIsValidName(pattern.test(name));
+  const validateName = (newName?: string) => {
+    const lastChangesName = typeof newName === 'string' ? newName : name;
+    setIsValidName(!!lastChangesName && isValidLectureName(lastChangesName));
   };
 
-  const validateDescription = () => {
-    if (description.length === 0) return;
-    const pattern = /^[a-zA-Z0-9!:;=<>@#_$&()\\`.+,"-/ ]{10,}$/;
-    setIsValidDescription(pattern.test(description));
+  const validateDescription = (newName?: string) => {
+    setIsValidDescription(isValidLectureDescription(typeof newName === 'string' ? newName : description));
   };
 
   const handleAddFile = e => {
@@ -61,8 +62,8 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
       const vid = document.createElement('video');
       const fileURL = URL.createObjectURL(thisFile);
       vid.src = fileURL;
-      vid.ondurationchange = function() {
-        setDuration(vid.duration);
+      vid.ondurationchange = function () {
+        setDuration(Math.round(vid.duration));
       };
       setFile(thisFile);
       setIsValidFile(true);
@@ -95,9 +96,7 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
     handleClose();
   };
 
-  const warning = `${isValidFile ? '' : 'You should add video with m4v, avi, mpg, mp4, mkv file extension.'} 
-    ${isValidDescription ? ''
-    : 'Description should consists of 10 or more Latin letters, numbers or special characters, or be skipped.'}`;
+  const warning = `${isValidFile ? '' : VIDEO_FORMAT_MESSAGE} ${isValidDescription ? '' : DESCRIPTION_MESSAGE}`;
 
   return (
     <Modal size="small" open={isOpen} onClose={() => handleClose()}>
@@ -150,20 +149,24 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
                 error={!isValidName}
                 value={name}
                 className={styles.customInput}
-                onChange={e => { setName(e.currentTarget.value); setIsValidName(true); }}
+                onChange={e => {
+                  const lastChangeValue = e.currentTarget.value;
+                  setName(lastChangeValue);
+                  validateName(lastChangeValue);
+                }}
                 onBlur={() => validateName()}
                 inverted
               />
-              {isValidName ? '' : 
-                (
-                  <Label
-                    basic
-                    className={styles.warninglabel}
-                    promt="true"
-                  >
-                    Should consists of 3-40 Latin letters, numbers or special characters.
-                  </Label>
-                )}
+              {!isValidName
+              && (
+                <Label
+                  basic
+                  className={styles.warninglabel}
+                  promt="true"
+                >
+                  {LECTURE_MESSAGE}
+                </Label>
+              )}
             </div>
           </div>
           <div className={styles.rightside}>
@@ -179,15 +182,16 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
         <div className={styles.textcontainer}>Description:</div>
         <div className={styles.textareacontainer}>
           <textarea
-            onChange={ev => { setDescription(ev.target.value); setIsValidDescription(true); }}
+            onChange={ev => {
+              const { value } = ev.target;
+              setDescription(value);
+              validateDescription(value);
+            }}
             className={isValidDescription ? styles.customtextarea : styles.customtextarea_error}
             value={description}
             onBlur={() => validateDescription()}
           />
-          {warning.length > 25
-            ? (
-              <Label basic className={styles.warninglabel} promt="true">{warning}</Label>
-            ) : '' }
+          {warning.length > 25 && (<Label basic className={styles.warninglabel} promt="true">{warning}</Label>)}
         </div>
         <GradientButton
           onClick={() => handleSave()}

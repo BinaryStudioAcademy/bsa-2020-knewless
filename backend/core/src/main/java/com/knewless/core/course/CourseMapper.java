@@ -1,6 +1,8 @@
 package com.knewless.core.course;
 
+import com.knewless.core.category.model.Category;
 import com.knewless.core.course.dto.*;
+import com.knewless.core.course.model.Course;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -34,7 +36,13 @@ public interface CourseMapper {
 
 	@Mapping(source = "category", target = "category.name")
 	@Mapping(target = "rating", ignore = true)
-	@Mapping(target = "level", ignore = true)
-	@Mapping(target = "duration", ignore = true)
 	AuthorCourseDto authorCourseQueryResultToAuthorCourseDto(AuthorCourseQueryResult courseQueryResult);
+
+	@Mapping(target = "author", ignore = true)
+	@Mapping(target = "authorCourses", ignore = true)
+	@Mapping(target = "duration", ignore = true)
+	@Mapping(target = "rating", ignore = true)
+	@Mapping(target = "lectures", ignore = true)
+	@Mapping(target = "tags", ignore = true)
+	CourseFullInfoDto courseToCourseFullInfoDto(Course course);
 }

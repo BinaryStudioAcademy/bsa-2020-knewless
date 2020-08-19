@@ -12,10 +12,11 @@ import './styles.sass';
 export interface ILecturesMenuProps {
   menuProps: ILecturesMenu;
   setMenu: IBindingCallback1<ILecturesMenu>;
+  setChosenVideo: Function;
 }
 
 const LecturesMenu: React.FunctionComponent<ILecturesMenuProps> = ({
-  menuProps, setMenu
+  menuProps, setMenu, setChosenVideo
 }) => (
   <div style={{ height: '100%' }}>
     <Menu className="lecturesMenu" pointing secondary widths="2">
@@ -32,7 +33,8 @@ const LecturesMenu: React.FunctionComponent<ILecturesMenuProps> = ({
       />
     </Menu>
     <Segment className="segmentStyle">
-      {menuProps.lecturesMenuActiveItem === 'Lectures' ? <LecturesList /> : 'Discussions' }
+      {menuProps.lecturesMenuActiveItem === 'Lectures'
+        ? <LecturesList setChosenVideo={setChosenVideo} /> : 'Discussions' }
     </Segment>
   </div>
 );

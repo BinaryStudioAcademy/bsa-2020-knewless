@@ -1,14 +1,18 @@
 package com.knewless.core.course;
 
 import com.knewless.core.course.dto.*;
-import com.knewless.core.lecture.Dto.ShortLectureDto;
+import com.knewless.core.exception.custom.ResourceNotFoundException;
 import com.knewless.core.security.oauth.UserPrincipal;
 import com.knewless.core.user.model.CurrentUser;
+import com.knewless.core.validation.SingleMessageResponse;
+import com.knewless.core.validation.ValidationMessageCreator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,10 +39,27 @@ public class CourseController {
         return courseService.getCourseById(id);
     }
 
+    @GetMapping("/{id}/info")
+    private CourseFullInfoDto getAllCourseInfoById(@PathVariable("id") UUID id) {
+        return courseService.getAllCourseInfoById(id);
+    }
+
     @PostMapping("/create")
-    private CreateCourseResponseDto createCourse(@CurrentUser UserPrincipal user,
-                                                 @RequestBody CreateCourseRequestDto request) {
-        return courseService.createCourse(request, user.getId());
+    private ResponseEntity<?> createCourse(@CurrentUser UserPrincipal user,
+                                           @Valid @RequestBody CreateCourseRequestDto request,
+                                           Errors validationResult) {
+        if (validationResult.hasErrors()) {
+            return ResponseEntity.badRequest()
+                    .body(new SingleMessageResponse(
+                                    ValidationMessageCreator.createString(validationResult, " ")
+                            )
+                    );
+        }
+        try {
+            return ResponseEntity.ok(courseService.createCourse(request, user.getId()));
+        } catch (ResourceNotFoundException ex) {
+            return ResponseEntity.badRequest().body(new SingleMessageResponse(ex.getMessage()));
+        }
     }
 
     @GetMapping("/lecture/{lectureId}")
