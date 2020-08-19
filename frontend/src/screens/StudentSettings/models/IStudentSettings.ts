@@ -1,5 +1,3 @@
-import { ITag } from './ITag';
-
 export interface IStudentSettings {
     id: undefined,
     firstName: string,

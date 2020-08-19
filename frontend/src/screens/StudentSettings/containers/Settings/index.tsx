@@ -49,7 +49,8 @@ export interface IStudentSettingsProps {
 function presentStudentTagsAssembler (allTags: ITag[], presentTags: string[]) {
   var resultTags = [];
 
-  if(presentTags[0] === undefined || allTags[0].id === undefined) return null;
+  if(allTags == undefined || presentTags == undefined) return [];
+  if(presentTags[0] === undefined || allTags[0].id === undefined) return [];
 
   for(let i = 0; i < presentTags.length; i++) {
     for(let j = 0; j < allTags.length; j++) {
@@ -119,9 +120,8 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
 
   useEffect(() => {
     setStoredTags(allTags);
-    setSelectedTags(settings.tags[0] === undefined
-      ? []
-      : presentStudentTagsAssembler(allTags, settings.tags));
+    setSelectedTags(presentStudentTagsAssembler(allTags, settings.tags));
+
   }, [allTags]);
 
   const handleUploadFile = file => {

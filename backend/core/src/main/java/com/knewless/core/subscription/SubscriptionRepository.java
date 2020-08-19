@@ -6,6 +6,7 @@ import com.knewless.core.subscription.model.Subscription;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -16,7 +17,7 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, UUID
             "WHERE s.user.id = :userId " +
             "AND s.sourceId = :sourceId " +
             "AND s.sourceType = :sourceType")
-    List<Subscription> findBySource(UUID userId, UUID sourceId, SourceType sourceType);
+    List<Subscription> findBySource(@Param("userId") UUID userId, @Param("sourceId") UUID sourceId, @Param("sourceType") SourceType sourceType);
 
     @Modifying
     @Transactional
