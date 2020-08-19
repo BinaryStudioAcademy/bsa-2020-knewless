@@ -3,6 +3,7 @@ import styles from './styles.module.sass';
 import CoursesList from '@screens/CoursePage/components/CoursesList';
 import { IAuthorCourseData } from '@screens/CoursePage/models/IAuthorCourseData';
 import { IAuthorData } from '@screens/CoursePage/models/IAuthorData';
+import noAvatar from 'assets/images/no_avatar.jpg';
 
 interface IAuthorInfoProps {
   author: IAuthorData;
@@ -18,7 +19,7 @@ const AuthorInfo: React.FunctionComponent<IAuthorInfoProps> = ({
   <div className="content_row">
     <div className={`${styles.info} flex_item aligned_item`}>
       <div className={`${styles.info_content} left_container`}>
-        <img src={author?.avatar} className={styles.author_image} alt="Author" />
+        <img src={author?.avatar || noAvatar} className={styles.author_image} alt="Author" />
         <h1 className={styles.author_name}>
           {`${author?.firstName} ${author?.lastName}` || ''}
         </h1>
