@@ -5,4 +5,5 @@ export interface IAppRouterState {
   user: IUser;
   settingsMode: RoleTypes;
   roleLoading: boolean;
+  userLoading: boolean;
 }

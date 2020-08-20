@@ -8,7 +8,7 @@ interface ILoaderWrapperProps {
 const LoaderWrapper: FunctionComponent<ILoaderWrapperProps> = ({ loading, children }) => (
   loading
     ? (
-      <div style={{ position: 'relative', height: '100%' }}>
+      <div style={{ position: 'relative', height: '100vh' }}>
         <Loader active />
       </div>
     ) : (

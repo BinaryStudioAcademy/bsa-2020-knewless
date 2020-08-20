@@ -6,7 +6,8 @@ import { fetchUserRoutine, resetSettingsModeRoutine, setRoleLoadingRoutine, setS
 const initialState: IAppRouterState = {
   user: { } as IUser,
   settingsMode: null,
-  roleLoading: false
+  roleLoading: false,
+  userLoading: true
 };
 
 export const appRouter = (state = initialState, action: Routine<any>) => {
@@ -15,7 +16,14 @@ export const appRouter = (state = initialState, action: Routine<any>) => {
       return {
         ...state,
         user: action.payload,
+        userLoading: false,
         roleLoading: false
+      };
+    }
+    case fetchUserRoutine.FAILURE: {
+      return {
+        ...state,
+        userLoading: false
       };
     }
     case setSettingsModeRoutine.TRIGGER: {
