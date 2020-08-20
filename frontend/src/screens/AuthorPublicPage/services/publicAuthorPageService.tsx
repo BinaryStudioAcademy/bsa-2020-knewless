@@ -10,22 +10,19 @@ export const getData = async (authorId: string) => {
 };
 
 export const followAuthor = async source => {
-  const response = await callApi({
+  await callApi({
     endpoint: '/api/subscription/subscribe',
     type: 'POST',
     requestData: source
   });
-
-  return response.json();
 };
 
 export const unfollowAuthor = async source => {
   console.log(source);
-  const response = await callApi({
+  await callApi({
     endpoint: '/api/subscription/unsubscribe',
     type: 'POST',
     requestData: source
   });
 
-  return response.json();
 };
