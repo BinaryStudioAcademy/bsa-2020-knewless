@@ -78,4 +78,8 @@ public class UserService implements UserDetailsService {
     public Role getUserRole(String email) {
         return userRepository.getUserRoleId(email);
     }
+
+    public Role getUserRole(String email) {
+        return userRepository.getUserRoleId(email);
+    }
 }
