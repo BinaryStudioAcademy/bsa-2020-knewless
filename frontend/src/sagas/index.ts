@@ -14,6 +14,7 @@ import publicAuthorSagas from '../screens/AuthorPublicPage/sagas';
 import appRouterSagas from 'containers/AppRouter/sagas';
 import addPathSagas from '../screens/AddPath/sagas';
 import coursePageSagas from '@screens/CoursePage/sagas';
+import searchSagas from '@screens/./Search/sagas/sagas';
 
 export default function* rootSaga() {
   yield all([
@@ -31,6 +32,7 @@ export default function* rootSaga() {
     publicAuthorSagas(),
     appRouterSagas(),
     addPathSagas(),
-    coursePageSagas()
+    coursePageSagas(),
+    searchSagas()
   ]);
 }

@@ -42,6 +42,7 @@ services:
     depends_on:
       - api-db
       - rabbitmq
+      - elasticsearch
     ports:
       - '5000:5000'
     volumes:
@@ -49,7 +50,7 @@ services:
     env_file:
       - ~/.env/api.env
     environment:
-      WAIT_HOSTS: rabbitmq:5672, api-db:5432
+      WAIT_HOSTS: rabbitmq:5672, api-db:5432, elasticsearch:9200
     logging:
       driver: "json-file"
       options:
@@ -122,7 +123,24 @@ services:
       - /etc/letsencrypt/live/knewless.tk/fullchain.pem:/etc/letsencrypt/live/knewless.tk/fullchain.pem
       - /etc/letsencrypt/live/knewless.tk/privkey.pem:/etc/letsencrypt/live/knewless.tk/privkey.pem
 
+  #  Elasticsearch
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.8.1
+    container_name: elasticsearch
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    env_file:
+      - ~/.env/elastic.env
+    volumes:
+      - esdata:/elasticsearch/data
+    ports:
+      - 9200:9200
+
 volumes:
+  esdata:
+    driver: local
   pgdata_api:
     driver: local
   pgconf_api:

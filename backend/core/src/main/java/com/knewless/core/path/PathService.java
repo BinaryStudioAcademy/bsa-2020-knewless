@@ -4,6 +4,8 @@ import com.knewless.core.author.AuthorRepository;
 import com.knewless.core.author.model.Author;
 import com.knewless.core.course.CourseRepository;
 import com.knewless.core.db.SourceType;
+import com.knewless.core.elasticsearch.EsService;
+import com.knewless.core.elasticsearch.model.EsDataType;
 import com.knewless.core.path.dto.AuthorPathDto;
 import com.knewless.core.path.dto.PathCreationRequestDto;
 import com.knewless.core.path.dto.PathDto;
@@ -21,6 +23,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,20 +33,22 @@ public class PathService {
 	private final CourseRepository courseRepository;
 	private final TagRepository tagRepository;
 	private final AuthorRepository authorRepository;
+	private final EsService esService;
 	private final SubscriptionService subscriptionService;
 
 	@Autowired
 	public PathService(PathRepository pathRepository, CourseRepository courseRepository,
 					   TagRepository tagRepository, AuthorRepository authorRepository,
-					   SubscriptionService subscriptionService) {
+					   SubscriptionService subscriptionService, EsService esService) {
 		this.pathRepository = pathRepository;
 		this.courseRepository = courseRepository;
 		this.tagRepository = tagRepository;
 		this.authorRepository = authorRepository;
 		this.subscriptionService = subscriptionService;
+		this.esService = esService;
 	}
 
-   
+
     public List<PathDto> getPaths(Pageable pageable) {
         var pathInfo = pathRepository.getAllPaths(pageable);
         return pathInfo.stream().map(p -> {
@@ -93,8 +98,11 @@ public class PathService {
 		path.setCourses(courses);
 		Author author = authorRepository.findByUserId(userId).orElseThrow();
 		String message = author.getFirstName()+" "+ author.getLastName()+" added new path.";
-		var result = pathRepository.save(path).getId();
+		Path savedPath = pathRepository.save(path);
+		var result = savedPath.getId();
 		subscriptionService.notifySubscribers(author.getId(), SourceType.AUTHOR, result, SourceType.PATH, message);
+
+		CompletableFuture.runAsync(() -> esService.put(EsDataType.PATH, savedPath));
 		return result;
 	}
 }

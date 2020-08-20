@@ -7,6 +7,8 @@ import com.knewless.core.author.model.Author;
 import com.knewless.core.course.dto.*;
 import com.knewless.core.course.model.Course;
 import com.knewless.core.course.model.Level;
+import com.knewless.core.elasticsearch.EsService;
+import com.knewless.core.elasticsearch.model.EsDataType;
 import com.knewless.core.db.SourceType;
 import com.knewless.core.exception.custom.ResourceNotFoundException;
 import com.knewless.core.lecture.LectureMapper;
@@ -23,6 +25,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,6 +38,7 @@ public class CourseService {
     private final AuthorService authorService;
     private final SubscriptionService subscriptionService;
     private final TagService tagService;
+    private final EsService esService;
 
     @Value(value = "${fs.video_url}")
     private String URL;
@@ -43,7 +47,7 @@ public class CourseService {
     public CourseService(CourseRepository courseRepository, LectureRepository lectureRepository,
                          AuthorRepository authorRepository, HomeworkRepository homeworkRepository,
                          AuthorService authorService, SubscriptionService subscriptionService,
-                         TagService tagService) {
+                         TagService tagService, EsService esService) {
         this.courseRepository = courseRepository;
         this.lectureRepository = lectureRepository;
         this.authorRepository = authorRepository;
@@ -51,6 +55,7 @@ public class CourseService {
         this.authorService = authorService;
         this.subscriptionService = subscriptionService;
         this.tagService = tagService;
+        this.esService = esService;
     }
 
     public CreateCourseResponseDto createCourse(CreateCourseRequestDto request, UUID userId) {
@@ -85,18 +90,24 @@ public class CourseService {
             thisLectures.add(lec);
         }
         if (request.getIsReleased()) course.setReleasedDate(new Date());
-        courseRepository.save(course);
+
+        Course savedCourse = courseRepository.save(course);
+
         homeworkRepository.saveAll(homeworks);
         thisLectures.forEach(l -> {
             l.setCourse(course);
             Optional<Homework> ophw = homeworks.stream().filter(h -> h.getLecture().getId().equals(l.getId())).findFirst();
             ophw.ifPresent(l::setHomework);
         });
-        lectureRepository.saveAll(thisLectures);
+        List<Lecture> lectures = lectureRepository.saveAll(thisLectures);
+
+        savedCourse.setLectures(lectures);
+        CompletableFuture.runAsync(() -> esService.put(EsDataType.COURSE, savedCourse));
+
         String message = author.getFirstName() + " " + author.getLastName() + " added new course.";
         subscriptionService.notifySubscribers(author.getId(), SourceType.AUTHOR, course.getId(), SourceType.COURSE, message);
         return new CreateCourseResponseDto(course.getId(), true);
-    }
+	}
 
     public CourseToPlayerDto getCourseByLectureId(UUID lectureId) {
         var courseProjection = courseRepository.findOneById(UUID.fromString(courseRepository.findByLectureId(lectureId).getId()));

@@ -1,14 +1,15 @@
 import Logo from './logo';
-import { NavLink, useLocation } from 'react-router-dom';
+import {NavLink, useLocation} from 'react-router-dom';
 import PathIcon from './icons/paths';
-import React, { useCallback, useEffect, useState } from 'react';
-import { Icon, Input, Label } from 'semantic-ui-react';
+import React, {useCallback, useEffect, useState} from 'react';
+import {Icon, Label} from 'semantic-ui-react';
 import styles from './styles.module.sass';
 import LoginRegister from './LoginRegister';
 import UserElement from './UserElement';
-import { connect } from 'react-redux';
-import { IAppState } from '@models/AppState';
-import { IUser } from '@containers/AppRouter/models/IUser';
+import {connect} from 'react-redux';
+import {IAppState} from '@models/AppState';
+import {IUser} from '@containers/AppRouter/models/IUser';
+import SearchHeader from '@screens/Search/containers/SearchHeader/index';
 
 enum RoutPointer {
   home,
@@ -23,7 +24,6 @@ interface IHeaderProps {
 
 const Header = ({ currentUser, isAuthorized }: IHeaderProps) => {
   const [currentRout, setCurrentRout] = useState(RoutPointer.home);
-  const [search, setSearch] = useState('');
   const [searchStyle, setSearchStyle] = useState(styles.searchHidden);
   const location = useLocation();
 
@@ -108,16 +108,7 @@ const Header = ({ currentUser, isAuthorized }: IHeaderProps) => {
               </NavLink>
             </div>
           </div>
-          <Input
-            id="searchInput"
-            type="text"
-            icon="search"
-            value={search}
-            className={searchStyle}
-            placeholder="Search..."
-            onChange={ev => setSearch(ev.target.value)}
-            inverted
-          />
+          <SearchHeader className={searchStyle} />
         </div>
         <div className={styles.right_side}>
           {isAuthorized ? <UserElement user={currentUser} /> : <LoginRegister />}

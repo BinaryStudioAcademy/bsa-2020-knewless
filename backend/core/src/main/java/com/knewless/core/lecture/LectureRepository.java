@@ -20,9 +20,9 @@ public interface LectureRepository extends JpaRepository<Lecture, UUID> {
         "WHERE l.user.id = :id")
 List<ShortLectureDto> getShortLecturesByUserId(@Param("id")UUID id);
 
-@Query("SELECT l FROM Lecture l " +
-        "WHERE l.user.id = :id")
-List<Lecture> getLecturesByUserId(@Param("id")UUID id);
+    @Query("SELECT l FROM Lecture l " +
+            "WHERE l.user.id = :id")
+    List<Lecture> getLecturesByUserId(@Param("id")UUID id);
 
     @Transactional
     @Modifying
@@ -30,4 +30,9 @@ List<Lecture> getLecturesByUserId(@Param("id")UUID id);
             "SET l.duration = :duration, l.urlOrigin = :path " +
             "WHERE l.id = :id")
     void setDurationPath(@Param("id")UUID id, @Param("duration")int duration, @Param("path")String path);
+
+    @Query("SELECT l " +
+            "FROM Lecture l JOIN l.course c JOIN c.paths p " +
+            "WHERE p.id=:id")
+    List<Lecture> getLecturesByPathId(@Param("id") UUID id);
 }

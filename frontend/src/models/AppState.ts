@@ -8,6 +8,7 @@ import { IAppRouterState } from '@containers/AppRouter/models/IAppRouterState';
 import { IAddPathState } from '@screens/AddPath/models/AddPathState';
 import { ICoursePageState } from '@screens/CoursePage/models/ICoursePageState';
 import { ILecturePageState } from '@screens/LecturePage/models/ILecturePageState';
+import { ISearchState } from '@screens/./Search/models/ISearchState';
 
 export interface IAppState {
   toastr: any;
@@ -19,6 +20,7 @@ export interface IAppState {
   auth: IAuthState;
   appRouter: IAppRouterState;
   addPathPage: IAddPathState;
+  search: ISearchState;
   coursePage: ICoursePageState;
   lecturePage: ILecturePageState;
 }
