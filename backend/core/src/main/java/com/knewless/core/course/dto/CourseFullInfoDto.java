@@ -2,7 +2,7 @@ package com.knewless.core.course.dto;
 
 import com.knewless.core.author.dto.AuthorBriefInfoDto;
 import com.knewless.core.author.dto.AuthorMainInfoDto;
-import com.knewless.core.lecture.Dto.ShortLectureDto;
+import com.knewless.core.lecture.dto.ShortLectureDto;
 import com.knewless.core.tag.dto.TagDto;
 import lombok.Data;
 

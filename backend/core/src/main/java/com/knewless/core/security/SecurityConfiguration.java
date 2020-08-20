@@ -99,7 +99,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpMethod.GET, "/course", "/course/**/info").permitAll()
                     .antMatchers(HttpMethod.GET, "/paths").permitAll()
                     .antMatchers(SWAGGER_PATHS_WHITELIST).permitAll()
-                    .antMatchers("/auth/**", "/oauth2/**", "/assets/images/**").permitAll()
+                    .antMatchers("/auth/**", "/oauth2/**", "/assets/images/**","/assets/video/**").permitAll()
                     .anyRequest().authenticated()
                 .and()
                 .oauth2Login()

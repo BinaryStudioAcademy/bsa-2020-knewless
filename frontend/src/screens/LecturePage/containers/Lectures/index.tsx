@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
-import ReactPlayer from 'react-player';
+import ReactPlayer from 'react-player/lazy';
 import { Link } from 'react-router-dom';
-
+import { Button } from 'semantic-ui-react';
 import { ICourseData } from '@screens/LecturePage/models/ICourseData';
 import { IBindingCallback1 } from 'models/Callbacks';
 import { chooseVideoRoutine, fetchCourseDtoRoutine, saveWatchTimeRoutine } from 'screens/LecturePage/routines';
@@ -12,6 +12,7 @@ import { ILectures } from 'screens/LecturePage/models/ILectures';
 import './styles.sass';
 import { IAppState } from '@models/AppState';
 import useInterval from '../../../../services/use.interval.hook';
+import { chosenVideo } from './reducers';
 
 export interface ILectureProps {
   match: any;
@@ -21,50 +22,26 @@ export interface ILectureProps {
   setChosenVideo: ({ chosenVideo }: {chosenVideo: string}) => void;
   saveWatchTime: Function;
 }
-
+function chooseSource (lecture: ILectures){
+  const result = lecture.webLink? lecture.webLink : lecture.urlOrigin;
+  return result;
+}
 function necessaryVideo(chosenVideoProps: string, responseData: ICourseData, incomingLectureId: string) {
   if (chosenVideoProps === '') {
     if (responseData.id === null) {
       return '';
     }
+    
     // This return gives lecture that you have called
-    return responseData.lectures.filter(l => l.id === incomingLectureId)[0].sourceUrl;
+    return chooseSource(responseData.lectures.filter(l => l.id === incomingLectureId)[0]);
   }
 
   if (responseData.id !== null) {
     // This return gives chosen video
-    return responseData.lectures.filter(l => l.id === chosenVideoProps)[0].sourceUrl;
+    return chooseSource(responseData.lectures.filter(l => l.id === chosenVideoProps)[0]);
   }
 
   return '';
-}
-
-function videosQueue(chosenVideoProps: string, responseData: ICourseData, incomingLectureId: string) {
-  const necessary = necessaryVideo(chosenVideoProps, responseData, incomingLectureId);
-  if (necessary !== '') {
-    const array = responseData.lectures.map(l => l.sourceUrl);
-    const nessVidId = (lectures: ILectures[], nessVidResult: string) => {
-      for (let i = 0; i < lectures.length; i += 1) {
-        if (lectures[i].sourceUrl === nessVidResult) {
-          return i;
-        }
-      }
-      return undefined;
-    };
-
-    const resultArray = [];
-    const indexNessVideo = nessVidId(responseData.lectures, necessary);
-
-    for (let i = 0; i < array.length; i += 1) {
-      if (indexNessVideo + i < array.length) {
-        resultArray.push(array[indexNessVideo + i]);
-      } else {
-        resultArray.push(array[i - array.length + indexNessVideo]);
-      }
-    }
-    return resultArray;
-  }
-  return necessary;
 }
 
 interface IPlayerProgress {
@@ -112,12 +89,19 @@ const LecturePage: React.FunctionComponent<ILectureProps> = ({
   };
   useInterval(() => autoSave(), AUTOSAVE_MS);
 
-  const resultList = videosQueue(chosenVideoId, lecturesData, initialLectureId);
-
+  const result = necessaryVideo(chosenVideoId, lecturesData, initialLectureId);
+ 
   const handlePause = () => {
     setIsPlaying(false);
     triggerSaveTime();
   };
+
+  const handleEnded = () =>{
+    const prev = lecturesData.lectures.findIndex(l=>l.id === chosenVideoId);
+    const nextId = lecturesData.lectures[prev+1]? lecturesData.lectures[prev+1].id : lecturesData.lectures[0].id ;
+    setChosenVideo({ chosenVideo: nextId });
+    triggerSaveTime();
+  }
 
   const handleChooseVideo = useCallback(chosenVideo => {
     triggerSaveTime();
@@ -137,15 +121,15 @@ const LecturePage: React.FunctionComponent<ILectureProps> = ({
         <div className="player">
           <ReactPlayer
             className="react-player"
-            url={resultList}
+            url={result}
             width="100%"
             height="100%"
             playing
-            controls
+            controls={true}
             onProgress={setPlayerProgress}
             onPlay={() => setIsPlaying(true)}
             onPause={handlePause}
-            onEnded={() => triggerSaveTime()}
+            onEnded={() => handleEnded()}
           />
         </div>
         <div className="courseName">

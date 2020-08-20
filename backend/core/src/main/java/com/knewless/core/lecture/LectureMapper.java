@@ -1,6 +1,6 @@
 package com.knewless.core.lecture;
 
-import com.knewless.core.lecture.Dto.ShortLectureDto;
+import com.knewless.core.lecture.dto.ShortLectureDto;
 import com.knewless.core.lecture.model.Lecture;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

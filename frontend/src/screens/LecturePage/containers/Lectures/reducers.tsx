@@ -9,8 +9,13 @@ const basicCourseData = {
   name: 'Unspecified course!',
   lectures: [{
     id: 'undefined',
+    name: 'undefined',
     description: 'undefined',
-    sourceUrl: 'undefined',
+    webLink: 'undefined',
+    urlOrigin: 'undefined',
+    url1080: 'undefined',
+    url720: 'undefined',
+    url480: 'undefined',
     duration: 0
   }],
   author: {

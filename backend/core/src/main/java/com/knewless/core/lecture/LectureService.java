@@ -1,8 +1,8 @@
 package com.knewless.core.lecture;
 
 import com.knewless.core.fileManager.FileManager;
-import com.knewless.core.lecture.Dto.LectureCreateResponseDto;
-import com.knewless.core.lecture.Dto.ShortLectureDto;
+import com.knewless.core.lecture.dto.LectureCreateResponseDto;
+import com.knewless.core.lecture.dto.ShortLectureDto;
 import com.knewless.core.lecture.model.Lecture;
 import com.knewless.core.messaging.Message;
 import com.knewless.core.messaging.MessageSender;
@@ -48,8 +48,7 @@ public class LectureService {
         System.out.println("video saved");
         String[] concatString = filename.split("\\.");
         String fileType = concatString[concatString.length - 1];
-        String relativePath = File.separator + "assets" + File.separator + "video" + File.separator + folderId +
-                File.separator + folderId + "-origin." + fileType;
+        String relativePath = "assets/video/"+folderId +"/"+ folderId + "-origin." + fileType;
         lectureRepository.setDurationPath(lectureId, duration, relativePath);
         Message message = new Message();
         message.setEntityId(lectureId);
@@ -80,10 +79,7 @@ public class LectureService {
         List<Lecture> allLectures = lectureRepository.getLecturesByUserId(id);
         List<Lecture> result = new ArrayList<>();
         allLectures.forEach(lec -> {
-            if (!result.stream().map(Lecture::getSourceUrl).collect(Collectors.toList()).contains(lec.getSourceUrl())) {
-                result.add(lec);
-            }
-            if (lec.getSourceUrl()==null && !result.stream().map(Lecture::getName).collect(Collectors.toList()).contains(lec.getName())) {
+            if (!result.stream().map(Lecture::getName).collect(Collectors.toList()).contains(lec.getName())) {
                 result.add(lec);
             }
         });
@@ -93,7 +89,11 @@ public class LectureService {
                         l.getId(),
                         l.getName() == null ? "mockName" : l.getName(),
                         l.getDescription(),
-                        l.getSourceUrl(),
+                        l.getWebLink(),
+                        l.getUrlOrigin(),
+                        l.getUrl1080(),
+                        l.getUrl720(),
+                        l.getUrl480(),
                         l.getDuration() == 0? l.getDuration() : l.getDuration()/60 + 1))
                 .collect(Collectors.toList());
     }

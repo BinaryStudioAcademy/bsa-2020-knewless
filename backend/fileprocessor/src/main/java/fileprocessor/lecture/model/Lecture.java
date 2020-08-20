@@ -14,8 +14,20 @@ import javax.persistence.Table;
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "lectures")
 public class Lecture extends BaseEntity {
-    @Column(name = "source_url")
-    private String sourceUrl;
+    @Column(name = "web_link")
+    private String webLink;
+
+    @Column(name = "url_origin")
+    private String urlOrigin;
+
+    @Column(name = "url_1080")
+    private String url1080;
+
+    @Column(name = "url_720")
+    private String url720;
+
+    @Column(name = "url_480")
+    private String url480;
 
     @Column(name = "description")
     private String description;

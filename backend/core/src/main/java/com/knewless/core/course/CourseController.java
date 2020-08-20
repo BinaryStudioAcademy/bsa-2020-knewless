@@ -1,6 +1,7 @@
 package com.knewless.core.course;
 
 import com.knewless.core.course.dto.*;
+import com.knewless.core.lecture.dto.ShortLectureDto;
 import com.knewless.core.exception.custom.ResourceNotFoundException;
 import com.knewless.core.security.oauth.UserPrincipal;
 import com.knewless.core.user.model.CurrentUser;
@@ -63,7 +64,7 @@ public class CourseController {
     }
 
     @GetMapping("/lecture/{lectureId}")
-    public CourseToPlayerProjection getCourseByLectureId(@PathVariable UUID lectureId) {
+    public CourseToPlayerDto getCourseByLectureId(@PathVariable UUID lectureId) {
         return courseService.getCourseByLectureId(lectureId);
     }
 

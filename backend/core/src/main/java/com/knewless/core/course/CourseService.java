@@ -13,10 +13,12 @@ import com.knewless.core.lecture.LectureMapper;
 import com.knewless.core.lecture.LectureRepository;
 import com.knewless.core.lecture.homework.HomeworkRepository;
 import com.knewless.core.lecture.homework.model.Homework;
+import com.knewless.core.lecture.mapper.LectureProjectionMapper;
 import com.knewless.core.lecture.model.Lecture;
 import com.knewless.core.subscription.SubscriptionService;
 import com.knewless.core.tag.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +35,9 @@ public class CourseService {
     private final AuthorService authorService;
     private final SubscriptionService subscriptionService;
     private final TagService tagService;
+
+    @Value(value = "${fs.video_url}")
+    private String URL;
 
     @Autowired
     public CourseService(CourseRepository courseRepository, LectureRepository lectureRepository,
@@ -64,7 +69,13 @@ public class CourseService {
             if (l.getCourse() == null) {
                 lec = l;
             } else {
-                lec = Lecture.builder().name(l.getName()).sourceUrl(l.getSourceUrl()).description(l.getDescription())
+                lec = Lecture.builder().name(l.getName())
+                        .webLink(l.getWebLink())
+                        .urlOrigin(l.getUrlOrigin())
+                        .url1080(l.getUrl1080())
+                        .url720(l.getUrl720())
+                        .url480(l.getUrl480())
+                        .description(l.getDescription())
                         .duration(l.getDuration()).build();
             }
             if (l.getHomework() != null) {
@@ -87,8 +98,17 @@ public class CourseService {
         return new CreateCourseResponseDto(course.getId(), true);
     }
 
-    public CourseToPlayerProjection getCourseByLectureId(UUID lectureId) {
-        return courseRepository.findOneById(UUID.fromString(courseRepository.findByLectureId(lectureId).getId()));
+    public CourseToPlayerDto getCourseByLectureId(UUID lectureId) {
+        var courseProjection = courseRepository.findOneById(UUID.fromString(courseRepository.findByLectureId(lectureId).getId()));
+        CourseToPlayerDto course = new CourseToPlayerDto();
+        course.setId(courseProjection.getId());
+        course.setName(courseProjection.getName());
+        course.setAuthor(courseProjection.getAuthor());
+        course.setLectures(courseProjection.getLectures()
+                .stream()
+                .map( l -> new LectureProjectionMapper().fromProjection(l,URL))
+                .collect(Collectors.toList()));
+         return course;
     }
 
     public List<CourseDto> getCourses(Pageable pageable) {

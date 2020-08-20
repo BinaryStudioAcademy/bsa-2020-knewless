@@ -1,8 +1,8 @@
 package com.knewless.core.lecture;
 
-import com.knewless.core.lecture.Dto.LectureCreateResponseDto;
-import com.knewless.core.lecture.Dto.SaveLectureDto;
-import com.knewless.core.lecture.Dto.ShortLectureDto;
+import com.knewless.core.lecture.dto.LectureCreateResponseDto;
+import com.knewless.core.lecture.dto.SaveLectureDto;
+import com.knewless.core.lecture.dto.ShortLectureDto;
 import com.knewless.core.security.oauth.UserPrincipal;
 import com.knewless.core.user.model.CurrentUser;
 import com.knewless.core.validation.SingleMessageResponse;
