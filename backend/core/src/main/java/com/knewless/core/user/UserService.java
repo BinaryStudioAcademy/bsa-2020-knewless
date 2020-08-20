@@ -69,8 +69,10 @@ public class UserService implements UserDetailsService {
     }
 
     public void setRole(UUID userId, RoleType roleType) {
-        var role = roleRepository.findByName(roleType);
-        userRepository.setRole(userId, role.getId());
+        if (!userRepository.existsByIdAndRoleIsNotNull(userId)) {
+            var role = roleRepository.findByName(roleType);
+            userRepository.setRole(userId, role.getId());
+        }
     }
 
     public Role getUserRole(String email) {
