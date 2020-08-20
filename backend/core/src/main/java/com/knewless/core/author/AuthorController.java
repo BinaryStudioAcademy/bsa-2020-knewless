@@ -8,11 +8,9 @@ import com.knewless.core.validation.SingleMessageResponse;
 import com.knewless.core.validation.ValidationMessageCreator;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.Optional;
@@ -59,6 +57,7 @@ public class AuthorController {
         );
     }
 
+    @GetMapping("/self-info")
     public ResponseEntity<?> getAuthorInfo(@CurrentUser UserPrincipal userPrincipal) {
         try {
             return ResponseEntity.ok(this.authorService.getAuthorInfoByUserId(userPrincipal.getId()));
@@ -70,9 +69,9 @@ public class AuthorController {
     @GetMapping("/overview/{authorId}")
     public ResponseEntity<?> getPublicAuthor(@PathVariable UUID authorId, @CurrentUser UserPrincipal userPrincipal) {
         try {
-            return new ResponseEntity<>(this.authorService.getAuthorPublicDto(authorId, userPrincipal), HttpStatus.OK);
+            return ResponseEntity.ok(this.authorService.getAuthorPublicDto(authorId, userPrincipal));
         } catch (NotFoundException ex) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
+            return ResponseEntity.notFound().build();
         }
     }
 
