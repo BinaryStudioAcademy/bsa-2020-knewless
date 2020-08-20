@@ -20,6 +20,7 @@ import { RoleTypes } from '../AppRouter/models/IRole';
 import { history } from '@helpers/history.helper';
 import CoursesPage from '@screens/Courses/containers/CoursesPage';
 import CoursePage from '@screens/CoursePage/containers/CoursePage';
+import PathPage from '@screens/PathPage/containers/PathPage';
 
 export interface IRoutingProps {
   isLoading: boolean;
@@ -53,6 +54,7 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({ isLoading }) => {
           <SettingsRoute />
           <RootRoute />
           <PublicRoute exact path="/course/:courseId" component={CoursePage} />
+          <PublicRoute exact path="/path/:pathId" component={PathPage} />
           <PublicRoute exact path="/login" component={LoginPage} />
           <PublicRoute exact path="/oauth/redirect" component={handler} />
           <PublicRoute exact path="/register" component={RegisterPage} />

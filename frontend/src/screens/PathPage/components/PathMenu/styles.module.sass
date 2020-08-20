@@ -1,0 +1,54 @@
+@import '../../styles/variables'
+
+.menu
+  color: #FFF
+  position: relative
+
+.menu__header
+  width: 100%
+  margin-bottom: 1rem
+
+.menu__options
+  display: grid
+  grid-template-columns: 7rem 7rem auto
+  grid-template-rows: 1fr 0.1rem
+  justify-items: center
+  p
+    font-size: 1.4em
+    font-weight: 600
+
+.menu__button
+  display: flex
+  padding: 0.2rem 0 0.7rem 0
+  cursor: pointer
+  background: transparent
+  outline: none
+  border: none
+  *
+    transition: all 0.3s ease-in-out
+
+.button_selected
+  p
+    color: #58C2F1
+
+.button_ordinary
+  p
+    color: #596C7E
+  &:hover
+    p
+      color: #58C2F1
+
+
+.separator
+  background: #596C7E
+  width: 100%
+
+.selected_separator
+  background: linear-gradient(83.47deg, #0084F8 9.02%, #FF8576 90.81%)
+  width: 100%
+
+.menu__content_container
+  position: relative
+  margin-right: $indent
+  margin-bottom: 8vh
+  overflow-y: auto

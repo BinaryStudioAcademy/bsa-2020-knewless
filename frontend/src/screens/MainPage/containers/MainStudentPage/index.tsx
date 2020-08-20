@@ -114,6 +114,7 @@ const MainStudentPage: React.FunctionComponent<IMainStudentPageProps> = ({
             {paths.slice(0, 3).map(p => (
               <div className={styles.path_card}>
                 <PathCard
+                  id={p.id}
                   name={p.name}
                   logoSrc={p.logoSrc}
                   courses={p.courses}

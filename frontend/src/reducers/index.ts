@@ -17,6 +17,7 @@ import addPathPage from '../screens/AddPath/reducers';
 import coursesPage from '../screens/Courses/reducers';
 import search from '../screens/Search/reducer/reducer';
 import coursePage from '../screens/CoursePage/reducers';
+import pathPage from '../screens/PathPage/reducers';
 
 export default combineReducers({
   toastr,
@@ -34,6 +35,7 @@ export default combineReducers({
   authorPublicData,
   appRouter,
   addPathPage,
+  pathPage,
   coursesPage,
   coursePage,
   search

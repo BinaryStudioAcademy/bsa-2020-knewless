@@ -138,6 +138,7 @@ export const LandingPage: React.FunctionComponent<ILandingProps> = ({
               <div className={styles.path_card}>
                 <PathCard
                   key={p.id}
+                  id={p.id}
                   name={p.name}
                   logoSrc={p.logoSrc}
                   courses={p.courses}
