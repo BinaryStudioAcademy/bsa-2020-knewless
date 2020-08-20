@@ -47,14 +47,13 @@ export const CoursePreview: React.FC<ICoursePreviewProps> = ({
 
   return (
     <div className={styles.container}>
-      <div className={styles.content}>
-        <div className={styles.meta__image}>
-          {flag !== undefined ? <img src={image} alt="" className={styles.inactive_avatar} />
-            : (
-              <div className={styles.uploadWrapper}>
-                <img src={image} alt="" className={styles.avatar} />
-                <Button as="label" className={styles.uploader}>
-                  upload...
+      <div className={styles.meta__image}>
+        {flag !== undefined ? <img src={image} alt="" className={styles.inactive_avatar} />
+          : (
+            <div className={styles.uploadWrapper}>
+              <img src={image} alt="" className={styles.avatar} />
+              <Button as="label" className={styles.uploader}>
+                upload...
                 <input name="image" type="file" onChange={e => action(e.target.files[0])} hidden />
               </Button>
             </div>
