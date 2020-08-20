@@ -5,7 +5,6 @@ export const setSettings = async request => {
     endpoint: '/api/student/',
     type: 'POST',
     requestData: request
-
   });
   return response.json();
 };

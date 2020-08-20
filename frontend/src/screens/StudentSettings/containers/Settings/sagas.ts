@@ -2,12 +2,10 @@ import { all, call, put, takeEvery } from 'redux-saga/effects';
 import { Routine } from 'redux-saga-routines';
 import * as imageService from 'services/image.service';
 import { toastr } from 'react-redux-toastr';
-
 import { fetchUserRoutine } from 'containers/AppRouter/routines';
 import { fetchStudentRoutine } from '@screens/MainPage/routines';
 import * as settingsService from '../../services/settings.service';
-import { fetchGetStudentSettingsRoutine, fetchSetStudentSettingsRoutine } from '../../routines';
-import { fetchAllTagsRoutine } from '../../routines/index';
+import { fetchGetStudentSettingsRoutine, fetchSetStudentSettingsRoutine, fetchAllTagsRoutine } from '../../routines';
 
 function* getSettings() {
   try {
@@ -16,7 +14,9 @@ function* getSettings() {
       yield put(fetchGetStudentSettingsRoutine.success(response));
     }
   } catch (error) {
-    yield put(fetchGetStudentSettingsRoutine.failure(error?.message));
+    const msg = error?.message || 'An error occurred while loading your settings.';
+    yield put(fetchGetStudentSettingsRoutine.failure(msg));
+    toastr.error(msg);
   }
 }
 
@@ -31,11 +31,17 @@ function* setSettings(action: Routine<any>) {
       const { link } = yield call(() => imageService.uploadImage(author.uploadImage));
       author.avatar = link;
     }
-    yield call(() => settingsService.setSettings(action.payload));
+    const response = yield call(() => settingsService.setSettings(action.payload));
     yield put(fetchStudentRoutine.trigger());
     yield put(fetchUserRoutine.trigger());
+    if (response !== null) {
+      yield put(fetchSetStudentSettingsRoutine.success(response.message));
+      toastr.success(response.message);
+    }
   } catch (error) {
-    toastr('Updating student failed :(')
+    const msg = error?.message || 'An error occurred while saving your changes.';
+    yield put(fetchSetStudentSettingsRoutine.failure(msg));
+    toastr.error(msg);
   }
 }
 
@@ -47,10 +53,10 @@ function* getTags() {
   try {
     const response = yield call(settingsService.getTags);
     yield put(fetchAllTagsRoutine.success(response));
-    console.log('saga works: ', response);
   } catch (error) {
-    yield put(fetchAllTagsRoutine.failure(error?.message));
-    toastr.error('Loading failed!');
+    const msg = error?.message || 'An error occurred while loading your interests.';
+    yield put(fetchAllTagsRoutine.failure(msg));
+    toastr.error(msg);
   }
 }
 
