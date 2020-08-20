@@ -4,7 +4,7 @@ import styles from './styles.module.sass';
 import { locationOptions } from './options';
 import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { fetchGetAuthorSettingsRoutine, fetchSetAuthorSettingsRoutine } from '../../routines';
+import { fetchGetAuthorSettingsRoutine, fetchSetAuthorSettingsRoutine } from '@screens/AuthorSettings/routines';
 import { IAuthorSettings } from 'screens/AuthorSettings/models/IAuthorSettings';
 import { IBindingAction, IBindingCallback1 } from 'models/Callbacks';
 import GrayOutlineButton from '@components/buttons/GrayOutlineButton';
@@ -15,14 +15,19 @@ import {
   BIOGRAPHY_MESSAGE,
   COMPANY_MESSAGE,
   FIRST_NAME_MESSAGE,
+  getTwitterUserFromUrl,
   isValidBiography,
-  isValidCompany, isValidJob,
+  isValidCompany,
+  isValidJob,
   isValidNameSurname,
   isValidTwitter,
-  isValidUrl, JOB_MESSAGE,
+  isValidTwitterUser,
+  isValidUrl,
+  JOB_MESSAGE,
   LAST_NAME_MESSAGE,
   REQUIRED_FIELD_MESSAGE,
   TWITTER_MESSAGE,
+  TWITTER_URL_PREFIX,
   URL_MESSAGE
 } from '@helpers/validation.helper';
 import AvatarUploader from '@components/avatar/AvatarUploader';
@@ -55,7 +60,7 @@ const AuthorSettings: React.FunctionComponent<IAuthorSettingsProps> = ({
   const [company, setCompany] = useState(settings.company || '');
   const [job, setJob] = useState(settings.job || '');
   const [website, setWebsite] = useState(settings.website || '');
-  const [twitter, setTwitter] = useState(settings.twitter || '');
+  const [twitterUser, setTwitterUser] = useState(getTwitterUserFromUrl(settings?.twitter || ''));
   const [biography, setBiography] = useState(settings.biography || '');
   useEffect(() => {
     setAvatar(settings.avatar);
@@ -65,8 +70,8 @@ const AuthorSettings: React.FunctionComponent<IAuthorSettingsProps> = ({
     setCompany(settings.company);
     setJob(settings.job);
     setWebsite(settings.website);
-    setTwitter(settings.twitter);
-    setBiography(settings.biography);
+    setTwitterUser(getTwitterUserFromUrl(settings?.twitter || ''));
+    setBiography(settings.biography || '');
   }, [settings]);
   const handleUploadFile = file => {
     setUploadImage(file);
@@ -77,18 +82,19 @@ const AuthorSettings: React.FunctionComponent<IAuthorSettingsProps> = ({
   const [isLastNameValid, setIsLastNameValid] = useState(true);
   const [isCompanyValid, setIsCompanyValid] = useState(true);
   const [isWebsiteValid, setIsWebsiteValid] = useState(true);
-  const [isTwitterValid, setIsTwitterValid] = useState(true);
+  const [isTwitterUserValid, setIsTwitterUserValid] = useState(true);
   const [isBiographyValid, setIsBiographyValid] = useState(true);
   const [isJobValid, setIsJobValid] = useState(true);
   const [isLocationValid, setIsLocationValid] = useState(true);
 
   const isRequiredFieldsValid = (): boolean => !!firstName && !!lastName && !!location && !!company && !!job
-    && !!website && !!twitter && isFirstNameValid && isLastNameValid && isCompanyValid && isWebsiteValid
-    && isTwitterValid && isBiographyValid && isLocationValid && isJobValid;
+    && !!website && !!twitterUser && isFirstNameValid && isLastNameValid && isCompanyValid && isWebsiteValid
+    && isTwitterUserValid && isBiographyValid && isLocationValid && isJobValid;
 
   const handleSubmit = e => {
     e.preventDefault();
-    if (isRequiredFieldsValid()) {
+    const fullTwitterUrl = TWITTER_URL_PREFIX + twitterUser;
+    if (isRequiredFieldsValid() && isValidTwitter(fullTwitterUrl)) {
       setUserRole(RoleTypes.AUTHOR);
       const updatedSettings = {
         id: settings.id,
@@ -99,7 +105,7 @@ const AuthorSettings: React.FunctionComponent<IAuthorSettingsProps> = ({
         company,
         job,
         website,
-        twitter,
+        twitter: fullTwitterUrl,
         biography,
         uploadImage
       };
@@ -126,13 +132,12 @@ const AuthorSettings: React.FunctionComponent<IAuthorSettingsProps> = ({
     const lastChangeValue = typeof newName === 'string' ? newName : website;
     setIsWebsiteValid(!!lastChangeValue && isValidUrl(lastChangeValue));
   };
-  const validateTwitter = (newName?: string) => {
-    const lastChangeValue = typeof newName === 'string' ? newName : twitter;
-    setIsTwitterValid(!!lastChangeValue && isValidTwitter(lastChangeValue));
+  const validateTwitterUser = (newName?: string) => {
+    const lastChangeValue = typeof newName === 'string' ? newName : twitterUser;
+    setIsTwitterUserValid(!!lastChangeValue && isValidTwitterUser(lastChangeValue));
   };
   const validateBiography = (newName?: string) => {
-    const lastChangeValue = typeof newName === 'string' ? newName : biography;
-    setIsBiographyValid(!!lastChangeValue && isValidBiography(lastChangeValue));
+    setIsBiographyValid(isValidBiography(typeof newName === 'string' ? newName : biography));
   };
   const validateLocation = (newName?: string) => {
     const lastChangeValue = typeof newName === 'string' ? newName : location;
@@ -243,19 +248,24 @@ const AuthorSettings: React.FunctionComponent<IAuthorSettingsProps> = ({
           />
           <Form.Input
             fluid
-            className={`${styles.formField} ${!isTwitterValid && styles.roundedBottomField}`}
+            className={`${styles.formField} ${!isTwitterUserValid && styles.roundedBottomField}`}
             label="Twitter"
-            placeholder="Twitter"
-            value={twitter}
+            placeholder="@nickname"
+            value={twitterUser}
+            required
+            error={isTwitterUserValid ? false : TWITTER_MESSAGE}
             onChange={e => {
               const { value } = e.target;
-              setTwitter(value);
-              validateTwitter(value);
+              setTwitterUser(value);
+              validateTwitterUser(value);
             }}
-            required
-            error={isTwitterValid ? false : TWITTER_MESSAGE}
-            onBlur={() => validateTwitter()}
-          />
+            onBlur={() => validateTwitterUser()}
+          >
+            <div className={`ui label ${styles.inputInlineLabel}`}>{TWITTER_URL_PREFIX}</div>
+            <input
+              className={`ui input ${styles.inputWithInlineLabel} ${!isTwitterUserValid && styles.roundedBottomField}`}
+            />
+          </Form.Input>
         </Form.Group>
         <Form.Group widths="2">
           <Form.Select

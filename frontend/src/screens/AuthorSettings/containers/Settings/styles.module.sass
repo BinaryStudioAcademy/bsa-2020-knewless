@@ -47,6 +47,17 @@ body
   .formField
     margin-bottom: 1em !important
 
+    .inputInlineLabel
+      margin-right: 0 !important
+      border-top-right-radius: 0 !important
+      border-bottom-right-radius: 0 !important
+      font-size: 1em
+      padding-top: 0.8em
+
+    .inputWithInlineLabel
+      border-top-left-radius: 0 !important
+      border-bottom-left-radius: 0 !important
+
     \:global(.ui.pointing.label)
       &
         background-color: #f7d0d0 !important
@@ -59,7 +70,7 @@ body
     margin-top: 3em !important
 
   .roundedBottomField
-    input[type="text"], textarea
+    input[type="text"], textarea, .inputInlineLabel
       border-bottom-left-radius: 0 !important
       border-bottom-right-radius: 0 !important
 

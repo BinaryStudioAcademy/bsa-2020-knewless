@@ -31,7 +31,7 @@ public class PathController {
 
     @GetMapping
     private List<PathDto> getPaths(@RequestParam(defaultValue = "10") int size,
-									  @RequestParam(defaultValue = "0") int page) {
+                                   @RequestParam(defaultValue = "0") int page) {
         return pathService.getPaths(PageRequest.of(page, size));
     }
 
@@ -40,9 +40,10 @@ public class PathController {
         return ResponseEntity.ok(pathService.getLatestPathsByAuthorId(authorId));
     }
 
-	@PutMapping("create")
-	public ResponseEntity<?> create(@Valid @RequestBody PathCreationRequestDto requestDto, @CurrentUser UserPrincipal userPrincipal,
-                       Errors validationResult) {
+    @PutMapping("create")
+    public ResponseEntity<?> create(@Valid @RequestBody PathCreationRequestDto requestDto,
+                                    @CurrentUser UserPrincipal userPrincipal,
+                                    Errors validationResult) {
         if (validationResult.hasErrors()) {
             return ResponseEntity.badRequest()
                     .body(new SingleMessageResponse(
@@ -55,6 +56,6 @@ public class PathController {
             return ResponseEntity.badRequest().body(new SingleMessageResponse("User id can't be null."));
         }
         return ResponseEntity.ok(pathService.create(currentUserId, requestDto));
-	}
+    }
 
 }

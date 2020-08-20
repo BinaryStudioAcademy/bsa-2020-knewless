@@ -9,7 +9,7 @@ import java.util.UUID;
 @Data
 public class StudentSettingsDto {
 
-    @NotNull(message = "Id cannot be null.")
+    @NotNull(message = "Id can't be null.")
     private UUID id;
 
     private UUID userId;
@@ -46,7 +46,8 @@ public class StudentSettingsDto {
 
     @Pattern(
             regexp = "^$|^[\\d\\D]{50,}$",
-            message = "Biography minimum length must be 50 symbols (only Latin letters, numbers and special characters allowed)."
+            message = "Biography can be empty or its minimum length must be 50 symbols. " +
+                    "Only Latin letters, numbers and special characters allowed."
     )
     private String biography;
 

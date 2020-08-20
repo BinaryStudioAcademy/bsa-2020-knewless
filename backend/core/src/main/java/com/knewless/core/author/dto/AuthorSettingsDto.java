@@ -51,7 +51,8 @@ public class AuthorSettingsDto {
 
     @Pattern(
             regexp = "^$|^[\\d\\D]{50,}$",
-            message = "Biography minimum length must be 50 symbols (only Latin letters, numbers and special characters allowed)."
+            message = "Biography can be empty or its minimum length must be 50 symbols. " +
+                    "Only Latin letters, numbers and special characters allowed."
     )
     private String biography;
 

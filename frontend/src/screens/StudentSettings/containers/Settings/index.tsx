@@ -60,8 +60,8 @@ export interface IStudentSettingsProps {
 function presentStudentTagsAssembler(allTags: ITag[], presentTags: string[]) {
   const resultTags = [];
 
-  if(allTags == undefined || presentTags == undefined) return [];
-  if(presentTags[0] === undefined || allTags[0].id === undefined) return [];
+  if (allTags == undefined || presentTags == undefined) return [];
+  if (presentTags[0] === undefined || allTags[0].id === undefined) return [];
 
   for (let i = 0; i < presentTags.length; i++) {
     for (let j = 0; j < allTags.length; j++) {
@@ -118,7 +118,7 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
     setCompany(settings.company);
     setJob(settings.job);
     setWebsite(settings.website);
-    setBiography(settings.biography);
+    setBiography(settings.biography || '');
     setDirection(settings.direction);
     setExperience(settings.experience);
     setLevel(settings.level);
@@ -132,7 +132,6 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
   useEffect(() => {
     setStoredTags(allTags);
     setSelectedTags(presentStudentTagsAssembler(allTags, settings.tags));
-
   }, [allTags]);
 
   const handleUploadFile = file => {
@@ -202,8 +201,7 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
     setIsWebsiteValid(!!lastChangeValue && isValidUrl(lastChangeValue));
   };
   const validateBiography = (newName?: string) => {
-    const lastChangeValue = typeof newName === 'string' ? newName : biography;
-    setIsBiographyValid(!!lastChangeValue && isValidBiography(lastChangeValue));
+    setIsBiographyValid(isValidBiography(typeof newName === 'string' ? newName : biography));
   };
   const validateLocation = (newName?: string) => {
     const lastChangeValue = typeof newName === 'string' ? newName : location;
