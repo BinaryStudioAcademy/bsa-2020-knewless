@@ -7,6 +7,7 @@ import com.knewless.core.student.StudentRepository;
 import com.knewless.core.user.dto.UserDto;
 import com.knewless.core.user.model.User;
 import com.knewless.core.user.role.RoleRepository;
+import com.knewless.core.user.role.model.Role;
 import com.knewless.core.user.role.model.RoleType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -70,5 +71,9 @@ public class UserService implements UserDetailsService {
     public void setRole(UUID userId, RoleType roleType) {
         var role = roleRepository.findByName(roleType);
         userRepository.setRole(userId, role.getId());
+    }
+
+    public Role getUserRole(String email) {
+        return userRepository.getUserRoleId(email);
     }
 }

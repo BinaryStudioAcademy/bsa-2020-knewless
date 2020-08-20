@@ -1,42 +1,44 @@
-$previewheight: 13em
+$previewheight: 15em
 
 .container
   background: #2A2B37
-  display: grid
+  display: flex
+  align-items: center
   width: 100%
-  height: $previewheight
-  grid-template-columns: $previewheight 1fr 1fr 15% 15% 10% 5%  5%
-  grid-template-rows: repeat(10, 10% )
+  height: 12em
+
+.content
+  display: flex
+  align-items: center
+  padding-right: 10px
+
+.card_content_box
+  margin-left: 25px
+  width: 60%
+  height: 12em
+  position: relative
 
 .inactive_avatar
   width: 100%
   height: 100%
-  max-width: $previewheight
-  max-height: $previewheight
-  display: flex
-  align-self: center
-  align-content: center
+  object-fit: cover
   
 .uploadWrapper
   width: 100%
   height: 100%
-  max-width: $previewheight
-  max-height: $previewheight
-  display: flex
-  align-self: center
-  align-content: center
+  position: relative
 
   .avatar
-    position: absolute
     width: 100%
     height: 100%
-    max-width: $previewheight
-    max-height: $previewheight
     background-color: #2a2b3798
     object-fit: cover
     z-index: 1
 
   .uploader
+    position: absolute
+    left: 0
+    top: 0
     display: flex
     justify-content: center
     align-items: center
@@ -44,28 +46,40 @@ $previewheight: 13em
     width: 100%
     height: 100%
     border-radius: 0
-    max-width: $previewheight
-    max-height: $previewheight
     background: #2a2b3765
     padding: 0
     z-index: 2
     opacity: 0
     transition-duration: 0.4s
     &:hover
-        transition-duration: 0.4s
-        opacity: 0.8
-        background: #2a2b3765
+      transition-duration: 0.4s
+      opacity: 0.8
+      background: #2a2b3765
 
+.course_rating
+  position: absolute
+  right: 0px
+  top: 12px
 
 .number
   color: #FF8576  
   font-weight: bold
   margin-right: 10px
 
+.author
+  font-size: .9em
+  margin: 5px 0
+  i 
+    color: #666
+    &:hover
+      text-decoration: underline
+
 
 .meta
   &__image
-    grid-area: 1 / 1 / 11 / 2
+    height: 12em
+    width: 50%
+
 
   &__lectures
     color: #666666
@@ -79,35 +93,32 @@ $previewheight: 13em
   font-size: 0.9em
   text-transform: uppercase
 
+.tags
+  margin-top: 12px
+  span 
+    margin-right: 8px
+    text-transform: uppercase
+    color: #FF8576
+    font-size: .9em
+
 .course_name
-  grid-area: 1 / 2 / 4 / 6
-  justify-self: start
-  align-self: flex-start
-  overflow: hidden
-  max-width: 100%
-  padding: 1em
-  padding-left: 3em
-  white-space: nowrap
-  text-transform: capitalize
+  margin-top: 8px
 
 .nameText
-  font-size: 2em
+  font-size: 1.3em
   font-weight: bold
   color: white
+  &:hover
+    text-decoration: underline
 
 .description
-  grid-area: 5 / 2 / 7 / 8
-  max-height: $previewheight - 6em
-  padding: 3em
-  justify-self: start
-  align-self: center
-  overflow: hidden
   max-width: 100%
   display: inline-block
 
 .description_text
   font-size: 0.9em
-  line-height: 150%
+  opacity: 0.7
+  line-height: 1.5
 
 .bottomflex
   display: flex
@@ -116,14 +127,11 @@ $previewheight: 13em
   align-items: flex-end
   justify-items: center
   justify-content: flex-start
+  position: absolute
+  bottom: 10px
 
 .grid_row_flex
-  padding-left: 3em
-  grid-area: 9 / 2 / 10 / 6
-  justify-self: stretch
-  align-self: stretch
-  padding-bottom: 5px
-  padding-right: 5px
+  margin-top: 4px
 
 .topflex
   display: flex
@@ -135,10 +143,6 @@ $previewheight: 13em
   padding-right: 5px
 
 .grid_top_row_flex
-  grid-area: 4 / 2 / 5 / 4
-  justify-self: stretch
-  align-self: flex-end
-  padding-left: 3em
 
 .optional_element
   grid-area: 5 / 7 / 7 / 9
@@ -153,4 +157,11 @@ $previewheight: 13em
 
   &:hover
     cursor: pointer  
-    
+
+@media (max-width: 1250px)
+  .course_rating
+    display: none !important
+
+  .bottomflex
+    div:nth-child(2)
+      display: none !important

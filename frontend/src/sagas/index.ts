@@ -13,6 +13,7 @@ import addCourseSagas from 'screens/AddCourse/sagas';
 import publicAuthorSagas from '../screens/AuthorPublicPage/sagas';
 import appRouterSagas from 'containers/AppRouter/sagas';
 import addPathSagas from '../screens/AddPath/sagas';
+import coursesSagas from '../screens/Courses/sagas';
 import coursePageSagas from '@screens/CoursePage/sagas';
 import searchSagas from '@screens/./Search/sagas/sagas';
 
@@ -31,6 +32,8 @@ export default function* rootSaga() {
     addCourseSagas(),
     publicAuthorSagas(),
     appRouterSagas(),
+    addPathSagas(),
+    coursesSagas(),
     addPathSagas(),
     coursePageSagas(),
     searchSagas()

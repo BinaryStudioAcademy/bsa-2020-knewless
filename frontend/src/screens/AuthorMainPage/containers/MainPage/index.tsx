@@ -10,6 +10,7 @@ import { fetchAuthorCoursesRoutine, fetchAuthorPathsRoutine, fetchAuthorRoutine 
 import { useHistory } from 'react-router-dom';
 import { IUser } from 'containers/AppRouter/models/IUser';
 import { IBindingAction } from 'models/Callbacks';
+import { history } from '@helpers/history.helper';
 import styles from './styles.module.sass';
 
 export interface IMainAuthorPageProps {
@@ -53,7 +54,7 @@ const MainAuthorPage: React.FunctionComponent<IMainAuthorPageProps> = ({
           <AuthorCardsSegment
             title="Your recently created Courses"
             onCreateClick={() => history.push('/add_course')}
-            onViewAllClick={() => (console.log('clicked view author courses'))}
+            onViewAllClick={() => history.push('/courses')}
             loading={coursesLoading}
           >
             {(authorCourses && authorCourses.length > 0) ? authorCourses.slice(0, 3).map(c => (

@@ -12,6 +12,7 @@ import {
 } from '../../routines';
 import { IAppState } from 'models/AppState';
 import { IUser } from 'containers/AppRouter/models/IUser';
+import { history } from '@helpers/history.helper';
 
 export interface IMainStudentPageProps {
   student: IStudent;
@@ -62,7 +63,7 @@ const MainStudentPage: React.FunctionComponent<IMainStudentPageProps> = ({
         <div className={`${styles.wide_container} ${styles.content_row}`}>
           <CardsSegment
             title="Continue Learning"
-            onViewAllClick={() => (console.log('clicked view all courses'))}
+            onViewAllClick={() => history.push('/courses')}
             loading={continueCoursesLoading}
           >
             {(continueCourses && continueCourses.length > 0) ? continueCourses.slice(0, 3).map(c => (
@@ -85,7 +86,7 @@ const MainStudentPage: React.FunctionComponent<IMainStudentPageProps> = ({
         <div className={`${styles.wide_container} ${styles.content_row}`}>
           <CardsSegment
             title="Recommended Courses"
-            onViewAllClick={() => (console.log('clicked view all courses'))}
+            onViewAllClick={() => history.push('/courses')}
             loading={recommendedCoursesLoading}
           >
             {recommendedCourses.slice(0, 3).map(c => (

@@ -237,6 +237,9 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
             <div className={styles.textcontainer}>Preview:</div>
             <div className={styles.preview_warning_container}>
               <CoursePreview
+                authorName='You Name'
+                tags={['tag1', 'tag2', 'tag3']}
+                rating={0}
                 image={previewImage}
                 lecturesNumber={selected.length}
                 name={courseName}

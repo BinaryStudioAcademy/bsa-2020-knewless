@@ -84,4 +84,19 @@ public class CourseController {
         return courseService.getCourses(PageRequest.of(page, size));
     }
 
+    @GetMapping("/all")
+    public List<CourseDetailsDto> getAllCourses(@RequestParam(defaultValue = "0") int page,
+                                                @RequestParam(defaultValue = "10") int size) {
+        return courseService.getAllCourses(PageRequest.of(page, size));
+    }
+
+    @GetMapping("/lecture/tag/{tagId}")
+    public List<CourseDetailsDto> getAllCoursesByLectureTag(@PathVariable UUID tagId) {
+        return courseService.getAllCoursesByLectureTag(tagId);
+    }
+
+    @GetMapping("/author/user")
+    public List<CourseDetailsDto> getAllCoursesByLectureTag(@CurrentUser UserPrincipal userPrincipal) {
+        return courseService.getAllAuthorCourses(userPrincipal);
+    }
 }

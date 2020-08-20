@@ -15,7 +15,7 @@ const UserElement = ({ user }) => (
     >
       <Icon name="heart" size="big" inverted />
     </Label>
-    <Notifications user={{ id: user.id }} styleName={styles.toolbarBtn} />
+    <Notifications userId={user.id} styleName={styles.toolbarBtn} />
     <Popup
       id={styles.popup}
       on="click"

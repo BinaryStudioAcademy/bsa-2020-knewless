@@ -12,13 +12,15 @@ import {
 import { connect } from 'react-redux';
 import styles from './styles.module.sass';
 
-const Notifications = ({ user, notifications, fetchNotifications: fetch,
+const Notifications = ({ userId, notifications, fetchNotifications: fetch,
   readNotif: read, deleteAllNotifications: deleteAll,
   readAllNotifs: readAll, styleName }) => {
   const ref = useRef(null);
   useEffect(() => {
-    fetch({ userId: user.id });
-  }, []);
+    if (userId) {
+      fetch({ userId });
+    }
+  }, [fetch, userId]);
 
   function countUnread() {
     return notifications.filter(n => n.read === false).length > 0;
@@ -45,8 +47,8 @@ const Notifications = ({ user, notifications, fetchNotifications: fetch,
               <div className={styles.action}>
                 <Dropdown icon="ellipsis vertical">
                   <Dropdown.Menu>
-                    <Dropdown.Item icon="eye" text="Read all" onClick={() => readAll({ userId: user.id })} />
-                    <Dropdown.Item icon="trash" text="Delete all" onClick={() => deleteAll({ userId: user.id })} />
+                    <Dropdown.Item icon="eye" text="Read all" onClick={() => readAll({ userId })} />
+                    <Dropdown.Item icon="trash" text="Delete all" onClick={() => deleteAll({ userId: userId })} />
                   </Dropdown.Menu>
                 </Dropdown>
               </div>
@@ -74,11 +76,11 @@ const Notifications = ({ user, notifications, fetchNotifications: fetch,
 };
 
 Notifications.defaultProps = {
-  user: undefined
+  userId: undefined
 };
 
 Notifications.propTypes = {
-  user: PropTypes.objectOf(PropTypes.any)
+  userId: PropTypes.string
 };
 
 const mapStateToProps = rootState => ({

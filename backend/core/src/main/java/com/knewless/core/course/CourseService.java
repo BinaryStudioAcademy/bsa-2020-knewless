@@ -17,6 +17,11 @@ import com.knewless.core.lecture.homework.HomeworkRepository;
 import com.knewless.core.lecture.homework.model.Homework;
 import com.knewless.core.lecture.mapper.LectureProjectionMapper;
 import com.knewless.core.lecture.model.Lecture;
+import com.knewless.core.security.oauth.UserPrincipal;
+import com.knewless.core.tag.TagRepository;
+import com.knewless.core.user.UserService;
+import com.knewless.core.user.role.model.Role;
+import com.knewless.core.user.role.model.RoleType;
 import com.knewless.core.subscription.SubscriptionService;
 import com.knewless.core.tag.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +40,8 @@ public class CourseService {
     private final LectureRepository lectureRepository;
     private final AuthorRepository authorRepository;
     private final HomeworkRepository homeworkRepository;
+    private final TagRepository tagRepository;
+    private final UserService userService;
     private final AuthorService authorService;
     private final SubscriptionService subscriptionService;
     private final TagService tagService;
@@ -46,6 +53,7 @@ public class CourseService {
     @Autowired
     public CourseService(CourseRepository courseRepository, LectureRepository lectureRepository,
                          AuthorRepository authorRepository, HomeworkRepository homeworkRepository,
+                         TagRepository tagRepository, UserService userService,
                          AuthorService authorService, SubscriptionService subscriptionService,
                          TagService tagService, EsService esService) {
         this.courseRepository = courseRepository;
@@ -56,6 +64,8 @@ public class CourseService {
         this.subscriptionService = subscriptionService;
         this.tagService = tagService;
         this.esService = esService;
+        this.tagRepository = tagRepository;
+        this.userService = userService;
     }
 
     public CreateCourseResponseDto createCourse(CreateCourseRequestDto request, UUID userId) {
@@ -174,4 +184,58 @@ public class CourseService {
         return course;
     }
 
+
+    public List<CourseDetailsDto> getUserCourses(UUID id) {
+        return courseRepository.getDetailCoursesByUserId(id)
+                .stream()
+                .map(c -> {
+                    List<String> tags = tagRepository.getTagsByCourse(c.getId());
+                    tags = tags.size() > 3 ? tags.subList(0, 3) : tags;
+                    CourseDetailsDto course = CourseMapper.MAPPER.courseDetailsResultToCourseDetailsDto(c);
+                    course.setTags(tags);
+                    return course;
+                }).collect(Collectors.toList());
+    }
+
+    public List<CourseDetailsDto> getAllCourses(Pageable pageable) {
+        return courseRepository.getDetailCourses(pageable)
+                .stream()
+                .map(c -> {
+                    List<String> tags = tagRepository.getTagsByCourse(c.getId());
+                    tags = tags.size() > 3 ? tags.subList(0, 3) : tags;
+                    CourseDetailsDto course = CourseMapper.MAPPER.courseDetailsResultToCourseDetailsDto(c);
+                    course.setTags(tags);
+                    return course;
+                }).collect(Collectors.toList());
+    }
+
+    public List<CourseDetailsDto> getAllCoursesByLectureTag(UUID tagId) {
+        return courseRepository.getDetailCoursesByLectureTag(tagId)
+                .stream()
+                .map(c -> {
+                    List<String> tags = tagRepository.getTagsByCourse(c.getId());
+                    tags = tags.size() > 3 ? tags.subList(0, 3) : tags;
+                    CourseDetailsDto course = CourseMapper.MAPPER.courseDetailsResultToCourseDetailsDto(c);
+                    course.setTags(tags);
+                    return course;
+                }).collect(Collectors.toList());
+    }
+
+    public List<CourseDetailsDto> getAllAuthorCourses(UserPrincipal user) {
+        Role role = userService.getUserRole(user.getEmail());
+        if (role.getName() != RoleType.AUTHOR) {
+            return  List.of();
+        }
+        Author author = authorRepository.findByUserId(user.getId()).orElseThrow();
+
+        return courseRepository.getDetailCoursesByAuthorId(author.getId())
+                .stream()
+                .map(c -> {
+                    List<String> tags = tagRepository.getTagsByCourse(c.getId());
+                    tags = tags.size() > 3 ? tags.subList(0, 3) : tags;
+                    CourseDetailsDto course = CourseMapper.MAPPER.courseDetailsResultToCourseDetailsDto(c);
+                    course.setTags(tags);
+                    return course;
+                }).collect(Collectors.toList());
+    }
 }

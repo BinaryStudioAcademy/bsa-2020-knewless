@@ -11,19 +11,12 @@ import {IAppState} from '@models/AppState';
 import {IUser} from '@containers/AppRouter/models/IUser';
 import SearchHeader from '@screens/Search/containers/SearchHeader/index';
 
-enum RoutPointer {
-  home,
-  courses,
-  paths
-}
-
 interface IHeaderProps {
   currentUser: IUser;
   isAuthorized: boolean;
 }
 
 const Header = ({ currentUser, isAuthorized }: IHeaderProps) => {
-  const [currentRout, setCurrentRout] = useState(RoutPointer.home);
   const [searchStyle, setSearchStyle] = useState(styles.searchHidden);
   const location = useLocation();
 
@@ -65,46 +58,43 @@ const Header = ({ currentUser, isAuthorized }: IHeaderProps) => {
                   basic
                   size="tiny"
                   className={styles.routElement}
-                  onClick={() => setCurrentRout(RoutPointer.home)}
                 >
                   <div className={styles.iconWrp}>
                     <Icon name="home" size="big" inverted />
                   </div>
                   <div className={styles.routName}>Home</div>
                 </Label>
-                {currentRout === 0 ? <div className={styles.homeLine} /> : ''}
+                {location.pathname === '/' && <div className={styles.homeLine} />}
               </NavLink>
             </div>
             <div className={styles.column}>
-              <NavLink exact to="/">
+              <NavLink exact to="/courses">
                 <Label
                   basic
                   size="tiny"
                   className={styles.routElement}
-                  onClick={() => setCurrentRout(RoutPointer.courses)}
                 >
                   <div className={styles.iconWrp}>
                     <Icon name="newspaper outline" size="big" inverted />
                   </div>
                   <div className={styles.routName}>Courses</div>
                 </Label>
-                {currentRout === 1 ? <div className={styles.homeLine} /> : ''}
+                {location.pathname === '/courses' && <div className={styles.homeLine} />}
               </NavLink>
             </div>
             <div className={styles.column}>
-              <NavLink exact to="/">
+              <NavLink exact to="/paths">
                 <Label
                   basic
                   size="tiny"
                   className={styles.routElement}
-                  onClick={() => setCurrentRout(RoutPointer.paths)}
                 >
                   <div className={styles.iconWrp}>
                     <PathIcon />
                   </div>
                   <div className={styles.routName}>Paths</div>
                 </Label>
-                {currentRout === 2 ? <div className={styles.homeLine} /> : ''}
+                {location.pathname === '/paths' && <div className={styles.homeLine} />}
               </NavLink>
             </div>
           </div>
