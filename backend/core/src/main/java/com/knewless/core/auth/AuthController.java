@@ -1,5 +1,7 @@
 package com.knewless.core.auth;
 
+import com.knewless.core.auth.Dto.SavePasswordDtoRequest;
+import com.knewless.core.auth.Dto.SavePasswordDtoResponse;
 import com.knewless.core.exception.UserAlreadyRegisteredException;
 import com.knewless.core.security.model.LoginRequest;
 import com.knewless.core.security.model.SignUpRequest;
@@ -12,6 +14,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/auth")
@@ -60,5 +63,21 @@ public class AuthController {
             return new ResponseEntity<>(new SingleMessageResponse(ex.getMessage()), HttpStatus.UNAUTHORIZED);
         }
     }
+
+    @GetMapping("/reset")
+    public ResponseEntity<?> getResetLink(@Valid @RequestParam String email) {
+        return ResponseEntity.ok(authService.getResetLink(email));
+    }
+
+    @GetMapping("/checkreset")
+    public ResponseEntity<?> checkResetLink(@Valid @RequestParam UUID id) {
+        return ResponseEntity.ok(authService.validateLink(id));
+    }
+    
+    @PostMapping("/savepassword")
+    public SavePasswordDtoResponse savePassword(@Valid @RequestBody SavePasswordDtoRequest request) {
+        return authService.savePassword(request.getResetId(), request.getPassword());
+    }
+
 
 }

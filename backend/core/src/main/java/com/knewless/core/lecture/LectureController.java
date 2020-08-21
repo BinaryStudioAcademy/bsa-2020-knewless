@@ -31,7 +31,6 @@ public class LectureController {
                                                 @RequestParam(value = "image", required = true) MultipartFile image,
                                                 @RequestParam UUID id,
                                                 @RequestParam int duration) throws NotFoundException {
-        System.out.println(duration);
         return lectureService.saveLecture(image, image.getOriginalFilename(), id, duration);
     }
 

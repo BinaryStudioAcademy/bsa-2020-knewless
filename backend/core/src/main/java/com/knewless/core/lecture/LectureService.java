@@ -1,5 +1,6 @@
 package com.knewless.core.lecture;
 
+import com.knewless.core.emailservice.EmailService;
 import com.knewless.core.fileManager.FileManager;
 import com.knewless.core.lecture.dto.LectureCreateResponseDto;
 import com.knewless.core.lecture.dto.ShortLectureDto;
@@ -30,15 +31,17 @@ public class LectureService {
     private final FileManager fileManager;
     private final MessageSender messageSender;
     private final UserRepository userRepository;
+    private final EmailService emailService;
 
 
     @Autowired
     public LectureService(LectureRepository lectureRepository, FileManager fileManager,
-                          MessageSender messageSender, UserRepository userRepository) {
+                          MessageSender messageSender, UserRepository userRepository, EmailService emailService) {
         this.fileManager = fileManager;
         this.lectureRepository = lectureRepository;
         this.messageSender = messageSender;
         this.userRepository = userRepository;
+        this.emailService = emailService;
     }
 
     public LectureCreateResponseDto saveLecture(MultipartFile file, String filename, UUID lectureId, int duration) throws NotFoundException {

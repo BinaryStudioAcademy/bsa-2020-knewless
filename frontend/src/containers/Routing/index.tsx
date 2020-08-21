@@ -20,6 +20,8 @@ import { RoleTypes } from '../AppRouter/models/IRole';
 import { history } from '@helpers/history.helper';
 import CoursesPage from '@screens/Courses/containers/CoursesPage';
 import CoursePage from '@screens/CoursePage/containers/CoursePage';
+import ForgotPassword from '@screens/ResetPassword/containers/ForgotPasswordPage';
+import SavePassword from '@screens/SavePassword/containers/SavePasswordPage';
 import PathPage from '@screens/PathPage/containers/PathPage';
 
 export interface IRoutingProps {
@@ -28,7 +30,7 @@ export interface IRoutingProps {
 
 const Routing: React.FunctionComponent<IRoutingProps> = ({ isLoading }) => {
   const checkHeaderShown = () => {
-    const headerBlackList = ['/login', '/register', '/lecture/'];
+    const headerBlackList = ['/login', '/register', '/lecture/', '/reset', '/savepassword'];
 
     return headerBlackList.every(item => !history.location.pathname.startsWith(item));
   };
@@ -53,9 +55,11 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({ isLoading }) => {
           {isHeaderShown && <Header />}
           <SettingsRoute />
           <RootRoute />
+          <PublicRoute exact path="/savepassword/:resetid" component={SavePassword} />
           <PublicRoute exact path="/course/:courseId" component={CoursePage} />
           <PublicRoute exact path="/path/:pathId" component={PathPage} />
           <PublicRoute exact path="/login" component={LoginPage} />
+          <PublicRoute exact path="/reset" component={ForgotPassword} />
           <PublicRoute exact path="/oauth/redirect" component={handler} />
           <PublicRoute exact path="/register" component={RegisterPage} />
           <PrivateRoute exact path="/author/:authorId" component={AuthorPublicPage} />

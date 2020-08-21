@@ -13,8 +13,10 @@ import addCourseSagas from 'screens/AddCourse/sagas';
 import publicAuthorSagas from '../screens/AuthorPublicPage/sagas';
 import appRouterSagas from 'containers/AppRouter/sagas';
 import addPathSagas from '../screens/AddPath/sagas';
-import coursesSagas from '../screens/Courses/sagas';
+import resetPasswordSagas from '../screens/ResetPassword/sagas';
 import coursePageSagas from '@screens/CoursePage/sagas';
+import savePasswordSagas from '@screens/SavePassword/sagas';
+import coursesSagas from '../screens/Courses/sagas';
 import pathPageSagas from '@screens/PathPage/sagas';
 import searchSagas from '@screens/./Search/sagas/sagas';
 
@@ -35,6 +37,8 @@ export default function* rootSaga() {
     appRouterSagas(),
     addPathSagas(),
     pathPageSagas(),
+    resetPasswordSagas(),
+    savePasswordSagas(),
     coursesSagas(),
     addPathSagas(),
     coursePageSagas(),

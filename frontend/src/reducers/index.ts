@@ -17,6 +17,8 @@ import addPathPage from '../screens/AddPath/reducers';
 import coursesPage from '../screens/Courses/reducers';
 import search from '../screens/Search/reducer/reducer';
 import coursePage from '../screens/CoursePage/reducers';
+import resetpassword from '../screens/ResetPassword/reducers';
+import savepassword from '../screens/SavePassword/reducers';
 import pathPage from '../screens/PathPage/reducers';
 
 export default combineReducers({
@@ -35,8 +37,10 @@ export default combineReducers({
   authorPublicData,
   appRouter,
   addPathPage,
+  coursePage,
+  resetpassword,
+  savepassword,
   pathPage,
   coursesPage,
-  coursePage,
   search
 });
