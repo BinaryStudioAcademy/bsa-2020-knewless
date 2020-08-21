@@ -229,7 +229,9 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
 
   return (
     <div className={styles.settings}>
-      <div id={styles.settingsTitle}>Account Settings</div>
+      <div className={styles.wrapperTitle}>
+        <div id={styles.settingsTitle}>Account Settings</div>
+      </div>
       <div className={styles.wrapperAvatar}>
         <div className={styles.avatar}>
           <AvatarUploader
