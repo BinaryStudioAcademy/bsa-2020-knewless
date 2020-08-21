@@ -260,6 +260,12 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
                 )}
             </div>
             <div className={styles.buttonGroup}>
+              <GrayOutlineButton
+                className={styles.buttonCancel}
+                onClick={() => handleCancel()}
+              >
+                Cancel
+              </GrayOutlineButton>
               <div className={styles.buttonSaveGroup}>
                 <Button
                   content="Save"
@@ -277,12 +283,6 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
                   Release
                 </GradientButton>
               </div>
-              <GrayOutlineButton
-                className={styles.buttonCancel}
-                onClick={() => handleCancel()}
-              >
-                Cancel
-              </GrayOutlineButton>
             </div>
           </div>
           <div className={styles.list_container}>

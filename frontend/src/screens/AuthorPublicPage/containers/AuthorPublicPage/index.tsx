@@ -26,11 +26,9 @@ const AuthorPublicPage: React.FunctionComponent<IAuthorPublic> = ({
 
   const handleOnClickFollow = () => {
     followAuthor(match.params.authorId);
-    fetchAuthorData(match.params.authorId);
   };
   const handleOnClickUnfollow = () => {
     unfollowAuthor(match.params.authorId);
-    fetchAuthorData(match.params.authorId);
   };
 
   return (

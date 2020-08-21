@@ -253,6 +253,7 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
                     <GrayOutlineButton
                       content="Cancel"
                       onClick={handleCancel}
+                      className={styles.btn_cancel}
                     />
                     <GradientButton
                       disabled={!isPathNameValid}
