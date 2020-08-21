@@ -6,15 +6,20 @@ import { ReactComponent as InfoIcon } from '../../icons/info.svg';
 import styles from './styles.module.sass';
 import { LectureCard } from '@screens/AddCourse/components/LectureCard';
 import { ILectureData } from '@screens/CoursePage/models/ILectureData';
+import { IBindingCallback1 } from '@models/Callbacks';
 
 interface ICourseMenuProps {
   lectures: ILectureData[];
   courseDescription: string;
+  isAuthorized: boolean;
+  openLoginModal: IBindingCallback1<string>;
 }
 
 const CourseMenu: React.FunctionComponent<ICourseMenuProps> = ({
   lectures,
-  courseDescription
+  courseDescription,
+  isAuthorized,
+  openLoginModal
 }) => {
   const [selected, setSelected] = useState(0);
   const history = useHistory();
@@ -71,7 +76,10 @@ const CourseMenu: React.FunctionComponent<ICourseMenuProps> = ({
               <button
                 type="button"
                 className={styles.lecture}
-                onClick={() => history.push(`/lecture/${lec.id}`)}
+                onClick={() => {
+                  if (!isAuthorized) openLoginModal(`/lecture/${lec.id}`);
+                  else history.push(`/lecture/${lec.id}`)
+                }}
               >
                 <LectureCard
                   timeMinutes={lec.timeMinutes}

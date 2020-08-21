@@ -10,10 +10,12 @@ import { IBindingAction, IBindingFunction } from '@models/Callbacks';
 import { IUser } from './models/IUser';
 import { RoleTypes } from './models/IRole';
 import { ACCESS_TOKEN, REFRESH_TOKEN } from '@screens/Authentication/constants';
+import LoaderWrapper from '@components/LoaderWrapper';
 
 interface IAppRouterProps {
   user: IUser;
   roleLoading: boolean;
+  userLoading: boolean;
   settingsMode: RoleTypes;
   isAuthorized: boolean;
   fetchUser: IBindingAction;
@@ -26,7 +28,8 @@ const AppRouter: React.FunctionComponent<IAppRouterProps> = ({
   isAuthorized,
   fetchUser,
   setSettingsMode,
-  roleLoading
+  roleLoading,
+  userLoading: loading
 }) => {
   useEffect(() => {
     const unlisten = history.listen(() => {
@@ -44,24 +47,28 @@ const AppRouter: React.FunctionComponent<IAppRouterProps> = ({
     }
   }, [isAuthorized, roleLoading]);
   return (
-    <Router history={history}>
-      {
+    <LoaderWrapper loading={localStorage.getItem(ACCESS_TOKEN) ? loading : false} >
+      <Router history={history}>
+        {
           (settingsMode === null && !user.role && user.id && !roleLoading
-        && <RolePopUp setSettingsMode={setSettingsMode} />)
-      }
-      <Routing isLoading={false} />
-    </Router>
+            && <RolePopUp setSettingsMode={setSettingsMode} />)
+        }
+        <Routing isLoading={false} />
+      </Router>
+
+    </LoaderWrapper>
   );
 };
 
 const mapStateToProps = (state: IAppState) => {
   const { isAuthorized } = state.auth.auth;
-  const { user, settingsMode, roleLoading } = state.appRouter;
+  const { user, settingsMode, roleLoading, userLoading } = state.appRouter;
   return {
     user,
     settingsMode,
     isAuthorized,
-    roleLoading
+    roleLoading,
+    userLoading
   };
 };
 

@@ -6,13 +6,11 @@ $previewheight: 15em
   align-items: center
   width: 100%
   height: 12em
-  padding-right: 10px
 
 .card_content_box
-  margin-left: 25px
+  padding: 0 12px 0 20px
   width: 60%
   height: 12em
-  max-width: 350px
   position: relative
   word-wrap: break-word
 
@@ -56,7 +54,7 @@ $previewheight: 15em
 
 .course_rating
   position: absolute
-  right: 0px
+  right: 12px
   top: 12px
 
 .number
@@ -75,8 +73,8 @@ $previewheight: 15em
 
 .meta
   &__image
-    height: 100%
-    width: 50%
+    height: 12em
+    width: 40%
 
 
   &__lectures
@@ -155,11 +153,3 @@ $previewheight: 15em
 
   &:hover
     cursor: pointer
-
-@media (max-width: 1250px)
-  .course_rating
-    display: none !important
-
-  .bottomflex
-    div:nth-child(2)
-      display: none !important

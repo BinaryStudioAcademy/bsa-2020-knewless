@@ -5,6 +5,7 @@ import { StyledRating } from 'components/StyledRating';
 import GradientButton from 'components/buttons/GradientButton';
 import GrayOutlineButton from 'components/buttons/GrayOutlineButton';
 import '../../styles/common.sass';
+import { IBindingCallback1 } from '@models/Callbacks';
 
 interface ICourseOverviewProps {
   imageSrc: string;
@@ -14,6 +15,7 @@ interface ICourseOverviewProps {
   rating: number;
   startLectureId: string;
   isAuthorized: boolean;
+  openLoginModal: IBindingCallback1<string>;
 }
 
 const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
@@ -23,7 +25,8 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
   authorId,
   rating,
   startLectureId,
-  isAuthorized
+  isAuthorized,
+  openLoginModal
 }) => {
   const history = useHistory();
   return (
@@ -46,7 +49,8 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
           </div>
           <div className={styles.description__buttons}>
             <GradientButton onClick={() => {
-              if (startLectureId !== '') history.push(`/lecture/${startLectureId}`);
+              if (!isAuthorized) openLoginModal(`/lecture/${startLectureId}`);
+              else if (startLectureId !== '') history.push(`/lecture/${startLectureId}`);
             }}
             >
               Start

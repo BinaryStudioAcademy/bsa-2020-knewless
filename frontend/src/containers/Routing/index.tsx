@@ -23,12 +23,34 @@ import CoursePage from '@screens/CoursePage/containers/CoursePage';
 import ForgotPassword from '@screens/ResetPassword/containers/ForgotPasswordPage';
 import SavePassword from '@screens/SavePassword/containers/SavePasswordPage';
 import PathPage from '@screens/PathPage/containers/PathPage';
+import { LoginModal } from '@containers/LoginModal';
+import { IAppState } from '@models/AppState';
+import { connect } from 'react-redux';
+import { loginRoutine } from '@screens/Home/routines';
+import { openLoginModalRoutine } from '@containers/LoginModal/routines';
+import { IBindingAction, IBindingCallback1 } from '@models/Callbacks';
 
 export interface IRoutingProps {
   isLoading: boolean;
+  isAuthorized: boolean;
+  isLoginLoading: boolean;
+  isLoginFailure: boolean;
+  onOpen: boolean;
+  loginUser: IBindingAction;
+  setOpen: IBindingCallback1<string>;
+  redirectTo: string
 }
 
-const Routing: React.FunctionComponent<IRoutingProps> = ({ isLoading }) => {
+const Routing: React.FunctionComponent<IRoutingProps> = ({
+  isLoading,
+  isAuthorized,
+  isLoginLoading,
+  isLoginFailure,
+  onOpen,
+  loginUser,
+  setOpen,
+  redirectTo
+}) => {
   const checkHeaderShown = () => {
     const headerBlackList = ['/login', '/register', '/lecture/', '/reset', '/savepassword'];
 
@@ -62,11 +84,11 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({ isLoading }) => {
           <PublicRoute exact path="/reset" component={ForgotPassword} />
           <PublicRoute exact path="/oauth/redirect" component={handler} />
           <PublicRoute exact path="/register" component={RegisterPage} />
+          <PublicRoute exact path="/courses" component={CoursesPage} />
           <PrivateRoute exact path="/author/:authorId" component={AuthorPublicPage} />
           <PrivateRoute exact path="/lecture/:lectureId" component={LecturePage} />
           <PrivateRoute exact path="/add_path" roles={[RoleTypes.AUTHOR]} component={AddPathPage} />
           <PrivateRoute exact path="/add_course" roles={[RoleTypes.AUTHOR]} component={AddCourse} />
-          <PrivateRoute exact path="/courses" component={CoursesPage} />
           <PrivateRoute exact path="/profile" roles={[RoleTypes.USER]} component={StudentProfile} />
         </Route>
         <div>
@@ -85,8 +107,32 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({ isLoading }) => {
         </div>
       </Switch>
       {connectToWebsocket()}
+      {onOpen && (
+        <LoginModal
+          onOpen={onOpen}
+          isLoginLoading={isLoginLoading}
+          isAuthorized={isAuthorized}
+          isLoginFailure={isLoginFailure}
+          setOpen={setOpen}
+          loginUser={loginUser}
+          redirectTo={redirectTo}
+        />
+      )}
     </div>
   );
 };
 
-export default Routing;
+const mapStateToProps = (state: IAppState) => ({
+  isAuthorized: state.auth.auth.isAuthorized,
+  isLoginLoading: state.auth.requests.loginRequest.loading,
+  isLoginFailure: state.auth.requests.loginRequest.error != null && !state.auth.requests.loginRequest.loading,
+  onOpen: state.loginModal.open,
+  redirectTo: state.loginModal.redirectTo
+});
+
+const mapDispatchToProps = {
+  loginUser: loginRoutine.trigger,
+  setOpen: openLoginModalRoutine.trigger
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Routing);

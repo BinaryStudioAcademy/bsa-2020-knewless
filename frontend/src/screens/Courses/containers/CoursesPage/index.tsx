@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { fetchCoursesRoutine, fetchCoursesByTagRoutine, fetchAllCoursesRoutine, fetchAllAuthorCoursesRoutine } from '../../routines';
+import { fetchCoursesRoutine, fetchCoursesByTagRoutine, fetchAllCoursesRoutine, fetchAllAuthorCoursesRoutine, fetchAllTagsRoutine } from '../../routines';
 import { IBindingAction, IBindingCallback1 } from '@models/Callbacks';
 import { connect } from 'react-redux';
 import { IAppState } from '@models/AppState';
@@ -10,30 +10,39 @@ import { ITag } from '@screens/Courses/models/ITag';
 import styles from './styles.module.sass';
 import { AllCourses } from '../../components/AllCourses';
 import { MyCourses } from '@screens/Courses/components/MyCourses';
+import { IRole } from '@containers/AppRouter/models/IRole';
 
 export interface ICoursePageProps {
   courses: ICourseItem[];
   continueCourses: ICourseItem[];
   tags: ITag[];
-  role: string;
+  role?: IRole;
   fetchData: IBindingAction;
   fetchAllAuthorCourses: IBindingAction;
   fetchAllCourses: IBindingAction;
+  fetchTags: IBindingAction;
   fetchCoursesByTag: IBindingCallback1<string>;
   loading: boolean;
 }
 
 const CoursePage: React.FC<ICoursePageProps> = ({
-  courses, continueCourses, tags, fetchData, fetchAllCourses, fetchCoursesByTag, fetchAllAuthorCourses, loading, role
+  courses, continueCourses, tags, fetchData, fetchAllCourses, fetchTags, fetchCoursesByTag, fetchAllAuthorCourses, loading, role
 }) => {
 
   useEffect(() => {
-    if (role === 'AUTHOR') {
-      fetchAllAuthorCourses();
-    } else {
-      fetchData();
+    switch(role?.name) {
+      case undefined: {
+        fetchTags();
+        fetchAllCourses();
+        break;
+      }
+      case 'AUTHOR': {
+        fetchAllAuthorCourses();
+        break;
+      }
+      default: fetchData();
     }
-  }, [fetchData, fetchAllAuthorCourses, role]);
+  }, [fetchData, fetchAllAuthorCourses, fetchAllCourses, role]);
 
   return (
     <div className={styles.courses_content}>
@@ -41,12 +50,14 @@ const CoursePage: React.FC<ICoursePageProps> = ({
         ? <InlineLoaderWrapper loading={loading} centered={true} />
         : (
           <>
-            <MyCourses
-              continueCourses={continueCourses}
-              loading={loading}
-              role={role}
-            />
-            {role !== 'AUTHOR' && (
+            {role && (
+              <MyCourses
+                continueCourses={continueCourses}
+                loading={loading}
+                role={role.name}
+              />
+            )}
+            {!role || role.name !== 'AUTHOR' ? (
               <AllCourses
                 courses={courses}
                 tags={tags}
@@ -54,7 +65,7 @@ const CoursePage: React.FC<ICoursePageProps> = ({
                 fetchCoursesByTag={fetchCoursesByTag}
                 loading={loading}
               />
-            )}
+            ) : null}
           </>
         )}
     </div >
@@ -66,13 +77,14 @@ const mapStateToProps = (state: IAppState) => ({
   continueCourses: state.coursesPage.data.continueCourses,
   tags: state.coursesPage.data.tags,
   loading: state.coursesPage.requests.dataRequest.loading,
-  role: state.appRouter.user.role.name
+  role: state.appRouter.user.role
 });
 
 const mapDispatchToProps = {
   fetchData: fetchCoursesRoutine,
   fetchCoursesByTag: fetchCoursesByTagRoutine,
   fetchAllCourses: fetchAllCoursesRoutine,
+  fetchTags: fetchAllTagsRoutine,
   fetchAllAuthorCourses: fetchAllAuthorCoursesRoutine
 };
 

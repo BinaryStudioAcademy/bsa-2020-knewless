@@ -7,16 +7,13 @@ import { IUser } from '../AppRouter/models/IUser';
 import { RoleTypes } from '../AppRouter/models/IRole';
 import MainAuthorPage from '@screens/AuthorMainPage/containers/MainPage';
 import MainStudentPage from '@screens/MainPage/containers/MainStudentPage';
-import LoaderWrapper from '@components/LoaderWrapper';
-import { ACCESS_TOKEN } from '@screens/Authentication/constants';
 
 interface IRootRouteProps {
   user: IUser;
   isAuthorized: boolean;
-  userLoading: boolean;
 }
 
-const RootRoute: React.FunctionComponent<IRootRouteProps> = ({ isAuthorized, user, userLoading: loading }) => {
+const RootRoute: React.FunctionComponent<IRootRouteProps> = ({ isAuthorized, user }) => {
   let currentComponent: React.FunctionComponent = () => null;
   if (!isAuthorized) {
     currentComponent = LandingPage;
@@ -28,23 +25,20 @@ const RootRoute: React.FunctionComponent<IRootRouteProps> = ({ isAuthorized, use
     }
   }
   return (
-    <LoaderWrapper loading={localStorage.getItem(ACCESS_TOKEN) ? loading : false} >
-      <PublicRoute
-        exact
-        path="/"
-        component={currentComponent}
-      />
-    </LoaderWrapper>
+    <PublicRoute
+      exact
+      path="/"
+      component={currentComponent}
+    />
   );
 };
 
 const mapStateToProps = (state: IAppState) => {
-  const { user, userLoading } = state.appRouter;
+  const { user } = state.appRouter;
   const { isAuthorized } = state.auth.auth;
   return {
     user,
-    isAuthorized,
-    userLoading
+    isAuthorized
   };
 };
 
