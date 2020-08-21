@@ -15,6 +15,7 @@ export interface ISearchResult {
   metadata?: object;
   type: EsDataTypes;
   tags: string[];
+  title: '';
 }
 
 export enum EsDataTypes {
@@ -88,6 +89,7 @@ const SearchHeader: FunctionComponent<ISearchHeaderProps> = ({ className, clear,
     <Highlighter
       highlightClassName={styles.bold_text}
       searchWords={query.split(' ')}
+      autoEscape
       textToHighlight={name}
     />
   );
