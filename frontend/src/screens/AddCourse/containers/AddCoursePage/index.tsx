@@ -34,13 +34,15 @@ interface IAddCourseProps {
   isLecturesLoaded: boolean;
   fetchLectures: IBindingAction;
   saveCourse: IBindingCallback1<ICourse>;
+  authorName: string;
 }
 
 const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
   lectures,
   fetchLectures: getLectures,
   saveCourse: save,
-  isLecturesLoaded
+  isLecturesLoaded,
+  authorName
 }) => {
   const history = useHistory();
   const [selected, setSelected] = useState(Array<ILecture>());
@@ -53,10 +55,6 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
     const filtered = updated.filter(l => !selected.map(s => s.id).includes(l.id));
     setPool(filtered);
   }, [lectures, getLectures]);
-
-  const handleBack = () => {
-    history.push('/');
-  };
 
   const itemToJsxWithClick = (item: IFilterableItem, click: (item) => void, isSelected?: boolean) => {
     const lecture = item as ILecture;
@@ -93,7 +91,13 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
   const validateDescription = (newName?: string) => setIsValidDescription(
     isValidCourseDescription(typeof newName === 'string' ? newName : description)
   );
-  const validateLevel = () => setIsValidLevel(!!level);
+  const validateLevel = (newName?: string) => {
+    const lastChangesName = typeof newName === 'string' ? newName : level;
+    setIsValidLevel(!!lastChangesName && levelOptions.filter(l => l.value === lastChangesName).length > 0);
+  };
+  const isRequiredFieldsValid = !!courseName && isValidName && isValidDescription && !!level && isValidLevel
+    && isValidImage;
+  const isReleseble = isRequiredFieldsValid && selected.length > 0;
 
   const handleUploadFile = file => {
     const thisFile: File = file;
@@ -114,13 +118,8 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
     setPool(prev => [...prev, dependency as ILecture]);
   }, [pool, selected]);
 
-  const isSaveble = (level !== '' && !isSaved && isValidName && isValidDescription
-    && courseName.length > 1 && (description.length === 0 || description.length > 9));
-
-  const isReleseble = isSaveble && selected.length > 0;
-
   const handleSave = (isRelease: boolean) => {
-    if (!isSaveble) return;
+    if (!isRequiredFieldsValid) return;
     if (isRelease && !isReleseble) return;
     setIsSaved(true);
     setButtonLoading(true);
@@ -193,8 +192,9 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
                     clearable
                     value={level}
                     onChange={(e, data) => {
-                      setLevel(data.value as string);
-                      setIsValidLevel(true);
+                      const value = data.value as string;
+                      setLevel(value);
+                      validateLevel(value);
                     }}
                     search
                     selection
@@ -237,7 +237,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
             <div className={styles.textcontainer}>Preview:</div>
             <div className={styles.preview_warning_container}>
               <CoursePreview
-                authorName='You Name'
+                authorName={authorName}
                 tags={['tag1', 'tag2', 'tag3']}
                 rating={0}
                 image={previewImage}
@@ -264,13 +264,15 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
                 <Button
                   content="Save"
                   loading={buttonLoading}
-                  className={isSaveble && !isSaved ? styles.button_save : styles.button_save_disabled}
+                  className={isRequiredFieldsValid && !isSaved ? styles.button_save : styles.button_save_disabled}
                   onClick={() => handleSave(false)}
+                  disabled={!isRequiredFieldsValid}
                 />
                 <GradientButton
                   loading={buttonLoading}
                   className={isReleseble && !isSaved ? styles.button_release : styles.button_release_disabled}
                   onClick={() => handleSave(true)}
+                  disabled={!isSaved}
                 >
                   Release
                 </GradientButton>
@@ -310,8 +312,10 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
 const mapStateToProps = (state: IAppState) => {
   const { lectures, isLecturesLoaded, courseId } = state.addcourse.data;
   const { appRouter } = state;
+  const { firstName, lastName } = state.authorMainPage.data.author;
   return {
     userId: appRouter.user.id,
+    authorName: `${firstName} ${lastName}`,
     courseId,
     lectures,
     isLecturesLoaded,
