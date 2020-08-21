@@ -1,303 +1,302 @@
-@import "styles/fonts"
+@import "src/styles/fonts"
 
 .info
-    color: white
+  color: white
 
 .authorMainContainer
-    color: white
-    background: #121421
-    display: grid
-    grid-template-columns: 5% 25% 65% 5%
-    grid-template-rows: 22vh 2vh 22vh 64vh
-    grid-template-areas: ". . . . " " . avatar . . " " . avatar cards . " " . authorInfo list . "
+  color: white
+  background: #121421
+  display: grid
+  grid-template-columns: 5% 25% 65% 5%
+  grid-template-rows: 22vh 2vh 22vh 64vh
+  grid-template-areas: ". . . . " " . avatar . . " " . avatar cards . " " . authorInfo list . "
 
 .authorAvatar-wrapper
-    grid-area: avatar
-    display: flex
-    align-items: flex-start
-    justify-content: left
-    height: 100%
-    padding-left: 0%
-    padding-bottom: 1vh
+  grid-area: avatar
+  display: flex
+  align-items: flex-start
+  justify-content: left
+  height: 100%
+  padding-left: 0
+  padding-bottom: 1vh
 
 .authorMainInfo-wrapper
-    grid-area: authorInfo
+  grid-area: authorInfo
 
 .cardsAuthorPublicPage-wrapper
-    grid-area: cards
-    height: 100%
-    background: #2A2B37
-    box-shadow: 0px 30px 40px rgba(0, 0, 0, 0.1)
-    border-radius: 0px
+  grid-area: cards
+  height: 100%
+  background: #2A2B37
+  box-shadow: 0 30px 40px rgba(0, 0, 0, 0.1)
+  border-radius: 0
 
 .cardsGridlines
-    height: 100%
-    display: grid
-    grid-template-columns: calc(100% / 3 + 2px) calc(100% / 3 + 2px) calc(100% / 3 - 4px)
-    grid-template-rows: 5% 90% 5%
-    grid-template-areas: " . . . " " coursesNumber schoolCard articlesNumber " " . . . "
+  height: 100%
+  display: grid
+  grid-template-columns: calc(100% / 3 + 2px) calc(100% / 3 + 2px) calc(100% / 3 - 4px)
+  grid-template-rows: 5% 90% 5%
+  grid-template-areas: " . . . " " coursesNumber schoolCard articlesNumber " " . . . "
 
 .cardCoursesNumber-wrapper
-    grid-area: coursesNumber
-    color: white
-    border-right: 2px solid rgba(255, 255, 255, 0.1)
+  grid-area: coursesNumber
+  color: white
+  border-right: 2px solid rgba(255, 255, 255, 0.1)
 
 .cardSchoolLink-wrapper, .cardSchoolLink-wrapper:hover
-    grid-area: schoolCard
-    color: white
-    border-right: 2px solid rgba(255, 255, 255, 0.1)
+  grid-area: schoolCard
+  color: white
+  border-right: 2px solid rgba(255, 255, 255, 0.1)
 
 .cardArticlesNumber-wrapper
-    grid-area: articlesNumber
-    color: white
+  grid-area: articlesNumber
+  color: white
 
 .cardStyle-authorPublic
-    height: 19.8vh
-    display: grid
-    grid-template-rows: 70% 30%
-    grid-template-areas: " mainPart " " bottomPart "
+  height: 19.8vh
+  display: grid
+  grid-template-rows: 70% 30%
+  grid-template-areas: " mainPart " " bottomPart "
 
 .cardMainInfo
-    grid-area: mainPart
+  grid-area: mainPart
 
 .cardBottomText
-    grid-area: bottomPart
+  grid-area: bottomPart
 
 .cardTopText, .cardMainInfo, .cardBottomText
-    height: 100%
-    display: flex
-    align-items: center
-    justify-content: center
+  height: 100%
+  display: flex
+  align-items: center
+  justify-content: center
 
 .cardTopText
-    height: 100%
-    padding-top: 1%
-    padding-bottom: 1%
-    font-size: 180%
+  height: 100%
+  padding-top: 1%
+  padding-bottom: 1%
+  font-size: 180%
 
 .cardBottomText
-    height: 100%
-    padding-top: 1%
-    padding-bottom: 1%
-    font-size: 180%
+  height: 100%
+  padding-top: 1%
+  padding-bottom: 1%
+  font-size: 180%
 
 .cardTextField
-    height: 100%
-    font-size: 550%
-    text-align: center
-    padding-bottom: 1%
-
-.cardMainInfo.cardSchoolImage
-    size: 200%
+  height: 100%
+  font-size: 550%
+  text-align: center
+  padding-bottom: 1%
 
 .listCoursesArticles-wrapper
-    grid-area: list
-    height: 100%
+  grid-area: list
+  height: 100%
 
 .authorPublicAvatar
-    height: 100%
-    width: 23vh
-    object-fit: cover
-    border-radius: 50%
+  height: 100%
+  width: 23vh
+  object-fit: cover
+  border-radius: 50%
 
 .ui.secondary.pointing.menu.authorMenu
-    height: 12% !important
-    margin: 0 !important
-    min-height: 0 !important
-    padding-left: 2%
+  height: 12% !important
+  margin: 0 !important
+  min-height: 0 !important
+  padding-left: 2%
 
 .ui.secondary.pointing.menu.authorMenu .item.authorMenuButton
-    color: #676767
-    height: 100%
-    width: 12%
-    display: flex
-    justify-content: center
-    font-size: 140%
-    border: 0! important
-    margin: 0 !important
-    padding: 3% 0 0 0! important
+  color: #676767
+  height: 100%
+  width: 12%
+  display: flex
+  justify-content: center
+  font-size: 140%
+  border: 0 !important
+  margin: 0 !important
+  padding: 3% 0 0 0 !important
 
 .ui.secondary.pointing.menu.authorMenu .active.item, .ui.secondary.pointing.menu.authorMenu .item.authorMenuButton:hover
-    color: white
+  color: white
 
 .ui.segment.authorMenuSegment
-    padding: 2% 5% 2% 6%
-    background: #2A2B37 !important
-    border-radius: 0px
+  padding: 2% 5% 2% 6%
+  background: #2A2B37 !important
+  border-radius: 0px
 
 .ui.card.infoCourseCard:last-child, .ui.card.authorArticle-wrapper:last-child
-    border: 0 !important
+  border: 0 !important
 
 .ui.card.infoCourseCard
-    width: 100%
-    height: 17vh
-    padding: 2.5% 0 2.5%
-    background: none !important
-    margin: 0 !important
-    border-radius: 0 !important
-    display: grid
-    grid-template-columns: 17% 83%
-    grid-template-rows: 50% 30% 20%
-    grid-template-areas: " courseImage courseDescription " " courseImage courseCategory " " courseImage courseDetails "
-    box-shadow: none !important
-    transform: none !important
-    border-bottom: 2px  solid
-    border-bottom-color: #434558
+  width: 100%
+  height: 17vh
+  padding: 2.5% 0 2.5%
+  background: none !important
+  margin: 0 !important
+  border-radius: 0 !important
+  display: grid
+  grid-template-columns: 17% 83%
+  grid-template-rows: 50% 30% 20%
+  grid-template-areas: " courseImage courseDescription " " courseImage courseCategory " " courseImage courseDetails "
+  box-shadow: none !important
+  transform: none !important
+  border-bottom: 2px solid
+  border-bottom-color: #434558
 
 .ui.card.infoCourseCard *
-    border-radius: 0 !important
+  border-radius: 0 !important
 
 .imageCourse
-    grid-area: courseImage
-    height: 100%
-    width: 100%
-    object-fit: cover
-    border-radius: 0 !important
+  grid-area: courseImage
+  height: 100%
+  width: 100%
+  object-fit: cover
+  border-radius: 0 !important
 
 .authorCourseCategory
-    grid-area: courseCategory
-    padding-left: 6%
-    color: #F27A54
-    font-family: Montserrat
-    text-transform: uppercase
-    font-size: 80%
-    font-weight: bold
+  grid-area: courseCategory
+  padding-left: 6%
+  color: #F27A54
+  font-family: Montserrat
+  text-transform: uppercase
+  font-size: 80%
+  font-weight: bold
 
 .authorCourseDescription
-    grid-area: courseDescription
-    padding-left: 6%
-    font-size: 180%
-    display: flex
-    align-items: flex-start
+  grid-area: courseDescription
+  padding-left: 6%
+  font-size: 180%
+  display: flex
+  align-items: flex-start
 
 .authorCourseDetails, .ui.card .meta.authorCourseDetails
-    grid-area: courseDetails
-    padding-left: 6%!important
-    color: #CBCFD4
-    display: grid
-    grid-template-columns: 13% 10% 15% 12% 42%
-    grid-template-areas: " detailsAuthorName detailsCourseDuration detailsCourseLevel detailsRank . "
+  grid-area: courseDetails
+  padding-left: 6% !important
+  color: #CBCFD4
+  display: grid
+  grid-template-columns: 13% 10% 15% 12% 42%
+  grid-template-areas: " detailsAuthorName detailsCourseDuration detailsCourseLevel detailsRank . "
 
 .authorCourseDetails-authorName
-    grid-area: detailsAuthorName
+  grid-area: detailsAuthorName
 
 .authorCourseDetails-courseDuration
-    grid-area: detailsCourseDuration
+  grid-area: detailsCourseDuration
 
 .authorCourseDetails-courseLevel
-    grid-area: detailsCourseLevel
-    text-transform: lowercase
+  grid-area: detailsCourseLevel
+  text-transform: lowercase
 
 .authorCourseDetails-courseLevel::first-letter
-    text-transform: uppercase
+  text-transform: uppercase
 
 .authorCourseDetails-courseStarsRank
-    grid-area: detailsRank
+  grid-area: detailsRank
 
 .authorCourseDetails-courseStarsRank .inactiveStar
-    grid-area: detailsRank
-    opacity: 0.3 !important
+  grid-area: detailsRank
+  opacity: 0.3 !important
 
 
 .activeStar
-    margin: 0 !important
-    color: #FF8576
+  margin: 0 !important
+  color: #FF8576
 
 .inactiveStar
-    margin: 0 !important
-    color: #FF8576
-    opacity: 0.3 !important
+  margin: 0 !important
+  color: #FF8576
+  opacity: 0.3 !important
 
 
 .subscribersNumber
-    display: flex
-    align-items: center
-    padding-top: 2.5%
-    font-size: 115%
-    font-weight: lighter
+  display: flex
+  align-items: center
+  padding-top: 2.5%
+  font-size: 115%
+  font-weight: lighter
 
 .buttonsFollowLikeAuthor
-    display: flex
-    align-items: center
-    justify-content: left
-    &:hover
-        .textButtonUnfollow
-            background-position: -50% 0
+  display: flex
+  align-items: center
+  justify-content: left
+
+  &:hover
+    .textButtonUnfollow
+      background-position: -50% 0
 
 .unfollow
-    width: 100%
-    height: 100%
-    display: flex
-    margin: auto
-    justify-content: center
-    align-items: center
-    text-align: center
-    background:#121421
+  width: 100%
+  height: 100%
+  display: flex
+  margin: auto
+  justify-content: center
+  align-items: center
+  text-align: center
+  background: #121421
+
 .textButtonUnfollow
-    padding: 1px
-    font-family: "Custom Open Sans", sans-serif !important
-    font-size: 1.2em !important
-    font-weight: 600 !important
-    background: -webkit-linear-gradient(70.06deg,#FF8576, #0084F8, #FF8576)
-    background-size: 300%
-    -webkit-background-clip: text
-    -webkit-text-fill-color: transparent
-    transition: all .6s ease-in-out
+  padding: 1px
+  font-family: "Custom Open Sans", sans-serif !important
+  font-size: 1.2em !important
+  font-weight: 600 !important
+  background: -webkit-linear-gradient(70.06deg, #FF8576, #0084F8, #FF8576)
+  background-size: 300%
+  -webkit-background-clip: text
+  -webkit-text-fill-color: transparent
+  transition: all .6s ease-in-out
 
 .textButtonFollow
-    padding: 1px
-    font-family: "Custom Open Sans", sans-serif !important
-    font-size: 1.2em !important
-    font-weight: 600 !important
+  padding: 1px
+  font-family: "Custom Open Sans", sans-serif !important
+  font-size: 1.2em !important
+  font-weight: 600 !important
 
 .ui.button.authorFollowButton
-    height: 4.8vh
-    min-height: 4.8vh
-    text-align: center
-    padding: 2px
-    margin-right: 5%
-    min-width: 40%
+  height: 4.8vh
+  min-height: 4.8vh
+  text-align: center
+  padding: 2px
+  margin-right: 5%
+  min-width: 40%
 
 .authorLikeHeartButton
-    margin-bottom: 1%
-    vertical-align: middle
-    fill: url(#svg-heart-gradient) #ED8580
+  margin-bottom: 1%
+  vertical-align: middle
+  fill: url(#svg-heart-gradient) #ED8580
 
 .authorName-publicPage
-    padding-bottom: 1.7%
-    padding-top: 5%
-    font-size: 200%
-    font-weight: lighter
+  padding-bottom: 1.7%
+  padding-top: 5%
+  font-size: 200%
+  font-weight: lighter
 
 .authorKnewlessStatic
-    font-size: 110%
-    font-weight: lighter
-    padding-bottom: 2%
+  font-size: 110%
+  font-weight: lighter
+  padding-bottom: 2%
 
 .authorNumberFollowers
-    font-weight: bold
+  font-weight: bold
 
 .authorBiography
-    padding-top: 7%
-    word-break: break-all
-    padding-right: 5%
+  padding-top: 7%
+  word-break: break-all
+  padding-right: 5%
 
 .ui.card.authorArticle-wrapper
-    width: 100%
-    height: 15vh
-    padding: 2.5% 0 2.5%
-    background: none !important
-    margin: 0 !important
-    border-radius: 0 !important
-    box-shadow: none !important
-    transform: none !important
-    border-bottom: 2px  solid
-    border-bottom-color: #434558
+  width: 100%
+  height: 15vh
+  padding: 2.5% 0 2.5%
+  background: none !important
+  margin: 0 !important
+  border-radius: 0 !important
+  box-shadow: none !important
+  transform: none !important
+  border-bottom: 2px solid
+  border-bottom-color: #434558
 
 .headerLine-wrapper
-    margin-top: 120px
-    position: fixed
-    width: 100%
-    border-bottom: 1px solid rgba(255, 255, 255, 0.3)
-    z-index: 10000
+  margin-top: 120px
+  position: fixed
+  width: 100%
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3)
+  z-index: 10000
 

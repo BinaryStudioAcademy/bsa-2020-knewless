@@ -5,6 +5,7 @@ import { fetchAuthorDataRoutine, setAuthorMenuActiveItemRoutine } from 'screens/
 import { IAuthorMenu } from 'screens/AuthorPublicPage/models/IAuthorMenu';
 
 const basicAuthorData = {
+  userId: '',
   avatar: 'https://i.imgur.com/rGqrhwK.jpg',
   firstName: 'Unspecified',
   lastName: 'author',

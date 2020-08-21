@@ -7,7 +7,6 @@ import { AuthorCourseCard, IAuthorCourseCardProps } from '../../components/Autho
 import { AuthorCardsSegment } from '../../components/AuthorCardsSegment';
 import AuthorInfoBlock from '../../components/AuthorInfoBlock';
 import { fetchAuthorCoursesRoutine, fetchAuthorPathsRoutine, fetchAuthorRoutine } from '../../routines';
-import { useHistory } from 'react-router-dom';
 import { IUser } from 'containers/AppRouter/models/IUser';
 import { IBindingAction } from 'models/Callbacks';
 import { history } from '@helpers/history.helper';
@@ -45,7 +44,6 @@ const MainAuthorPage: React.FunctionComponent<IMainAuthorPageProps> = ({
       getAuthorPaths(author.id);
     }
   }, [user.id, author.id]);
-  const history = useHistory();
   return (
     <div className={styles.main_page}>
       <AuthorInfoBlock author={author} />

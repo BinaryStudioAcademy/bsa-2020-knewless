@@ -111,7 +111,9 @@ public class AuthorService {
         var numberOfSubscriptions = this.authorRepository.getNumberOfSubscriptions(authorId)
                 .orElseThrow(() -> new NotFoundException("Cant find number of author subscribers " + authorId));
 
-        return new AuthorPublicDto(author.getFirstName(),
+        return new AuthorPublicDto(
+                author.getUser().getId(),
+                author.getFirstName(),
                 author.getLastName(),
                 author.getAvatar(),
                 author.getBiography(),
