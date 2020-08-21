@@ -16,17 +16,17 @@ export interface IDepsSelectorProps {
   updateLectures: () => void;
 }
 
-export const AddCourseDependenciesSelector: React.FC<IDepsSelectorProps> = (
-  { selected,
-    stored,
-    selectedToStored,
-    storedToSelected,
-    itemToJsx,
-    dependencyName,
-    sortFn,
-    openModalAction,
-    updateLectures: update }
-) => {
+export const AddCourseDependenciesSelector: React.FC<IDepsSelectorProps> = ({
+  selected,
+  stored,
+  selectedToStored,
+  storedToSelected,
+  itemToJsx,
+  dependencyName,
+  sortFn,
+  openModalAction,
+  updateLectures: update
+}) => {
   const [modalChooseOpen, setModalChooseOpen] = useState(false);
   const handleOpen = () => {
     update();
@@ -39,7 +39,7 @@ export const AddCourseDependenciesSelector: React.FC<IDepsSelectorProps> = (
           <div className={styles.textcontainer}>Lectures</div>
           <div className={styles.button_group}>
             <GrayOutlineButton
-              content="Select lectures"
+              content="Add lectures..."
               className={styles.add_button}
               onClick={() => handleOpen()}
             />
@@ -51,11 +51,13 @@ export const AddCourseDependenciesSelector: React.FC<IDepsSelectorProps> = (
             itemToJsx={item => itemToJsx(item, selectedToStored, true)}
             sortFn={sortFn}
             scrolling
+            placeholderTitle={`You can add more ${dependencyName.toLowerCase()}s`}
+            placeholderDescription="Just click the button above."
           />
         </div>
       </div>
       <Modal open={modalChooseOpen} closeIcon onClose={() => setModalChooseOpen(false)}>
-        <ModalHeader className={styles.modal__header}>{`Add ${dependencyName.toLowerCase()}s`}</ModalHeader>
+        <ModalHeader className={styles.modal__header}>{`Select ${dependencyName.toLowerCase()}s`}</ModalHeader>
         <ModalContent className={styles.modal__content}>
           <AddCourseFilterableList
             items={stored}
@@ -63,6 +65,8 @@ export const AddCourseDependenciesSelector: React.FC<IDepsSelectorProps> = (
             sortFn={sortFn}
             scrolling
             openModal={openModalAction}
+            placeholderTitle="Its empty here"
+            placeholderDescription="But you can create more."
           />
         </ModalContent>
       </Modal>

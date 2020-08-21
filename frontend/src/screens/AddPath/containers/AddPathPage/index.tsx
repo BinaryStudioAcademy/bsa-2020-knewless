@@ -293,8 +293,8 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
         <Footer />
         <Confirmation
           open={isConfirming}
-          title="Data will be reset!"
-          text="Your unsaved changes will be lost."
+          title="Your unsaved changes will be lost."
+          text="Are you absolutely sure?"
           onConfirm={forwardAddCourse}
           onCancel={() => setIsConfirming(false)}
           className={styles.confirmation}
