@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { Icon } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { IBindingCallback1 } from 'models/Callbacks';
@@ -8,6 +7,8 @@ import { IAuthorData } from 'screens/AuthorPublicPage/models/IAuthorData';
 import { GradientButton } from 'components/buttons/GradientButton';
 import './styles.sass';
 import AuthorPublicMenu from './authorPublicMenu';
+import { IUser } from '@containers/AppRouter/models/IUser';
+import noAvatar from '@images/no_avatar.jpg';
 
 export interface IAuthorPublic {
   match: any;
@@ -15,10 +16,11 @@ export interface IAuthorPublic {
   authorData: IAuthorData;
   followAuthor: IBindingCallback1<string>;
   unfollowAuthor: IBindingCallback1<string>;
+  user: IUser;
 }
 
 const AuthorPublicPage: React.FunctionComponent<IAuthorPublic> = ({
-  match, fetchAuthorData, authorData, followAuthor, unfollowAuthor
+  match, fetchAuthorData, authorData, followAuthor, unfollowAuthor, user
 }) => {
   useEffect(() => {
     fetchAuthorData(match.params.authorId);
@@ -26,13 +28,11 @@ const AuthorPublicPage: React.FunctionComponent<IAuthorPublic> = ({
 
   const handleOnClickFollow = () => {
     followAuthor(match.params.authorId);
-    fetchAuthorData(match.params.authorId);
   };
   const handleOnClickUnfollow = () => {
     unfollowAuthor(match.params.authorId);
-    fetchAuthorData(match.params.authorId);
   };
-
+  const isSelfPublicPage = user.id === authorData.userId;
   return (
     <div style={{ height: '0' }}>
       <div className="headerLine-wrapper" />
@@ -40,7 +40,7 @@ const AuthorPublicPage: React.FunctionComponent<IAuthorPublic> = ({
         <div className="authorAvatar-wrapper">
           <img
             className="authorPublicAvatar"
-            src={authorData.avatar}
+            src={authorData.avatar || noAvatar}
             alt={`${authorData.firstName} ${authorData.lastName} avatar`}
           />
         </div>
@@ -48,40 +48,31 @@ const AuthorPublicPage: React.FunctionComponent<IAuthorPublic> = ({
           <div className="authorName-publicPage">
             {`${authorData.firstName} ${authorData.lastName}`}
           </div>
-          {authorData.schoolName === '' ? null
-            : (
-              <div className="authorKnewlessStatic">
-                <Link className="cardSchoolLink-wrapper" to={`/school/${authorData.schoolId}`}>
-                  {`Author in ${authorData.schoolName}`}
-                </Link>
-              </div>
-            )}
-
-          {authorData.printFollowButton
-            ? (
-              <div className="buttonsFollowLikeAuthor">
-                <GradientButton
-                  className="authorFollowButton"
-                  onClick={handleOnClickFollow}
-                >
-                  <div className="textButtonFollow">Follow</div>
-                </GradientButton>
-              </div>
-            )
-            : (
-              <div className="buttonsFollowLikeAuthor">
-                <GradientButton
-                  className="authorFollowButton"
-                  onClick={handleOnClickUnfollow}
-                >
-                  <div className="unfollow">
-                    <div className="textButtonUnfollow">
-                      Following
-                    </div>
+          {authorData.schoolName !== '' && (
+            <div className="authorKnewlessStatic">
+              <Link className="cardSchoolLink-wrapper" to={`/school/${authorData.schoolId}`}>
+                {`Author in ${authorData.schoolName}`}
+              </Link>
+            </div>
+          )}
+          {!isSelfPublicPage && authorData.printFollowButton && (
+            <div className="buttonsFollowLikeAuthor">
+              <GradientButton className="authorFollowButton" onClick={handleOnClickFollow}>
+                <div className="textButtonFollow">Follow</div>
+              </GradientButton>
+            </div>
+          )}
+          {!isSelfPublicPage && !authorData.printFollowButton && (
+            <div className="buttonsFollowLikeAuthor">
+              <GradientButton className="authorFollowButton" onClick={handleOnClickUnfollow}>
+                <div className="unfollow">
+                  <div className="textButtonUnfollow">
+                    Following
                   </div>
-                </GradientButton>
-              </div>
-            )}
+                </div>
+              </GradientButton>
+            </div>
+          )}
           <div className="subscribersNumber">
             <p className="authorNumberFollowers">
               {authorData.numberOfSubscribers}
@@ -138,7 +129,8 @@ const AuthorPublicPage: React.FunctionComponent<IAuthorPublic> = ({
 };
 
 const mapStateToProps = (state: any) => ({
-  authorData: state.authorPublicData.authorData
+  authorData: state.authorPublicData.authorData,
+  user: state.appRouter.user
 });
 
 const mapDispatchToProps = {

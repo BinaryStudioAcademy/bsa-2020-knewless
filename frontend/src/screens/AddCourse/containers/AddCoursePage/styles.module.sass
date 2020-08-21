@@ -2,7 +2,7 @@
 
 $container_width: 1400px
 $side_padding: 80px
-$width_btn: 100px
+$width_btn: 115px
 $height_btn: 40px
 
 .main_container
@@ -169,11 +169,13 @@ textarea
 .buttonSaveGroup
   width: inherit
   display: flex
-  justify-content: flex-start
+  justify-content: flex-end
   flex-direction: row
 
 \:global(.ui.button).buttonCancel
   border-radius: 3px !important
+  width: $width_btn
+  height: $height_btn
 
 \:global(.ui.button).button_save
   width: $width_btn

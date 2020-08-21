@@ -10,14 +10,14 @@
     "analyzer": {
       "autocomplete_search": {
         "type": "custom",
-        "tokenizer": "standard",
+        "tokenizer": "whitespace",
         "filter": [
           "lowercase"
         ]
       },
       "autocomplete_index": {
         "type": "custom",
-        "tokenizer": "standard",
+        "tokenizer": "whitespace",
         "filter": [
           "lowercase",
           "autocomplete_filter"

@@ -1,7 +1,8 @@
-import { IAuthorCourse } from "./IAuthorCourse";
-import { IAuthorArticles } from "./IAuthorArticles";
+import { IAuthorCourse } from './IAuthorCourse';
+import { IAuthorArticles } from './IAuthorArticles';
 
 export interface IAuthorData {
+    userId: string;
     avatar: string;
     firstName: string;
     lastName: string;

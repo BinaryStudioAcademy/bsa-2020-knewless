@@ -1,5 +1,7 @@
 @import "src/styles/common_variables"
 
+$width_btn: 115px
+$height_btn: 40px
 $title_container_height: 55px
 
 .main_container
@@ -97,6 +99,7 @@ $title_container_height: 55px
   &__button_row
     display: flex
     flex-direction: row
+    justify-content: space-between
 
   &__name_button_group
     display: grid
@@ -112,16 +115,20 @@ $title_container_height: 55px
     flex-basis: 0
     flex-grow: 1
 
-$width_btn: 100px
-$height_btn: 40px
-
 #PathTags
   span
     color: #2A2B37
 
 .btn_save
   margin-left: 1.5em !important
-
+  width: $width_btn
+  height: $height_btn
+  margin-top: 0
+  
+.btn_cancel
+  width: $width_btn
+  height: $height_btn
+  
 .confirmation
   max-width: 400px
 
