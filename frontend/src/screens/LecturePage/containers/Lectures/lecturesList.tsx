@@ -13,13 +13,15 @@ export interface ILecturesListProps {
     setChosenVideo: Function;
 }
 
-function secondsToTime(mins: any): string { // have to be fixed with moment.js
-  const hours = Math.floor(mins / 60);
-
-  const divisorForMinutes = mins % 60;
-  const minutes = Math.floor(divisorForMinutes);
-
-  return `${hours}h ${minutes}m 0s`;
+function secondsToTime(totalTime: any): string { 
+  const HOUR = 60 * 60;
+  const MIN = 60;
+  console.log(totalTime);
+  const hours = (totalTime > HOUR ) ? Math.trunc(totalTime / HOUR): undefined;
+  totalTime = hours ? totalTime - hours * HOUR : totalTime;
+  const mins = (totalTime > MIN || hours) ? Math.ceil(totalTime / MIN) : 0;
+  const result = hours? `${hours}h ${mins}m`: `${mins}m`;
+   return result;
 }
 
 const LecturesList: React.FunctionComponent<ILecturesListProps> = ({
