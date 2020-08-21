@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.Optional;
@@ -47,12 +46,19 @@ public class AuthorController {
         }
         final var currentUserId = userPrincipal.getId();
         if (currentUserId == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User id cannot be null.");
+            return ResponseEntity.badRequest().body(new SingleMessageResponse("User id cannot be null."));
         }
         settings.setUserId(currentUserId);
-        return ResponseEntity.ok(authorService.setAuthorSettings(settings));
+        final var savingResult = authorService.setAuthorSettings(settings);
+        if (savingResult.isPresent()) {
+            return ResponseEntity.ok(new SingleMessageResponse("Success. Your profile has been updated."));
+        }
+        return new ResponseEntity<>(
+                new SingleMessageResponse("An error occurred while saving changes."), HttpStatus.INTERNAL_SERVER_ERROR
+        );
     }
 
+    @GetMapping("/self-info")
     public ResponseEntity<?> getAuthorInfo(@CurrentUser UserPrincipal userPrincipal) {
         try {
             return ResponseEntity.ok(this.authorService.getAuthorInfoByUserId(userPrincipal.getId()));
@@ -64,9 +70,9 @@ public class AuthorController {
     @GetMapping("/overview/{authorId}")
     public ResponseEntity<?> getPublicAuthor(@PathVariable UUID authorId, @CurrentUser UserPrincipal userPrincipal) {
         try {
-            return new ResponseEntity<>(this.authorService.getAuthorPublicDto(authorId, userPrincipal), HttpStatus.OK);
+            return ResponseEntity.ok(this.authorService.getAuthorPublicDto(authorId, userPrincipal));
         } catch (NotFoundException ex) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
+            return ResponseEntity.notFound().build();
         }
     }
 

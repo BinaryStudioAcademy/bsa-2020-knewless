@@ -1,6 +1,7 @@
 package com.knewless.core.course;
 
 import com.knewless.core.course.dto.*;
+import com.knewless.core.lecture.dto.ShortLectureDto;
 import com.knewless.core.exception.custom.ResourceNotFoundException;
 import com.knewless.core.security.oauth.UserPrincipal;
 import com.knewless.core.user.model.CurrentUser;
@@ -63,7 +64,7 @@ public class CourseController {
     }
 
     @GetMapping("/lecture/{lectureId}")
-    public CourseToPlayerProjection getCourseByLectureId(@PathVariable UUID lectureId) {
+    public CourseToPlayerDto getCourseByLectureId(@PathVariable UUID lectureId) {
         return courseService.getCourseByLectureId(lectureId);
     }
 
@@ -83,4 +84,19 @@ public class CourseController {
         return courseService.getCourses(PageRequest.of(page, size));
     }
 
+    @GetMapping("/all")
+    public List<CourseDetailsDto> getAllCourses(@RequestParam(defaultValue = "0") int page,
+                                                @RequestParam(defaultValue = "10") int size) {
+        return courseService.getAllCourses(PageRequest.of(page, size));
+    }
+
+    @GetMapping("/lecture/tag/{tagId}")
+    public List<CourseDetailsDto> getAllCoursesByLectureTag(@PathVariable UUID tagId) {
+        return courseService.getAllCoursesByLectureTag(tagId);
+    }
+
+    @GetMapping("/author/user")
+    public List<CourseDetailsDto> getAllCoursesByLectureTag(@CurrentUser UserPrincipal userPrincipal) {
+        return courseService.getAllAuthorCourses(userPrincipal);
+    }
 }

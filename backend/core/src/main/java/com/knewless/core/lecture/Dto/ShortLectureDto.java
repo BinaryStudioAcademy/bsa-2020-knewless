@@ -1,4 +1,4 @@
-package com.knewless.core.lecture.Dto;
+package com.knewless.core.lecture.dto;
 
 import lombok.Data;
 
@@ -13,7 +13,11 @@ public class ShortLectureDto {
     private UUID id;
     private String name;
     private String description;
-    private String lectureURL;
+    private String webLink;
+    private String urlOrigin;
+    private String url1080;
+    private String url720;
+    private String url480;
     private int timeMinutes;
 }
 

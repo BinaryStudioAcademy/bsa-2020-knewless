@@ -18,6 +18,8 @@
     "query-string": "^6.9.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
+    "react-ellipsis-pjs": "^2.1.2",
+    "react-highlight-words": "^0.16.0",
     "react-icons": "^3.10.0",
     "react-middle-ellipsis": "^1.1.0",
     "react-notifications": "^1.6.0",
@@ -85,7 +87,6 @@
     "eslint-plugin-react": "^7.17.0",
     "eslint-plugin-react-hooks": "^1.7.0",
     "react-app-rewired": "^2.1.5",
-    "react-ellipsis-pjs": "^2.1.2",
     "source-map-loader": "^0.2.4",
     "typescript": "^3.7.5"
   }

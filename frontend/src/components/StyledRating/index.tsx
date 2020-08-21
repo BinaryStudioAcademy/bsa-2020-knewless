@@ -11,7 +11,7 @@ export const StyledRating: React.FC<IStyledRatingProps> = props => {
   return (
     <Rating
       {...props}
-      defaultRating={rating}
+      rating={rating}
       maxRating={5}
       size="huge"
       className={`landing__rating_bar ${className}`}

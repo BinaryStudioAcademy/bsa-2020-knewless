@@ -1,6 +1,8 @@
 package com.knewless.core.currentUserCource;
 
 import com.knewless.core.course.CourseService;
+import com.knewless.core.course.dto.CourseDetailsDto;
+import com.knewless.core.course.dto.CourseDetailsQueryResult;
 import com.knewless.core.course.dto.CourseDto;
 import com.knewless.core.course.dto.CourseWithMinutesDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,10 @@ public class CurrentUserCourseService {
                 .stream()
                 .map(c -> courseService.getCourseWithMinutesById(c))
                 .collect(Collectors.toList());
+    }
+
+    public List<CourseDetailsDto> getCurrentCourses(UUID userId) {
+        return courseService.getUserCourses(userId);
     }
 
 }

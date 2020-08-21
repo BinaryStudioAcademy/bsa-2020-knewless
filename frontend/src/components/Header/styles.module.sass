@@ -16,7 +16,7 @@ $side_padding: 80px
   left: 0px
   top: 0px
   flex-direction: row
-  z-index: 100
+  z-index: 200
 
 
 .customHeader
@@ -112,16 +112,14 @@ $side_padding: 80px
   height: 12px
   padding-left: 0px
 
-\:global(.ui.icon.input).search
+\:global(div).search
   max-width: 18em
   width: 100%
-  position: relative
 
-\:global(.ui.icon.input).searchHidden
-  visibility: hidden
+\:global(div).searchHidden
+  visibility: hidden !important
   max-width: 18em
   width: 100%
-  opacity: 0
 
 .homeLine
   padding-top: 0.3em

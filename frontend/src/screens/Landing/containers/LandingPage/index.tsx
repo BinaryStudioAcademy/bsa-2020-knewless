@@ -12,6 +12,7 @@ import { IAppState } from '@models/AppState';
 import { fetchDataRoutine } from 'screens/Landing/routines';
 import { CardsSegment } from '@components/CardsSegment';
 import { Footer } from '@components/Footer';
+import { history } from '@helpers/history.helper';
 
 // eslint-disable-next-line
 export interface ILandingProps {
@@ -30,6 +31,7 @@ export const LandingPage: React.FunctionComponent<ILandingProps> = ({
   loading
 }) => {
   const [playerRunning, setPlayerRunning] = useState(true);
+  const [query, setQuery] = useState('');
   const playerRef = createRef<HTMLVideoElement>();
 
   useEffect(() => {
@@ -44,6 +46,17 @@ export const LandingPage: React.FunctionComponent<ILandingProps> = ({
       playerRef.current.pause();
     }
   }
+
+  const onSearchFieldKeyPressed = (event: KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      history.push(`/search?q=${query}`);
+    }
+  };
+
+  const onSearchFieldChange = data => {
+    setQuery(data);
+  };
 
   function handleViewAllCoursesClick() {
     console.log('clicked view all courses');
@@ -62,7 +75,12 @@ export const LandingPage: React.FunctionComponent<ILandingProps> = ({
             <p>
               With KnewLess, you can align your technology strategy to a skills strategy that moves you forward faster.
             </p>
-            <Input icon="search" placeholder="Find courses" />
+            <Input
+              icon="search"
+              placeholder="Find courses"
+              onChange={((event, data) => onSearchFieldChange(data.value))}
+              onKeyPress={onSearchFieldKeyPressed}
+            />
           </div>
           <div className={styles.intro__video_container}>
             <div className={styles.intro__video_cover} />
@@ -120,6 +138,7 @@ export const LandingPage: React.FunctionComponent<ILandingProps> = ({
               <div className={styles.path_card}>
                 <PathCard
                   key={p.id}
+                  id={p.id}
                   name={p.name}
                   logoSrc={p.logoSrc}
                   courses={p.courses}

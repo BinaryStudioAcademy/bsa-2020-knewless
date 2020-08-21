@@ -5,7 +5,7 @@ import RolePopUp from '@components/RolePopUp';
 import Routing from '../Routing';
 import { IAppState } from '@models/AppState';
 import { connect } from 'react-redux';
-import { fetchUserRoutine, setSettingsModeRoutine } from './routines';
+import { fetchUserRoutine, setUserRoleRoutine } from './routines';
 import { IBindingAction, IBindingFunction } from '@models/Callbacks';
 import { IUser } from './models/IUser';
 import { RoleTypes } from './models/IRole';
@@ -67,7 +67,7 @@ const mapStateToProps = (state: IAppState) => {
 
 const mapDispatchToProps = {
   fetchUser: fetchUserRoutine,
-  setSettingsMode: setSettingsModeRoutine
+  setSettingsMode: setUserRoleRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppRouter);

@@ -45,4 +45,11 @@ public interface CourseMapper {
 	@Mapping(target = "lectures", ignore = true)
 	@Mapping(target = "tags", ignore = true)
 	CourseFullInfoDto courseToCourseFullInfoDto(Course course);
+
+	@Mapping(target = "tags", ignore = true)
+	@Mapping(target = "rating",
+			expression =
+					"java(CourseMapper.calculateRating(course.getAllReactions(), course.getPositiveReactions()))"
+	)
+	CourseDetailsDto courseDetailsResultToCourseDetailsDto(CourseDetailsQueryResult course);
 }

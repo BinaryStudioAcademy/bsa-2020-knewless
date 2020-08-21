@@ -1,4 +1,4 @@
-package com.knewless.core.lecture.Dto;
+package com.knewless.core.lecture.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,7 +24,7 @@ public class SaveLectureDto {
 
     @Pattern(
             regexp = "^$|^[a-zA-Z0-9!:;=<>@#$&()\\\\-`.+,\"/ ]{10,}$",
-            message = "Lecture description can be empty or it min length must be 10 symbols. " +
+            message = "Lecture description can be empty or its minimum length must be 10 symbols. " +
                     "Only digits, Latin letters and special characters allowed."
     )
     private String description;

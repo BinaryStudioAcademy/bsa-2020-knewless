@@ -8,8 +8,8 @@ import com.knewless.core.user.model.CurrentUser;
 import com.knewless.core.validation.SingleMessageResponse;
 import com.knewless.core.validation.ValidationMessageCreator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,7 +48,13 @@ public class StudentController {
             return ResponseEntity.badRequest().body(new SingleMessageResponse("User id cannot be null."));
         }
         settings.setUserId(currentUserId);
-        return ResponseEntity.ok(studentService.setStudentSettings(settings));
+        final var savingResult = studentService.setStudentSettings(settings);
+        if (savingResult.isPresent()) {
+            return ResponseEntity.ok(new SingleMessageResponse("Success. Your profile has been updated."));
+        }
+        return new ResponseEntity<>(
+                new SingleMessageResponse("An error occurred while saving changes."), HttpStatus.INTERNAL_SERVER_ERROR
+        );
     }
 
     @GetMapping("/profile")

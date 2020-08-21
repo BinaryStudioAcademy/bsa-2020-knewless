@@ -195,7 +195,6 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
                   {/* <label className={styles.form__label}>Tags:</label>*/}
                   <div className={styles.form__tags_selector}>
                     <InlineLoaderWrapper loading={tagsLoading} centered>
-                      {console.log('stored tags: ', storedTags)}
                       {!tagsLoading && (
                         <TagSelector
                           ref={tagsRef}

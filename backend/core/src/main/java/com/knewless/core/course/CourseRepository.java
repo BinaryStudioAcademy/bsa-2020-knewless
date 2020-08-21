@@ -1,10 +1,8 @@
 package com.knewless.core.course;
 
-import com.knewless.core.course.dto.AuthorCourseQueryResult;
-import com.knewless.core.course.dto.CourseIdByLectureIdProjection;
-import com.knewless.core.course.dto.CourseQueryResult;
-import com.knewless.core.course.dto.CourseToPlayerProjection;
+import com.knewless.core.course.dto.*;
 import com.knewless.core.course.model.Course;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -55,4 +53,76 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
             "ORDER BY c.updatedAt DESC")
     List<AuthorCourseQueryResult> getLatestCoursesByAuthorId(@Param("authorId") UUID authorId);
 
+    @Query("SELECT new com.knewless.core.course.dto.CourseDetailsQueryResult(" +
+            "c.id, c.name, c.level, " +
+            "c.author.id, concat(c.author.firstName,' ' , c.author.lastName), " +
+            "c.image, " +
+            "(SELECT COALESCE(SUM(cl.duration), 0) FROM c.lectures as cl), " +
+            "c.description, " +
+            "( " +
+            "SELECT COALESCE(SUM(CASE WHEN cr.reaction = TRUE THEN 1 ELSE 0 END), 0) " +
+            "FROM c.reactions as cr " +
+            "WHERE cr.reaction = TRUE" +
+            "), " +
+            "SIZE(c.reactions), " +
+            "size(c.lectures)) " +
+            "FROM CurrentUserCourse cc " +
+            "LEFT JOIN cc.course as c " +
+            "WHERE cc.user.id = :id")
+    List<CourseDetailsQueryResult> getDetailCoursesByUserId(@Param("id") UUID id);
+
+    @Query("SELECT new com.knewless.core.course.dto.CourseDetailsQueryResult(" +
+            "c.id, c.name, c.level, " +
+            "c.author.id, concat(c.author.firstName,' ' , c.author.lastName), " +
+            "c.image, " +
+            "(SELECT COALESCE(SUM(cl.duration), 0) FROM c.lectures as cl), " +
+            "c.description, " +
+            "( " +
+            "SELECT COALESCE(SUM(CASE WHEN cr.reaction = TRUE THEN 1 ELSE 0 END), 0) " +
+            "FROM c.reactions as cr " +
+            "WHERE cr.reaction = TRUE" +
+            "), " +
+            "SIZE(c.reactions), " +
+            "SIZE(c.lectures)) " +
+            "FROM Course c " +
+            "ORDER BY c.updatedAt DESC")
+    List<CourseDetailsQueryResult> getDetailCourses(Pageable pageable);
+
+    @Query("SELECT new com.knewless.core.course.dto.CourseDetailsQueryResult(" +
+            "c.id, c.name, c.level, " +
+            "c.author.id, concat(c.author.firstName,' ' , c.author.lastName), " +
+            "c.image, " +
+            "(SELECT COALESCE(SUM(cl.duration), 0) FROM c.lectures as cl), " +
+            "c.description, " +
+            "( " +
+            "SELECT COALESCE(SUM(CASE WHEN cr.reaction = TRUE THEN 1 ELSE 0 END), 0) " +
+            "FROM c.reactions as cr " +
+            "WHERE cr.reaction = TRUE" +
+            "), " +
+            "SIZE(c.reactions), " +
+            "SIZE(c.lectures)) " +
+            "FROM Course c " +
+            "LEFT JOIN c.lectures as l " +
+            "LEFT JOIN l.tags as t " +
+            "WHERE t.id = :tagId " +
+            "ORDER BY c.updatedAt DESC")
+    List<CourseDetailsQueryResult> getDetailCoursesByLectureTag(UUID tagId);
+
+    @Query("SELECT new com.knewless.core.course.dto.CourseDetailsQueryResult(" +
+            "c.id, c.name, c.level, " +
+            "c.author.id, concat(c.author.firstName,' ' , c.author.lastName), " +
+            "c.image, " +
+            "(SELECT COALESCE(SUM(cl.duration), 0) FROM c.lectures as cl), " +
+            "c.description, " +
+            "( " +
+            "SELECT COALESCE(SUM(CASE WHEN cr.reaction = TRUE THEN 1 ELSE 0 END), 0) " +
+            "FROM c.reactions as cr " +
+            "WHERE cr.reaction = TRUE" +
+            "), " +
+            "SIZE(c.reactions), " +
+            "SIZE(c.lectures)) " +
+            "FROM Course c " +
+            "WHERE c.author.id = :authorId " +
+            "ORDER BY c.updatedAt DESC")
+    List<CourseDetailsQueryResult> getDetailCoursesByAuthorId(UUID authorId);
 }

@@ -46,40 +46,58 @@ public class VideoEncoderService {
 
     public void encode(String id, UUID entityId) throws IOException {
         String baseFilePath = rootPath + "/video/" + id + "/" + id;
+        String path = "assets/video/" + id + "/" + id;
         inputVideo = ffprobe.probe(baseFilePath + "-origin.mp4");
         getThumbnail(id);
-
         FFmpegStream videoInfo = inputVideo.getStreams().get(0);
-
+        updateOrigin(path + "-origin.mp4", entityId);
         if (videoInfo.width >= 720) {
             fFmpegExecutor.createJob(
                     getBuilder(baseFilePath + "-480.mp4", SMALL_WIDTH, SMALL_HEIGHT),
                     this::loggerProgressWhileEncoding
             ).run();
 
-            updateLecture(id, entityId);
+            update480(path + "-480.mp4", entityId);
             sendResponse(id, entityId);
         }
         if (videoInfo.width >= 1280) {
             fFmpegExecutor.createJob(getBuilder(
-                    baseFilePath + "-720.mp4", HD_WIDTH, HD_HEIGHT),
+                    path + "-720.mp4", HD_WIDTH, HD_HEIGHT),
                     this::loggerProgressWhileEncoding
             ).run();
+            update720(baseFilePath + "-720.mp4", entityId);
         }
         if (videoInfo.width >= 1920) {
             fFmpegExecutor.createJob(getBuilder(
                     baseFilePath + "-1080.mp4", FULL_HD_WIDTH, FULL_HD_HEIGHT),
                     this::loggerProgressWhileEncoding
             ).run();
+            update1080(path + "-1080.mp4", entityId);
         }
     }
 
-    private void updateLecture(String sourceId, UUID lectureId) {
+    private void updateOrigin(String sourceId, UUID lectureId) {
         Lecture lecture = lectureRepository.findById(lectureId).orElseThrow();
-        lecture.setSourceUrl(sourceId);
+        lecture.setUrlOrigin(sourceId);
         lecture.setDuration((int) (inputVideo.getFormat().duration));
         lectureRepository.save(lecture);
     }
+    private void update1080(String sourceId, UUID lectureId) {
+        Lecture lecture = lectureRepository.findById(lectureId).orElseThrow();
+        lecture.setUrl1080(sourceId);
+        lectureRepository.save(lecture);
+    }
+    private void update720(String sourceId, UUID lectureId) {
+        Lecture lecture = lectureRepository.findById(lectureId).orElseThrow();
+        lecture.setUrl720(sourceId);
+        lectureRepository.save(lecture);
+    }
+    private void update480(String sourceId, UUID lectureId) {
+        Lecture lecture = lectureRepository.findById(lectureId).orElseThrow();
+        lecture.setUrl480(sourceId);
+        lectureRepository.save(lecture);
+    }
+
 
     private void sendResponse(String folderId, UUID entityId) {
         Message message = new Message();

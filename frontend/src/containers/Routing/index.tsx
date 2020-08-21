@@ -18,9 +18,11 @@ import PrivateRoute from '../PrivateRoute';
 import WebSocketNotifications from 'containers/WebSocketNotifications';
 import { RoleTypes } from '../AppRouter/models/IRole';
 import { history } from '@helpers/history.helper';
+import CoursesPage from '@screens/Courses/containers/CoursesPage';
 import CoursePage from '@screens/CoursePage/containers/CoursePage';
 import ForgotPassword from '@screens/ResetPassword/containers/ForgotPasswordPage';
 import SavePassword from '@screens/SavePassword/containers/SavePasswordPage';
+import PathPage from '@screens/PathPage/containers/PathPage';
 
 export interface IRoutingProps {
   isLoading: boolean;
@@ -50,11 +52,12 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({ isLoading }) => {
     <div>
       <Switch>
         <Route>
-          {isHeaderShown ? <Header /> : null}
+          {isHeaderShown && <Header />}
           <SettingsRoute />
           <RootRoute />
           <PublicRoute exact path="/savepassword/:resetid" component={SavePassword} />
           <PublicRoute exact path="/course/:courseId" component={CoursePage} />
+          <PublicRoute exact path="/path/:pathId" component={PathPage} />
           <PublicRoute exact path="/login" component={LoginPage} />
           <PublicRoute exact path="/reset" component={ForgotPassword} />
           <PublicRoute exact path="/oauth/redirect" component={handler} />
@@ -63,6 +66,7 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({ isLoading }) => {
           <PrivateRoute exact path="/lecture/:lectureId" component={LecturePage} />
           <PrivateRoute exact path="/add_path" roles={[RoleTypes.AUTHOR]} component={AddPathPage} />
           <PrivateRoute exact path="/add_course" roles={[RoleTypes.AUTHOR]} component={AddCourse} />
+          <PrivateRoute exact path="/courses" component={CoursesPage} />
           <PrivateRoute exact path="/profile" roles={[RoleTypes.USER]} component={StudentProfile} />
         </Route>
         <div>

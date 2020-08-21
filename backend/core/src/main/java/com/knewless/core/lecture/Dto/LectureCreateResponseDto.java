@@ -1,4 +1,4 @@
-package com.knewless.core.lecture.Dto;
+package com.knewless.core.lecture.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

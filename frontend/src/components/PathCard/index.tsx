@@ -17,7 +17,13 @@ export interface IPathCardProps {
 }
 
 export const PathCard: React.FunctionComponent<IPathCardProps> = (
-  { name, logoSrc, courses, duration, imageRef, clickableImage = false }
+  { id,
+    name,
+    logoSrc,
+    courses,
+    duration,
+    imageRef,
+    clickableImage = false }
 ) => (
   <div>
     <div className={styles.container}>
@@ -27,7 +33,12 @@ export const PathCard: React.FunctionComponent<IPathCardProps> = (
         alt="Path logo"
         ref={imageRef}
       />
-      <div className={styles.title}>{name}</div>
+      <div className={styles.title}>
+        {
+        id ? <a href={`/path/${id}`}>{name}</a>
+          : <span>{name}</span>
+      }
+      </div>
       <div className={styles.meta}>
         <div>
           <span className={styles.indicator}>{courses}</span>

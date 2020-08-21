@@ -6,8 +6,11 @@ import com.knewless.core.author.dto.AuthorPublicDto;
 import com.knewless.core.author.dto.AuthorSettingsDto;
 import com.knewless.core.author.mapper.AuthorInfoMapper;
 import com.knewless.core.author.mapper.AuthorMapper;
+import com.knewless.core.author.model.Author;
 import com.knewless.core.course.CourseRepository;
 import com.knewless.core.db.SourceType;
+import com.knewless.core.elasticsearch.EsService;
+import com.knewless.core.elasticsearch.model.EsDataType;
 import com.knewless.core.exception.custom.ResourceNotFoundException;
 import com.knewless.core.school.mapper.SchoolInfoMapper;
 import com.knewless.core.security.oauth.UserPrincipal;
@@ -19,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class AuthorService {
@@ -33,17 +37,21 @@ public class AuthorService {
 
     private final SubscriptionService subscriptionService;
 
+    private final EsService esService;
+
     @Autowired
     public AuthorService(AuthorRepository authorRepository,
                          UserRepository userRepository,
                          CourseRepository courseRepository,
+                         SubscriptionService subscriptionService,
                          ArticleRepository articleRepository,
-                         SubscriptionService subscriptionService) {
+                         EsService esService) {
         this.authorRepository = authorRepository;
         this.userRepository = userRepository;
         this.courseRepository = courseRepository;
         this.articleRepository = articleRepository;
         this.subscriptionService = subscriptionService;
+        this.esService = esService;
     }
 
     public Optional<AuthorSettingsDto> getAuthorSettings(UUID userId) {
@@ -59,7 +67,10 @@ public class AuthorService {
         );
         final var oldSettings = this.authorRepository.findByUser(user);
         if (oldSettings.isEmpty()) {
-            return Optional.of(this.authorRepository.save(AuthorMapper.fromDto(settings, user)))
+            Author author = authorRepository.save(AuthorMapper.fromDto(settings, user));
+            CompletableFuture.runAsync(() -> esService.put(EsDataType.AUTHOR, author));
+
+            return Optional.of(author)
                     .map(AuthorMapper::fromEntity);
         }
         final var updateSettings = AuthorMapper.fromDto(settings, user);

@@ -25,7 +25,7 @@ public class CreateCourseRequestDto {
 
     @Pattern(
             regexp = "^$|^[a-zA-Z0-9!:;=<>@#$&()\\\\-`.+,\"/ ]{10,}$",
-            message = "Course description can be empty or it min length must be 10 symbols. " +
+            message = "Course description can be empty or its minimum length must be 10 symbols. " +
                     "Only digits, Latin letters and special characters allowed."
     )
     private String description;

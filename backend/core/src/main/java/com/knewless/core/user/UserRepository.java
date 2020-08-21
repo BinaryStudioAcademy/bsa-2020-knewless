@@ -31,4 +31,5 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     @Query("UPDATE User u SET u.password = :password WHERE u.id = :id")
     void setPassword(@Param("id") UUID userId, @Param("password") String password);
 
+    Boolean existsByIdAndRoleIsNotNull(UUID id);
 }

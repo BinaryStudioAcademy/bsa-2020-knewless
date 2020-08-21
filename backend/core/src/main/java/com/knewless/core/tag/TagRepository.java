@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.UUID;
 
 public interface TagRepository extends JpaRepository<Tag, UUID> {
+    @Query("SELECT DISTINCT t.name FROM Course c LEFT JOIN c.lectures as l LEFT JOIN l.tags as t WHERE c.id = :id")
+    List<String> getTagsByCourse(UUID id);
 
     @Query(value = "select cast(tag_id as varchar) from user_tag where user_id = :userId", nativeQuery = true)
     List<UUID> getTagsByUserId(@Param("userId") UUID userId);

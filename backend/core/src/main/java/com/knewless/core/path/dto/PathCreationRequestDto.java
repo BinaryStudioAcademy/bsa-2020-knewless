@@ -18,7 +18,7 @@ public class PathCreationRequestDto {
 
 	@Pattern(
 			regexp = "^$|^[a-zA-Z0-9!:;=<>@#$&()\\\\-`.+,\"/ ]{10,}$",
-			message = "Description can be empty or it min length must be 10 symbols. " +
+			message = "Description can be empty or its minimum length must be 10 symbols. " +
 					"Only digits, Latin letters and special characters allowed."
 	)
 	private String description;
