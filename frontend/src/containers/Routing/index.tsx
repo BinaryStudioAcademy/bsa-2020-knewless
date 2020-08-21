@@ -38,7 +38,7 @@ export interface IRoutingProps {
   onOpen: boolean;
   loginUser: IBindingAction;
   setOpen: IBindingCallback1<string>;
-  redirectTo: string
+  redirectTo: string;
 }
 
 const Routing: React.FunctionComponent<IRoutingProps> = ({

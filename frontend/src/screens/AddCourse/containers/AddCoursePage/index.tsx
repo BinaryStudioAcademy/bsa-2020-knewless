@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { fetchLecturesRoutine, saveCourseRoutine } from 'screens/AddCourse/routines';
-import { IBindingCallback1, IBindingAction } from 'models/Callbacks';
+import { IBindingAction, IBindingCallback1 } from 'models/Callbacks';
 import { ICourse } from '../../models/ICourse';
 import { Button, Dropdown, Input, Label } from 'semantic-ui-react';
 import { Footer } from '@components/Footer';
@@ -82,7 +82,6 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
   const [buttonLoading, setButtonLoading] = useState(false);
   const [previewImage, setPreviewImage] = useState(CourseImage);
   const [modalAddOpen, setModalAddOpen] = useState(false);
-  const [isSaved, setIsSaved] = useState(false);
 
   const validateName = (newName?: string) => {
     const lastChangesName = typeof newName === 'string' ? newName : courseName;
@@ -119,9 +118,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
   }, [pool, selected]);
 
   const handleSave = (isRelease: boolean) => {
-    if (!isRequiredFieldsValid) return;
     if (isRelease && !isReleseble) return;
-    setIsSaved(true);
     setButtonLoading(true);
     save({
       name: courseName,
@@ -248,40 +245,36 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
                 action={handleUploadFile}
                 description={description}
               />
-              {isValidImage ? ''
-                : (
-                  <Label
-                    basic
-                    className={styles.warninglabel}
-                    promt="true"
-                  >
-                    {IMAGE_FORMAT_MESSAGE}
-                  </Label>
-                )}
+              {!isValidImage && (
+                <Label
+                  basic
+                  className={styles.warninglabel}
+                  promt="true"
+                >
+                  {IMAGE_FORMAT_MESSAGE}
+                </Label>
+              )}
             </div>
             <div className={styles.buttonGroup}>
               <GrayOutlineButton
                 className={styles.buttonCancel}
                 onClick={() => handleCancel()}
-              >
-                Cancel
-              </GrayOutlineButton>
+                content="Cancel"
+              />
               <div className={styles.buttonSaveGroup}>
                 <Button
                   content="Save"
-                  loading={buttonLoading}
-                  className={isRequiredFieldsValid && !isSaved ? styles.button_save : styles.button_save_disabled}
+                  className={styles.button_save_disabled}
                   onClick={() => handleSave(false)}
-                  disabled={!isRequiredFieldsValid}
+                  disabled
                 />
                 <GradientButton
-                  loading={buttonLoading}
-                  className={isReleseble && !isSaved ? styles.button_release : styles.button_release_disabled}
+                  disabled={!isReleseble}
+                  className={isReleseble ? styles.button_release : styles.button_release_disabled}
                   onClick={() => handleSave(true)}
-                  disabled={!isSaved}
-                >
-                  Release
-                </GradientButton>
+                  loading={buttonLoading}
+                  content="Release"
+                />
               </div>
             </div>
           </div>

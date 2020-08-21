@@ -2,7 +2,7 @@ import React, { createRef, useCallback, useEffect, useState } from 'react';
 import styles from './styles.module.sass';
 import { ICourse, IPath, ITag } from '../../models/domain';
 import { Footer } from '@components/Footer';
-import { Form, Input, Label, TextArea } from 'semantic-ui-react';
+import { Button, Form, Input, Label, TextArea } from 'semantic-ui-react';
 import { DependenciesSelector } from '@components/DependenciesSelector';
 import { IFilterableItem } from '@components/FilterableList';
 import { CourseCard } from '../../components/ClickableCourseCard';
@@ -79,19 +79,19 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
     setIsDescriptionValid(isValidPathDescription(typeof newName === 'string' ? newName : pathDescription));
   }
 
-  const isRequiredFieldsValid = (): boolean => isPathNameValid && isDescriptionValid;
+  const isRequiredFieldsValid = !!pathName && isPathNameValid && isDescriptionValid;
+  const isReadyToRelease = isRequiredFieldsValid && selectedCourses.length > 0;
 
-  function handleSavePath() {
-    if (isRequiredFieldsValid()) {
-      const path: IPath = {
-        name: pathName,
-        description: pathDescription,
-        courses: selectedCourses,
-        tags: selectedTags,
-        imageTag: pathImageTag
-      };
-      triggerSavePath(path);
-    }
+  function handleSavePath(isRelease: boolean) {
+    if (isRelease && !isReadyToRelease) return;
+    const path: IPath = {
+      name: pathName,
+      description: pathDescription,
+      courses: selectedCourses,
+      tags: selectedTags,
+      imageTag: pathImageTag
+    };
+    triggerSavePath(path);
   }
 
   function handleCancel() {
@@ -255,12 +255,18 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
                       onClick={handleCancel}
                       className={styles.btn_cancel}
                     />
-                    <GradientButton
-                      disabled={!isPathNameValid}
+                    <Button
+                      disabled
                       className={styles.btn_save}
                       content="Save"
-                      onClick={handleSavePath}
+                      onClick={() => handleSavePath(false)}
+                    />
+                    <GradientButton
+                      disabled={!isReadyToRelease}
+                      className={isReadyToRelease ? styles.button_release : styles.button_release_disabled}
+                      onClick={() => handleSavePath(true)}
                       loading={pathUploading}
+                      content="Release"
                     />
                   </div>
                 </div>
