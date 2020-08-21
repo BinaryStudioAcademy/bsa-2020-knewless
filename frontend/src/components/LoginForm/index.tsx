@@ -12,11 +12,13 @@ import GradientButton from '../buttons/GradientButton';
 interface ILoginForm {
   login: IBindingCallback1<ILoginRequest>;
   isLoginLoading: boolean;
+  isLanding: boolean;
 }
 
 const LoginForm: FunctionComponent<ILoginForm> = ({
   login,
-  isLoginLoading
+  isLoginLoading,
+  isLanding
 }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -39,7 +41,8 @@ const LoginForm: FunctionComponent<ILoginForm> = ({
         <Header as="h2" textAlign="center" className={styles.main_container__header}>
           <LogoWithText />
         </Header>
-        <Form name="loginForm" size="large" onSubmit={handleLoginClick}>
+        {isLanding && <h3 style={{fontSize: '25px' }}>Get access now</h3>}
+        <Form name="loginForm" size="large" style={{paddingTop: '20px'}} onSubmit={handleLoginClick}>
           <Segment className={styles.main_container__form}>
             <Form.Input
               fluid

@@ -12,6 +12,7 @@ import { ILecturePageState } from '@screens/LecturePage/models/ILecturePageState
 import { IResetState } from '@screens/ResetPassword/models/IResetState';
 import { ISavePasswordState } from '@screens/SavePassword/models/ISavePasswordState';
 import { ISearchState } from '@screens/./Search/models/ISearchState';
+import { ILoginModalState } from '@containers/LoginModal/models/ILoginModalState';
 
 export interface IAppState {
   toastr: any;
@@ -27,6 +28,7 @@ export interface IAppState {
   search: ISearchState;
   coursePage: ICoursePageState;
   lecturePage: ILecturePageState;
+  loginModal: ILoginModalState;
   resetpassword: IResetState;
   savepassword: ISavePasswordState;
 }

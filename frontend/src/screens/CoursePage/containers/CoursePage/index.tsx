@@ -14,9 +14,11 @@ import { IBindingCallback1 } from '@models/Callbacks';
 import { IFullCourseData } from '@screens/CoursePage/models/IFullCourseData';
 import defaultCourseImage from 'assets/images/default_course_image.jpg';
 import { navigations } from '@screens/Landing/services/mock';
+import { openLoginModalRoutine } from '@containers/LoginModal/routines';
 
 interface ICoursePageProps {
   fetchData: IBindingCallback1<string>;
+  openLoginModal: IBindingCallback1<string>;
   course: IFullCourseData;
   loading: boolean;
   isAuthorized: boolean;
@@ -26,7 +28,8 @@ const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
   fetchData,
   course,
   loading,
-  isAuthorized
+  isAuthorized,
+  openLoginModal
 }) => {
   const { courseId } = useParams();
 
@@ -48,9 +51,12 @@ const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
           rating={course?.rating}
           startLectureId={course.lectures ? course.lectures[0].id : ''}
           isAuthorized={isAuthorized}
+          openLoginModal={openLoginModal}
         />
         <div className="separator" />
         <CourseInfo
+          isAuthorized={isAuthorized}
+          openLoginModal={openLoginModal}
           level={course?.level || ''}
           updatedAt={course?.updatedAt}
           duration={course?.duration || ''}
@@ -87,7 +93,8 @@ const mapStateToProps = (state: IAppState) => {
 };
 
 const mapDispatchToProps = {
-  fetchData: fetchCourseDataRoutine
+  fetchData: fetchCourseDataRoutine,
+  openLoginModal: openLoginModalRoutine.trigger
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CoursePage);

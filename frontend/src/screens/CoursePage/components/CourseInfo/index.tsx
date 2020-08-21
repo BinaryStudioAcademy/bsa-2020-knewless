@@ -6,6 +6,7 @@ import CourseMenu from '@screens/CoursePage/components/CourseMenu';
 import { ILectureData } from '@screens/CoursePage/models/ILectureData';
 import moment from 'moment';
 import { ITagData } from '@screens/CoursePage/models/ITagData';
+import { IBindingCallback1 } from '@models/Callbacks';
 
 interface ICourseInfoProps {
   level: string;
@@ -15,6 +16,8 @@ interface ICourseInfoProps {
   lectures: ILectureData[];
   courseDescription: string;
   tags: ITagData[];
+  isAuthorized: boolean;
+  openLoginModal: IBindingCallback1<string>;
 }
 
 const CourseInfo: React.FunctionComponent<ICourseInfoProps> = ({
@@ -24,7 +27,9 @@ const CourseInfo: React.FunctionComponent<ICourseInfoProps> = ({
   rating,
   lectures,
   courseDescription,
-  tags
+  tags,
+  isAuthorized,
+  openLoginModal
 }) => (
   <div className="content_row">
     <div className={`${styles.info} flex_item aligned_item`}>
@@ -49,6 +54,8 @@ const CourseInfo: React.FunctionComponent<ICourseInfoProps> = ({
     </div>
     <div className={`${styles.menu} flex_item`}>
       <CourseMenu
+        isAuthorized={isAuthorized}
+        openLoginModal={openLoginModal}
         lectures={lectures}
         courseDescription={courseDescription}
       />

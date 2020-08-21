@@ -13,6 +13,7 @@ import { fetchDataRoutine } from 'screens/Landing/routines';
 import { CardsSegment } from '@components/CardsSegment';
 import { Footer } from '@components/Footer';
 import { history } from '@helpers/history.helper';
+import { loginRoutine } from '@screens/Home/routines';
 
 // eslint-disable-next-line
 export interface ILandingProps {
@@ -20,6 +21,10 @@ export interface ILandingProps {
   paths: IPathCardProps[];
   navigations: INavigationSectionProps[];
   fetchData: IBindingAction;
+  loginUser: IBindingAction;
+  isLoginLoading: boolean;
+  isAuthorized: boolean;
+  isLoginFailure: boolean;
   loading: boolean;
 }
 
@@ -28,9 +33,14 @@ export const LandingPage: React.FunctionComponent<ILandingProps> = ({
   paths,
   navigations,
   fetchData: triggerFetchData,
+  loginUser,
+  isLoginLoading,
+  isAuthorized,
+  isLoginFailure,
   loading
 }) => {
   const [playerRunning, setPlayerRunning] = useState(true);
+  const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
   const playerRef = createRef<HTMLVideoElement>();
 
@@ -58,11 +68,8 @@ export const LandingPage: React.FunctionComponent<ILandingProps> = ({
     setQuery(data);
   };
 
-  function handleViewAllCoursesClick() {
-    console.log('clicked view all courses');
-  }
-  function handleViewAllPathsClick() {
-    console.log('clicked view all paths');
+  function handleClickToViewModal() {
+    setOpen(prev => !prev);
   }
 
   return (
@@ -109,7 +116,7 @@ export const LandingPage: React.FunctionComponent<ILandingProps> = ({
         <div className={`${styles.wide_container} ${styles.content_row}`}>
           <CardsSegment
             title="Most popular courses"
-            onViewAllClick={handleViewAllCoursesClick}
+            onViewAllClick={() => history.push('/courses')}
             loading={loading}
           >
             {loading || courses.map(c => (
@@ -131,11 +138,11 @@ export const LandingPage: React.FunctionComponent<ILandingProps> = ({
         <div className={`${styles.wide_container} ${styles.card_segment} ${styles.space_under}`}>
           <CardsSegment
             title="Paths"
-            onViewAllClick={handleViewAllPathsClick}
+            onViewAllClick={() => history.push('/paths')}
             loading={loading}
           >
-            {loading || paths.map(p => (
-              <div className={styles.path_card}>
+            {loading || paths.map((p, i) => (
+              <div key={i} className={styles.path_card}>
                 <PathCard
                   key={p.id}
                   id={p.id}
@@ -166,12 +173,16 @@ const mapStateToProps = (state: IAppState) => {
     navigations,
     paths,
     courses,
+    isAuthorized: state.auth.auth.isAuthorized,
+    isLoginLoading: state.auth.requests.loginRequest.loading,
+    isLoginFailure: state.auth.requests.loginRequest.error != null && !state.auth.requests.loginRequest.loading,
     loading: state.landing.requests.dataRequest.loading
   });
 };
 
 const mapDispatchToProps = {
-  fetchData: fetchDataRoutine
+  fetchData: fetchDataRoutine,
+  loginUser: loginRoutine.trigger
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(LandingPage);

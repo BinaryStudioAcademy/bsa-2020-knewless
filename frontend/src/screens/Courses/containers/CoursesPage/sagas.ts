@@ -1,5 +1,5 @@
 import { all, call, put, takeEvery } from 'redux-saga/effects';
-import { fetchCoursesRoutine, fetchCoursesByTagRoutine, fetchAllCoursesRoutine, fetchAllAuthorCoursesRoutine } from '../../routines';
+import { fetchCoursesRoutine, fetchCoursesByTagRoutine, fetchAllCoursesRoutine, fetchAllAuthorCoursesRoutine, fetchAllTagsRoutine } from '../../routines';
 import * as coursesService from '../../services/courses.page.service';
 import { Routine } from 'redux-saga-routines';
 
@@ -55,6 +55,22 @@ function* watchGetAllCoursesRequest() {
   yield takeEvery(fetchAllCoursesRoutine.TRIGGER, getAllCourses);
 }
 
+function* getAllTags() {
+  try {
+    const tags = yield call(coursesService.getTags);
+
+    yield put(fetchAllTagsRoutine.success({
+      tags
+    }));
+  } catch (error) {
+    yield put(fetchAllTagsRoutine.failure(error?.message));
+  }
+}
+
+function* watchGetAllTagsRequest() {
+  yield takeEvery(fetchAllTagsRoutine.TRIGGER, getAllTags);
+}
+
 function* getAllAuthorCourses() {
   try {
     const continueCourses = yield call(coursesService.getAuthorCourses);
@@ -76,6 +92,7 @@ export default function* coursesPageContainerSagas() {
     watchGetCoursesRequest(),
     watchGetCoursesByTagRequest(),
     watchGetAllCoursesRequest(),
-    watchGetAllAuthorCoursesRequest()
+    watchGetAllAuthorCoursesRequest(),
+    watchGetAllTagsRequest()
   ]);
 }
