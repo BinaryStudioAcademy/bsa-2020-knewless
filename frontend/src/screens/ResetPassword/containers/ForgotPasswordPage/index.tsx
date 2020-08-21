@@ -54,14 +54,14 @@ const ForgotPassword: React.FunctionComponent<IForgotPasswordProps> = ({
           <div className={styles.logocontainer}>
             <LogoWithText />
           </div>
-          <h1 className={styles.header}>Forgot Password</h1>
+          {isLinkFetched && isValidEmail ? "" : <h1 className={styles.header}>Forgot Password</h1> }
         </div>
         {isLinkFetched && isValidEmail ? (
           <div className={styles.contentContainer}>
-            <div className={styles.textfield}>
+            <div className={styles.textfieldLast}>
               Check your email
             <br />
-              We just sent an email to you with a link to reset your password!
+              We've just sent you a link to reset your password
             </div>
           </div>) : (
           <div className={styles.contentContainer}>
