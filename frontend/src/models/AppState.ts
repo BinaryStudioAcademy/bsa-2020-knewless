@@ -8,6 +8,8 @@ import { IAppRouterState } from '@containers/AppRouter/models/IAppRouterState';
 import { IAddPathState } from '@screens/AddPath/models/AddPathState';
 import { ICoursePageState } from '@screens/CoursePage/models/ICoursePageState';
 import { ILecturePageState } from '@screens/LecturePage/models/ILecturePageState';
+import { IResetState } from '@screens/ResetPassword/models/IResetState';
+import { ISavePasswordState } from '@screens/SavePassword/models/ISavePasswordState';
 
 export interface IAppState {
   toastr: any;
@@ -21,4 +23,6 @@ export interface IAppState {
   addPathPage: IAddPathState;
   coursePage: ICoursePageState;
   lecturePage: ILecturePageState;
+  resetpassword: IResetState;
+  savepassword: ISavePasswordState;
 }

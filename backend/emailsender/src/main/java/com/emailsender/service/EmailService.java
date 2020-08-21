@@ -16,8 +16,8 @@ public class EmailService {
         String body = String.join(
                 System.getProperty("line.separator"),
                 "<h3>Hello, friend!</h3>",
-                "<p>You've been requested reset your password.</p>",
-                "<p><b>Link time expires in 5 minutes. </b> Your " + resetLink + "</p>",
+                "<p>You've been requested reset your password on <i><b>Knewless site</b></i>.</p>",
+                "<p><b>Link time expires in 10 minutes. </b> Your " + resetLink + "</p>",
                 "<br />");
         emailSender.send(to, body, "Reset password");
     }

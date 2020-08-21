@@ -39,7 +39,7 @@ public class EmailSender {
         });
 
         try {
-            MimeMessage msg = new MimeMessage(s);
+            final MimeMessage msg = new MimeMessage(s);
             msg.setFrom(new InternetAddress(KNEWLESS_EMAIL));
             msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email));
             msg.setSubject(subject);

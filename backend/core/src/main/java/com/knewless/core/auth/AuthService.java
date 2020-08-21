@@ -1,5 +1,8 @@
 package com.knewless.core.auth;
 
+import com.knewless.core.auth.Dto.SavePasswordDtoResponse;
+import com.knewless.core.auth.Dto.ValidateResetLinkResponseDto;
+import com.knewless.core.emailservice.EmailService;
 import com.knewless.core.exception.UserAlreadyRegisteredException;
 import com.knewless.core.security.model.AuthResponse;
 import com.knewless.core.security.model.LoginRequest;
@@ -16,6 +19,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 @Service
 public class AuthService {
 
@@ -27,17 +34,20 @@ public class AuthService {
 
     private final UserService customUserDetailsService;
 
+    private final EmailService emailService;
+
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public AuthService(AuthenticationManager authenticationManager, TokenProvider tokenProvider,
                        UserRepository userRepository, UserService customUserDetailsService,
-                       PasswordEncoder passwordEncoder) {
+                       PasswordEncoder passwordEncoder, EmailService emailService) {
         this.authenticationManager = authenticationManager;
         this.tokenProvider = tokenProvider;
         this.userRepository = userRepository;
         this.customUserDetailsService = customUserDetailsService;
         this.passwordEncoder = passwordEncoder;
+        this.emailService = emailService;
     }
 
     public AuthResponse login(LoginRequest loginRequest) {
@@ -75,6 +85,33 @@ public class AuthService {
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
         return new RefreshTokenResponse(tokenProvider.createAccessToken(authentication));
+    }
+
+    public boolean getResetLink(String email) {
+        Optional<User> user = userRepository.findByEmail(email);
+        if (user.isEmpty()) {
+            return false;
+        } else {
+            emailService.generateResetAndSendEmail(user.get().getId());
+            return true;
+        }
+    }
+
+    public ValidateResetLinkResponseDto validateLink(UUID id) {
+        return emailService.isResetValid(id);
+    }
+
+    public SavePasswordDtoResponse savePassword(UUID resetId, String password) {
+        var result = emailService.isResetValid(resetId);
+        if (result.isValidLink()==false) {
+            return  SavePasswordDtoResponse.builder().comment("Reset link have been expired").isSuccessfull(false).build();
+        } else {
+            UUID userId = emailService.resets.stream().filter(r->r.getId().equals(resetId)).findFirst().orElseThrow().getUserId();
+            String codedpassword = passwordEncoder.encode(password);
+            userRepository.setPassword(userId, codedpassword);
+            emailService.removeReset(resetId);
+            return SavePasswordDtoResponse.builder().isSuccessfull(true).comment("Password saved").build();
+        }
     }
 
 }

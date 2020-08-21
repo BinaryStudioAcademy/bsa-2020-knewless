@@ -13,7 +13,9 @@ import addCourseSagas from 'screens/AddCourse/sagas';
 import publicAuthorSagas from '../screens/AuthorPublicPage/sagas';
 import appRouterSagas from 'containers/AppRouter/sagas';
 import addPathSagas from '../screens/AddPath/sagas';
+import resetPasswordSagas from '../screens/ResetPassword/sagas';
 import coursePageSagas from '@screens/CoursePage/sagas';
+import savePasswordSagas from '@screens/SavePassword/sagas';
 
 export default function* rootSaga() {
   yield all([
@@ -31,6 +33,8 @@ export default function* rootSaga() {
     publicAuthorSagas(),
     appRouterSagas(),
     addPathSagas(),
-    coursePageSagas()
+    coursePageSagas(),
+    resetPasswordSagas(),
+    savePasswordSagas()
   ]);
 }

@@ -84,6 +84,11 @@ const LoginForm: FunctionComponent<ILoginForm> = ({
           {' '}
           <NavLink exact to="/register">Sign Up</NavLink>
         </Message>
+        <Message className={styles.main_container__reset_message}>
+          Forgot password?
+          {' '}
+          <NavLink exact to="/reset">Reset</NavLink>
+        </Message>
       </Grid.Column>
     </Grid>
   );

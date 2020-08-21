@@ -1,5 +1,6 @@
 package com.knewless.core.emailservice;
 
+import com.knewless.core.auth.Dto.ValidateResetLinkResponseDto;
 import com.knewless.core.emailservice.Dto.DtoType;
 import com.knewless.core.emailservice.Dto.TemporaryDto;
 import com.knewless.core.user.UserRepository;
@@ -10,10 +11,8 @@ import com.knewless.core.messaging.emailMessage.EmailMessage;
 import com.knewless.core.messaging.emailMessage.EmailMessageType;
 import com.knewless.core.messaging.MessageSender;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class EmailService {
@@ -29,8 +28,8 @@ public class EmailService {
     public EmailService(MessageSender messageSender, UserRepository userRepository) {
         this.messageSender = messageSender;
         this.userRepository = userRepository;
-        this.resets = new ArrayList<TemporaryDto>();
-        this.registers = new ArrayList<TemporaryDto>();
+        this.resets = new ArrayList<>();
+        this.registers = new ArrayList<>();
     }
 
     public void generateResetAndSendEmail(UUID userId) {
@@ -42,7 +41,7 @@ public class EmailService {
                 .userId(userId)
                 .build();
         resets.add(dto);
-        String link = domain + "reset/" + dto.getId();
+        String link = domain + "savepassword/" + dto.getId();
         EmailMessage message = EmailMessage.builder().email(email).type(EmailMessageType.RESET).link(link).build();
         messageSender.sendEmail(message);
     }
@@ -59,5 +58,27 @@ public class EmailService {
         String link = domain + "register/" + dto.getId();
         EmailMessage message = EmailMessage.builder().email(email).type(EmailMessageType.REGISTRATION).link(link).build();
         messageSender.sendEmail(message);
+    }
+
+    public ValidateResetLinkResponseDto isResetValid(UUID id) {
+        Optional<TemporaryDto> res = resets.stream().filter(r-> r.getId().equals(id)).findFirst();
+        if (res.isEmpty()) {
+            return ValidateResetLinkResponseDto.builder().email(null).isValidLink(false).build();
+        } else {
+            long diffInMillies  = (new Date().getTime() - res.get().getCreatedAt().getTime());
+            long diff = TimeUnit.MINUTES.convert(diffInMillies, TimeUnit.MILLISECONDS);
+            String email = userRepository.findById(res.get().getUserId())
+                    .orElseThrow().getEmail();
+            if (diff > 10) {
+                return ValidateResetLinkResponseDto.builder().email(email).isValidLink(false).build();
+            } else {
+                return ValidateResetLinkResponseDto.builder().email(email).isValidLink(true).build();
+            }
+        }
+    }
+
+    public void removeReset(UUID id) {
+        Optional<TemporaryDto> res = resets.stream().filter(r-> r.getId().equals(id)).findFirst();
+        if (res.isPresent()) resets.remove(res.get());
     }
 }
