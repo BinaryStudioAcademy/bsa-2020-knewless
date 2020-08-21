@@ -84,7 +84,6 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
 }) => {
   useEffect(() => {
     getSettings();
-    console.log(settings); // you have to delete this
     fetchAllTags();
     return () => resetSettingsMode();
   }, []);
@@ -282,7 +281,7 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
         <Form.Group widths="equal">
           <Form.Input
             fluid
-            className={`${styles.formField} ${!job && styles.roundedBottomField}`}
+            className={`${styles.formField} ${!isJobValid && styles.roundedBottomField}`}
             label="Job title"
             placeholder="Job title"
             value={job}

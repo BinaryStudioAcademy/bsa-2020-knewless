@@ -14,9 +14,7 @@ function* getSettings() {
       yield put(fetchGetStudentSettingsRoutine.success(response));
     }
   } catch (error) {
-    const msg = error?.message || 'An error occurred while loading your settings.';
-    yield put(fetchGetStudentSettingsRoutine.failure(msg));
-    toastr.error(msg);
+    yield put(fetchGetStudentSettingsRoutine.failure(error?.message));
   }
 }
 
