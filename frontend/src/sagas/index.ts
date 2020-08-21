@@ -36,7 +36,7 @@ export default function* rootSaga() {
     publicAuthorSagas(),
     appRouterSagas(),
     addPathSagas(),
-    coursePageSagas(),
+    pathPageSagas(),
     resetPasswordSagas(),
     savePasswordSagas(),
     coursesSagas(),
