@@ -119,16 +119,55 @@ $title_container_height: 55px
   span
     color: #2A2B37
 
-.btn_save
-  margin-left: 1.5em !important
+\:global(.ui.button).btn_save
+  margin-left: auto !important
   width: $width_btn
   height: $height_btn
+  font-family: 'Montserrat', sans-serif
+  font-style: normal
+  font-weight: bold
+  font-size: 1em
+  line-height: 1em
+  margin-right: 1.6em
+  align-items: center
+  color: #FFFFFF
+  background: #454849
+  border-radius: 3px
   margin-top: 0
-  
+
+\:global(.ui.button).button_release
+  border-radius: 3px
+  font-size: 1em
+  width: $width_btn
+  height: $height_btn
+
 .btn_cancel
   width: $width_btn
   height: $height_btn
-  
+
+\:global(.ui.button).button_release_disabled
+  border-radius: 3px
+  width: $width_btn
+  height: $height_btn
+  opacity: 0.5
+  cursor: default
+
+\:global(.ui.button).button_save_disabled
+  width: $width_btn
+  height: $height_btn
+  font-family: 'Montserrat', sans-serif
+  font-style: normal
+  font-weight: bold
+  font-size: 1em
+  line-height: 1em
+  margin-right: 1.6em
+  align-items: center
+  color: #FFFFFF
+  background: #454849
+  border-radius: 3px
+  opacity: 0.5
+  cursor: default !important
+
 .confirmation
   max-width: 400px
 
