@@ -1,11 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { IAuthorCourse } from '../../models/IAuthorCourse';
 import { Card } from 'semantic-ui-react';
-
 import { IAuthorArticles } from '../../models/IAuthorArticles';
-
-import './styles.sass';
+import styles from './styles.module.sass';
+import { RowPlaceholder } from '@components/placeholder/RowPlaceholder';
 
 export interface IAuthorCoursesList {
   articles: IAuthorArticles[];
@@ -14,16 +12,17 @@ export interface IAuthorCoursesList {
 const ArticlesList: React.FunctionComponent<IAuthorCoursesList> = ({
   articles
 }) => (
-  <div className="articlesList">
-    {articles === undefined ? 'No articles here'
-      : articles.map((a, i) => (
-        <Card className="authorArticle-wrapper">
-          <Card.Description className="authorArticle">
+  <>
+    {(!articles || articles?.length < 1)
+      ? (<RowPlaceholder description="Articles will appear later." webOnLeft={false} />)
+      : articles.map(a => (
+        <Card className={styles.articlePreviewWrapper} key={a.id}>
+          <Card.Description className={styles.authorArticle}>
             {a.name}
           </Card.Description>
         </Card>
       ))}
-  </div>
+  </>
 );
 
 const mapStateToProps = (state: any) => ({
