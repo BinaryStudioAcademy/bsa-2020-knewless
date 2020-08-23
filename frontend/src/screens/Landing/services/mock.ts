@@ -4,9 +4,9 @@ export const navigations: INavigationSectionProps[] = [
   {
     title: 'Courses',
     links: [
-      { id: '1', text: 'Java Script beginner', url: '' },
-      { id: '2', text: 'PHP Advanced', url: '' },
-      { id: '3', text: 'Java Basic', url: '' },
+      { id: '1', text: 'Java Beginner', url: '' },
+      { id: '2', text: 'Java Script Beginner', url: '' },
+      { id: '3', text: 'PHP Intermediate', url: '' },
       { id: '4', text: '.NET Advanced', url: '' }
     ]
   },
