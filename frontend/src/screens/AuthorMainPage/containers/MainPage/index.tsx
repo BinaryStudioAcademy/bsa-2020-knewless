@@ -56,8 +56,9 @@ const MainAuthorPage: React.FunctionComponent<IMainAuthorPageProps> = ({
             loading={coursesLoading}
           >
             {(authorCourses && authorCourses.length > 0) ? authorCourses.slice(0, 3).map(c => (
-              <div className={styles.course_card} key={c.name}>
+              <div className={styles.course_card} key={c.id}>
                 <AuthorCourseCard
+                  id={c.id}
                   name={c.name}
                   imageSrc={c.imageSrc}
                 />
