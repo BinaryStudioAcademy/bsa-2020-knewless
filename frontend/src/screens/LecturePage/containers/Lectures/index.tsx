@@ -31,7 +31,7 @@ function necessaryVideo(chosenVideoProps: string, responseData: ICourseData, inc
     if (responseData.id === null) {
       return '';
     }
-    
+
     // This return gives lecture that you have called
     return chooseSource(responseData.lectures.filter(l => l.id === incomingLectureId)[0]);
   }
@@ -90,7 +90,7 @@ const LecturePage: React.FunctionComponent<ILectureProps> = ({
   useInterval(() => autoSave(), AUTOSAVE_MS);
 
   const result = necessaryVideo(chosenVideoId, lecturesData, initialLectureId);
- 
+
   const handlePause = () => {
     setIsPlaying(false);
     triggerSaveTime();
@@ -136,7 +136,7 @@ const LecturePage: React.FunctionComponent<ILectureProps> = ({
           {lecturesData.name}
         </div>
         <div className="authorName">
-          By &nbsp;
+          By&nbsp;
           <Link
             className="authorLink"
             to={`/author/${lecturesData.author.id}`}
