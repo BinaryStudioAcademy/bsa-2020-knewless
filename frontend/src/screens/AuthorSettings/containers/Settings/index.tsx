@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Form } from 'semantic-ui-react';
 import styles from './styles.module.sass';
 import { locationOptions } from './options';
-import { useHistory } from 'react-router-dom';
+import { history } from '@helpers/history.helper';
 import { connect } from 'react-redux';
 import { fetchGetAuthorSettingsRoutine, fetchSetAuthorSettingsRoutine } from '@screens/AuthorSettings/routines';
 import { IAuthorSettings } from 'screens/AuthorSettings/models/IAuthorSettings';
@@ -15,12 +15,10 @@ import {
   BIOGRAPHY_MESSAGE,
   COMPANY_MESSAGE,
   FIRST_NAME_MESSAGE,
-  getTwitterUserFromUrl,
   isValidBiography,
   isValidCompany,
   isValidJob,
   isValidNameSurname,
-  isValidTwitter,
   isValidTwitterUser,
   isValidUrl,
   JOB_MESSAGE,
@@ -51,7 +49,7 @@ const AuthorSettings: React.FunctionComponent<IAuthorSettingsProps> = ({
     getSettings();
     return () => resetSettingsMode();
   }, []);
-  const history = useHistory();
+  const getTwitterUserFromUrl = (url: string): string => url.substring(TWITTER_URL_PREFIX.length);
   const [firstName, setFirstName] = useState(settings.firstName || '');
   const [lastName, setLastName] = useState(settings.lastName || '');
   const [avatar, setAvatar] = useState(settings.avatar);
@@ -80,21 +78,21 @@ const AuthorSettings: React.FunctionComponent<IAuthorSettingsProps> = ({
 
   const [isFirstNameValid, setIsFirstNameValid] = useState(true);
   const [isLastNameValid, setIsLastNameValid] = useState(true);
+  const [isLocationValid, setIsLocationValid] = useState(true);
+  const isRequiredFieldsValid = (): boolean => !!firstName && !!lastName && !!location
+    && isFirstNameValid && isLastNameValid && isLocationValid;
+
   const [isCompanyValid, setIsCompanyValid] = useState(true);
+  const [isJobValid, setIsJobValid] = useState(true);
   const [isWebsiteValid, setIsWebsiteValid] = useState(true);
   const [isTwitterUserValid, setIsTwitterUserValid] = useState(true);
   const [isBiographyValid, setIsBiographyValid] = useState(true);
-  const [isJobValid, setIsJobValid] = useState(true);
-  const [isLocationValid, setIsLocationValid] = useState(true);
-
-  const isRequiredFieldsValid = (): boolean => !!firstName && !!lastName && !!location && !!company && !!job
-    && !!website && !!twitterUser && isFirstNameValid && isLastNameValid && isCompanyValid && isWebsiteValid
-    && isTwitterUserValid && isBiographyValid && isLocationValid && isJobValid;
+  const isNonRequiredFieldsValid = (): boolean => isCompanyValid && isJobValid && isWebsiteValid && isTwitterUserValid
+    && isBiographyValid;
 
   const handleSubmit = e => {
     e.preventDefault();
-    const fullTwitterUrl = TWITTER_URL_PREFIX + twitterUser;
-    if (isRequiredFieldsValid() && isValidTwitter(fullTwitterUrl)) {
+    if (isRequiredFieldsValid() && isNonRequiredFieldsValid()) {
       setUserRole(RoleTypes.AUTHOR);
       const updatedSettings = {
         id: settings.id,
@@ -105,7 +103,7 @@ const AuthorSettings: React.FunctionComponent<IAuthorSettingsProps> = ({
         company,
         job,
         website,
-        twitter: fullTwitterUrl,
+        twitter: (TWITTER_URL_PREFIX + twitterUser),
         biography,
         uploadImage
       };
@@ -118,34 +116,26 @@ const AuthorSettings: React.FunctionComponent<IAuthorSettingsProps> = ({
   };
   const validateFirstName = (newName?: string) => {
     const lastChangeValue = typeof newName === 'string' ? newName : firstName;
-    setIsFirstNameValid(!!firstName && isValidNameSurname(lastChangeValue));
+    setIsFirstNameValid(!!lastChangeValue && isValidNameSurname(lastChangeValue));
   };
   const validateLastName = (newName?: string) => {
     const lastChangeValue = typeof newName === 'string' ? newName : lastName;
     setIsLastNameValid(!!lastChangeValue && isValidNameSurname(lastChangeValue));
   };
   const validateCompany = (newName?: string) => {
-    const lastChangeValue = typeof newName === 'string' ? newName : company;
-    setIsCompanyValid(!!lastChangeValue && isValidCompany(lastChangeValue));
+    setIsCompanyValid(isValidCompany(typeof newName === 'string' ? newName : company));
+  };
+  const validateJob = (newName?: string) => {
+    setIsJobValid(isValidJob(typeof newName === 'string' ? newName : job));
   };
   const validateWebsite = (newName?: string) => {
-    const lastChangeValue = typeof newName === 'string' ? newName : website;
-    setIsWebsiteValid(!!lastChangeValue && isValidUrl(lastChangeValue));
+    setIsWebsiteValid(isValidUrl(typeof newName === 'string' ? newName : website));
   };
   const validateTwitterUser = (newName?: string) => {
-    const lastChangeValue = typeof newName === 'string' ? newName : twitterUser;
-    setIsTwitterUserValid(!!lastChangeValue && isValidTwitterUser(lastChangeValue));
+    setIsTwitterUserValid(isValidTwitterUser(typeof newName === 'string' ? newName : twitterUser));
   };
   const validateBiography = (newName?: string) => {
     setIsBiographyValid(isValidBiography(typeof newName === 'string' ? newName : biography));
-  };
-  const validateLocation = (newName?: string) => {
-    const lastChangeValue = typeof newName === 'string' ? newName : location;
-    setIsLocationValid(!!lastChangeValue && lastChangeValue.length > 1);
-  };
-  const validateJob = (newName?: string) => {
-    const lastChangeValue = typeof newName === 'string' ? newName : job;
-    setIsJobValid(!!lastChangeValue && isValidJob(lastChangeValue));
   };
   return (
     <div className={styles.settings}>
@@ -175,11 +165,7 @@ const AuthorSettings: React.FunctionComponent<IAuthorSettingsProps> = ({
             label="First Name"
             placeholder="First Name"
             value={firstName}
-            onChange={e => {
-              const { value } = e.target;
-              setFirstName(value);
-              validateFirstName(value);
-            }}
+            onChange={e => { setFirstName(e.target.value); validateFirstName(e.target.value); }}
             required
             error={isFirstNameValid ? false : FIRST_NAME_MESSAGE}
             onBlur={() => validateFirstName()}
@@ -190,11 +176,7 @@ const AuthorSettings: React.FunctionComponent<IAuthorSettingsProps> = ({
             label="Last Name"
             placeholder="Last Name"
             value={lastName}
-            onChange={e => {
-              const { value } = e.target;
-              setLastName(value);
-              validateLastName(value);
-            }}
+            onChange={e => { setLastName(e.target.value); validateLastName(e.target.value); }}
             required
             error={isLastNameValid ? false : LAST_NAME_MESSAGE}
             onBlur={() => validateLastName()}
@@ -206,15 +188,9 @@ const AuthorSettings: React.FunctionComponent<IAuthorSettingsProps> = ({
             className={`${styles.formField} ${!isCompanyValid && styles.roundedBottomField}`}
             label="Company name"
             value={company}
-            onChange={e => {
-              const { value } = e.target;
-              setCompany(value);
-              validateCompany(value);
-            }}
+            onChange={e => { setCompany(e.target.value); validateCompany(e.target.value); }}
             placeholder="Company name"
-            required
             error={isCompanyValid ? false : COMPANY_MESSAGE}
-            onBlur={() => validateCompany()}
           />
           <Form.Input
             fluid
@@ -227,7 +203,6 @@ const AuthorSettings: React.FunctionComponent<IAuthorSettingsProps> = ({
               setJob(value);
               validateJob(value);
             }}
-            required
             error={isJobValid ? false : JOB_MESSAGE}
             onBlur={() => validateJob()}
           />
@@ -244,7 +219,6 @@ const AuthorSettings: React.FunctionComponent<IAuthorSettingsProps> = ({
               setWebsite(value);
               validateWebsite(value);
             }}
-            required
             error={isWebsiteValid ? false : URL_MESSAGE}
             onBlur={() => validateWebsite()}
           />
@@ -254,7 +228,6 @@ const AuthorSettings: React.FunctionComponent<IAuthorSettingsProps> = ({
             label="Twitter"
             placeholder="@nickname"
             value={twitterUser}
-            required
             error={isTwitterUserValid ? false : TWITTER_MESSAGE}
             onChange={e => {
               const { value } = e.target;
@@ -280,11 +253,10 @@ const AuthorSettings: React.FunctionComponent<IAuthorSettingsProps> = ({
             onChange={(e, data) => {
               const value = data.value as string;
               setLocation(value);
-              validateLocation(value);
+              setIsLocationValid(!!value);
             }}
             required
             error={isLocationValid ? false : REQUIRED_FIELD_MESSAGE}
-            onBlur={() => validateLocation()}
           />
         </Form.Group>
         <Form.Group widths="equal">
@@ -300,18 +272,20 @@ const AuthorSettings: React.FunctionComponent<IAuthorSettingsProps> = ({
             }}
             placeholder="Tell about yourself"
             error={isBiographyValid ? false : BIOGRAPHY_MESSAGE}
-            onBlur={() => validateBiography()}
           />
         </Form.Group>
         <Form.Group className={`${styles.formField} ${styles.formButtons}`}>
-          <GrayOutlineButton className={styles.Btn} onClick={() => handleCancel()}>Cancel </GrayOutlineButton>
+          <GrayOutlineButton
+            className={styles.Btn}
+            onClick={() => handleCancel()}
+            content="Cancel"
+          />
           <GradientButton
             className={styles.Btn}
             onClick={e => handleSubmit(e)}
-            disabled={!isRequiredFieldsValid()}
-          >
-            Save
-          </GradientButton>
+            disabled={!isRequiredFieldsValid() || !isNonRequiredFieldsValid()}
+            content="Save"
+          />
         </Form.Group>
       </Form>
     </div>

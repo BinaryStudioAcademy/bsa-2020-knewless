@@ -27,7 +27,6 @@ import {
   isValidCourseName,
   REQUIRED_FIELD_MESSAGE
 } from '@helpers/validation.helper';
-import { InlineLoaderWrapper } from '@components/InlineLoaderWrapper';
 
 interface IAddCourseProps {
   lectures: ILecture [];
@@ -280,21 +279,17 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
             </div>
           </div>
           <div className={styles.list_container}>
-            <InlineLoaderWrapper loading={isLecturesLoaded} centered>
-              {!isLecturesLoaded && (
-                <AddCourseDependenciesSelector
-                  selected={selected}
-                  stored={pool}
-                  selectedToStored={removeLectureFromSelected}
-                  storedToSelected={removeLectureFromPool}
-                  dependencyName="lecture"
-                  itemToJsx={itemToJsxWithClick}
-                  sortFn={compareName}
-                  openModalAction={setModalAddOpen}
-                  updateLectures={handleUpdateLectures}
-                />
-              )}
-            </InlineLoaderWrapper>
+            <AddCourseDependenciesSelector
+              selected={selected}
+              stored={pool}
+              selectedToStored={removeLectureFromSelected}
+              storedToSelected={removeLectureFromPool}
+              dependencyName="lecture"
+              itemToJsx={itemToJsxWithClick}
+              sortFn={compareName}
+              openModalAction={setModalAddOpen}
+              updateLectures={handleUpdateLectures}
+            />
           </div>
         </div>
       </div>

@@ -8,13 +8,12 @@ export const LAST_NAME_MESSAGE = `Last name must be 2-40 symbols ${LATIN_LETTER_
 export const COMPANY_MESSAGE = 'Company name must be 2-40 symbols (only Latin letters, numbers, and \'-\' allowed).';
 export const URL_MESSAGE = 'Check your website url correctness.';
 export const TWITTER_MESSAGE = 'Check your twitter account nickname correctness.';
-export const BIOGRAPHY_MESSAGE = `
-Biography can be empty or its minimum length must be 50 symbols ${DIGITS_LATIN_LETTERS_SPEC_CHARS_ONLY}.`;
-export const JOB_MESSAGE = 'Job min length must be 1 symbol (only Latin letters, hyphen and whitespaces allowed).';
+export const BIOGRAPHY_MESSAGE = `Biography maximum length can be 600 symbols ${DIGITS_LATIN_LETTERS_SPEC_CHARS_ONLY}.`;
+export const JOB_MESSAGE = 'Job minimum length must be 2 symbol (only Latin letters, hyphen and whitespaces allowed).';
 export const COURSE_NAME_MESSAGE = `Course name length must be 2-40 symbols ${DIGITS_LATIN_LETTERS_SPEC_CHARS_ONLY}.`;
 export const PATH_NAME_MESSAGE = `Path name length must be 2-40 symbols ${DIGITS_LATIN_LETTERS_SPEC_CHARS_ONLY}.`;
 export const DESCRIPTION_MESSAGE = `
-Description can be empty or its minimum length must be 10 symbols ${DIGITS_LATIN_LETTERS_SPEC_CHARS_ONLY}.`;
+Description minimum length must be 10 symbols ${DIGITS_LATIN_LETTERS_SPEC_CHARS_ONLY}.`;
 export const LECTURE_MESSAGE = `Lecture name must be 3-40 symbols ${DIGITS_LATIN_LETTERS_SPEC_CHARS_ONLY}.`;
 
 export const IMAGE_FORMAT_MESSAGE = 'Supported image formats: jpg, png, jpeg.';
@@ -26,15 +25,15 @@ export const TWITTER_URL_PREFIX = 'https://twitter.com/';
 const emailRegex = /^\w[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~"-]{0,34}@((\[?[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}]?)|(([a-zA-Z0-9][a-zA-Z\-0-9]*\.)+[a-zA-Z]+))$/;
 const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,32}$/;
 const userNameRegex = /^[a-zA-Z]{2,40}$/;
-const companyRegex = /^[a-zA-Z0-9-]{2,40}$/;
-const urlRegex = /^(https?|ftp|file):\/\/[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]/;
-const twitterRegex = /^https(?:s)?:\/\/twitter\.com\/([a-zA-Z0-9_]+)$/;
-const twitterUserRegex = /^[a-zA-Z0-9_]+$/;
-const biographyRegex = /^$|^[\d\D]{50,}$/;
-const jobRegex = /^[a-zA-Z][a-zA-Z- ]+$/;
-const coursePathNameRegex = /^[a-zA-Z0-9!:;=<>@#$&()\\-`.+,"/ ]{2,40}$/;
-const coursePathLectureDescriptionRegex = /^$|^[a-zA-Z0-9!:;=<>@#$&()\\-`.+,"/ ]{10,}$/;
-const lectureNameRegex = /^[a-zA-Z0-9!:;=<>@#$&()\\-`.+,"/ ]{3,40}$/;
+const companyRegex = /^$|^[a-zA-Z0-9-]{2,40}$/;
+const urlRegex = /^$|^(https?):\/\/[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]/;
+const twitterRegex = /^$|^https(?:s)?:\/\/twitter\.com\/([a-zA-Z0-9_]+)$/;
+const twitterUserRegex = /^$|^[a-zA-Z0-9_]+$/;
+const biographyRegex = /^[\d\D]{0,600}$/;
+const jobRegex = /^$|^[a-zA-Z][a-zA-Z- ]+$/;
+const coursePathNameRegex = /^[\d\D]{2,40}$/;
+const coursePathLectureDescriptionRegex = /^$|^[\d\D]{10,}$/;
+const lectureNameRegex = /^[\d\D]{3,40}$/;
 
 export const isValidEmail = (str: string): boolean => emailRegex.test(str) && str.length >= 5 && str.length <= 71;
 export const isValidPassword = (str: string): boolean => passwordRegex.test(str) && str.length >= 8 && str.length <= 32;
@@ -51,4 +50,3 @@ export const isValidPathName = (str: string): boolean => coursePathNameRegex.tes
 export const isValidPathDescription = (str: string): boolean => coursePathLectureDescriptionRegex.test(str);
 export const isValidLectureName = (str: string): boolean => lectureNameRegex.test(str);
 export const isValidLectureDescription = (str: string): boolean => coursePathLectureDescriptionRegex.test(str);
-export const getTwitterUserFromUrl = (url: string): string => url.substring(TWITTER_URL_PREFIX.length);

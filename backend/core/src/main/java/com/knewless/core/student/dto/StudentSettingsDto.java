@@ -24,29 +24,28 @@ public class StudentSettingsDto {
     @Pattern(regexp = "^[a-zA-z]{2,40}$", message = "Last Name must be 2-40 symbols (only Latin letters allowed).")
     private String lastName;
 
-    @NotBlank(message = "Job can't be empty.")
+    @Pattern(regexp = "^$|^[a-zA-Z][a-zA-Z- ]+$", message = "Job minimum length must be 2 symbol. " +
+            "Only Latin letters, hyphen and whitespaces allowed.")
     private String job;
 
     @NotBlank(message = "Location can't be empty.")
     private String location;
 
-    @NotNull(message = "Company can't be null.")
     @Pattern(
-            regexp = "^[a-zA-Z0-9-]{2,40}$",
+            regexp = "^$|^[a-zA-Z0-9-]{2,40}$",
             message = "Company name must be 2-40 symbols (only Latin letters, numbers, and '-' allowed)."
     )
     private String company;
 
-    @NotNull(message = "Website url can't be null.")
     @Pattern(
-            regexp = "^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]",
-            message = "Website url is invalid"
+            regexp = "^$|^(https?)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]",
+            message = "Website url is invalid."
     )
     private String website;
 
     @Pattern(
-            regexp = "^$|^[\\d\\D]{50,}$",
-            message = "Biography can be empty or its minimum length must be 50 symbols. " +
+            regexp = "^$|^[\\d\\D]{0,600}$",
+            message = "Biography maximum length can be 600 symbols. " +
                     "Only Latin letters, numbers and special characters allowed."
     )
     private String biography;
@@ -54,6 +53,7 @@ public class StudentSettingsDto {
     @NotBlank(message = "Direction can't be empty.")
     private String direction;
 
+    @NotNull(message = "Experience can't be null.")
     @DecimalMin(value = "0", message = "Experience must be a single number from 0 to 80.")
     @DecimalMax(value = "80", message = "Experience must be a single number from 0 to 80.")
     private int experience;
@@ -67,7 +67,6 @@ public class StudentSettingsDto {
     @NotBlank(message = "Role can't be empty.")
     private String role;
 
-    @NotBlank(message = "Employment can't be empty.")
     private String employment;
 
     @NotBlank(message = "Education can't be empty.")

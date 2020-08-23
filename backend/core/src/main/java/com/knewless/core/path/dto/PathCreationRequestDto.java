@@ -9,16 +9,17 @@ import java.util.UUID;
 @Data
 public class PathCreationRequestDto {
 
-	@Size(min = 2, max = 40, message = "Path name length must be 2-40 symbols.")
+	@NotBlank(message = "Path name can't be empty.")
 	@Pattern(
-			regexp = "^[a-zA-Z0-9!:;=<>@#$&()\\\\-`.+,\"/ ]{2,40}$",
-			message = "Only digits, Latin letters and special characters allowed."
+			regexp = "^[\\d\\D]{2,40}$",
+			message = "Path name length must be 2-40 symbols. " +
+					"Only digits, Latin letters and special characters allowed."
 	)
 	private String name;
 
 	@Pattern(
-			regexp = "^$|^[a-zA-Z0-9!:;=<>@#$&()\\\\-`.+,\"/ ]{10,}$",
-			message = "Description can be empty or its minimum length must be 10 symbols. " +
+			regexp = "^$|^[\\d\\D]{10,}$",
+			message = "Path description minimum length must be 10 symbols. " +
 					"Only digits, Latin letters and special characters allowed."
 	)
 	private String description;
