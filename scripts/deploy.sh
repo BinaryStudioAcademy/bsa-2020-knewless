@@ -3,6 +3,7 @@ scp ./.docker/docker-compose.yml $vm_user@$server_ip:~/.docker
 
 ssh $vm_user@$server_ip "sudo docker pull bsa2020knewless/dockerhub:api"
 ssh $vm_user@$server_ip "sudo docker pull bsa2020knewless/dockerhub:fileprocessor"
+ssh $vm_user@$server_ip "sudo docker pull bsa2020knewless/dockerhub:emailsender"
 ssh $vm_user@$server_ip "sudo docker pull bsa2020knewless/dockerhub:push"
 ssh $vm_user@$server_ip "sudo docker pull bsa2020knewless/dockerhub:client"
 ssh $vm_user@$server_ip "sudo docker-compose -f ~/.docker/docker-compose.yml up -d"
