@@ -78,7 +78,7 @@ const CourseMenu: React.FunctionComponent<ICourseMenuProps> = ({
                 className={styles.lecture}
                 onClick={() => {
                   if (!isAuthorized) openLoginModal(`/lecture/${lec.id}`);
-                  else history.push(`/lecture/${lec.id}`)
+                  else history.push(`/lecture/${lec.id}`);
                 }}
               >
                 <LectureCard
