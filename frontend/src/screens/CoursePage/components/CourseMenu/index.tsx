@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { ReactComponent as ArchiveIcon } from '../../icons/archive.svg';
-import { ReactComponent as DownloadIcon } from '../../icons/download.svg';
+import { ReactComponent as DiscussionIcon } from '../../icons/discussion.svg';
 import { ReactComponent as InfoIcon } from '../../icons/info.svg';
 import styles from './styles.module.sass';
 import { LectureCard } from '@screens/AddCourse/components/LectureCard';
@@ -51,7 +51,7 @@ const CourseMenu: React.FunctionComponent<ICourseMenuProps> = ({
             className={`${styles.menu__button}
               ${selected === 2 ? styles.button_selected : styles.button_ordinary}`}
           >
-            <DownloadIcon className={styles.icon_stroke} />
+            <DiscussionIcon className={styles.icon_fill} />
             <p>Discussion</p>
           </button>
           {
