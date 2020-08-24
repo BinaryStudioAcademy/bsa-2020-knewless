@@ -40,6 +40,21 @@ public class PathController {
         return ResponseEntity.ok(pathService.getLatestPathsByAuthorId(authorId));
     }
 
+    @GetMapping("/author")
+    private List<PathDto> getAuthorPathsByUser(@CurrentUser UserPrincipal userPrincipal) {
+        return pathService.getAuthorPathsByUser(userPrincipal);
+    }
+
+    @GetMapping("/student")
+    private List<PathDto> getStudentPathsByUser(@CurrentUser UserPrincipal userPrincipal) {
+        return pathService.getStudentPathsByUser(userPrincipal);
+    }
+
+    @GetMapping("/tag/{tagId}")
+    private List<PathDto> getPathsByTag(@PathVariable UUID tagId) {
+        return pathService.getPathsByTag(tagId);
+    }
+
     @PutMapping("create")
     public ResponseEntity<?> create(@Valid @RequestBody PathCreationRequestDto requestDto,
                                     @CurrentUser UserPrincipal userPrincipal,

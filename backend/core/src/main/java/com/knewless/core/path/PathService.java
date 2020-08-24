@@ -11,8 +11,12 @@ import com.knewless.core.path.dto.PathCreationRequestDto;
 import com.knewless.core.path.dto.PathDto;
 import com.knewless.core.path.dto.PathDurationDto;
 import com.knewless.core.path.model.Path;
+import com.knewless.core.security.oauth.UserPrincipal;
 import com.knewless.core.subscription.SubscriptionService;
 import com.knewless.core.tag.TagRepository;
+import com.knewless.core.user.UserService;
+import com.knewless.core.user.role.model.Role;
+import com.knewless.core.user.role.model.RoleType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -35,17 +39,20 @@ public class PathService {
 	private final AuthorRepository authorRepository;
 	private final EsService esService;
 	private final SubscriptionService subscriptionService;
+	private final UserService userService;
 
 	@Autowired
 	public PathService(PathRepository pathRepository, CourseRepository courseRepository,
 					   TagRepository tagRepository, AuthorRepository authorRepository,
-					   SubscriptionService subscriptionService, EsService esService) {
+					   SubscriptionService subscriptionService, EsService esService,
+					   UserService userService) {
 		this.pathRepository = pathRepository;
 		this.courseRepository = courseRepository;
 		this.tagRepository = tagRepository;
 		this.authorRepository = authorRepository;
 		this.subscriptionService = subscriptionService;
 		this.esService = esService;
+		this.userService = userService;
 	}
 
 
@@ -104,5 +111,37 @@ public class PathService {
 
 		CompletableFuture.runAsync(() -> esService.put(EsDataType.PATH, savedPath));
 		return result;
+	}
+
+	public List<PathDto> getPathsByTag(UUID tagId) {
+		return pathRepository.getPathsByTagId(tagId)
+				.stream().map(p -> {
+					var path = PathMapper.MAPPER.pathQueryResultToPathDto(p);
+					path.setDuration(getDuration(p.getMinutes()));
+					return path;
+				}).collect(Collectors.toList());
+	}
+
+	public List<PathDto> getAuthorPathsByUser(UserPrincipal userPrincipal) {
+		Role role = userService.getUserRole(userPrincipal.getEmail());
+		if (role.getName() != RoleType.AUTHOR) {
+			return  List.of();
+		}
+		Author author = authorRepository.findByUserId(userPrincipal.getId()).orElseThrow();
+		return pathRepository.getAllPathsByAuthorId(author.getId())
+				.stream().map(p -> {
+					var path = PathMapper.MAPPER.pathQueryResultToPathDto(p);
+					path.setDuration(getDuration(p.getMinutes()));
+					return path;
+				}).collect(Collectors.toList());
+	}
+
+	public List<PathDto> getStudentPathsByUser(UserPrincipal userPrincipal) {
+		return pathRepository.getPathsByUserId(userPrincipal.getId())
+				.stream().map(p -> {
+					var path = PathMapper.MAPPER.pathQueryResultToPathDto(p);
+					path.setDuration(getDuration(p.getMinutes()));
+					return path;
+				}).collect(Collectors.toList());
 	}
 }

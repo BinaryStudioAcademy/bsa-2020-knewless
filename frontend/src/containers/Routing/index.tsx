@@ -29,6 +29,7 @@ import { connect } from 'react-redux';
 import { loginRoutine } from '@screens/Home/routines';
 import { openLoginModalRoutine } from '@containers/LoginModal/routines';
 import { IBindingAction, IBindingCallback1 } from '@models/Callbacks';
+import PathsPage from '@screens/Paths/containers/PathsPage';
 
 export interface IRoutingProps {
   isLoading: boolean;
@@ -85,6 +86,7 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({
           <PublicRoute exact path="/oauth/redirect" component={handler} />
           <PublicRoute exact path="/register" component={RegisterPage} />
           <PublicRoute exact path="/courses" component={CoursesPage} />
+          <PublicRoute exact path="/paths" component={PathsPage} />
           <PrivateRoute exact path="/author/:authorId" component={AuthorPublicPage} />
           <PrivateRoute exact path="/lecture/:lectureId" component={LecturePage} />
           <PrivateRoute exact path="/add_path" roles={[RoleTypes.AUTHOR]} component={AddPathPage} />
