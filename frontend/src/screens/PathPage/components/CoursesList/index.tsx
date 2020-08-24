@@ -4,8 +4,14 @@ import styles from './styles.module.sass';
 import { courses } from '@screens/PathPage/services/mock';
 import { CourseCard } from '@screens/PathPage/components/CourseCard';
 
+const courseLevels = {
+  BEGINNER: [],
+  INTERMEDIATE: [],
+  ADVANCED: []
+};
+
 const CoursesList = () => {
-  const groupedCourses = courses.reduce((result, course) => {
+  const groupedCourses = courses.reduce((result = courseLevels, course) => {
     const { level } = course;
     const res = result;
     if (!Object.prototype.hasOwnProperty.call(result, level)) {
@@ -25,7 +31,17 @@ const CoursesList = () => {
       setSelected([...selected, i]);
     }
   };
-  const getCourses = () => Object.keys(groupedCourses).sort().map((key, i) => (
+  const compareCourseLevels = (a, b) => {
+    switch (a) {
+      case 'BEGINNER':
+        return -1;
+      case 'INTERMEDIATE':
+        return 0;
+      default:
+        return 1;
+    }
+  };
+  const getCourses = () => Object.keys(groupedCourses).sort(compareCourseLevels).map((key, i) => (
     <Accordion fluid>
       <Accordion.Title
         active={selected.includes(i)}
