@@ -34,7 +34,7 @@ const SavePassword: React.FunctionComponent<ISavePasswordProps> = ({
   const resetId = match.params.resetid;
   useEffect(() => {
       checkLink(resetId);
-  }, [checkLink]);
+  }, [checkLink, resetId]);
 
   
   const [inputStyle1, setInputStyle1] = useState(styles.custominput);
@@ -75,10 +75,6 @@ const SavePassword: React.FunctionComponent<ISavePasswordProps> = ({
 
   const validatePassword = () => {
     setIsValid(isValidNew(password));
-  }
-
-  const handleBack = () => {
-    history.push('/login');
   }
 
   if (isSavedSuccessfull) {

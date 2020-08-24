@@ -65,11 +65,6 @@ export const AddCourseFilterableList: React.FC<IAddCourseFilterableListProps> = 
           ))}
         </div>
       )}
-      <div className={scrolling ? styles.scrolled : ''}>
-        {items.filter(i => filterByName(i, filterString)).sort(handleSort).map(item => (
-          itemToJsx(item)
-        ))}
-      </div>
     </div>
   );
 };

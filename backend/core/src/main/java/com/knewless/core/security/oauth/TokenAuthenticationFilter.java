@@ -1,5 +1,6 @@
 package com.knewless.core.security.oauth;
 
+import com.knewless.core.exception.custom.EmailNotVerifiedException;
 import com.knewless.core.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,8 +32,10 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
             if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
                 UUID userId = tokenProvider.getUserIdFromToken(jwt);
-
                 UserDetails userDetails = customUserDetailsService.loadUserById(userId);
+                if (!customUserDetailsService.isEmailVerified(userId) && !request.getServletPath().equals("/user/me")) {
+                    throw new EmailNotVerifiedException("You couldn't make this request with non-verified e-mail");
+                }
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 

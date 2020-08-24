@@ -11,4 +11,5 @@ public class UserDto {
     private String nickname;
     private RoleDto role;
     private String avatar;
+    private boolean isEmailVerified;
 }

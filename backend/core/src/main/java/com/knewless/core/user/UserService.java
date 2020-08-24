@@ -75,6 +75,12 @@ public class UserService implements UserDetailsService {
         }
     }
 
+    public boolean isEmailVerified(UUID id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
+        return user.isEmailVerified();
+    }
+
     public Role getUserRole(String email) {
         return userRepository.getUserRoleId(email);
     }

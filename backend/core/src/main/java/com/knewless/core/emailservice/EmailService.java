@@ -55,7 +55,7 @@ public class EmailService {
                 .userId(userId)
                 .build();
         registers.add(dto);
-        String link = domain + "register/" + dto.getId();
+        String link = domain + "verifyemail/" + dto.getId();
         EmailMessage message = EmailMessage.builder().email(email).type(EmailMessageType.REGISTRATION).link(link).build();
         messageSender.sendEmail(message);
     }
@@ -80,5 +80,15 @@ public class EmailService {
     public void removeReset(UUID id) {
         Optional<TemporaryDto> res = resets.stream().filter(r-> r.getId().equals(id)).findFirst();
         if (res.isPresent()) resets.remove(res.get());
+    }
+
+    public TemporaryDto getRegisterDto(UUID id) {
+        Optional<TemporaryDto> result = registers.stream().filter(r-> r.getId().equals(id)).findFirst();
+        return result.isPresent()? result.get() : null;
+    }
+
+    public void removeRegister(UUID id) {
+        Optional<TemporaryDto> res = registers.stream().filter(r-> r.getId().equals(id)).findFirst();
+        if (res.isPresent()) registers.remove(res.get());
     }
 }

@@ -21,6 +21,7 @@ import { IBindingAction, IBindingCallback1 } from 'models/Callbacks';
 import { resetSettingsModeRoutine, setUserRoleRoutine } from 'containers/AppRouter/routines';
 import { RoleTypes } from 'containers/AppRouter/models/IRole';
 import AvatarUploader from '@components/avatar/AvatarUploader';
+import { isImage } from '@screens/AddCourse/services/helper.service';
 import {
   BIOGRAPHY_MESSAGE,
   COMPANY_MESSAGE,
@@ -134,8 +135,11 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
   }, [allTags]);
 
   const handleUploadFile = file => {
-    setUploadImage(file);
-    setAvatar(URL.createObjectURL(file));
+    const thisFile: File = file;
+    if (thisFile && isImage(thisFile.name)) {
+      setUploadImage(thisFile);
+      setAvatar(URL.createObjectURL(thisFile));
+    }
   };
 
   const [isFirstNameValid, setIsFirstNameValid] = useState(true);

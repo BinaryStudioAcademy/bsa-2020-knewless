@@ -2,6 +2,7 @@ package com.knewless.core.auth;
 
 import com.knewless.core.auth.Dto.SavePasswordDtoRequest;
 import com.knewless.core.auth.Dto.SavePasswordDtoResponse;
+import com.knewless.core.auth.Dto.VerifyEmailResponseDto;
 import com.knewless.core.exception.UserAlreadyRegisteredException;
 import com.knewless.core.security.model.LoginRequest;
 import com.knewless.core.security.model.SignUpRequest;
@@ -66,7 +67,9 @@ public class AuthController {
 
     @GetMapping("/reset")
     public ResponseEntity<?> getResetLink(@Valid @RequestParam String email) {
-        return ResponseEntity.ok(authService.getResetLink(email));
+        var result = authService.getResetLink(email);
+        System.out.println(email + " " + result);
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/checkreset")
@@ -79,5 +82,9 @@ public class AuthController {
         return authService.savePassword(request.getResetId(), request.getPassword());
     }
 
+    @GetMapping("/verifymail")
+    public VerifyEmailResponseDto verifyEmail(@Valid @RequestParam UUID id) {
+        return authService.verifyEmail(id);
+    }
 
 }

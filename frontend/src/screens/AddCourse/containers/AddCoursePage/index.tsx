@@ -36,6 +36,7 @@ interface IAddCourseProps {
   fetchLectures: IBindingAction;
   saveCourse: IBindingCallback1<ICourse>;
   authorName: string;
+  authorId: string;
 }
 
 const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
@@ -43,7 +44,8 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
   fetchLectures: getLectures,
   saveCourse: save,
   isLecturesLoaded,
-  authorName
+  authorName,
+  authorId
 }) => {
   const history = useHistory();
   const [selected, setSelected] = useState(Array<ILecture>());
@@ -67,7 +69,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
         key={lecture.id}
         onClick={() => click(lecture)}
         isSelected={isSelected}
-        lectureURL={lecture.lectureURL}
+        lectureURL={lecture.urlOrigin}
       />
     );
   };
@@ -239,6 +241,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
                 tags={['tag1', 'tag2', 'tag3']}
                 rating={0}
                 image={previewImage}
+                authorId={authorId}
                 lecturesNumber={selected.length}
                 name={courseName}
                 level={level}
@@ -280,8 +283,8 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
             </div>
           </div>
           <div className={styles.list_container}>
-            <InlineLoaderWrapper loading={isLecturesLoaded} centered>
-              {!isLecturesLoaded && (
+            <InlineLoaderWrapper loading={!isLecturesLoaded} centered>
+              {isLecturesLoaded && (
                 <AddCourseDependenciesSelector
                   selected={selected}
                   stored={pool}
@@ -310,10 +313,11 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
 const mapStateToProps = (state: IAppState) => {
   const { lectures, isLecturesLoaded, courseId } = state.addcourse.data;
   const { appRouter } = state;
-  const { firstName, lastName } = state.authorMainPage.data.author;
+  const { firstName, lastName, id } = state.authorMainPage.data.author;
   return {
     userId: appRouter.user.id,
     authorName: `${firstName} ${lastName}`,
+    authorId: id,
     courseId,
     lectures,
     isLecturesLoaded,
