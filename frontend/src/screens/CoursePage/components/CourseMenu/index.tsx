@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import { ReactComponent as ArchiveIcon } from '../../icons/archive.svg';
 import { ReactComponent as DiscussionIcon } from '../../icons/discussion.svg';
 import { ReactComponent as InfoIcon } from '../../icons/info.svg';
@@ -22,7 +21,6 @@ const CourseMenu: React.FunctionComponent<ICourseMenuProps> = ({
   openLoginModal
 }) => {
   const [selected, setSelected] = useState(0);
-  const history = useHistory();
   return (
     <div className={styles.menu}>
       <div className={styles.menu__header}>
@@ -78,7 +76,7 @@ const CourseMenu: React.FunctionComponent<ICourseMenuProps> = ({
                 className={styles.lecture}
                 onClick={() => {
                   if (!isAuthorized) openLoginModal(`/lecture/${lec.id}`);
-                  else history.push(`/lecture/${lec.id}`);
+                  else window.open(`/lecture/${lec.id}`);
                 }}
               >
                 <LectureCard
