@@ -1,209 +1,210 @@
 body, #root
-    height: 100vh
+  height: 100vh
 
 @mixin linear-gradient($element, $thick, $direction, $fromColor, $toColor)
-    #{$element}: $thick solid transparent
-    border-image: linear-gradient($direction, $fromColor, $toColor)
-    border-image-slice: 1
+  #{$element}: $thick solid transparent
+  border-image: linear-gradient($direction, $fromColor, $toColor)
+  border-image-slice: 1
 
 .ui.secondary.pointing.menu.lecturesMenu
-    padding: 0
-    height: 12%
-    @include linear-gradient(border-bottom, 1px, 120.32deg, rgb(0, 132, 248) 9.02%, rgb(255, 133, 118) 90.81%)
-    @include linear-gradient(border-top, 1px, 120.32deg, rgb(0, 132, 248) 9.02%, rgb(255, 133, 118) 90.81%)
+  padding: 0
+  height: 12%
+  @include linear-gradient(border-bottom, 1px, 120.32deg, rgb(0, 132, 248) 9.02%, rgb(255, 133, 118) 90.81%)
+  @include linear-gradient(border-top, 1px, 120.32deg, rgb(0, 132, 248) 9.02%, rgb(255, 133, 118) 90.81%)
 
 .ui.secondary.pointing.menu.lecturesMenu .item
-    color: white
-    height: 100%
-    display: flex
-    justify-content: center
-    font-size: 16px
-    border-bottom: 3px solid transparent
-    margin: 0 !important
+  color: white
+  height: 100%
+  display: flex
+  justify-content: center
+  font-size: 16px
+  border-bottom: 3px solid transparent
+  margin: 0 !important
 
-.ui.secondary.pointing.menu.lecturesMenu  .item:not(active):hover
-    color: white
-    border-bottom: 4px solid transparent
-    background: #36405acc
+.ui.secondary.pointing.menu.lecturesMenu .item:not(active):hover
+  color: white
+  border-bottom: 4px solid transparent
+  background: #36405acc
 
-.ui.secondary.pointing.menu.lecturesMenu  .active.item, .ui.secondary.pointing.menu .active.item.lecturesButtonStyle
-    color: white
-    @include linear-gradient(border-bottom, 3px, 70.32deg, rgb(0, 132, 248) 9.02%, rgb(255, 133, 118) 90.81%)
+.ui.secondary.pointing.menu.lecturesMenu .active.item, .ui.secondary.pointing.menu .active.item.lecturesButtonStyle
+  color: white
+  @include linear-gradient(border-bottom, 3px, 70.32deg, rgb(0, 132, 248) 9.02%, rgb(255, 133, 118) 90.81%)
 
-.ui.secondary.pointing.menu.lecturesMenu  .active.item:hover
-    color: white
-    @include linear-gradient(border-bottom, 4px, 45.32deg, rgb(0, 132, 248) 9.02%, rgb(255, 133, 118) 90.81%)
+.ui.secondary.pointing.menu.lecturesMenu .active.item:hover
+  color: white
+  @include linear-gradient(border-bottom, 4px, 45.32deg, rgb(0, 132, 248) 9.02%, rgb(255, 133, 118) 90.81%)
 
 .item.lecturesButtonStyle
-    width: 40%
+  width: 40%
 
 .mainContainer
-    display: grid
-    height: 100vh
-    grid-template-columns: 70% 30%
-    grid-template-rows: 12% 4% 84%
-    grid-template-areas: " player courseName" " player authorName " " player lecturesList "
-    overflow-y: hidden !important
+  display: grid
+  height: 100vh
+  grid-template-columns: 70% 30%
+  grid-template-rows: 12% 4% 84%
+  grid-template-areas: " player courseName" " player authorName " " player lecturesList "
+  overflow-y: hidden !important
 
 .player
-    grid-area: player
-    position: relative
-    padding-top: 56.25%
+  grid-area: player
+  position: relative
+  padding-top: 56.25%
 
 .courseName
-    grid-area: courseName
-    display: flex
-    align-items: center
-    padding-left: 6%
-    background: #182033
-    color: white
-    border: 1px white
-    font-size: 27px
-    line-height: 100% !important
+  grid-area: courseName
+  display: flex
+  align-items: center
+  padding-left: 6%
+  background: #182033
+  color: white
+  border: 1px white
+  font-size: 27px
+  line-height: 100% !important
 
 .authorName
-    grid-area: authorName
-    display: flex
-    align-items: flex-start
-    justify-content: left
-    padding-left: 6%
-    background: #182033
-    color: white
+  grid-area: authorName
+  display: flex
+  align-items: flex-start
+  justify-content: left
+  padding-left: 6%
+  background: #182033
+  color: white
 
-.authorLink
-    color: white
-
-.authorLink:hover
-    font-weight: bold
-    color: white
+  .authorLink
+    font-size: 1em
+    text-decoration: none
+    color: #58C2F1
 
 .lecturesList
-    grid-area: lecturesList
-    background: #182033
-    color: white
+  grid-area: lecturesList
+  background: #182033
+  color: white
 
 .react-player
-    position: absolute
-    top: 0
-    left: 0
+  position: absolute
+  top: 0
+  left: 0
 
 .ui.segment
-    background: #182033
-    border-radius: 0 !important
+  background: #182033
+  border-radius: 0 !important
 
 .segmentStyle
-    overflow: auto
-    height: 88% !important
-    margin: 0 !important
-    padding: 0 !important
+  overflow: auto
+  height: 88% !important
+  margin: 0 !important
+  padding: 0 !important
 
 .lecturesMenu
-    height: 10%
-    margin: 0 !important
-    min-height: 0 !important
+  height: 10%
+  margin: 0 !important
+  min-height: 0 !important
 
 .ui.card.lecture, .ui.link.card.lecture
-    width: 100%
-    height: 5.1vw
-    margin: 0 !important
-    border-radius: 0 !important
-    background: #182033
-    display: grid
-    grid-template-columns: 17% 83%
-    grid-template-rows: 55% 45%
-    grid-template-areas: " number description" " number duration "
-    box-shadow: none !important
-    transform: none !important
-    border-bottom: 2px  solid
-    border-bottom-color: #434558
+  width: 100%
+  height: 5.1vw
+  margin: 0 !important
+  border-radius: 0 !important
+  background: #182033
+  display: grid
+  grid-template-columns: 17% 83%
+  grid-template-rows: 55% 45%
+  grid-template-areas: " number description" " number duration "
+  box-shadow: none !important
+  transform: none !important
+  border-bottom: 2px solid
+  border-bottom-color: #434558
 
-.ui.card.lecture.active 
-    background: #283658cb !important
+.ui.card.lecture.active
+  background: #283658cb !important
 
 .ui.card.lecture:hover, a.ui.card.lecture.active:hover
-    background: #36405acc !important
-    border-bottom: 2px  solid #434558
-.ui.card.lecture:hover  .numberText
-    background: #36405acc !important   
+  background: #36405acc !important
+  border-bottom: 2px solid #434558
+
+.ui.card.lecture:hover .numberText
+  background: #36405acc !important
+
 a.ui.card.lecture.active:hover .numberText
-    background: #36405acc !important
+  background: #36405acc !important
+
 a.ui.card.lecture.active .cardNumber
-    height: 55%
-    width: 55%
-    padding: 2px
-    border-radius: 50% !important
-    background: linear-gradient(60.32deg, rgb(0, 132, 248) 9.02%, rgb(255, 133, 118) 90.81%)
-    display: flex
-    align-items: center
-    justify-content: center
+  height: 55%
+  width: 55%
+  padding: 2px
+  border-radius: 50% !important
+  background: linear-gradient(60.32deg, rgb(0, 132, 248) 9.02%, rgb(255, 133, 118) 90.81%)
+  display: flex
+  align-items: center
+  justify-content: center
 
 a.ui.card.lecture.active .numberText
-    background: #283658cb !important
+  background: #283658cb !important
 
 .ui.card.lecture:hover .cardNumber
-    background: #9a9cb2
+  background: #9a9cb2
 
 .cardNumber
-    height: 55%
-    width: 55%
-    padding: 2px
-    border-radius: 50% !important
-    background: #cccccc
-    display: flex
-    align-items: center
-    justify-content: center
+  height: 55%
+  width: 55%
+  padding: 2px
+  border-radius: 50% !important
+  background: #cccccc
+  display: flex
+  align-items: center
+  justify-content: center
 
 .numberText
-    width: 100%
-    height: 100%
-    margin: auto
-    border-radius: 50% !important
-    background: #182033
-    display: flex
-    align-items: center
-    justify-content: center
-    font-size:  1.15em
-    color: #f5f5f5
+  width: 100%
+  height: 100%
+  margin: auto
+  border-radius: 50% !important
+  background: #182033
+  display: flex
+  align-items: center
+  justify-content: center
+  font-size: 1.15em
+  color: #f5f5f5
 
 .numberWrapper
-    grid-area: number
-    display: flex
-    align-items: center
-    justify-content: center
+  grid-area: number
+  display: flex
+  align-items: center
+  justify-content: center
 
 .videoDescription
-    grid-area: description
-    display: flex
-    align-items: flex-end
+  grid-area: description
+  display: flex
+  align-items: flex-end
 
 .descriptionText
-    height: 100%
-    display: flex
-    align-items: flex-end
-    justify-content: left
-    font-size: 1.2em
-    color: #f5f5f5
-    padding-bottom: 0.5% !important
+  height: 100%
+  display: flex
+  align-items: flex-end
+  justify-content: left
+  font-size: 1.2em
+  color: #f5f5f5
+  padding-bottom: 0.5% !important
 
 .videoDuration
-    grid-area: duration
-    height: 100%
-    width: 100%
-    padding: 0 !important
-    margin-top: 7px !important
-    margin-bottom: 5px !important
-    display: flex
-    align-items: flex-start
-    justify-content: left
+  grid-area: duration
+  height: 100%
+  width: 100%
+  padding: 0 !important
+  margin-top: 7px !important
+  margin-bottom: 5px !important
+  display: flex
+  align-items: flex-start
+  justify-content: left
 
 .ui.card.lecture .meta
-    height: 100%
-    width: 100%
-    display: flex
-    justify-content: left
-    align-items: flex-start
-    color: #bcbdcc
-    padding: 1% !important
+  height: 100%
+  width: 100%
+  display: flex
+  justify-content: left
+  align-items: flex-start
+  color: #bcbdcc
+  padding: 1% !important
 
 .ui.card.lecture .meta *
-    margin-right: 1% !important
+  margin-right: 1% !important
