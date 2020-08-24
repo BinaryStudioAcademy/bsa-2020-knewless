@@ -8,8 +8,8 @@ import { GradientButton } from 'components/buttons/GradientButton';
 import styles from './styles.module.sass';
 import AuthorPublicMenu from './authorPublicMenu';
 import { IUser } from '@containers/AppRouter/models/IUser';
-import noAvatar from '@images/no_avatar.jpg';
 import AvatarWithGradient from '@components/avatar/AvatarWithBackground';
+import { InlineLoaderWrapper } from '@components/InlineLoaderWrapper';
 
 export interface IAuthorPublic {
   match: any;
@@ -18,10 +18,11 @@ export interface IAuthorPublic {
   followAuthor: IBindingCallback1<string>;
   unfollowAuthor: IBindingCallback1<string>;
   user: IUser;
+  loading: boolean;
 }
 
 const AuthorPublicPage: React.FunctionComponent<IAuthorPublic> = ({
-  match, fetchAuthorData, authorData, followAuthor, unfollowAuthor, user
+  match, fetchAuthorData, authorData, followAuthor, unfollowAuthor, user, loading
 }) => {
   useEffect(() => {
     fetchAuthorData(match.params.authorId);
@@ -38,53 +39,55 @@ const AuthorPublicPage: React.FunctionComponent<IAuthorPublic> = ({
     <div className={styles.page}>
       <div className={styles.wideContainer}>
         <div className={styles.authorMainContainer}>
-          <div className={styles.authorAvatarWrapper}>
-            <AvatarWithGradient
-              className={styles.authorPublicAvatar}
-              imageSrc={authorData.avatar || noAvatar}
-              alt={`${authorData.firstName} ${authorData.lastName} avatar`}
-            />
-          </div>
-          <div className={styles.authorMainInfoWrapper}>
-            <div className={styles.authorNamePublicPage}>
-              {`${authorData.firstName} ${authorData.lastName}`}
+          <InlineLoaderWrapper loading={loading} centered={false}>
+            <div className={styles.authorAvatarWrapper}>
+              <AvatarWithGradient
+                className={styles.authorPublicAvatar}
+                imageSrc={authorData.avatar}
+                alt={`${authorData.firstName} ${authorData.lastName} avatar`}
+              />
             </div>
-            {authorData.schoolName !== '' && (
-              <div className={styles.authorKnewlessStatic}>
-                <Link className={styles.cardSchoolLinkWrapper} to={`/school/${authorData.schoolId}`}>
-                  {`Author in ${authorData.schoolName}`}
-                </Link>
+            <div className={styles.authorMainInfoWrapper}>
+              <div className={styles.authorNamePublicPage}>
+                {`${authorData.firstName} ${authorData.lastName}`}
               </div>
-            )}
-            {!isSelfPublicPage && authorData.printFollowButton && (
-              <div className={styles.buttonsFollowLikeAuthor}>
-                <GradientButton className={styles.authorFollowButton} onClick={handleOnClickFollow}>
-                  <div className={styles.textButtonFollow}>Follow</div>
-                </GradientButton>
-              </div>
-            )}
-            {!isSelfPublicPage && !authorData.printFollowButton && (
-              <div className={styles.buttonsFollowLikeAuthor}>
-                <GradientButton className={styles.authorFollowButton} onClick={handleOnClickUnfollow}>
-                  <div className={styles.unfollow}>
-                    <div className={styles.textButtonUnfollow}>
-                      Following
+              {authorData.schoolName !== '' && (
+                <div className={styles.authorKnewlessStatic}>
+                  <Link className={styles.cardSchoolLinkWrapper} to={`/school/${authorData.schoolId}`}>
+                    {`Author in ${authorData.schoolName}`}
+                  </Link>
+                </div>
+              )}
+              {!isSelfPublicPage && authorData.printFollowButton && (
+                <div className={styles.buttonsFollowLikeAuthor}>
+                  <GradientButton className={styles.authorFollowButton} onClick={handleOnClickFollow}>
+                    <div className={styles.textButtonFollow}>Follow</div>
+                  </GradientButton>
+                </div>
+              )}
+              {!isSelfPublicPage && !authorData.printFollowButton && (
+                <div className={styles.buttonsFollowLikeAuthor}>
+                  <GradientButton className={styles.authorFollowButton} onClick={handleOnClickUnfollow}>
+                    <div className={styles.unfollow}>
+                      <div className={styles.textButtonUnfollow}>
+                        Following
+                      </div>
                     </div>
-                  </div>
-                </GradientButton>
+                  </GradientButton>
+                </div>
+              )}
+              <div className={styles.subscribersNumber}>
+                <p className={styles.authorNumberFollowers}>
+                  {authorData.numberOfSubscribers}
+                </p>
+                &nbsp; followers
               </div>
-            )}
-            <div className={styles.subscribersNumber}>
-              <p className={styles.authorNumberFollowers}>
-                {authorData.numberOfSubscribers}
-              </p>
-              &nbsp; followers
+              <div className={styles.authorBiography}>
+                <p>ABOUT AUTHOR</p>
+                <p>{authorData.biography}</p>
+              </div>
             </div>
-            <div className={styles.authorBiography}>
-              <p>ABOUT AUTHOR</p>
-              <p>{authorData.biography}</p>
-            </div>
-          </div>
+          </InlineLoaderWrapper>
           <div className={styles.cardsAuthorPublicPageWrapper}>
             <div className={styles.cardsGridLines}>
               <div className={styles.cardCoursesNumberWrapper}>
@@ -130,7 +133,8 @@ const AuthorPublicPage: React.FunctionComponent<IAuthorPublic> = ({
 
 const mapStateToProps = (state: any) => ({
   authorData: state.authorPublicData.authorData,
-  user: state.appRouter.user
+  user: state.appRouter.user,
+  loading: state.authorPublicData.requests.dataRequest.loading
 });
 
 const mapDispatchToProps = {
