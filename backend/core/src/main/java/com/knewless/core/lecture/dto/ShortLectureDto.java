@@ -21,4 +21,4 @@ public class ShortLectureDto {
     private int timeMinutes;
 }
 
-//Dto for reusing lectures in different courses
+//dto for reusing lectures in different courses

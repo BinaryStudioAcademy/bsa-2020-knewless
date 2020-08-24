@@ -96,6 +96,22 @@ services:
         max-size: "10m"
         max-file: "5"
 
+  # emailsender
+  emailsender:
+    image: bsa2020knewless/dockerhub:emailsender
+    container_name: emailsender
+    depends_on:
+      - rabbitmq
+    env_file:
+    - ~/.env/emailsender.env
+    environment:
+      WAIT_HOSTS: rabbitmq:5672
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+
   # Frontend
   client:
     image: bsa2020knewless/dockerhub:client

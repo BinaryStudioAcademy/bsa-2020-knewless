@@ -4,16 +4,19 @@ import GrayOutlineButton from 'components/buttons/GrayOutlineButton';
 import GradientButton from 'components/buttons/GradientButton';
 import styles from './styles.module.sass';
 import {
+  directionOptions,
   educationOptions,
   employmentOptions,
   experienceOptions,
   industryOptions,
   levelOptions,
   locationOptions,
+  MIN_EXPERIENCE_YEAR,
+  MIN_YEAR_OF_BIRTH,
   roleOptions,
   yearOptions
 } from './options';
-import { useHistory } from 'react-router-dom';
+import { history } from '@helpers/history.helper';
 import { connect } from 'react-redux';
 import { fetchGetStudentSettingsRoutine, fetchSetStudentSettingsRoutine, fetchAllTagsRoutine } from '../../routines';
 import { IStudentSettings } from 'screens/StudentSettings/models/IStudentSettings';
@@ -30,7 +33,8 @@ import {
   isValidCompany, isValidJob,
   isValidNameSurname,
   isValidUrl, JOB_MESSAGE,
-  LAST_NAME_MESSAGE, REQUIRED_FIELD_MESSAGE,
+  LAST_NAME_MESSAGE,
+  REQUIRED_FIELD_MESSAGE,
   URL_MESSAGE
 } from '@helpers/validation.helper';
 import { ITag } from '../../models/ITag';
@@ -61,11 +65,11 @@ export interface IStudentSettingsProps {
 function presentStudentTagsAssembler(allTags: ITag[], presentTags: string[]) {
   const resultTags = [];
 
-  if (allTags == undefined || presentTags == undefined) return [];
+  if (allTags === undefined || presentTags === undefined) return [];
   if (presentTags[0] === undefined || allTags[0].id === undefined) return [];
 
-  for (let i = 0; i < presentTags.length; i++) {
-    for (let j = 0; j < allTags.length; j++) {
+  for (let i = 0; i < presentTags.length; i += 1) {
+    for (let j = 0; j < allTags.length; j += 1) {
       if (allTags[j].id === presentTags[i]) {
         resultTags.push(allTags[j]);
       }
@@ -88,16 +92,15 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
     fetchAllTags();
     return () => resetSettingsMode();
   }, []);
-  const history = useHistory();
-  const [firstName, setFirstName] = useState(settings.firstName || '');
-  const [lastName, setLastName] = useState(settings.lastName || '');
+  const [firstName, setFirstName] = useState(settings.firstName);
+  const [lastName, setLastName] = useState(settings.lastName);
   const [avatar, setAvatar] = useState(settings.avatar);
   const [uploadImage, setUploadImage] = useState(null);
-  const [location, setLocation] = useState(settings.location || '');
-  const [company, setCompany] = useState(settings.company || '');
-  const [job, setJob] = useState(settings.job || '');
-  const [website, setWebsite] = useState(settings.website || '');
-  const [biography, setBiography] = useState(settings.biography || '');
+  const [location, setLocation] = useState(settings.location);
+  const [company, setCompany] = useState(settings.company);
+  const [job, setJob] = useState(settings.job);
+  const [website, setWebsite] = useState(settings.website);
+  const [biography, setBiography] = useState(settings.biography);
   const [direction, setDirection] = useState(settings.direction);
   const [experience, setExperience] = useState(settings.experience);
   const [level, setLevel] = useState(settings.level);
@@ -112,21 +115,21 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
 
   useEffect(() => {
     setAvatar(settings.avatar);
-    setFirstName(settings.firstName);
-    setLastName(settings.lastName);
-    setLocation(settings.location);
-    setCompany(settings.company);
-    setJob(settings.job);
-    setWebsite(settings.website);
+    setFirstName(settings.firstName || '');
+    setLastName(settings.lastName || '');
+    setLocation(settings.location || '');
+    setCompany(settings.company || '');
+    setJob(settings.job || '');
+    setWebsite(settings.website || '');
     setBiography(settings.biography || '');
-    setDirection(settings.direction);
-    setExperience(settings.experience);
-    setLevel(settings.level);
-    setIndustry(settings.industry);
-    setRole(settings.role);
-    setEmployment(settings.employment);
-    setEducation(settings.education);
-    setYear(settings.year);
+    setDirection(settings.direction || directionOptions[0].value);
+    setExperience(settings.experience || MIN_EXPERIENCE_YEAR);
+    setLevel(settings.level || '');
+    setIndustry(settings.industry || '');
+    setRole(settings.role || '');
+    setEmployment(settings.employment || employmentOptions[0].value);
+    setEducation(settings.education || '');
+    setYear(settings.year || MIN_YEAR_OF_BIRTH);
   }, [settings]);
 
   useEffect(() => {
@@ -144,20 +147,25 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
 
   const [isFirstNameValid, setIsFirstNameValid] = useState(true);
   const [isLastNameValid, setIsLastNameValid] = useState(true);
-  const [isCompanyValid, setIsCompanyValid] = useState(true);
-  const [isWebsiteValid, setIsWebsiteValid] = useState(true);
+  const [isYearsOfExperienceValid, setIsYearsOfExperienceValid] = useState(true);
+  const [isEducationLvlValid, setIsEducationLvlValid] = useState(true);
+  const [isLvlWithinValid, setIsLvlWithinValid] = useState(true);
+  const [isLocationValid, setIsLocationValid] = useState(true);
+  const [isIndustryValid, setIsIndustryValid] = useState(true);
+  const [isRoleValid, setIsRoleValid] = useState(true);
+  const isRequiredFieldsValid = (): boolean => !!firstName && !!lastName && !!education && !!level && !!location
+    && !!industry && !!role && isFirstNameValid && isLastNameValid && isYearsOfExperienceValid && isEducationLvlValid
+    && isLvlWithinValid && isLocationValid && isIndustryValid && isRoleValid;
+
   const [isBiographyValid, setIsBiographyValid] = useState(true);
   const [isJobValid, setIsJobValid] = useState(true);
-  const [isLocationValid, setIsLocationValid] = useState(true);
-
-  const isRequiredFieldsValid = (): boolean => !!firstName && !!lastName && !!location && !!company && !!job
-    && !!website && !!direction && !!level && !!industry && !!role && !!employment && !!education && !!year
-    && isFirstNameValid && isLastNameValid && isCompanyValid && isWebsiteValid && isBiographyValid
-    && isLocationValid && isJobValid;
+  const [isCompanyValid, setIsCompanyValid] = useState(true);
+  const [isWebsiteValid, setIsWebsiteValid] = useState(true);
+  const isNonRequiredFieldsValid = (): boolean => isBiographyValid && isJobValid && isCompanyValid && isWebsiteValid;
 
   const handleSubmit = e => {
     e.preventDefault();
-    if (isRequiredFieldsValid()) {
+    if (isRequiredFieldsValid() && isNonRequiredFieldsValid()) {
       setUserRole(RoleTypes.USER);
       const updatedSettings = {
         id: settings.id,
@@ -187,32 +195,26 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
   const handleCancel = () => {
     history.push('/');
   };
+
   const validateFirstName = (newName?: string) => {
     const lastChangeValue = typeof newName === 'string' ? newName : firstName;
-    setIsFirstNameValid(!!firstName && isValidNameSurname(lastChangeValue));
+    setIsFirstNameValid(!!lastChangeValue && isValidNameSurname(lastChangeValue));
   };
   const validateLastName = (newName?: string) => {
     const lastChangeValue = typeof newName === 'string' ? newName : lastName;
     setIsLastNameValid(!!lastChangeValue && isValidNameSurname(lastChangeValue));
   };
-  const validateCompany = (newName?: string) => {
-    const lastChangeValue = typeof newName === 'string' ? newName : company;
-    setIsCompanyValid(!!lastChangeValue && isValidCompany(lastChangeValue));
-  };
-  const validateWebsite = (newName?: string) => {
-    const lastChangeValue = typeof newName === 'string' ? newName : website;
-    setIsWebsiteValid(!!lastChangeValue && isValidUrl(lastChangeValue));
-  };
   const validateBiography = (newName?: string) => {
     setIsBiographyValid(isValidBiography(typeof newName === 'string' ? newName : biography));
   };
-  const validateLocation = (newName?: string) => {
-    const lastChangeValue = typeof newName === 'string' ? newName : location;
-    setIsLocationValid(!!lastChangeValue && lastChangeValue.length > 1);
-  };
   const validateJob = (newName?: string) => {
-    const lastChangeValue = typeof newName === 'string' ? newName : job;
-    setIsJobValid(!!lastChangeValue && isValidJob(lastChangeValue));
+    setIsJobValid(isValidJob(typeof newName === 'string' ? newName : job));
+  };
+  const validateCompany = (newName?: string) => {
+    setIsCompanyValid(isValidCompany(typeof newName === 'string' ? newName : company));
+  };
+  const validateWebsite = (newName?: string) => {
+    setIsWebsiteValid(isValidUrl(typeof newName === 'string' ? newName : website));
   };
 
   function onTagAddition(tag) {
@@ -221,14 +223,11 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
   }
 
   function onTagDeletion(i) {
-    console.log('index in selected Tags: ', i);
     const deletedTag = selectedTags[i];
-    console.log('seletedTags[i] : ', selectedTags[i]);
     if (deletedTag !== undefined) {
       setSelectedTags(prev => prev.filter((_, index) => index !== i));
       setStoredTags(prev => [...prev, deletedTag]);
     }
-    console.log('selected tags after deletion: ', selectedTags);
   }
 
   return (
@@ -245,12 +244,7 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
           />
         </div>
       </div>
-      <Form
-        className={styles.formSettings}
-        onKeyPress={e => {
-          if (e.key === 'Enter') e.preventDefault();
-        }}
-      >
+      <Form className={styles.formSettings} onKeyPress={e => { if (e.key === 'Enter') e.preventDefault(); }}>
         <div id={styles.personalTitle} className={styles.title}>Personal info</div>
         <Form.Group widths="equal">
           <Form.Input
@@ -259,11 +253,7 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
             label="First Name"
             placeholder="First Name"
             value={firstName}
-            onChange={e => {
-              const { value } = e.target;
-              setFirstName(value);
-              validateFirstName(value);
-            }}
+            onChange={e => { setFirstName(e.target.value); validateFirstName(e.target.value); }}
             required
             error={isFirstNameValid ? false : FIRST_NAME_MESSAGE}
             onBlur={() => validateFirstName()}
@@ -274,79 +264,70 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
             label="Last Name"
             placeholder="Last Name"
             value={lastName}
-            onChange={e => {
-              const { value } = e.target;
-              setLastName(value);
-              validateLastName(value);
-            }}
+            onChange={e => { setLastName(e.target.value); validateLastName(e.target.value); }}
             required
             error={isLastNameValid ? false : LAST_NAME_MESSAGE}
             onBlur={() => validateLastName()}
           />
         </Form.Group>
         <Form.Group widths="equal">
-          <Form.Input
+          <Form.Select
             fluid
-            className={`${styles.formField} ${!isJobValid && styles.roundedBottomField}`}
-            label="Job title"
-            placeholder="Job title"
-            value={job}
-            onChange={e => {
-              const { value } = e.target;
-              setJob(value);
-              validateJob(value);
-            }}
+            className={`${styles.formField} ${!year && styles.roundedBottomField}`}
+            label="Year of Birth"
+            placeholder="Select"
+            options={yearOptions}
+            value={year}
+            onChange={(e, data) => setYear(data.value as number)}
+            error={year ? false : REQUIRED_FIELD_MESSAGE}
             required
-            error={isJobValid ? false : JOB_MESSAGE}
-            onBlur={() => validateJob()}
           />
           <Form.Select
             fluid
-            className={`${styles.formField} ${!location && styles.roundedBottomField}`}
-            label="Location"
-            placeholder="Select"
-            options={locationOptions}
-            value={location}
+            className={`${styles.formField} ${!isYearsOfExperienceValid && styles.roundedBottomField}`}
+            label="Years of Experience"
+            placeholder="0"
+            options={experienceOptions}
+            value={experience}
             onChange={(e, data) => {
-              const value = data.value as string;
-              setLocation(value);
-              validateLocation(value);
+              const value = data.value as number;
+              setExperience(value);
+              setIsYearsOfExperienceValid(value >= MIN_EXPERIENCE_YEAR);
             }}
+            error={isYearsOfExperienceValid ? false : REQUIRED_FIELD_MESSAGE}
             required
-            error={isLocationValid ? false : REQUIRED_FIELD_MESSAGE}
-            onBlur={() => validateLocation()}
           />
         </Form.Group>
-        <Form.Group widths="2">
-          <Form.Input
+        <Form.Group widths="equal">
+          <Form.Select
             fluid
-            className={`${styles.formField} ${!isCompanyValid && styles.roundedBottomField}`}
-            label="Company name"
-            value={company}
-            onChange={e => {
-              const { value } = e.target;
-              setCompany(value);
-              validateCompany(value);
+            className={`${styles.formField} ${!isEducationLvlValid && styles.roundedBottomField}`}
+            label="Education Level"
+            placeholder="Select"
+            options={educationOptions}
+            value={education}
+            onChange={(e, data) => {
+              const value = data.value as string;
+              setEducation(value);
+              setIsEducationLvlValid(!!value);
             }}
-            placeholder="Company name"
+            error={isEducationLvlValid ? false : REQUIRED_FIELD_MESSAGE}
             required
-            error={isCompanyValid ? false : COMPANY_MESSAGE}
-            onBlur={() => validateCompany()}
           />
-          <Form.Input
+          <Form.Select
             fluid
-            className={`${styles.formField} ${!isWebsiteValid && styles.roundedBottomField}`}
-            label="Personal website"
-            placeholder="Personal website"
-            value={website}
-            onChange={e => {
-              const { value } = e.target;
-              setWebsite(value);
-              validateWebsite(value);
+            className={`${styles.formField} ${!isLvlWithinValid && styles.roundedBottomField}`}
+            label="Level within"
+            placeholder="Select"
+            options={levelOptions}
+            value={level}
+            onChange={(e, data) => {
+              const value = data.value as string;
+              setLevel(value);
+              setIsLvlWithinValid(!!value);
             }}
+            error={isLvlWithinValid ? false : REQUIRED_FIELD_MESSAGE}
             required
-            error={isWebsiteValid ? false : URL_MESSAGE}
-            onBlur={() => validateWebsite()}
           />
         </Form.Group>
         <Form.Group widths="equal">
@@ -362,7 +343,6 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
             }}
             placeholder="Tell about yourself"
             error={isBiographyValid ? false : BIOGRAPHY_MESSAGE}
-            onBlur={() => validateBiography()}
           />
         </Form.Group>
         <div className={styles.tagSelector}>
@@ -378,80 +358,32 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
         </div>
         <div id={styles.demographicTitle} className={styles.title}> Demographic Info</div>
         <Form.Group width="4">
-          <Form.Checkbox
-            className={styles.formCheckBox}
-            label="Developer"
-            value="Developer"
-            checked={direction === 'Developer'}
-            onChange={() => setDirection('Developer')}
-          />
-          <Form.Checkbox
-            className={styles.formCheckBox}
-            label="IT Professional"
-            value="IT Professional"
-            checked={direction === 'IT Professional'}
-            onChange={() => setDirection('IT Professional')}
-          />
-          <Form.Checkbox
-            className={styles.formCheckBox}
-            label="Creative"
-            value="Creative"
-            checked={direction === 'Creative'}
-            onChange={() => setDirection('Creative')}
-          />
-          <Form.Checkbox
-            className={styles.formCheckBox}
-            label="Other"
-            value="Other"
-            checked={direction === 'Other'}
-            onChange={() => setDirection('Other')}
-          />
+          {directionOptions.map(dir => (
+            <Form.Radio
+              className={styles.formCheckBox}
+              label={dir.text}
+              value={dir.value}
+              checked={direction === dir.value}
+              onChange={() => setDirection(dir.value)}
+            />
+          ))}
         </Form.Group>
-        <Form.Group widths="2">
+        <Form.Group widths="equal">
           <Form.Select
             fluid
-            className={styles.formField}
-            label="Years of Experience"
-            placeholder="0"
-            options={experienceOptions}
-            value={experience}
-            onChange={(e, data) => setExperience(data.value as number)}
-            required
-          />
-          <Form.Select
-            fluid
-            className={styles.formField}
-            label="Level within"
+            className={`${styles.formField} ${!isLocationValid && styles.roundedBottomField}`}
+            label="Location"
             placeholder="Select"
-            options={levelOptions}
-            value={level}
-            onChange={(e, data) => setLevel(data.value as string)}
+            options={locationOptions}
+            value={location}
+            onChange={(e, data) => {
+              const value = data.value as string;
+              setLocation(value);
+              setIsLocationValid(!!value);
+            }}
             required
+            error={isLocationValid ? false : REQUIRED_FIELD_MESSAGE}
           />
-        </Form.Group>
-        <Form.Group widths="2">
-          <Form.Select
-            fluid
-            className={styles.formField}
-            label="Industry"
-            placeholder="Select"
-            options={industryOptions}
-            value={industry}
-            onChange={(e, data) => setIndustry(data.value as string)}
-            required
-          />
-          <Form.Select
-            fluid
-            className={styles.formField}
-            label="Role"
-            placeholder="Select"
-            options={roleOptions}
-            value={role}
-            onChange={(e, data) => setRole(data.value as string)}
-            required
-          />
-        </Form.Group>
-        <Form.Group widths="2">
           <Form.Select
             fluid
             className={styles.formField}
@@ -460,40 +392,84 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
             options={employmentOptions}
             value={employment}
             onChange={(e, data) => setEmployment(data.value as string)}
-            required
-          />
-          <Form.Select
-            fluid
-            className={styles.formField}
-            label="Education Level"
-            placeholder="Select"
-            options={educationOptions}
-            value={education}
-            onChange={(e, data) => setEducation(data.value as string)}
-            required
           />
         </Form.Group>
         <Form.Group widths="2">
           <Form.Select
             fluid
-            className={styles.formField}
-            label="Year of Birth"
+            className={`${styles.formField} ${!isIndustryValid && styles.roundedBottomField}`}
+            label="Industry"
             placeholder="Select"
-            options={yearOptions}
-            value={year}
-            onChange={(e, data) => setYear(data.value as number)}
+            options={industryOptions}
+            value={industry}
+            onChange={(e, data) => {
+              const value = data.value as string;
+              setIndustry(value);
+              setIsIndustryValid(!!value);
+            }}
+            error={isIndustryValid ? false : REQUIRED_FIELD_MESSAGE}
+            required
+          />
+          <Form.Select
+            fluid
+            className={`${styles.formField} ${!isRoleValid && styles.roundedBottomField}`}
+            label="Role"
+            placeholder="Select"
+            options={roleOptions}
+            value={role}
+            onChange={(e, data) => {
+              const value = data.value as string;
+              setRole(value);
+              setIsRoleValid(!!value);
+            }}
+            error={isRoleValid ? false : REQUIRED_FIELD_MESSAGE}
             required
           />
         </Form.Group>
+        <Form.Group widths="2">
+          <Form.Input
+            fluid
+            className={`${styles.formField} ${!isJobValid && styles.roundedBottomField}`}
+            label="Job title"
+            placeholder="Job title"
+            value={job}
+            onChange={e => { setJob(e.target.value); validateJob(e.target.value); }}
+            error={isJobValid ? false : JOB_MESSAGE}
+          />
+          <Form.Input
+            fluid
+            className={`${styles.formField} ${!isCompanyValid && styles.roundedBottomField}`}
+            label="Company name"
+            value={company}
+            onChange={e => { setCompany(e.target.value); validateCompany(e.target.value); }}
+            placeholder="Company name"
+            error={isCompanyValid ? false : COMPANY_MESSAGE}
+          />
+        </Form.Group>
+        <Form.Group widths="2">
+          <Form.Input
+            fluid
+            className={`${styles.formField} ${!isWebsiteValid && styles.roundedBottomField}`}
+            label="Personal website"
+            placeholder="Personal website"
+            value={website}
+            onChange={e => { setWebsite(e.target.value); validateWebsite(e.target.value); }}
+            error={isWebsiteValid ? false : URL_MESSAGE}
+            onBlur={() => validateWebsite()}
+          />
+        </Form.Group>
         <Form.Group className={`${styles.formField} ${styles.formButtons}`}>
-          <GrayOutlineButton className={styles.Btn} onClick={() => handleCancel()}>Cancel </GrayOutlineButton>
+          <GrayOutlineButton
+            className={styles.Btn}
+            onClick={() => handleCancel()}
+            content="Cancel"
+          />
           <GradientButton
             className={styles.Btn}
             onClick={e => handleSubmit(e)}
-            disabled={!isRequiredFieldsValid()}
-          >
-            Save
-          </GradientButton>
+            disabled={!isRequiredFieldsValid() || !isNonRequiredFieldsValid()}
+            content="Save"
+          />
         </Form.Group>
       </Form>
     </div>

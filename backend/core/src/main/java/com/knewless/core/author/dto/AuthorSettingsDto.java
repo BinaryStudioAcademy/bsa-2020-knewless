@@ -25,33 +25,31 @@ public class AuthorSettingsDto {
     @Pattern(regexp = "^[a-zA-z]{2,40}$", message = "Last Name must be 2-40 symbols (only Latin letters allowed).")
     private String lastName;
 
-    @NotBlank(message = "Job can't be empty.")
+    @Pattern(regexp = "^$|^[a-zA-Z][a-zA-Z- ]+$", message = "Job minimum length must be 2 symbol. " +
+            "Only Latin letters, hyphen and whitespaces allowed.")
     private String job;
 
     @NotBlank(message = "Location can't be empty.")
     private String location;
 
-    @NotNull(message = "Company can't be null.")
     @Pattern(
-            regexp = "^[a-zA-Z0-9-]{2,40}$",
+            regexp = "^$|^[a-zA-Z0-9-]{2,40}$",
             message = "Company name must be 2-40 symbols (only Latin letters, numbers, and '-' allowed)."
     )
     private String company;
 
-    @NotNull(message = "Website url can't be null.")
     @Pattern(
-            regexp = "^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]",
+            regexp = "^$|^(https?)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]",
             message = "Website url is invalid."
     )
     private String website;
 
-    @NotNull(message = "Twitter url can't be null.")
-    @Pattern(regexp = "^https(?:s)?://twitter\\.com/([a-zA-Z0-9_]+)$", message = "Twitter url is invalid.")
+    @Pattern(regexp = "^$|^https(?:s)?://twitter\\.com/([a-zA-Z0-9_]+)$", message = "Twitter url is invalid.")
     private String twitter;
 
     @Pattern(
-            regexp = "^$|^[\\d\\D]{50,}$",
-            message = "Biography can be empty or its minimum length must be 50 symbols. " +
+            regexp = "^$|^[\\d\\D]{0,600}$",
+            message = "Biography maximum length can be 600 symbols. " +
                     "Only Latin letters, numbers and special characters allowed."
     )
     private String biography;

@@ -13,6 +13,8 @@ import { IResetState } from '@screens/ResetPassword/models/IResetState';
 import { ISavePasswordState } from '@screens/SavePassword/models/ISavePasswordState';
 import { ISearchState } from '@screens/./Search/models/ISearchState';
 import { ILoginModalState } from '@containers/LoginModal/models/ILoginModalState';
+import { IPathPageState } from '@screens/PathPage/models/IPathPageState';
+import { IPathsState } from '@screens/Paths/models/IPathsState';
 
 export interface IAppState {
   toastr: any;
@@ -24,9 +26,11 @@ export interface IAppState {
   auth: IAuthState;
   appRouter: IAppRouterState;
   addPathPage: IAddPathState;
+  pathsPage: IPathsState;
   coursesPage: ICoursesState;
   search: ISearchState;
   coursePage: ICoursePageState;
+  pathPage: IPathPageState;
   lecturePage: ILecturePageState;
   loginModal: ILoginModalState;
   resetpassword: IResetState;

@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import styles from './styles.module.sass';
 import CoursesList from '@screens/PathPage/components/CoursesList';
-import { CourseCard } from '@screens/PathPage/components/CourseCard';
-import { courses } from '@screens/PathPage/services/mock';
-import AboutSection from "@screens/PathPage/components/AboutSection";
+import AboutSection from '@screens/PathPage/components/AboutSection';
 
 const PathMenu = () => {
   const [selected, setSelected] = useState(0);

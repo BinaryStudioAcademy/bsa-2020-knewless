@@ -1,16 +1,21 @@
 import React, { useEffect } from 'react';
-import { fetchCoursesRoutine, fetchCoursesByTagRoutine, fetchAllCoursesRoutine, fetchAllAuthorCoursesRoutine, fetchAllTagsRoutine } from '../../routines';
+import {
+  fetchCoursesRoutine,
+  fetchCoursesByTagRoutine,
+  fetchAllCoursesRoutine,
+  fetchAllAuthorCoursesRoutine,
+  fetchAllTagsRoutine
+} from '../../routines';
 import { IBindingAction, IBindingCallback1 } from '@models/Callbacks';
 import { connect } from 'react-redux';
 import { IAppState } from '@models/AppState';
 import { InlineLoaderWrapper } from '@components/InlineLoaderWrapper';
 import { ICourseItem } from '@screens/Courses/models/ICourseItem';
 import { ITag } from '@screens/Courses/models/ITag';
-
-import styles from './styles.module.sass';
 import { AllCourses } from '../../components/AllCourses';
 import { MyCourses } from '@screens/Courses/components/MyCourses';
 import { IRole } from '@containers/AppRouter/models/IRole';
+import styles from './styles.module.sass';
 
 export interface ICoursePageProps {
   courses: ICourseItem[];
@@ -26,11 +31,19 @@ export interface ICoursePageProps {
 }
 
 const CoursePage: React.FC<ICoursePageProps> = ({
-  courses, continueCourses, tags, fetchData, fetchAllCourses, fetchTags, fetchCoursesByTag, fetchAllAuthorCourses, loading, role
+  courses,
+  continueCourses,
+  tags,
+  fetchData,
+  fetchAllCourses,
+  fetchTags,
+  fetchCoursesByTag,
+  fetchAllAuthorCourses,
+  loading,
+  role
 }) => {
-
   useEffect(() => {
-    switch(role?.name) {
+    switch (role?.name) {
       case undefined: {
         fetchTags();
         fetchAllCourses();
@@ -47,7 +60,7 @@ const CoursePage: React.FC<ICoursePageProps> = ({
   return (
     <div className={styles.courses_content}>
       {loading
-        ? <InlineLoaderWrapper loading={loading} centered={true} />
+        ? <InlineLoaderWrapper loading={loading} centered />
         : (
           <>
             {role && (
@@ -68,7 +81,7 @@ const CoursePage: React.FC<ICoursePageProps> = ({
             ) : null}
           </>
         )}
-    </div >
+    </div>
   );
 };
 

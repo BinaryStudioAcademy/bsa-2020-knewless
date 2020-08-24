@@ -11,27 +11,27 @@ public class CreateCourseRequestDto {
 
     private UUID userId;
 
-    @Size(min = 2, max = 40, message = "Course name length must be 2-40 symbols.")
+    @NotBlank(message = "Course name can't be empty.")
     @Pattern(
-            regexp = "^[a-zA-Z0-9!:;=<>@#$&()\\\\-`.+,\"/ ]{2,40}$",
-            message = "Only digits, Latin letters and special characters allowed."
+            regexp = "^[\\d\\D]{2,40}$",
+            message = "Course name length must be 2-40 symbols. " +
+                    "Only digits, Latin letters and special characters allowed."
     )
     private String name;
 
     private String image;
 
-    @NotBlank
+    @NotBlank(message = "Course level can't be empty.")
     private String level;
 
     @Pattern(
-            regexp = "^$|^[a-zA-Z0-9!:;=<>@#$&()\\\\-`.+,\"/ ]{10,}$",
-            message = "Course description can be empty or its minimum length must be 10 symbols. " +
+            regexp = "^$|^[\\d\\D]{10,}$",
+            message = "Course description minimum length must be 10 symbols. " +
                     "Only digits, Latin letters and special characters allowed."
     )
     private String description;
 
-    @NotNull
-    private Boolean isReleased;
+    private Boolean isReleased = false;
 
     private List<UUID> lectures;
 

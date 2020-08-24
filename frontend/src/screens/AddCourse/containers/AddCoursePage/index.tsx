@@ -17,6 +17,7 @@ import { CoursePreview } from '@components/CoursePreview';
 import { IAppState } from 'models/AppState';
 import GrayOutlineButton from 'components/buttons/GrayOutlineButton';
 import GradientButton from 'components/buttons/GradientButton';
+import { InlineLoaderWrapper } from '@components/InlineLoaderWrapper';
 import UploadLectureModal from '../../components/UploadLectureModal';
 import CourseImage from '@images/default_course_image.jpg';
 import {
@@ -27,7 +28,6 @@ import {
   isValidCourseName,
   REQUIRED_FIELD_MESSAGE
 } from '@helpers/validation.helper';
-import { InlineLoaderWrapper } from '@components/InlineLoaderWrapper';
 
 interface IAddCourseProps {
   lectures: ILecture [];

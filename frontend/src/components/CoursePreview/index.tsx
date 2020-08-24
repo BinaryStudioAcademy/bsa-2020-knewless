@@ -1,8 +1,8 @@
 import React from 'react';
-import styles from './styles.module.sass';
 import { Button, Icon, Label } from 'semantic-ui-react';
 import { StyledRating } from '@components/StyledRating';
 import { NavLink } from 'react-router-dom';
+import styles from './styles.module.sass';
 
 export interface ICoursePreviewProps {
   id?: string;
@@ -62,7 +62,7 @@ export const CoursePreview: React.FC<ICoursePreviewProps> = ({
       <div className={styles.card_content_box}>
         <StyledRating
           className={styles.course_rating}
-          size='small'
+          size="small"
           style={{ fontSize: '1.2em', width: '8rem' }}
           rating={rating}
           disabled
@@ -79,14 +79,19 @@ export const CoursePreview: React.FC<ICoursePreviewProps> = ({
         </div>
         <div className={styles.author}>
           <NavLink exact to={`/author/${authorId}`}>
-            <span><i>by {authorName}</i></span>
+            <span>
+              <i>
+                by&nbsp;
+                {authorName}
+              </i>
+            </span>
           </NavLink>
         </div>
         <div className={styles.description}>
           <span className={styles.description_text}>
             {!description || description === ''
               ? 'Fill in the fields with information about your course'
-              : description.length > 75 ? description.substring(0, 75) + '...' : description}
+              : description.length > 75 ? `${description.substring(0, 75)}...` : description}
           </span>
         </div>
         <div className={styles.grid_row_flex}>

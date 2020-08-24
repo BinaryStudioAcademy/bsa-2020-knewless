@@ -3,11 +3,19 @@ import { useParams } from 'react-router-dom';
 import { BottomNavigation } from '@screens/Landing/components/BottomNavigation';
 import { navigations } from '@screens/Landing/services/mock';
 import { Footer } from '@components/Footer';
-import styles from './styles.module.sass';
 import PathOverview from '@screens/PathPage/components/PathOverview';
 import PathMenu from '@screens/PathPage/components/PathMenu';
+import { IAppState } from '@models/AppState';
+import { connect } from 'react-redux';
+import { InlineLoaderWrapper } from '@components/InlineLoaderWrapper';
+import styles from './styles.module.sass';
 
-const PathPage = () => {
+interface IPathPageProps {
+  loading: boolean;
+  isAuthorized: boolean;
+}
+
+const PathPage: React.FC<IPathPageProps> = ({ loading, isAuthorized }) => {
   const { pathId } = useParams();
 
   useEffect(() => {
@@ -15,10 +23,11 @@ const PathPage = () => {
       // console.log('FETCHING');
     }
   }, [pathId]);
+  if (loading) return (<InlineLoaderWrapper loading={loading} centered />);
   return (
     <>
       <div className={styles.content}>
-        <PathOverview />
+        <PathOverview isAuthorized={isAuthorized} />
         <PathMenu />
       </div>
       <div className={styles.navigation_layer}>
@@ -31,4 +40,15 @@ const PathPage = () => {
   );
 };
 
-export default PathPage;
+const mapStateToProps = (state: IAppState) => {
+  const { isAuthorized } = state.auth.auth;
+  return {
+    loading: state.pathPage.requests.dataRequest.loading,
+    isAuthorized
+  };
+};
+
+const mapDispatchToProps = {
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(PathPage);

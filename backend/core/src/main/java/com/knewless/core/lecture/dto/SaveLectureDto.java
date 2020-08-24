@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.UUID;
@@ -16,14 +17,15 @@ public class SaveLectureDto {
 
     private UUID id;
 
+    @NotBlank(message = "Lecture name can't be empty.")
     @Pattern(
-            regexp = "^[a-zA-Z0-9!:;=<>@#$&()\\\\-`.+,\"/ ]{2,40}$",
-            message = "Only digits, Latin letters and special characters allowed."
+            regexp = "^[\\d\\D]{3,40}$",
+            message = "Lecture name must be 3-40 symbols. Only digits, Latin letters and special characters allowed."
     )
     private String name;
 
     @Pattern(
-            regexp = "^$|^[a-zA-Z0-9!:;=<>@#$&()\\\\-`.+,\"/ ]{10,}$",
+            regexp = "^$|^[\\d\\D]{10,}$",
             message = "Lecture description can be empty or its minimum length must be 10 symbols. " +
                     "Only digits, Latin letters and special characters allowed."
     )

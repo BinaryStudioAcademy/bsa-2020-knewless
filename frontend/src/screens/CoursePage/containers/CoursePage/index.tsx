@@ -49,7 +49,7 @@ const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
           authorName={`${course?.author?.firstName} ${course?.author?.lastName}` || ''}
           authorId={course?.author?.id}
           rating={course?.rating}
-          startLectureId={course.lectures ? course.lectures[0].id : ''}
+          startLectureId={(course?.lectures && course?.lectures?.length > 0) ? course.lectures[0].id : ''}
           isAuthorized={isAuthorized}
           openLoginModal={openLoginModal}
         />

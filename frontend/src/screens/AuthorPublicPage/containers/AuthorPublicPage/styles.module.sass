@@ -1,0 +1,210 @@
+@import 'src/styles/common'
+@import 'src/styles/common_variables'
+
+$container_width: 1400px
+$side_padding: 80px
+
+.page
+  padding-top: $header_height
+  background: #121421
+
+.wideContainer
+  max-width: $container_width + ($side_padding * 2)
+  margin-left: auto !important
+  margin-right: auto !important
+  padding-left: $side_padding
+  padding-right: $side_padding
+
+.authorMainContainer
+  color: white
+  background: #121421
+  display: grid
+  grid-template-columns: 0 30% 70%
+  grid-template-rows: 2vh 2vh 22vh 64vh
+  grid-template-areas: ". . . . " " . avatar . . " " . avatar cards . " " . authorInfo list . "
+
+.authorAvatarWrapper
+  grid-area: avatar
+  display: flex
+  align-items: flex-start
+  justify-content: left
+  height: 100%
+  padding-left: 0
+  padding-bottom: 1vh
+
+.authorPublicAvatar
+  height: 100%
+  width: 23vh
+  object-fit: cover
+  border-radius: 50%
+
+.authorMainInfoWrapper
+  grid-area: authorInfo
+
+.authorNamePublicPage
+  padding-bottom: 1.7%
+  padding-top: 5%
+  font-size: 200%
+  font-weight: lighter
+
+.authorKnewlessStatic
+  font-size: 110%
+  font-weight: lighter
+  padding-bottom: 2%
+
+.cardSchoolLinkWrapper, .cardSchoolLinkWrapper:hover
+  grid-area: schoolCard
+  color: white
+  border-right: 2px solid rgba(255, 255, 255, 0.1)
+
+.buttonsFollowLikeAuthor
+  display: flex
+  align-items: center
+  justify-content: left
+
+  &:hover
+    .textButtonUnfollow
+      background-position: -50% 0
+
+  \:global(.ui.button).authorFollowButton
+    height: 4.8vh
+    min-height: 4.8vh
+    text-align: center
+    padding: 2px
+    margin-right: 5%
+    min-width: 40%
+    font-size: 1.2em !important
+
+    .textButtonFollow
+      padding: 1px
+      font-weight: 600 !important
+
+    .unfollow
+      width: 100%
+      height: 100%
+      display: flex
+      margin: auto
+      justify-content: center
+      align-items: center
+      text-align: center
+      background: #121421
+
+      .textButtonUnfollow
+        padding: 1px
+        font-weight: 600 !important
+        background: -webkit-linear-gradient(70.06deg, #FF8576, #0084F8, #FF8576)
+        background-size: 300%
+        -webkit-background-clip: text
+        -webkit-text-fill-color: transparent
+        transition: all .6s ease-in-out
+
+.subscribersNumber
+  display: flex
+  align-items: center
+  padding-top: 2.5%
+  font-size: 115%
+  font-weight: lighter
+
+.authorNumberFollowers
+  font-weight: bold
+
+.authorBiography
+  padding-top: 7%
+  word-break: break-word
+  padding-right: 15%
+
+.cardsAuthorPublicPageWrapper
+  grid-area: cards
+  height: 100%
+  background: #2A2B37
+  box-shadow: 0 30px 40px rgba(0, 0, 0, 0.1)
+  border-radius: 0
+
+  .cardsGridLines
+    height: 100%
+    display: grid
+    grid-template-columns: calc(100% / 3 + 2px) calc(100% / 3 + 2px) calc(100% / 3 - 4px)
+    grid-template-rows: 5% 90% 5%
+    grid-template-areas: " . . . " " coursesNumber schoolCard articlesNumber " " . . . "
+
+    .cardCoursesNumberWrapper, .cardArticlesNumberWrapper
+      color: white
+
+    .cardCoursesNumberWrapper
+      grid-area: coursesNumber
+      border-right: 2px solid rgba(255, 255, 255, 0.1)
+
+    .cardArticlesNumberWrapper
+      grid-area: articlesNumber
+
+    .cardStyleAuthorPublic
+      height: 19.8vh
+      display: grid
+      grid-template-rows: 70% 30%
+      grid-template-areas: " mainPart " " bottomPart "
+
+      .cardMainInfo
+        grid-area: mainPart
+
+      .cardMainInfo, .cardBottomText
+        height: 100%
+        display: flex
+        align-items: center
+        justify-content: center
+
+      .cardTextField
+        height: 100%
+        font-size: 550%
+        text-align: center
+        padding-bottom: 1%
+
+      .cardBottomText
+        grid-area: bottomPart
+        height: 100%
+        padding-top: 1%
+        padding-bottom: 1%
+        font-size: 180%
+
+.listCoursesArticlesWrapper
+  grid-area: list
+  height: 100%
+
+  .authorMenu
+    height: 12% !important
+    margin: 0 !important
+    min-height: 0 !important
+    padding-left: 2%
+
+    .authorMenuButton
+      color: #676767
+      height: 100%
+      width: 12%
+      display: flex
+      justify-content: center
+      font-size: 140%
+      border: 0 !important
+      margin: 0 1em 0 0 !important
+      padding: 3% 0 0 0 !important
+
+  .authorMenuSegment
+    padding: 0 !important
+    background: #2A2B37 !important
+    border-radius: 0
+    margin-bottom: 5em
+
+    .coursePreviewWrapper
+      padding-bottom: 10px
+      margin-top: 10px
+      border-bottom: 2px solid #434558
+
+    .articlePreviewWrapper
+      width: 100%
+      height: 15vh
+      padding: 2.5% 0 2.5%
+      background: none !important
+      margin: 0 !important
+      border-radius: 0 !important
+      box-shadow: none !important
+      transform: none !important
+      border-bottom: 2px solid
+      border-bottom-color: #434558

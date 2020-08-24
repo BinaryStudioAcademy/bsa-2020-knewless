@@ -20,6 +20,7 @@ import coursePage from '../screens/CoursePage/reducers';
 import resetpassword from '../screens/ResetPassword/reducers';
 import savepassword from '../screens/SavePassword/reducers';
 import pathPage from '../screens/PathPage/reducers';
+import pathsPage from '../screens/Paths/reducers';
 import { loginModal } from '../containers/LoginModal/reducer'
 
 export default combineReducers({
@@ -44,5 +45,6 @@ export default combineReducers({
   pathPage,
   coursesPage,
   search,
-  loginModal
+  loginModal,
+  pathsPage
 });

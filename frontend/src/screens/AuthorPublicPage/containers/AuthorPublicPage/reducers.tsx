@@ -1,25 +1,24 @@
 import { Routine } from 'redux-saga-routines';
-
 import { IAuthorData } from 'screens/AuthorPublicPage/models/IAuthorData';
 import { fetchAuthorDataRoutine, setAuthorMenuActiveItemRoutine } from 'screens/AuthorPublicPage/routines';
 import { IAuthorMenu } from 'screens/AuthorPublicPage/models/IAuthorMenu';
 
 const basicAuthorData = {
   userId: '',
-  avatar: 'https://i.imgur.com/rGqrhwK.jpg',
-  firstName: 'Unspecified',
-  lastName: 'author',
-  biography: 'unspecified information about author',
+  avatar: '',
+  firstName: '',
+  lastName: '',
+  biography: '',
   schoolName: '',
-  schoolId: 'incorrect id',
+  schoolId: '',
   numberOfSubscribers: 0,
   courses: [{
-    id: 'qwe',
-    name: 'qwe',
-    level: 'qwe',
-    author: 'qwe',
-    category: 'qwe',
-    imageSrc: 'qwe',
+    id: '',
+    name: '',
+    level: '',
+    author: '',
+    category: '',
+    imageSrc: '',
     duration: 0
   }],
   articles: [{

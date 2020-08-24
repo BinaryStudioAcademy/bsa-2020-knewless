@@ -2,17 +2,14 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
 import ReactPlayer from 'react-player/lazy';
 import { Link } from 'react-router-dom';
-import { Button } from 'semantic-ui-react';
 import { ICourseData } from '@screens/LecturePage/models/ICourseData';
 import { IBindingCallback1 } from 'models/Callbacks';
 import { chooseVideoRoutine, fetchCourseDtoRoutine, saveWatchTimeRoutine } from 'screens/LecturePage/routines';
 import LecturesMenu from 'screens/LecturePage/containers/Lectures/lecturesMenu';
 import { ILectures } from 'screens/LecturePage/models/ILectures';
-
-import './styles.sass';
 import { IAppState } from '@models/AppState';
 import useInterval from '../../../../services/use.interval.hook';
-import { chosenVideo } from './reducers';
+import './styles.sass';
 
 export interface ILectureProps {
   match: any;
@@ -22,25 +19,23 @@ export interface ILectureProps {
   setChosenVideo: ({ chosenVideo }: {chosenVideo: string}) => void;
   saveWatchTime: Function;
 }
-function chooseSource (lecture: ILectures){
-  const result = lecture.webLink? lecture.webLink : lecture.urlOrigin;
-  return result;
+
+function chooseSource(lecture: ILectures) {
+  return lecture.webLink ? lecture.webLink : lecture.urlOrigin;
 }
+
 function necessaryVideo(chosenVideoProps: string, responseData: ICourseData, incomingLectureId: string) {
   if (chosenVideoProps === '') {
     if (responseData.id === null) {
       return '';
     }
-    
     // This return gives lecture that you have called
     return chooseSource(responseData.lectures.filter(l => l.id === incomingLectureId)[0]);
   }
-
   if (responseData.id !== null) {
     // This return gives chosen video
     return chooseSource(responseData.lectures.filter(l => l.id === chosenVideoProps)[0]);
   }
-
   return '';
 }
 
@@ -90,18 +85,18 @@ const LecturePage: React.FunctionComponent<ILectureProps> = ({
   useInterval(() => autoSave(), AUTOSAVE_MS);
 
   const result = necessaryVideo(chosenVideoId, lecturesData, initialLectureId);
- 
+
   const handlePause = () => {
     setIsPlaying(false);
     triggerSaveTime();
   };
 
-  const handleEnded = () =>{
-    const prev = lecturesData.lectures.findIndex(l=>l.id === chosenVideoId);
-    const nextId = lecturesData.lectures[prev+1]? lecturesData.lectures[prev+1].id : lecturesData.lectures[0].id ;
+  const handleEnded = () => {
+    const prev = lecturesData.lectures.findIndex(l => l.id === chosenVideoId);
+    const nextId = lecturesData.lectures[prev + 1] ? lecturesData.lectures[prev + 1].id : lecturesData.lectures[0].id;
     setChosenVideo({ chosenVideo: nextId });
     triggerSaveTime();
-  }
+  };
 
   const handleChooseVideo = useCallback(chosenVideo => {
     triggerSaveTime();
@@ -125,7 +120,7 @@ const LecturePage: React.FunctionComponent<ILectureProps> = ({
             width="100%"
             height="100%"
             playing
-            controls={true}
+            controls
             onProgress={setPlayerProgress}
             onPlay={() => setIsPlaying(true)}
             onPause={handlePause}
@@ -136,7 +131,7 @@ const LecturePage: React.FunctionComponent<ILectureProps> = ({
           {lecturesData.name}
         </div>
         <div className="authorName">
-          By &nbsp;
+          By&nbsp;
           <Link
             className="authorLink"
             to={`/author/${lecturesData.author.id}`}

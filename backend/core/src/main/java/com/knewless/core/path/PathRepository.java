@@ -30,4 +30,32 @@ public interface PathRepository extends JpaRepository<Path, UUID> {
             "ORDER BY p.updatedAt DESC")
     List<AuthorPathQueryResult> getLatestPathsByAuthorId(@Param("authorId") UUID authorId);
 
+    @Query("SELECT new com.knewless.core.path.dto.PathQueryResult(p.id, p.name, " +
+            "p.imageTag.source, SIZE(p.courses), " +
+            "(SELECT COALESCE(SUM(pcl.duration), 0) FROM p.courses as pc " +
+            "INNER JOIN pc.lectures as pcl)) " +
+            "FROM Path p " +
+            "WHERE p.author.id = :authorId " +
+            "ORDER BY p.updatedAt DESC")
+    List<PathQueryResult> getAllPathsByAuthorId(UUID authorId);
+
+    @Query("SELECT new com.knewless.core.path.dto.PathQueryResult(p.id, p.name, " +
+            "p.imageTag.source, SIZE(p.courses), " +
+            "(SELECT COALESCE(SUM(pcl.duration), 0) FROM p.courses as pc " +
+            "INNER JOIN pc.lectures as pcl)) " +
+            "FROM Path p " +
+            "LEFT JOIN p.tags as t " +
+            "WHERE t.id = :tagId " +
+            "ORDER BY p.updatedAt DESC")
+    List<PathQueryResult> getPathsByTagId(UUID tagId);
+
+    @Query("SELECT DISTINCT new com.knewless.core.path.dto.PathQueryResult(p.id, p.name, " +
+            "p.imageTag.source, SIZE(p.courses), " +
+            "(SELECT COALESCE(SUM(pcl.duration), 0) FROM p.courses as pc " +
+            "INNER JOIN pc.lectures as pcl)) " +
+            "FROM CurrentUserCourse cuc " +
+            "LEFT JOIN cuc.course as c " +
+            "LEFT JOIN c.paths as p " +
+            "WHERE cuc.user.id = :userId")
+    List<PathQueryResult> getPathsByUserId(UUID userId);
 }
