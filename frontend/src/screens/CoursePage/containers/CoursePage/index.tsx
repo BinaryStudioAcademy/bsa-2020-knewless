@@ -52,7 +52,7 @@ const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
           startLectureId={(course?.lectures && course?.lectures?.length > 0) ? course.lectures[0].id : ''}
           isAuthorized={isAuthorized}
           openLoginModal={openLoginModal}
-          courseId={course?.id}
+          courseId={courseId}
         />
         <div className="separator" />
         <CourseInfo

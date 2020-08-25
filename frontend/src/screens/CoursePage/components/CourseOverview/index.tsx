@@ -41,12 +41,14 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
             {courseName}
           </h1>
           <div className={styles.description__meta_info}>
+            {isAuthorized &&
+              <div className={styles.favourite_wrp}>
+                <AddToFavouriteButton
+                  type={SourceType.COURSE}
+                  id={courseId}
+                />
+              </div>}
             <StyledRating rating={rating} className={`rating ${styles.rating}`} disabled />
-            {isAuthorized && 
-              <AddToFavouriteButton
-                type={SourceType.COURSE}
-                id={courseId}
-              />}
             <p>
               {'By '}
               {

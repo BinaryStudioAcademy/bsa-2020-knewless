@@ -51,12 +51,14 @@ const AuthorPublicPage: React.FunctionComponent<IAuthorPublic> = ({
             </div>
             <div className={styles.authorMainInfoWrapper}>
               <div className={styles.authorNamePublicPage}>
-                {`${authorData.firstName} ${authorData.lastName}`}
+                <span>{`${authorData.firstName} ${authorData.lastName}`}</span>
                 {user && 
-                  <AddToFavouriteButton
-                    type={SourceType.AUTHOR}
-                    id={match.params.authorId}
-                  />}
+                  <div className={styles.favourite_wrp}>
+                    <AddToFavouriteButton
+                      type={SourceType.AUTHOR}
+                      id={match.params.authorId}
+                    />
+                  </div>}
               </div>
               {authorData.schoolName !== '' && (
                 <div className={styles.authorKnewlessStatic}>
