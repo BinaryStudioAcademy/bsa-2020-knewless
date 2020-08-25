@@ -1,0 +1,28 @@
+@import "src/styles/common_variables"
+
+\:global(.ui.basic.label).toolBarIcon
+  margin-left: 10px
+  margin-right: 10px
+  background: inherit
+  border: none
+  padding: 0
+  color: white
+  &:hover
+    margin-right: 10px
+    margin-left: 10px
+    background: inherit
+    color: white
+
+\:global(i.icon).pushed
+  color: #fc4e6b
+  opacity: 0.8
+  transition-duration: 0.4s
+
+  &:hover
+    opacity: 1
+
+\:global(i.icon).inactive
+  transition-duration: 0.4s
+  color: #adadb1
+  &:hover
+    color: #e992a0

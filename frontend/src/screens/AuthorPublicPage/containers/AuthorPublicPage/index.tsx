@@ -8,6 +8,8 @@ import { GradientButton } from 'components/buttons/GradientButton';
 import styles from './styles.module.sass';
 import AuthorPublicMenu from './authorPublicMenu';
 import { IUser } from '@containers/AppRouter/models/IUser';
+import AddToFavouriteButton from '@components/AddToFavouritesButton/component';
+import { SourceType } from '@components/AddToFavouritesButton/models/helper';
 import AvatarWithGradient from '@components/avatar/AvatarWithBackground';
 import { InlineLoaderWrapper } from '@components/InlineLoaderWrapper';
 
@@ -50,6 +52,11 @@ const AuthorPublicPage: React.FunctionComponent<IAuthorPublic> = ({
             <div className={styles.authorMainInfoWrapper}>
               <div className={styles.authorNamePublicPage}>
                 {`${authorData.firstName} ${authorData.lastName}`}
+                {user && 
+                  <AddToFavouriteButton
+                    type={SourceType.AUTHOR}
+                    id={match.params.authorId}
+                  />}
               </div>
               {authorData.schoolName !== '' && (
                 <div className={styles.authorKnewlessStatic}>

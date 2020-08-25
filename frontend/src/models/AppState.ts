@@ -15,6 +15,7 @@ import { ISearchState } from '@screens/./Search/models/ISearchState';
 import { ILoginModalState } from '@containers/LoginModal/models/ILoginModalState';
 import { IPathPageState } from '@screens/PathPage/models/IPathPageState';
 import { IPathsState } from '@screens/Paths/models/IPathsState';
+import { IAddToFavouritesButtonState } from '@components/AddToFavouritesButton/models/IAddToFavouritesButtonState'
 
 export interface IAppState {
   toastr: any;
@@ -35,4 +36,5 @@ export interface IAppState {
   loginModal: ILoginModalState;
   resetpassword: IResetState;
   savepassword: ISavePasswordState;
+  favouriteButton: IAddToFavouritesButtonState;
 }

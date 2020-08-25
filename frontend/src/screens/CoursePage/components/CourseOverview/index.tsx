@@ -6,12 +6,15 @@ import GradientButton from 'components/buttons/GradientButton';
 import GrayOutlineButton from 'components/buttons/GrayOutlineButton';
 import '../../styles/common.sass';
 import { IBindingCallback1 } from '@models/Callbacks';
+import AddToFavouriteButton from '@components/AddToFavouritesButton/component';
+import { SourceType } from '@components/AddToFavouritesButton/models/helper';
 
 interface ICourseOverviewProps {
   imageSrc: string;
   courseName: string;
   authorName: string;
   authorId: string;
+  courseId: string;
   rating: number;
   startLectureId: string;
   isAuthorized: boolean;
@@ -24,6 +27,7 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
   authorName,
   authorId,
   rating,
+  courseId,
   startLectureId,
   isAuthorized,
   openLoginModal
@@ -38,6 +42,11 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
           </h1>
           <div className={styles.description__meta_info}>
             <StyledRating rating={rating} className={`rating ${styles.rating}`} disabled />
+            {isAuthorized && 
+              <AddToFavouriteButton
+                type={SourceType.COURSE}
+                id={courseId}
+              />}
             <p>
               {'By '}
               {

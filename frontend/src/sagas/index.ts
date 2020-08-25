@@ -20,6 +20,7 @@ import coursesSagas from '../screens/Courses/sagas';
 import pathPageSagas from '@screens/PathPage/sagas';
 import searchSagas from '@screens/./Search/sagas/sagas';
 import pathsPageSagas from '@screens/Paths/sagas';
+import favouriteButtonSagas from '@components/AddToFavouritesButton/sagas';
 
 export default function* rootSaga() {
   yield all([
@@ -44,6 +45,7 @@ export default function* rootSaga() {
     addPathSagas(),
     coursePageSagas(),
     searchSagas(),
-    pathsPageSagas()
+    pathsPageSagas(),
+    favouriteButtonSagas()
   ]);
 }
