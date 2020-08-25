@@ -4,6 +4,8 @@ import styles from './styles.module.sass';
 import { courses } from '@screens/PathPage/services/mock';
 import { CourseCard } from '@screens/PathPage/components/CourseCard';
 
+const Levels = ['BEGINNER', 'INTERMEDIATE', 'ADVANCED'];
+
 const courseLevels = {
   BEGINNER: [],
   INTERMEDIATE: [],
@@ -31,30 +33,22 @@ const CoursesList = () => {
       setSelected([...selected, i]);
     }
   };
-  const compareCourseLevels = (a, b) => {
-    switch (a) {
-      case 'BEGINNER':
-        return -1;
-      case 'INTERMEDIATE':
-        return 0;
-      default:
-        return 1;
-    }
-  };
-  const getCourses = () => Object.keys(groupedCourses).sort(compareCourseLevels).map((key, i) => (
-    <Accordion fluid>
-      <Accordion.Title
-        active={selected.includes(i)}
-        index={i}
-        onClick={() => handleClick(i)}
-        className={styles.accordion_title}
-      >
-        <Icon name="dropdown" />
-        {key}
-      </Accordion.Title>
-      <Accordion.Content active={selected.includes(i)}>
-        <div className={styles.courses}>
-          {
+  const getCourses = () => Object.keys(groupedCourses)
+    .sort((a, b) => Levels.indexOf(a) - Levels.indexOf(b))
+    .map((key, i) => (
+      <Accordion fluid>
+        <Accordion.Title
+          active={selected.includes(i)}
+          index={i}
+          onClick={() => handleClick(i)}
+          className={styles.accordion_title}
+        >
+          <Icon name="dropdown" />
+          {key}
+        </Accordion.Title>
+        <Accordion.Content active={selected.includes(i)}>
+          <div className={styles.courses}>
+            {
             groupedCourses[key].map(c => (
               <CourseCard
                 id={c.id}
@@ -66,11 +60,10 @@ const CoursesList = () => {
               />
             ))
           }
-        </div>
-      </Accordion.Content>
-    </Accordion>
-  ));
-
+          </div>
+        </Accordion.Content>
+      </Accordion>
+    ));
   return (
     <div>
       {getCourses()}

@@ -32,7 +32,7 @@ public class StudentSettingsDto {
     private String location;
 
     @Pattern(
-            regexp = "^$|^[a-zA-Z0-9-]{2,40}$",
+            regexp = "^$|^[a-zA-Z0-9- ]{2,40}$",
             message = "Company name must be 2-40 symbols (only Latin letters, numbers, and '-' allowed)."
     )
     private String company;

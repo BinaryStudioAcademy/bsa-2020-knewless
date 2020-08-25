@@ -216,6 +216,10 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
   const validateWebsite = (newName?: string) => {
     setIsWebsiteValid(isValidUrl(typeof newName === 'string' ? newName : website));
   };
+  const validateLocation = (newName?: string) => {
+    const lastChangeValue = typeof newName === 'string' ? newName : location;
+    setIsLocationValid(locationOptions.map(l => l.value).includes(lastChangeValue));
+  };
 
   function onTagAddition(tag) {
     setSelectedTags(prev => [...prev, tag]);
@@ -369,7 +373,7 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
           ))}
         </Form.Group>
         <Form.Group widths="equal">
-          <Form.Select
+          <Form.Dropdown
             fluid
             className={`${styles.formField} ${!isLocationValid && styles.roundedBottomField}`}
             label="Location"
@@ -379,8 +383,12 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
             onChange={(e, data) => {
               const value = data.value as string;
               setLocation(value);
-              setIsLocationValid(!!value);
+              validateLocation(value);
             }}
+            onBlur={() => validateLocation()}
+            clearable
+            search
+            selection
             required
             error={isLocationValid ? false : REQUIRED_FIELD_MESSAGE}
           />

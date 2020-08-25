@@ -1,22 +1,23 @@
 import Logo from './logo';
-import {NavLink, useLocation} from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import PathIcon from './icons/paths';
-import React, {useCallback, useEffect, useState} from 'react';
-import {Icon, Label} from 'semantic-ui-react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Icon, Label } from 'semantic-ui-react';
 import styles from './styles.module.sass';
 import LoginRegister from './LoginRegister';
 import UserElement from './UserElement';
-import {connect} from 'react-redux';
-import {IAppState} from '@models/AppState';
-import {IUser} from '@containers/AppRouter/models/IUser';
+import { connect } from 'react-redux';
+import { IAppState } from '@models/AppState';
+import { IUser } from '@containers/AppRouter/models/IUser';
 import SearchHeader from '@screens/Search/containers/SearchHeader/index';
 
 interface IHeaderProps {
   currentUser: IUser;
   isAuthorized: boolean;
+  authorId?: string;
 }
 
-const Header = ({ currentUser, isAuthorized }: IHeaderProps) => {
+const Header = ({ currentUser, isAuthorized, authorId }: IHeaderProps) => {
   const [searchStyle, setSearchStyle] = useState(styles.searchHidden);
   const location = useLocation();
 
@@ -101,7 +102,7 @@ const Header = ({ currentUser, isAuthorized }: IHeaderProps) => {
           <SearchHeader className={searchStyle} />
         </div>
         <div className={styles.right_side}>
-          {isAuthorized ? <UserElement user={currentUser} /> : <LoginRegister />}
+          {isAuthorized ? <UserElement user={currentUser} authorId={authorId} /> : <LoginRegister />}
         </div>
       </div>
     </div>
@@ -109,9 +110,10 @@ const Header = ({ currentUser, isAuthorized }: IHeaderProps) => {
 };
 
 const mapStateToProps = (state: IAppState) => {
-  const { appRouter, auth } = state;
+  const { appRouter, auth, authorMainPage } = state;
   return {
     currentUser: appRouter.user,
+    authorId: authorMainPage.data.author.id,
     isAuthorized: auth.auth.isAuthorized
   };
 };

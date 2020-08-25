@@ -5,7 +5,7 @@ import Notifications from '@containers/Notifications';
 import PopupMenu from '../PopupMenu';
 import AvatarWithGradient from '@components/avatar/AvatarWithBackground';
 
-const UserElement = ({ user }) => (
+const UserElement = ({ user, authorId }) => (
   <div className={styles.profileWrp}>
     <Label
       basic
@@ -24,7 +24,7 @@ const UserElement = ({ user }) => (
       hoverable
     >
       <Popup.Content>
-        <PopupMenu user={user} />
+        <PopupMenu user={user} authorId={authorId} />
       </Popup.Content>
     </Popup>
   </div>

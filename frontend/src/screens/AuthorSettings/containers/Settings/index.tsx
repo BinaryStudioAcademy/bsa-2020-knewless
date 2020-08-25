@@ -142,6 +142,10 @@ const AuthorSettings: React.FunctionComponent<IAuthorSettingsProps> = ({
   const validateBiography = (newName?: string) => {
     setIsBiographyValid(isValidBiography(typeof newName === 'string' ? newName : biography));
   };
+  const validateLocation = (newName?: string) => {
+    const lastChangeValue = typeof newName === 'string' ? newName : location;
+    setIsLocationValid(locationOptions.map(l => l.value).includes(lastChangeValue));
+  };
   return (
     <div className={styles.settings}>
       <div className={styles.wrapperTitle}>
@@ -248,20 +252,24 @@ const AuthorSettings: React.FunctionComponent<IAuthorSettingsProps> = ({
           </Form.Input>
         </Form.Group>
         <Form.Group widths="2">
-          <Form.Select
+          <Form.Dropdown
             fluid
             className={`${styles.formField} ${!isLocationValid && styles.roundedBottomField}`}
             label="Location"
             placeholder="Select"
-            options={locationOptions}
             value={location}
             onChange={(e, data) => {
               const value = data.value as string;
               setLocation(value);
-              setIsLocationValid(!!value);
+              validateLocation(value);
             }}
             required
             error={isLocationValid ? false : REQUIRED_FIELD_MESSAGE}
+            onBlur={() => validateLocation()}
+            clearable
+            search
+            selection
+            options={locationOptions}
           />
         </Form.Group>
         <Form.Group widths="equal">

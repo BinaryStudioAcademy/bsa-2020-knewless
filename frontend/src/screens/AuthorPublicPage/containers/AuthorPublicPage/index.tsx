@@ -24,12 +24,11 @@ export interface IAuthorPublic {
 }
 
 const AuthorPublicPage: React.FunctionComponent<IAuthorPublic> = ({
-  match, fetchAuthorData, authorData, followAuthor, unfollowAuthor, user, loading
+  match, fetchAuthorData, authorData, followAuthor, unfollowAuthor, user, loading = true
 }) => {
   useEffect(() => {
     fetchAuthorData(match.params.authorId);
   }, []);
-
   const handleOnClickFollow = () => {
     followAuthor(match.params.authorId);
   };
@@ -37,66 +36,73 @@ const AuthorPublicPage: React.FunctionComponent<IAuthorPublic> = ({
     unfollowAuthor(match.params.authorId);
   };
   const isSelfPublicPage = user.id === authorData.userId;
+  if (loading) {
+    return (
+      <div className={styles.page}>
+        <div className={styles.wideContainer}>
+          <InlineLoaderWrapper loading={loading} centered />
+        </div>
+      </div>
+    );
+  }
   return (
     <div className={styles.page}>
       <div className={styles.wideContainer}>
         <div className={styles.authorMainContainer}>
-          <InlineLoaderWrapper loading={loading} centered={false}>
-            <div className={styles.authorAvatarWrapper}>
-              <AvatarWithGradient
-                className={styles.authorPublicAvatar}
-                imageSrc={authorData.avatar}
-                alt={`${authorData.firstName} ${authorData.lastName} avatar`}
-              />
+          <div className={styles.authorAvatarWrapper}>
+            <AvatarWithGradient
+              className={styles.authorPublicAvatar}
+              imageSrc={authorData.avatar}
+              alt={`${authorData.firstName} ${authorData.lastName} avatar`}
+            />
+          </div>
+          <div className={styles.authorMainInfoWrapper}>
+            <div className={styles.authorNamePublicPage}>
+              {`${authorData.firstName} ${authorData.lastName}`}
+              {user && 
+                <div className={styles.favourite_wrp}>
+                  <AddToFavouriteButton
+                    type={SourceType.AUTHOR}
+                    id={match.params.authorId}
+                  />
+                </div>}
             </div>
-            <div className={styles.authorMainInfoWrapper}>
-              <div className={styles.authorNamePublicPage}>
-                <span>{`${authorData.firstName} ${authorData.lastName}`}</span>
-                {user && 
-                  <div className={styles.favourite_wrp}>
-                    <AddToFavouriteButton
-                      type={SourceType.AUTHOR}
-                      id={match.params.authorId}
-                    />
-                  </div>}
+            {authorData.schoolName !== '' && (
+              <div className={styles.authorKnewlessStatic}>
+                <Link className={styles.cardSchoolLinkWrapper} to={`/school/${authorData.schoolId}`}>
+                  {`Author in ${authorData.schoolName}`}
+                </Link>
               </div>
-              {authorData.schoolName !== '' && (
-                <div className={styles.authorKnewlessStatic}>
-                  <Link className={styles.cardSchoolLinkWrapper} to={`/school/${authorData.schoolId}`}>
-                    {`Author in ${authorData.schoolName}`}
-                  </Link>
-                </div>
-              )}
-              {!isSelfPublicPage && authorData.printFollowButton && (
-                <div className={styles.buttonsFollowLikeAuthor}>
-                  <GradientButton className={styles.authorFollowButton} onClick={handleOnClickFollow}>
-                    <div className={styles.textButtonFollow}>Follow</div>
-                  </GradientButton>
-                </div>
-              )}
-              {!isSelfPublicPage && !authorData.printFollowButton && (
-                <div className={styles.buttonsFollowLikeAuthor}>
-                  <GradientButton className={styles.authorFollowButton} onClick={handleOnClickUnfollow}>
-                    <div className={styles.unfollow}>
-                      <div className={styles.textButtonUnfollow}>
-                        Following
-                      </div>
+            )}
+            {!isSelfPublicPage && authorData.printFollowButton && (
+              <div className={styles.buttonsFollowLikeAuthor}>
+                <GradientButton className={styles.authorFollowButton} onClick={handleOnClickFollow}>
+                  <div className={styles.textButtonFollow}>Follow</div>
+                </GradientButton>
+              </div>
+            )}
+            {!isSelfPublicPage && !authorData.printFollowButton && (
+              <div className={styles.buttonsFollowLikeAuthor}>
+                <GradientButton className={styles.authorFollowButton} onClick={handleOnClickUnfollow}>
+                  <div className={styles.unfollow}>
+                    <div className={styles.textButtonUnfollow}>
+                      Following
                     </div>
-                  </GradientButton>
-                </div>
-              )}
-              <div className={styles.subscribersNumber}>
-                <p className={styles.authorNumberFollowers}>
-                  {authorData.numberOfSubscribers}
-                </p>
-                &nbsp; followers
+                  </div>
+                </GradientButton>
               </div>
-              <div className={styles.authorBiography}>
-                <p>ABOUT AUTHOR</p>
-                <p>{authorData.biography}</p>
-              </div>
+            )}
+            <div className={styles.subscribersNumber}>
+              <p className={styles.authorNumberFollowers}>
+                {authorData.numberOfSubscribers}
+              </p>
+              &nbsp; followers
             </div>
-          </InlineLoaderWrapper>
+            <div className={styles.authorBiography}>
+              <p>ABOUT AUTHOR</p>
+              <p>{authorData.biography}</p>
+            </div>
+          </div>
           <div className={styles.cardsAuthorPublicPageWrapper}>
             <div className={styles.cardsGridLines}>
               <div className={styles.cardCoursesNumberWrapper}>

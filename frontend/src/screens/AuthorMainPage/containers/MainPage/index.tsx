@@ -69,8 +69,8 @@ const MainAuthorPage: React.FunctionComponent<IMainAuthorPageProps> = ({
         <div className={`${styles.wide_container} ${styles.card_segment} ${styles.space_under}`}>
           <AuthorCardsSegment
             title="Your recently created Paths"
-            onCreateClick={() => (history.push('/add_path'))}
-            onViewAllClick={() => console.log('clicked view author paths')}
+            onCreateClick={() => history.push('/add_path')}
+            onViewAllClick={() => history.push('/paths')}
             loading={pathsLoading}
           >
             {(authorPaths && authorPaths.length > 0) ? authorPaths.slice(0, 3).map(p => (
