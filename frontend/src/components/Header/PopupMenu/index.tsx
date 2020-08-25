@@ -1,19 +1,27 @@
 import React from 'react';
 import { List } from 'semantic-ui-react';
 import styles from './styles.module.sass';
-import { useHistory } from 'react-router-dom';
+import { history } from '@helpers/history.helper';
 import { ACCESS_TOKEN, REFRESH_TOKEN } from 'screens/Authentication/constants';
 import { IUser } from '@containers/AppRouter/models/IUser';
 import MiddleEllipsis from 'react-middle-ellipsis';
 
 export interface IPopupMenuProps {
   user: IUser;
+  authorId?: string;
 }
 
-const PopupMenu: React.FC<IPopupMenuProps> = ({ user }) => {
-  const history = useHistory();
+const PopupMenu: React.FC<IPopupMenuProps> = ({ user, authorId }) => {
   const handleOnClickProfile = () => {
-    history.push('/profile');
+    let profilePath;
+    if (user.role.name === 'USER') {
+      profilePath = '/profile';
+    } else if (user.role.name === 'AUTHOR' && !!authorId) {
+      profilePath = `/author/${authorId}`;
+    } else {
+      profilePath = '/login';
+    }
+    history.push(profilePath);
   };
   const handleOnClickHistory = () => {
     history.push('/history');
