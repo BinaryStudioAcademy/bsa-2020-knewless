@@ -5,7 +5,10 @@ import com.knewless.core.course.model.Course;
 import com.knewless.core.lecture.model.Lecture;
 import com.knewless.core.path.model.Path;
 import com.knewless.core.school.model.School;
+import com.knewless.core.tag.TagMapper;
+import com.knewless.core.tag.TagRepository;
 import com.knewless.core.tag.model.Tag;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -26,7 +29,7 @@ public class EsMapper {
                 .build();
     }
 
-    public static EsEntity esEntityFromCourseEntity(Course course) {
+    public static EsEntity esEntityFromCourseEntity(Course course, List<String> tags) {
         if (course == null) {
             return null;
         }
@@ -44,33 +47,25 @@ public class EsMapper {
                 .name(course.getName())
                 .sourceId(course.getId())
                 .type(EsDataType.COURSE)
-                .tags(course.getLectures().stream()
-                        .map(Lecture::getTags)
-                        .flatMap(Collection::stream)
-                        .map(Tag::getName)
-                        .distinct()
-                        .collect(Collectors.toList())
-                )
+                .tags(tags)
                 .metadata(metadata)
                 .build();
     }
 
-    public static EsEntity esEntityFromPathEntity(Path path, List<Lecture> tags) {
+    public static EsEntity esEntityFromPathEntity(Path path) {
         if (path == null) {
             return null;
         }
 
         Map<String, Object> metadata = new HashMap<>();
-        metadata.put("total minutes", tags.stream().mapToInt(Lecture::getDuration).sum());
+        var duration = path.getCourses().stream().mapToInt(
+                c -> c.getLectures().stream().mapToInt(Lecture::getDuration).sum()
+        ).sum();
+        metadata.put("total minutes", duration);
 
         return EsEntity.builder()
                 .name(path.getName())
-                .tags(tags.stream()
-                        .map(Lecture::getTags)
-                        .flatMap(Collection::stream)
-                        .map(Tag::getName)
-                        .collect(Collectors.toList())
-                )
+                .tags(path.getTags().stream().map(Tag::getName).collect(Collectors.toList()))
                 .sourceId(path.getId())
                 .type(EsDataType.PATH)
                 .metadata(metadata)

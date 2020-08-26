@@ -29,7 +29,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -123,7 +122,6 @@ public class CourseService {
         return new CreateCourseResponseDto(course.getId(), true);
     }
 
-	@Transactional
 	public CreateCourseResponseDto updateCourse(CreateCourseRequestDto request, UUID userId) {
         Author author = authorRepository.findByUserId(userId).orElseThrow(
                 () -> new ResourceNotFoundException("Author", "userId", userId)
@@ -155,7 +153,6 @@ public class CourseService {
 
         String message = author.getFirstName() + " " + author.getLastName() + " updated course: " + updatedCourse.getName();
         subscriptionService.notifySubscribers(author.getId(), SourceType.AUTHOR, course.getId(), SourceType.COURSE, message);
-
         return new CreateCourseResponseDto(updatedCourse.getId(), true);
     }
 

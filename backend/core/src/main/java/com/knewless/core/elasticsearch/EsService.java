@@ -6,9 +6,12 @@ import com.knewless.core.db.BaseEntity;
 import com.knewless.core.elasticsearch.model.EsDataType;
 import com.knewless.core.elasticsearch.model.EsEntity;
 import com.knewless.core.elasticsearch.model.EsMapper;
+import com.knewless.core.lecture.LectureMapper;
 import com.knewless.core.lecture.LectureRepository;
 import com.knewless.core.lecture.model.Lecture;
 import com.knewless.core.path.model.Path;
+import com.knewless.core.tag.TagRepository;
+import com.knewless.core.tag.model.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHit;
@@ -31,49 +34,34 @@ public class EsService {
     private EsRepository esRepository;
 
     @Autowired
-    private LectureRepository lectureRepository;
+    private TagRepository tagRepository;
 
     @Autowired
     private ElasticsearchOperations elasticsearchTemplate;
 
     public void put(EsDataType dataType, BaseEntity data) {
 
-        EsEntity entity = new EsEntity();
-
-        switch (dataType) {
-            case PATH: {
-                List<Lecture> lectures = lectureRepository.getLecturesByPathId(data.getId());
-                entity = EsMapper.esEntityFromPathEntity((Path) data, lectures);
-                break;
-            }
-
-            case AUTHOR: {
-                entity = EsMapper.esEntityFromAuthorEntity((Author) data);
-                break;
-            }
-
-            case COURSE: {
-                entity = EsMapper.esEntityFromCourseEntity((Course) data);
-                break;
-            }
-
-            case SCHOOL: {
-//                entity = EsMapper.esEntityFromSchoolEntity((School) data, authorRepository.findBySchoolId(((BaseEntity) data).getId()));
-                break;
-            }
-        }
+        EsEntity entity = convertToEsEntity(dataType, data);
 
         esRepository.save(entity);
     }
 
     public void update(EsDataType dataType, BaseEntity data) {
 
+        EsEntity entity = convertToEsEntity(dataType, data);
+
+        EsEntity esEntityFromEs = esRepository.findBySourceId(data.getId()).orElseThrow();
+        entity.setId(esEntityFromEs.getId());
+
+        esRepository.save(entity);
+    }
+
+    private EsEntity convertToEsEntity(EsDataType dataType, BaseEntity data) {
         EsEntity entity = new EsEntity();
 
         switch (dataType) {
             case PATH: {
-                List<Lecture> lectures = lectureRepository.getLecturesByPathId(data.getId());
-                entity = EsMapper.esEntityFromPathEntity((Path) data, lectures);
+                entity = EsMapper.esEntityFromPathEntity((Path) data);
                 break;
             }
 
@@ -83,7 +71,9 @@ public class EsService {
             }
 
             case COURSE: {
-                entity = EsMapper.esEntityFromCourseEntity((Course) data);
+                Course course = (Course) data;
+                List<String> tags = tagRepository.getTagsByCourse(course.getId());
+                entity = EsMapper.esEntityFromCourseEntity(course, tags);
                 break;
             }
 
@@ -92,10 +82,7 @@ public class EsService {
                 break;
             }
         }
-        EsEntity esEntityFromEs = esRepository.findBySourceId(data.getId()).orElseThrow();
-        entity.setId(esEntityFromEs.getId());
-
-        esRepository.save(entity);
+        return entity;
     }
 
     public List<EsEntity> search(String query) {

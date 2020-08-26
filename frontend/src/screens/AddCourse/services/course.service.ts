@@ -1,6 +1,7 @@
 import { callApi } from 'helpers/api.helper';
 import { ICourse } from '../models/ICourse';
 import { IUpdateCourse } from '../models/IUpdateCourse';
+import { history } from '@helpers/history.helper';
 
 export const getLecturesByUser = async () => {
   const response = await callApi({
@@ -54,3 +55,7 @@ export const addLectureToDb = async lecture => {
   });
   return response.json();
 };
+
+export function forwardHome() {
+  history.push('/');
+}

@@ -41,7 +41,6 @@ export default function* rootSaga() {
     resetPasswordSagas(),
     savePasswordSagas(),
     coursesSagas(),
-    addPathSagas(),
     coursePageSagas(),
     searchSagas(),
     pathsPageSagas()

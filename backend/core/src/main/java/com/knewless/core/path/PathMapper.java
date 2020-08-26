@@ -1,9 +1,8 @@
 package com.knewless.core.path;
 
-import com.knewless.core.path.dto.AuthorPathDto;
-import com.knewless.core.path.dto.AuthorPathQueryResult;
-import com.knewless.core.path.dto.PathDto;
-import com.knewless.core.path.dto.PathQueryResult;
+import com.knewless.core.author.model.Author;
+import com.knewless.core.path.dto.*;
+import com.knewless.core.path.model.Path;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -19,4 +18,10 @@ public interface PathMapper {
     @Mapping(target = "duration", ignore = true)
     @Mapping(target = "logoSrc", source = "image")
     AuthorPathDto authorPathQueryResultToAuthorPathDto(AuthorPathQueryResult pathQueryResult);
+
+    @Mapping(target = "courses", ignore = true)
+    @Mapping(target = "tags", ignore = true)
+    @Mapping(target = "duration", ignore = true)
+    @Mapping(target = "imageTag.imageSrc", source = "imageTag.source")
+    PathDetailsDto pathToPathDetailsDto(Path path);
 }

@@ -1,9 +1,10 @@
 import { all, call, put, takeEvery } from 'redux-saga/effects';
 import { toastr } from 'react-redux-toastr';
-import { fetchCoursesRoutine, fetchTagsRoutine, savePathRoutine } from '../../routines';
+import { fetchCoursesRoutine, fetchTagsRoutine, savePathRoutine, fetchPathToEditRoutine, updatePathRoutine } from '../../routines';
 import * as addPageService from '../../services/add_page.service';
 import { AnyAction } from 'redux';
 import { ICourse } from '../../models/domain';
+import { Routine } from 'redux-saga-routines';
 
 function* loadCourses() {
   try {
@@ -33,6 +34,36 @@ function* watchFetchTagsTriggers() {
   yield takeEvery(fetchTagsRoutine.TRIGGER, loadTags);
 }
 
+function* loadEditPath(action: Routine<any>) {
+  try {
+    const response = yield call(addPageService.getPath, action.payload);
+    yield put(fetchPathToEditRoutine.success(response));
+  } catch (error) {
+    yield put(fetchPathToEditRoutine.failure(error?.message));
+  }
+}
+
+function* watchFetchPathTriggers() {
+  yield takeEvery(fetchPathToEditRoutine.TRIGGER, loadEditPath);
+}
+
+function* updatePath(action: Routine<any>) {
+  try {
+    const response = yield call(addPageService.updatePath, action.payload);
+    yield put(updatePathRoutine.success(response));
+    toastr.success('Saved successfully!');
+    addPageService.forwardHome();
+  } catch (error) {
+    yield put(updatePathRoutine.failure(error?.message));
+    // todo: change error to a proper one
+    toastr.error('Failed to save. Please select tag image.');
+  }
+}
+
+function* watchUpdatePathTriggers() {
+  yield takeEvery(updatePathRoutine.TRIGGER, updatePath);
+}
+
 function* savePath({ payload }: AnyAction) {
   try {
     const response = yield call(addPageService.uploadPath, payload);
@@ -54,6 +85,8 @@ export default function* pathSagas() {
   yield all([
     watchFetchCoursesTriggers(),
     watchFetchTagsTriggers(),
-    watchSavePathTriggers()
+    watchSavePathTriggers(),
+    watchFetchPathTriggers(),
+    watchUpdatePathTriggers()
   ]);
 }

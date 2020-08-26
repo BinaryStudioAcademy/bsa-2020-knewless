@@ -1,3 +1,5 @@
+import { IDuration } from "@components/PathCard";
+
 export interface IPath {
   id?: string;
   name: string;
@@ -5,6 +7,16 @@ export interface IPath {
   description: string;
   tags: ITag[];
   imageTag: ITag;
+}
+
+export interface IPathDetails {
+  id: string;
+  name: string;
+  courses: ICourse[];
+  description: string;
+  tags: ITag[];
+  imageTag: ITag;
+  duration: IDuration;
 }
 
 export interface ICourse {

@@ -40,7 +40,8 @@ function* updateCourse(action: Routine<any>) {
     }
     const response = yield call(courseService.updateCourse, action.payload);
     yield put(updateCourseRoutine.success(response));
-    toastr.success('Course saved!');
+    toastr.success('Saved successfully!');
+    courseService.forwardHome();
   } catch (error) {
     console.log(error);
     yield put(updateCourseRoutine.failure(error?.message));
@@ -60,8 +61,8 @@ function* saveCourse(action: Routine<any>) {
     }
     const response = yield call(courseService.saveCourse, action.payload);
     yield put(saveCourseRoutine.success(response));
-    console.log(response);
-    toastr.success('Course saved!');
+    toastr.success('Saved successfully!');
+    courseService.forwardHome();
   } catch (error) {
     console.log(error);
     yield put(saveCourseRoutine.failure(error?.message));
@@ -74,9 +75,9 @@ function* watchSaveCourseRequest() {
 
 function* saveLecture(action: Routine<any>) {
   try {
-    const addEntity = { 
+    const addEntity = {
       name: action.payload.name,
-      description: action.payload.description 
+      description: action.payload.description
     };
     const responseAdd = yield call(courseService.addLectureToDb, addEntity);
     yield put(saveLectureRoutine.success(responseAdd));
