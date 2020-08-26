@@ -45,7 +45,7 @@ public class Lecture extends BaseEntity {
     @Column(name = "duration")
     private int duration;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course_id")
     private Course course;
 

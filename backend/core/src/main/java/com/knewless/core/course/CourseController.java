@@ -1,6 +1,7 @@
 package com.knewless.core.course;
 
 import com.knewless.core.course.dto.*;
+import com.knewless.core.course.model.Course;
 import com.knewless.core.lecture.dto.ShortLectureDto;
 import com.knewless.core.exception.custom.ResourceNotFoundException;
 import com.knewless.core.security.oauth.UserPrincipal;
@@ -58,6 +59,24 @@ public class CourseController {
         }
         try {
             return ResponseEntity.ok(courseService.createCourse(request, user.getId()));
+        } catch (ResourceNotFoundException ex) {
+            return ResponseEntity.badRequest().body(new SingleMessageResponse(ex.getMessage()));
+        }
+    }
+
+    @PutMapping("/{id}")
+    private ResponseEntity<?> updateCourse(@CurrentUser UserPrincipal user,
+                                           @Valid @RequestBody CreateCourseRequestDto request,
+                                           Errors validationResult) {
+        if (validationResult.hasErrors()) {
+            return ResponseEntity.badRequest()
+                    .body(new SingleMessageResponse(
+                                    ValidationMessageCreator.createString(validationResult, " ")
+                            )
+                    );
+        }
+        try {
+            return ResponseEntity.ok(courseService.updateCourse(request, user.getId()));
         } catch (ResourceNotFoundException ex) {
             return ResponseEntity.badRequest().body(new SingleMessageResponse(ex.getMessage()));
         }

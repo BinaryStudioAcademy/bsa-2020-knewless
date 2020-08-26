@@ -11,6 +11,8 @@ public interface EsRepository extends ElasticsearchRepository<EsEntity, UUID> {
 
     Optional<EsEntity> findByName(String name);
 
+    Optional<EsEntity> findBySourceId(UUID sourceId);
+
     List<EsEntity> findByNameContainsIgnoreCase(String query);
 
     boolean existsBySourceId(UUID id);

@@ -20,6 +20,7 @@ interface ICoursePageProps {
   fetchData: IBindingCallback1<string>;
   openLoginModal: IBindingCallback1<string>;
   course: IFullCourseData;
+  role: string;
   loading: boolean;
   isAuthorized: boolean;
 }
@@ -27,6 +28,7 @@ interface ICoursePageProps {
 const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
   fetchData,
   course,
+  role,
   loading,
   isAuthorized,
   openLoginModal
@@ -44,6 +46,8 @@ const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
     <>
       <div className={styles.content}>
         <CourseOverview
+          role={role}
+          courseId={course?.id}
           imageSrc={course?.image || defaultCourseImage}
           courseName={course?.name || ''}
           authorName={`${course?.author?.firstName} ${course?.author?.lastName}` || ''}
@@ -88,6 +92,7 @@ const mapStateToProps = (state: IAppState) => {
   return {
     course,
     loading: state.coursePage.requests.dataRequest.loading,
+    role: state.appRouter.user.role.name,
     isAuthorized
   };
 };

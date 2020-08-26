@@ -28,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -118,6 +119,42 @@ public class CourseService {
         subscriptionService.notifySubscribers(author.getId(), SourceType.AUTHOR, course.getId(), SourceType.COURSE, message);
         return new CreateCourseResponseDto(course.getId(), true);
 	}
+
+	@Transactional
+	public CreateCourseResponseDto updateCourse(CreateCourseRequestDto request, UUID userId) {
+        Author author = authorRepository.findByUserId(userId).orElseThrow(
+                () -> new ResourceNotFoundException("Author", "userId", userId)
+        );
+        String authorId = author.getId().toString();
+        String requestAuthorId = request.getUserId().toString();
+        if (!authorId.equals(requestAuthorId)) {
+            throw new ResourceNotFoundException("Author", "userId", userId);
+        }
+
+        Course course = courseRepository.findById(request.getId()).orElseThrow(
+                () -> new ResourceNotFoundException("Course", "id", request)
+        );
+
+        course.setName(request.getName());
+        course.setImage(request.getImage());
+        course.setLevel(Level.valueOf(request.getLevel()));
+        course.setDescription(request.getDescription());
+
+        List<Lecture> lectures = lectureRepository.findAllById(request.getLectures());
+        course.setLectures(lectures);
+
+        if (request.getIsReleased()) {
+            course.setReleasedDate(new Date());
+        }
+        Course updatedCourse = courseRepository.save(course);
+
+        CompletableFuture.runAsync(() -> esService.update(EsDataType.COURSE, updatedCourse));
+
+        String message = author.getFirstName() + " " + author.getLastName() + " updated course: " + updatedCourse.getName();
+        subscriptionService.notifySubscribers(author.getId(), SourceType.AUTHOR, course.getId(), SourceType.COURSE, message);
+
+        return new CreateCourseResponseDto(updatedCourse.getId(), true);
+    }
 
     public CourseToPlayerDto getCourseByLectureId(UUID lectureId) {
         var courseProjection = courseRepository.findOneById(UUID.fromString(courseRepository.findByLectureId(lectureId).getId()));

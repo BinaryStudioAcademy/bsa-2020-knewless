@@ -6,6 +6,7 @@ import GradientButton from 'components/buttons/GradientButton';
 import GrayOutlineButton from 'components/buttons/GrayOutlineButton';
 import '../../styles/common.sass';
 import { IBindingCallback1 } from '@models/Callbacks';
+import { Icon, Label } from 'semantic-ui-react';
 
 interface ICourseOverviewProps {
   imageSrc: string;
@@ -16,6 +17,8 @@ interface ICourseOverviewProps {
   startLectureId: string;
   isAuthorized: boolean;
   openLoginModal: IBindingCallback1<string>;
+  role: string;
+  courseId: string;
 }
 
 const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
@@ -26,7 +29,9 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
   rating,
   startLectureId,
   isAuthorized,
-  openLoginModal
+  openLoginModal,
+  courseId,
+  role
 }) => {
   const history = useHistory();
   return (
@@ -35,6 +40,22 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
         <div className={`${styles.description_content} left_container`}>
           <h1 className={styles.description__course_name}>
             {courseName}
+            {role === 'AUTHOR' && (
+              <Label 
+                style={{
+                  background: 'transparent',
+                  color: '#fff',
+                  verticalAlign: 'super',
+                  position: 'relative',
+                  top: '-8px',
+                  left: '10px',
+                  cursor: 'pointer'
+                }}
+                onClick={() => history.push(`/course/edit/${courseId}`)}
+              >
+                <Icon name='pencil' />
+              </Label>
+            )}
           </h1>
           <div className={styles.description__meta_info}>
             <StyledRating rating={rating} className={`rating ${styles.rating}`} disabled />
@@ -43,7 +64,7 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
               {
                 isAuthorized
                   ? <a href={`/author/${authorId}`}>{authorName}</a>
-                  : <span>{ authorName }</span>
+                  : <span>{authorName}</span>
               }
             </p>
           </div>

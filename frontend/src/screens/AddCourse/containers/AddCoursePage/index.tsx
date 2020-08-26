@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { fetchLecturesRoutine, saveCourseRoutine } from 'screens/AddCourse/routines';
+import { fetchLecturesRoutine, saveCourseRoutine, fetchEditCourseRoutine, updateCourseRoutine, clearCourseRoutine } from 'screens/AddCourse/routines';
 import { IBindingAction, IBindingCallback1 } from 'models/Callbacks';
 import { ICourse } from '../../models/ICourse';
 import { Button, Dropdown, Input, Label } from 'semantic-ui-react';
 import { Footer } from '@components/Footer';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import styles from './styles.module.sass';
 import { levelOptions } from '../../models/options';
 import { compareName, getMinutes, isImage } from '../../services/helper.service';
@@ -27,26 +27,39 @@ import {
   isValidCourseName,
   REQUIRED_FIELD_MESSAGE
 } from '@helpers/validation.helper';
+import { IFullCourseData } from '@screens/CoursePage/models/IFullCourseData';
+import { updateCourse } from '@screens/AddCourse/services/course.service';
+import { IUpdateCourse } from '@screens/AddCourse/models/IUpdateCourse';
 
 interface IAddCourseProps {
-  lectures: ILecture [];
+  lectures: ILecture[];
+  editCourse: IFullCourseData,
   courseId: string;
   isLecturesLoaded: boolean;
   fetchLectures: IBindingAction;
   saveCourse: IBindingCallback1<ICourse>;
+  updateCourse: IBindingCallback1<IUpdateCourse>;
+  fetchCourse: IBindingCallback1<string>;
+  clearCourse: IBindingAction;
   authorName: string;
 }
 
 const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
   lectures,
+  editCourse,
   fetchLectures: getLectures,
   saveCourse: save,
+  updateCourse,
+  fetchCourse,
+  clearCourse,
   isLecturesLoaded,
   authorName
 }) => {
   const history = useHistory();
+  const { courseId } = useParams();
   const [selected, setSelected] = useState(Array<ILecture>());
   const [pool, setPool] = useState(Array<ILecture>());
+  const [isEdit, setIsEdit] = useState(false);
   useEffect(() => {
     if (lectures.length === 0 && !isLecturesLoaded) {
       getLectures();
@@ -55,6 +68,40 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
     const filtered = updated.filter(l => !selected.map(s => s.id).includes(l.id));
     setPool(filtered);
   }, [lectures, getLectures]);
+
+  useEffect(() => {
+    if (history.location.pathname.startsWith('/course/edit') && !editCourse) {
+      setIsEdit(true);
+      fetchCourse(courseId);
+    }
+  }, [history.location.pathname]);
+
+  useEffect(() => {
+    if (editCourse) {
+      setSelected([...editCourse.lectures]);
+      setCourseName(editCourse.name);
+      setPreviewImage(editCourse.image);
+      setDescription(editCourse.description);
+      setLevel(editCourse.level);
+      setAuthor(editCourse?.author.firstName + ' ' + editCourse?.author.lastName);
+      setRating(editCourse.rating);
+    }
+    if (!editCourse?.tags || editCourse?.tags.length === 0) {
+      setTags(['tag1', 'tag2', 'tag3']);
+    } else {
+      setTags(editCourse.tags.slice(0, 3).map(t => t.name));
+    }
+
+    if (editCourse?.author) {
+      setAuthor(editCourse?.author.firstName + ' ' + editCourse?.author.lastName);
+    } else {
+      setAuthor(authorName);
+    }
+  }, [editCourse]);
+
+  useEffect(() => {
+    return () => clearCourse();
+  }, []);
 
   const itemToJsxWithClick = (item: IFilterableItem, click: (item) => void, isSelected?: boolean) => {
     const lecture = item as ILecture;
@@ -79,6 +126,9 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
   const [description, setDescription] = useState('');
   const [courseName, setCourseName] = useState('');
   const [level, setLevel] = useState('');
+  const [tags, setTags] = useState([]);
+  const [author, setAuthor] = useState('');
+  const [rating, setRating] = useState(0);
   const [buttonLoading, setButtonLoading] = useState(false);
   const [previewImage, setPreviewImage] = useState(CourseImage);
   const [modalAddOpen, setModalAddOpen] = useState(false);
@@ -120,7 +170,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
   const handleSave = (isRelease: boolean) => {
     if (isRelease && !isReleseble) return;
     setButtonLoading(true);
-    save({
+    const course = {
       name: courseName,
       level,
       isReleased: isRelease,
@@ -128,7 +178,12 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
       description,
       image: previewImage,
       uploadImage
-    });
+    };
+    if (isEdit) {
+      updateCourse({ id: courseId, userId: editCourse.author.id, ...course });
+    } else {
+      save(course);
+    }
     setButtonLoading(false);
   };
 
@@ -147,7 +202,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
     <div className={styles.main_container}>
       <div className={styles.main_content}>
         <div className={styles.dividerwrp}>
-          <h3 className={styles.title}>New Course</h3>
+          <h3 className={styles.title}>{isEdit ? 'Edit Course' : 'New Course'}</h3>
         </div>
         <div className={styles.wide_container}>
           <div className={styles.settingsInput}>
@@ -234,9 +289,9 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
             <div className={styles.textcontainer}>Preview:</div>
             <div className={styles.preview_warning_container}>
               <CoursePreview
-                authorName={authorName}
-                tags={['tag1', 'tag2', 'tag3']}
-                rating={0}
+                authorName={author}
+                tags={tags}
+                rating={rating}
                 image={previewImage}
                 lecturesNumber={selected.length}
                 name={courseName}
@@ -310,6 +365,7 @@ const mapStateToProps = (state: IAppState) => {
     userId: appRouter.user.id,
     authorName: `${firstName} ${lastName}`,
     courseId,
+    editCourse: state.addcourse.data.editCourse,
     lectures,
     isLecturesLoaded,
     loading: state.addcourse.requests.dataRequest.loading
@@ -318,6 +374,9 @@ const mapStateToProps = (state: IAppState) => {
 
 const mapDispatchToProps = {
   fetchLectures: fetchLecturesRoutine,
+  fetchCourse: fetchEditCourseRoutine,
+  updateCourse: updateCourseRoutine,
+  clearCourse: clearCourseRoutine,
   saveCourse: saveCourseRoutine
 };
 

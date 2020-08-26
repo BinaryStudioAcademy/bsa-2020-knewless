@@ -66,6 +66,38 @@ public class EsService {
         esRepository.save(entity);
     }
 
+    public void update(EsDataType dataType, BaseEntity data) {
+
+        EsEntity entity = new EsEntity();
+
+        switch (dataType) {
+            case PATH: {
+                List<Lecture> lectures = lectureRepository.getLecturesByPathId(data.getId());
+                entity = EsMapper.esEntityFromPathEntity((Path) data, lectures);
+                break;
+            }
+
+            case AUTHOR: {
+                entity = EsMapper.esEntityFromAuthorEntity((Author) data);
+                break;
+            }
+
+            case COURSE: {
+                entity = EsMapper.esEntityFromCourseEntity((Course) data);
+                break;
+            }
+
+            case SCHOOL: {
+//                entity = EsMapper.esEntityFromSchoolEntity((School) data, authorRepository.findBySchoolId(((BaseEntity) data).getId()));
+                break;
+            }
+        }
+        EsEntity esEntityFromEs = esRepository.findBySourceId(data.getId()).orElseThrow();
+        entity.setId(esEntityFromEs.getId());
+
+        esRepository.save(entity);
+    }
+
     public List<EsEntity> search(String query) {
         NativeSearchQuery searchQuery = new NativeSearchQueryBuilder()
                 .withQuery(matchQuery("name", query))

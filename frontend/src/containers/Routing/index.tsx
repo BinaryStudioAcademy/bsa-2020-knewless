@@ -92,6 +92,8 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({
           <PrivateRoute exact path="/add_path" roles={[RoleTypes.AUTHOR]} component={AddPathPage} />
           <PrivateRoute exact path="/add_course" roles={[RoleTypes.AUTHOR]} component={AddCourse} />
           <PrivateRoute exact path="/profile" roles={[RoleTypes.USER]} component={StudentProfile} />
+          <PublicRoute exact path="/course/edit/:courseId" roles={[RoleTypes.AUTHOR]} component={AddCourse} />
+          <PublicRoute exact path="/path/edit/:pathId" roles={[RoleTypes.AUTHOR]} component={AddPathPage} />
         </Route>
         <div>
           <LoaderWrapper loading={isLoading}>
