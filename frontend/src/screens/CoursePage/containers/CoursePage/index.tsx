@@ -8,7 +8,7 @@ import CourseInfo from '../../components/CourseInfo';
 import { Footer } from '@components/Footer';
 import { BottomNavigation } from '@screens/Landing/components/BottomNavigation';
 import { IAppState } from '@models/AppState';
-import { fetchCourseDataRoutine } from '@screens/CoursePage/routines';
+import { fetchCourseDataRoutine, startCourseRoutine } from '@screens/CoursePage/routines';
 import { connect } from 'react-redux';
 import { IBindingCallback1 } from '@models/Callbacks';
 import { IFullCourseData } from '@screens/CoursePage/models/IFullCourseData';
@@ -18,6 +18,7 @@ import { openLoginModalRoutine } from '@containers/LoginModal/routines';
 
 interface ICoursePageProps {
   fetchData: IBindingCallback1<string>;
+  startCourse: IBindingCallback1<string>;
   openLoginModal: IBindingCallback1<string>;
   course: IFullCourseData;
   role: string;
@@ -27,6 +28,7 @@ interface ICoursePageProps {
 
 const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
   fetchData,
+  startCourse,
   course,
   role,
   loading,
@@ -40,7 +42,9 @@ const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
       fetchData(courseId);
     }
   }, [courseId]);
-
+  const handleOnStartCourse = () => {
+    startCourse(course.id);
+  };
   if (loading) return null;
   return (
     <>
@@ -54,12 +58,14 @@ const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
           authorId={course?.author?.id}
           rating={course?.rating}
           startLectureId={(course?.lectures && course?.lectures?.length > 0) ? course.lectures[0].id : ''}
+          startCourse={handleOnStartCourse}
           isAuthorized={isAuthorized}
           openLoginModal={openLoginModal}
         />
         <div className="separator" />
         <CourseInfo
           isAuthorized={isAuthorized}
+          startCourse={handleOnStartCourse}
           openLoginModal={openLoginModal}
           level={course?.level || ''}
           updatedAt={course?.updatedAt}
@@ -99,6 +105,7 @@ const mapStateToProps = (state: IAppState) => {
 
 const mapDispatchToProps = {
   fetchData: fetchCourseDataRoutine,
+  startCourse: startCourseRoutine,
   openLoginModal: openLoginModalRoutine.trigger
 };
 

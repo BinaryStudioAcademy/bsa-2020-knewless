@@ -23,50 +23,40 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "courses")
 public class Course extends BaseEntity {
-    
-    public Course(UUID id) {
-        this.setId(id);
-    }
-    
+
     @Column(name = "name")
     private String name;
-
     @Column(name = "description")
     private String description;
-
     @Column(name = "level")
     @Enumerated(EnumType.STRING)
     private Level level;
-
     @Column(name = "image")
     private String image;
-
     @Column(name = "released_date")
     private Date releasedDate;
-
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
     @JoinColumn(name = "author_id")
     private Author author;
-
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
     @JoinColumn(name = "category_id")
     private Category category;
-    
     @Builder.Default
     @ManyToMany(mappedBy = "courses", cascade = CascadeType.REFRESH)
     private List<Path> paths = List.of();
-    
     @Builder.Default
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CourseComment> comments = List.of();
-    
     @Builder.Default
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CourseReaction> reactions = List.of();
-
     @Builder.Default
     @OneToMany(targetEntity = Lecture.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "course_id")
     private List<Lecture> lectures = List.of();
+
+    public Course(UUID id) {
+        this.setId(id);
+    }
 }
 

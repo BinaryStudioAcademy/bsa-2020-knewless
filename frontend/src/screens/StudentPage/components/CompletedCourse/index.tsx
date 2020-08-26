@@ -4,6 +4,7 @@ import { minutesToDuration } from 'components/PathCard/helper';
 import { StyledRating } from 'components/StyledRating';
 
 export interface ICompletedCourseProps {
+  id: string;
   category: string;
   author: string;
   timeMinutes: number;
@@ -11,19 +12,20 @@ export interface ICompletedCourseProps {
   name: string;
   previewSrc: string;
   rating: number;
+  progress: number;
 }
 
 export const CompletedCourse: React.FC<ICompletedCourseProps> = ({
-  category, author, timeMinutes, level, name, previewSrc,
-  rating
+  id, category, author, timeMinutes, level, name, previewSrc,
+  rating, progress
 }) => {
   const calcDuration = useCallback(() => minutesToDuration(timeMinutes), [timeMinutes]);
   const { timeUnit, duration } = calcDuration();
   const handleOnClick = () => {
-    console.log('click');
+    window.open(`/course/${id}`);
   };
   return (
-    <div className={styles.container}>
+    <div className={styles.container} onClick={handleOnClick}>
       <div className={styles.image_container}>
         <div className={styles.image_cover} />
         <img
@@ -48,7 +50,7 @@ export const CompletedCourse: React.FC<ICompletedCourseProps> = ({
         </div>
         <div className={styles.wrapperProgress}>
           <div className={styles.progress}>
-            100%
+            {progress}%
           </div>
         </div>
       </div>

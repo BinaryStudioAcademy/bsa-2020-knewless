@@ -41,9 +41,11 @@ const StudentProfile: React.FunctionComponent<IStudentProfileProps> = ({
         {profile.courses && profile.courses.length !== 0 ? (
           <div className={styles.currentCourse}>
             <List relaxed>
-              {profile.courses.map(course => (
+              {profile.courses.sort((a,b)=> a.progress > b.progress ? 1 : -1).map(course => (
+                course.progress !== 100 &&
                 <List.Item className={styles.course} onClick={handleOnClickCourse}>
                   <CurrentCourse
+                    id={course.id}
                     author={course.author}
                     category={course.category}
                     level={course.level}
@@ -52,6 +54,7 @@ const StudentProfile: React.FunctionComponent<IStudentProfileProps> = ({
                     key={course.id}
                     previewSrc={course.image}
                     rating={course.rating}
+                    progress={course.progress}
                   />
                 </List.Item>
               ))}
@@ -62,8 +65,10 @@ const StudentProfile: React.FunctionComponent<IStudentProfileProps> = ({
         <div className={styles.completedCourse}>
           <List relaxed>
             {profile.courses && profile.courses.length !== 0 ? profile.courses.map(course => (
+              course.progress === 100 &&
               <List.Item className={styles.completedCourseItem}>
                 <CompletedCourse
+                  id={course.id}
                   author={course.author}
                   category={course.category}
                   level={course.level}
@@ -72,6 +77,7 @@ const StudentProfile: React.FunctionComponent<IStudentProfileProps> = ({
                   key={course.id}
                   previewSrc={course.image}
                   rating={course.rating}
+                  progress={course.progress}
                 />
               </List.Item>
             ))

@@ -7,5 +7,6 @@ export interface ICourse {
     level: string;
     image: string;
     rating: number;
+    progress: number;
   }
   

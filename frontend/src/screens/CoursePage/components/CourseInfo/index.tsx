@@ -6,7 +6,7 @@ import CourseMenu from '@screens/CoursePage/components/CourseMenu';
 import { ILectureData } from '@screens/CoursePage/models/ILectureData';
 import moment from 'moment';
 import { ITagData } from '@screens/CoursePage/models/ITagData';
-import { IBindingCallback1 } from '@models/Callbacks';
+import { IBindingCallback1, IBindingAction } from '@models/Callbacks';
 
 interface ICourseInfoProps {
   level: string;
@@ -17,6 +17,7 @@ interface ICourseInfoProps {
   courseDescription: string;
   tags: ITagData[];
   isAuthorized: boolean;
+  startCourse: IBindingAction;
   openLoginModal: IBindingCallback1<string>;
 }
 
@@ -29,6 +30,7 @@ const CourseInfo: React.FunctionComponent<ICourseInfoProps> = ({
   courseDescription,
   tags,
   isAuthorized,
+  startCourse,
   openLoginModal
 }) => (
   <div className="content_row">
@@ -56,6 +58,7 @@ const CourseInfo: React.FunctionComponent<ICourseInfoProps> = ({
       <CourseMenu
         isAuthorized={isAuthorized}
         openLoginModal={openLoginModal}
+        startCourse={startCourse}
         lectures={lectures}
         courseDescription={courseDescription}
       />

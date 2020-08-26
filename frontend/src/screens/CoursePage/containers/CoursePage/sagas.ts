@@ -1,5 +1,5 @@
 import { all, call, put, takeEvery } from 'redux-saga/effects';
-import { fetchCourseDataRoutine } from '@screens/CoursePage/routines';
+import { fetchCourseDataRoutine, startCourseRoutine } from '@screens/CoursePage/routines';
 import * as courseService from '@screens/CoursePage/services/course.service';
 import { AnyAction } from 'redux';
 import { history } from '@helpers/history.helper';
@@ -13,13 +13,25 @@ function* getData({ payload }: AnyAction) {
     yield put(fetchCourseDataRoutine.failure(error?.message));
   }
 }
-
+function* startCourse({ payload }: AnyAction) {
+  try {
+    const response = yield call(() => courseService.startCourse({courseId: payload}));
+    yield put(startCourseRoutine.success(response));
+  } catch (error) {
+    history.push('/');
+    yield put(startCourseRoutine.failure(error?.message));
+  }
+}
 function* watchGetDataRequest() {
   yield takeEvery(fetchCourseDataRoutine.TRIGGER, getData);
+}
+function* watchStartCourseRequest() {
+  yield takeEvery(startCourseRoutine.TRIGGER, startCourse);
 }
 
 export default function* courseDataSagas() {
   yield all([
-    watchGetDataRequest()
+    watchGetDataRequest(),
+    watchStartCourseRequest()
   ]);
 }

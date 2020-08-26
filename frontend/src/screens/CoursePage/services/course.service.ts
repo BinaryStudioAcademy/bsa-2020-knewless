@@ -8,3 +8,12 @@ export async function getData(id) {
 
   return response.json();
 }
+export async function startCourse(request) {
+  const response = await callApi({
+    endpoint: `/api/course/continue/start`,
+    type: 'POST',
+    requestData: request
+  });
+
+  return response.json();
+}

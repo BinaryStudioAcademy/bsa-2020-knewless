@@ -11,6 +11,7 @@ import com.knewless.core.elasticsearch.EsService;
 import com.knewless.core.elasticsearch.model.EsDataType;
 import com.knewless.core.db.SourceType;
 import com.knewless.core.exception.custom.ResourceNotFoundException;
+import com.knewless.core.history.WatchHistoryService;
 import com.knewless.core.lecture.LectureMapper;
 import com.knewless.core.lecture.LectureRepository;
 import com.knewless.core.lecture.homework.HomeworkRepository;
@@ -47,6 +48,7 @@ public class CourseService {
     private final SubscriptionService subscriptionService;
     private final TagService tagService;
     private final EsService esService;
+    private final WatchHistoryService watchHistoryService;
 
     @Value(value = "${fs.video_url}")
     private String URL;
@@ -56,7 +58,7 @@ public class CourseService {
                          AuthorRepository authorRepository, HomeworkRepository homeworkRepository,
                          TagRepository tagRepository, UserService userService,
                          AuthorService authorService, SubscriptionService subscriptionService,
-                         TagService tagService, EsService esService) {
+                         TagService tagService, EsService esService, WatchHistoryService watchHistoryService) {
         this.courseRepository = courseRepository;
         this.lectureRepository = lectureRepository;
         this.authorRepository = authorRepository;
@@ -67,6 +69,7 @@ public class CourseService {
         this.esService = esService;
         this.tagRepository = tagRepository;
         this.userService = userService;
+        this.watchHistoryService = watchHistoryService;
     }
 
     public CreateCourseResponseDto createCourse(CreateCourseRequestDto request, UUID userId) {
@@ -118,7 +121,7 @@ public class CourseService {
         String message = author.getFirstName() + " " + author.getLastName() + " added new course.";
         subscriptionService.notifySubscribers(author.getId(), SourceType.AUTHOR, course.getId(), SourceType.COURSE, message);
         return new CreateCourseResponseDto(course.getId(), true);
-	}
+    }
 
 	@Transactional
 	public CreateCourseResponseDto updateCourse(CreateCourseRequestDto request, UUID userId) {
@@ -164,9 +167,9 @@ public class CourseService {
         course.setAuthor(courseProjection.getAuthor());
         course.setLectures(courseProjection.getLectures()
                 .stream()
-                .map( l -> new LectureProjectionMapper().fromProjection(l,URL))
+                .map(l -> new LectureProjectionMapper().fromProjection(l, URL))
                 .collect(Collectors.toList()));
-         return course;
+        return course;
     }
 
     public List<CourseDto> getCourses(Pageable pageable) {
@@ -184,6 +187,13 @@ public class CourseService {
 
     public CourseWithMinutesDto getCourseWithMinutesById(UUID id) {
         return CourseMapper.MAPPER.courseQueryToCourseWithMinutes(courseRepository.getCourseById(id));
+    }
+
+    public CourseProfileDto getCourseProfileById(UUID id, UUID userId) {
+        CourseProfileDto course = CourseMapper.MAPPER.courseQueryToCourseProfileDto(courseRepository.getCourseById(id));
+        long progress = ((watchHistoryService.getProgress(id, userId) * 100) / course.getTimeMinutes());
+        course.setProgress((int) (progress > 100 ? 100 : progress));
+        return course;
     }
 
     public List<CourseWithMinutesDto> getCoursesWithMinutesByUserId(UUID userId) {
@@ -261,7 +271,7 @@ public class CourseService {
     public List<CourseDetailsDto> getAllAuthorCourses(UserPrincipal user) {
         Role role = userService.getUserRole(user.getEmail());
         if (role.getName() != RoleType.AUTHOR) {
-            return  List.of();
+            return List.of();
         }
         Author author = authorRepository.findByUserId(user.getId()).orElseThrow();
 

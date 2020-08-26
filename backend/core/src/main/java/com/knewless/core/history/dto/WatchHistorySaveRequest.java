@@ -10,11 +10,11 @@ import java.util.UUID;
 
 @Data
 public class WatchHistorySaveRequest {
-	@NotBlank
-	private UUID lectureId;
-	@PositiveOrZero
-	private int secondsWatched;
-	@DecimalMin(value = "0")
-	@DecimalMax(value = "1")
-	private float fractionWatched;
+    @NotBlank
+    private UUID lectureId;
+    @PositiveOrZero
+    private int secondsWatched;
+    @DecimalMin(value = "0")
+    @DecimalMax(value = "1")
+    private float fractionWatched;
 }

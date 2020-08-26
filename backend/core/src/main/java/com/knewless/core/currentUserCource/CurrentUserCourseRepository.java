@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface CurrentUserCourseRepository extends JpaRepository<CurrentUserCourse, UUID> {
@@ -17,4 +18,6 @@ public interface CurrentUserCourseRepository extends JpaRepository<CurrentUserCo
     @Query("SELECT DISTINCT cc.course.id FROM CurrentUserCourse cc WHERE cc.user.id = :id")
     List<UUID> getLearningCoursesId(@Param("id") UUID userId);
 
+    @Query("SELECT cc FROM CurrentUserCourse cc WHERE cc.user.id=:userId AND cc.course.id = :courseId")
+    Optional<CurrentUserCourse> findByUserAndCourse(UUID userId, UUID courseId);
 }

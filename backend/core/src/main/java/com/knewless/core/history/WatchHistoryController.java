@@ -12,26 +12,26 @@ import java.util.UUID;
 @RestController
 @RequestMapping("watch_history")
 public class WatchHistoryController {
-	private final WatchHistoryService service;
+    private final WatchHistoryService service;
 
-	@Autowired
-	public WatchHistoryController(WatchHistoryService service) {
-		this.service = service;
-	}
+    @Autowired
+    public WatchHistoryController(WatchHistoryService service) {
+        this.service = service;
+    }
 
-	@GetMapping
-	public long totalViewSeconds(@CurrentUser UserPrincipal userPrincipal) {
-		return service.getTotalViewSeconds(userPrincipal.getId());
-	}
+    @GetMapping
+    public long totalViewSeconds(@CurrentUser UserPrincipal userPrincipal) {
+        return service.getTotalViewSeconds(userPrincipal.getId());
+    }
 
-	@GetMapping("{lectureId}")
-	public long viewedSeconds(@CurrentUser UserPrincipal userPrincipal, @PathVariable UUID lectureId){
-		return service.getViewedSeconds(userPrincipal.getId(), lectureId);
-	}
+    @GetMapping("{lectureId}")
+    public long viewedSeconds(@CurrentUser UserPrincipal userPrincipal, @PathVariable UUID lectureId) {
+        return service.getViewedSeconds(userPrincipal.getId(), lectureId);
+    }
 
-	@PostMapping
-	public void saveWatchHistory(@CurrentUser UserPrincipal userPrincipal,
-								 @Valid @RequestBody WatchHistorySaveRequest request) {
-		service.saveWatchHistory(userPrincipal.getId(), request);
-	}
+    @PostMapping
+    public void saveWatchHistory(@CurrentUser UserPrincipal userPrincipal,
+                                 @Valid @RequestBody WatchHistorySaveRequest request) {
+        service.saveWatchHistory(userPrincipal.getId(), request);
+    }
 }

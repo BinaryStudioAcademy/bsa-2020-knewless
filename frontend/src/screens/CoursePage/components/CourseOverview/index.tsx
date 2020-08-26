@@ -5,7 +5,7 @@ import { StyledRating } from 'components/StyledRating';
 import GradientButton from 'components/buttons/GradientButton';
 import GrayOutlineButton from 'components/buttons/GrayOutlineButton';
 import '../../styles/common.sass';
-import { IBindingCallback1 } from '@models/Callbacks';
+import { IBindingCallback1, IBindingAction } from '@models/Callbacks';
 import { Icon, Label } from 'semantic-ui-react';
 
 interface ICourseOverviewProps {
@@ -16,6 +16,7 @@ interface ICourseOverviewProps {
   rating: number;
   startLectureId: string;
   isAuthorized: boolean;
+  startCourse: IBindingAction;
   openLoginModal: IBindingCallback1<string>;
   role: string;
   courseId: string;
@@ -29,11 +30,19 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
   rating,
   startLectureId,
   isAuthorized,
+  startCourse,
   openLoginModal,
   courseId,
   role
 }) => {
   const history = useHistory();
+  const onStart = () => {
+    if (!isAuthorized) openLoginModal(`/lecture/${startLectureId}`);
+    else if (startLectureId !== '') { 
+      startCourse();
+      window.open(`/lecture/${startLectureId}`);
+    }
+  }
   return (
     <div className="content_row">
       <div className={`${styles.description} flex_item aligned_item`}>
@@ -69,11 +78,7 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
             </p>
           </div>
           <div className={styles.description__buttons}>
-            <GradientButton onClick={() => {
-              if (!isAuthorized) openLoginModal(`/lecture/${startLectureId}`);
-              else if (startLectureId !== '') history.push(`/lecture/${startLectureId}`);
-            }}
-            >
+            <GradientButton onClick={onStart}>
               Start
             </GradientButton>
             <GrayOutlineButton>Play course overview</GrayOutlineButton>

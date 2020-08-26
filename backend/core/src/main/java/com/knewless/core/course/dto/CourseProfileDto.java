@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.UUID;
 
 @Data
-public class CourseWithMinutesDto {
+public class CourseProfileDto {
     private UUID id;
     private String name;
     private String category;
@@ -14,4 +14,5 @@ public class CourseWithMinutesDto {
     private String level;
     private String image;
     private int rating;
+    private int progress;
 }

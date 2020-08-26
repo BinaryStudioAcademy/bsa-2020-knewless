@@ -5,6 +5,7 @@ import { Progress } from 'semantic-ui-react';
 import { StyledRating } from 'components/StyledRating';
 
 export interface ICurrentCourseProps {
+  id:string
   category: string;
   author: string;
   timeMinutes: number;
@@ -12,16 +13,20 @@ export interface ICurrentCourseProps {
   name: string;
   previewSrc: string;
   rating: number;
+  progress: number;
 }
 
 export const CurrentCourse: React.FC<ICurrentCourseProps> = ({
-  category, author, timeMinutes, level, name, previewSrc,
-  rating
+  id, category, author, timeMinutes, level, name, previewSrc,
+  rating, progress
 }) => {
   const calcDuration = useCallback(() => minutesToDuration(timeMinutes), [timeMinutes]);
   const { timeUnit, duration } = calcDuration();
+  const handleOnClick = () => {
+    window.open(`/course/${id}`);
+  };
   return (
-    <div className={styles.container}>
+    <div className={styles.container} onClick={handleOnClick}>
       <div className={styles.image_container}>
         <div className={styles.image_cover} />
         <img
@@ -45,9 +50,8 @@ export const CurrentCourse: React.FC<ICurrentCourseProps> = ({
           <StyledRating rating={rating} className={styles.dependency__rating} />
         </div>
         <div className={styles.progress}>
-          <div className={styles.progressTime}>12h 2m</div>
           <div className={styles.wrapperProgress}>
-            <Progress percent={80} className={styles.progressBar}>80%</Progress>
+            <Progress percent={progress} className={styles.progressBar}>{progress}%</Progress>
           </div>
         </div>
       </div>
