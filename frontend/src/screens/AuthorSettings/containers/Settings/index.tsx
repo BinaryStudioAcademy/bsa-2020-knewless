@@ -11,6 +11,7 @@ import GrayOutlineButton from '@components/buttons/GrayOutlineButton';
 import GradientButton from '@components/buttons/GradientButton';
 import { resetSettingsModeRoutine, setUserRoleRoutine } from 'containers/AppRouter/routines';
 import { RoleTypes } from 'containers/AppRouter/models/IRole';
+import { isImage } from '@screens/AddCourse/services/helper.service';
 import {
   BIOGRAPHY_MESSAGE,
   COMPANY_MESSAGE,
@@ -71,9 +72,13 @@ const AuthorSettings: React.FunctionComponent<IAuthorSettingsProps> = ({
     setTwitterUser(getTwitterUserFromUrl(settings?.twitter || ''));
     setBiography(settings.biography || '');
   }, [settings]);
+
   const handleUploadFile = file => {
-    setUploadImage(file);
-    setAvatar(URL.createObjectURL(file));
+    const thisFile: File = file;
+    if (thisFile && isImage(thisFile.name)) {
+      setUploadImage(thisFile);
+      setAvatar(URL.createObjectURL(thisFile));
+    }
   };
 
   const [isFirstNameValid, setIsFirstNameValid] = useState(true);

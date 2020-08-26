@@ -2,6 +2,8 @@ package com.knewless.core.auth;
 
 import com.knewless.core.auth.Dto.SavePasswordDtoResponse;
 import com.knewless.core.auth.Dto.ValidateResetLinkResponseDto;
+import com.knewless.core.auth.Dto.VerifyEmailResponseDto;
+import com.knewless.core.emailservice.Dto.TemporaryDto;
 import com.knewless.core.emailservice.EmailService;
 import com.knewless.core.exception.UserAlreadyRegisteredException;
 import com.knewless.core.security.model.AuthResponse;
@@ -15,7 +17,9 @@ import com.knewless.core.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -73,6 +77,7 @@ public class AuthService {
         user.setEmail(signUpRequest.getEmail());
         user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
         userRepository.save(user);
+        emailService.generateRegisterAndSendEmail(user.getId());
         return login(new LoginRequest(signUpRequest.getEmail(), signUpRequest.getPassword()));
     }
 
@@ -112,6 +117,26 @@ public class AuthService {
             emailService.removeReset(resetId);
             return SavePasswordDtoResponse.builder().isSuccessfull(true).comment("Password saved").build();
         }
+    }
+
+    public VerifyEmailResponseDto verifyEmail(UUID id) {
+        TemporaryDto registerDto = emailService.getRegisterDto(id);
+        if (registerDto == null) return VerifyEmailResponseDto.builder().isVerified(false).build();
+
+        Optional<User> userOptional = userRepository.findById(registerDto.getUserId());
+        if (userOptional.isEmpty()) return VerifyEmailResponseDto.builder().isVerified(false).build();
+
+        User user = userOptional.get();
+        user.setEmailVerified(true);
+        userRepository.save(user);
+        final UserDetails userDetails = customUserDetailsService.loadUserById(registerDto.getUserId());
+        final Authentication authentication = new UsernamePasswordAuthenticationToken(
+                userDetails, null, userDetails.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        final String token = tokenProvider.createAccessToken(authentication);
+        final String refresh = tokenProvider.createRefreshToken(authentication);
+        emailService.removeRegister(id);
+        return VerifyEmailResponseDto.builder().isVerified(true).token(token).refresh(refresh).build();
     }
 
 }

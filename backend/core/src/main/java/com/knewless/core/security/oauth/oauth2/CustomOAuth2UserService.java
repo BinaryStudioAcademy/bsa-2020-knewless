@@ -1,5 +1,6 @@
 package com.knewless.core.security.oauth.oauth2;
 
+import com.knewless.core.emailservice.EmailService;
 import com.knewless.core.exception.custom.OAuth2AuthenticationProcessingException;
 import com.knewless.core.security.oauth.UserPrincipal;
 import com.knewless.core.security.oauth.oauth2.user.OAuth2UserInfo;
@@ -23,6 +24,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private EmailService emailService;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) throws OAuth2AuthenticationException {
@@ -60,7 +64,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         User user = new User();
 
         user.setEmail(oAuth2UserInfo.getEmail());
-        return userRepository.save(user);
+        userRepository.save(user);
+        emailService.generateRegisterAndSendEmail(user.getId());
+        return user;
     }
 
     private User updateExistingUser(User existingUser, OAuth2UserInfo oAuth2UserInfo) {

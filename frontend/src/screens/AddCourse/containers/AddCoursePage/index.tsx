@@ -17,6 +17,7 @@ import { CoursePreview } from '@components/CoursePreview';
 import { IAppState } from 'models/AppState';
 import GrayOutlineButton from 'components/buttons/GrayOutlineButton';
 import GradientButton from 'components/buttons/GradientButton';
+import { InlineLoaderWrapper } from '@components/InlineLoaderWrapper';
 import UploadLectureModal from '../../components/UploadLectureModal';
 import CourseImage from '@images/default_course_image.jpg';
 import {
@@ -42,6 +43,7 @@ interface IAddCourseProps {
   fetchCourse: IBindingCallback1<string>;
   clearCourse: IBindingAction;
   authorName: string;
+  authorId: string;
 }
 
 const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
@@ -53,7 +55,8 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
   fetchCourse,
   clearCourse,
   isLecturesLoaded,
-  authorName
+  authorName,
+  authorId
 }) => {
   const history = useHistory();
   const { courseId } = useParams();
@@ -113,7 +116,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
         key={lecture.id}
         onClick={() => click(lecture)}
         isSelected={isSelected}
-        lectureURL={lecture.lectureURL}
+        lectureURL={lecture.urlOrigin}
       />
     );
   };
@@ -293,6 +296,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
                 tags={tags}
                 rating={rating}
                 image={previewImage}
+                authorId={authorId}
                 lecturesNumber={selected.length}
                 name={courseName}
                 level={level}
@@ -334,17 +338,21 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
             </div>
           </div>
           <div className={styles.list_container}>
-            <AddCourseDependenciesSelector
-              selected={selected}
-              stored={pool}
-              selectedToStored={removeLectureFromSelected}
-              storedToSelected={removeLectureFromPool}
-              dependencyName="lecture"
-              itemToJsx={itemToJsxWithClick}
-              sortFn={compareName}
-              openModalAction={setModalAddOpen}
-              updateLectures={handleUpdateLectures}
-            />
+            <InlineLoaderWrapper loading={!isLecturesLoaded} centered>
+              {isLecturesLoaded && (
+                <AddCourseDependenciesSelector
+                  selected={selected}
+                  stored={pool}
+                  selectedToStored={removeLectureFromSelected}
+                  storedToSelected={removeLectureFromPool}
+                  dependencyName="lecture"
+                  itemToJsx={itemToJsxWithClick}
+                  sortFn={compareName}
+                  openModalAction={setModalAddOpen}
+                  updateLectures={handleUpdateLectures}
+                />
+              )}
+            </InlineLoaderWrapper>
           </div>
         </div>
       </div>
@@ -360,10 +368,11 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
 const mapStateToProps = (state: IAppState) => {
   const { lectures, isLecturesLoaded, courseId } = state.addcourse.data;
   const { appRouter } = state;
-  const { firstName, lastName } = state.authorMainPage.data.author;
+  const { firstName, lastName, id } = state.authorMainPage.data.author;
   return {
     userId: appRouter.user.id,
     authorName: `${firstName} ${lastName}`,
+    authorId: id,
     courseId,
     editCourse: state.addcourse.data.editCourse,
     lectures,

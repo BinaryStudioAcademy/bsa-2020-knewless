@@ -28,6 +28,7 @@ import { IAppState } from '@models/AppState';
 import { connect } from 'react-redux';
 import { loginRoutine } from '@screens/Home/routines';
 import { openLoginModalRoutine } from '@containers/LoginModal/routines';
+import VerifyEmail from '@components/EmailConfirmation/VerifyEmail';
 import { IBindingAction, IBindingCallback1 } from '@models/Callbacks';
 import PathsPage from '@screens/Paths/containers/PathsPage';
 
@@ -53,7 +54,7 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({
   redirectTo
 }) => {
   const checkHeaderShown = () => {
-    const headerBlackList = ['/login', '/register', '/lecture/', '/reset', '/savepassword'];
+    const headerBlackList = ['/login', '/register', '/lecture/', '/reset', '/savepassword', '/verifyemail'];
 
     return headerBlackList.every(item => !history.location.pathname.startsWith(item));
   };
@@ -78,6 +79,7 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({
           {isHeaderShown && <Header />}
           <SettingsRoute />
           <RootRoute />
+          <PublicRoute exact path="/verifyemail/:confirmId" component={VerifyEmail} />
           <PublicRoute exact path="/savepassword/:resetid" component={SavePassword} />
           <PublicRoute exact path="/course/:courseId" component={CoursePage} />
           <PublicRoute exact path="/path/:pathId" component={PathPage} />
