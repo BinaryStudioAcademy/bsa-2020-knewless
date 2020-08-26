@@ -1,6 +1,7 @@
 package com.knewless.core.subscription;
 
 import com.knewless.core.author.AuthorRepository;
+import com.knewless.core.author.model.Author;
 import com.knewless.core.db.SourceType;
 import com.knewless.core.exception.custom.ResourceNotFoundException;
 import com.knewless.core.messaging.MessageSender;
@@ -8,6 +9,8 @@ import com.knewless.core.messaging.userMessage.UserMessage;
 import com.knewless.core.messaging.userMessage.UserMessageType;
 import com.knewless.core.notification.NotificationService;
 import com.knewless.core.notification.dto.NotificationDto;
+import com.knewless.core.student.StudentRepository;
+import com.knewless.core.student.model.Student;
 import com.knewless.core.subscription.dto.SubscriptionDto;
 import com.knewless.core.subscription.mapper.SubscriptionMapper;
 import com.knewless.core.subscription.model.Subscription;
@@ -27,16 +30,18 @@ public class SubscriptionService {
     private final MessageSender messageSender;
     private final NotificationService notificationService;
     private final AuthorRepository authorRepository;
+    private final StudentRepository studentRepository;
 
     @Autowired
     public SubscriptionService(SubscriptionRepository subscriptionRepository, UserRepository userRepository,
                                MessageSender messageSender, NotificationService notificationService,
-                               AuthorRepository authorRepository) {
+                               AuthorRepository authorRepository, StudentRepository studentRepository) {
         this.subscriptionRepository = subscriptionRepository;
         this.userRepository = userRepository;
         this.messageSender = messageSender;
         this.notificationService = notificationService;
         this.authorRepository = authorRepository;
+        this.studentRepository = studentRepository;
     }
 
     public void subscribe(SubscriptionDto subscription) {
@@ -51,6 +56,25 @@ public class SubscriptionService {
         );
         if (result.isEmpty()) {
             subscriptionRepository.save(SubscriptionMapper.fromDto(subscription, user));
+            if (subscription.getSourceType() == SourceType.AUTHOR) {
+                String message = studentRepository.getStudentNameByUserId(subscription.getUserId()) + " follows you.";
+                var build = NotificationDto.builder()
+                        .id(UUID.randomUUID())
+                        .sourceId(subscription.getSourceId().toString())
+                        .date(new Date())
+                        .isRead(false)
+                        .text(message)
+                        .sourceType(subscription.getSourceType().toString())
+                        .build();
+                Author author = authorRepository.findOneById(subscription.getSourceId()).orElseThrow();
+                notificationService.createNotification(build, author.getUser().getId());
+                UserMessage userMessage = new UserMessage();
+                userMessage.setReceiverId(author.getUser().getId().toString());
+                userMessage.setBody(build);
+                userMessage.setType(UserMessageType.PERSONAL);
+                messageSender.sendToUser(userMessage);
+            }
+
         }
     }
 

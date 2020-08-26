@@ -14,4 +14,6 @@ public interface StudentRepository extends JpaRepository<Student, UUID> {
     Optional<Student> findByUser(User user);
 
     Optional<Student> findByUserId(UUID id);
+    @Query("SELECT concat(s.firstName,' ', s.lastName) FROM Student s WHERE s.user.id = :userId ")
+    String getStudentNameByUserId(UUID userId);
 }
