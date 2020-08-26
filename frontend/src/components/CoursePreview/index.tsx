@@ -17,12 +17,13 @@ export interface ICoursePreviewProps {
   tags?: string[];
   rating: number;
   flag?: boolean;
+  members?: number;
   action?: (any) => void;
 }
 
 export const CoursePreview: React.FC<ICoursePreviewProps> = ({
   image, lecturesNumber, durationMinutes, level, flag, action, name, description,
-  id, authorName, authorId, tags, rating
+  id, authorName, authorId, tags, rating, members
 }) => {
   const optionalIcon = (isSelected: boolean) => {
     switch (isSelected) {
@@ -60,15 +61,21 @@ export const CoursePreview: React.FC<ICoursePreviewProps> = ({
           )}
       </div>
       <div className={styles.card_content_box}>
-        <StyledRating
-          className={styles.course_rating}
-          size="small"
-          style={{ fontSize: '1.2em', width: '8rem' }}
-          rating={rating}
-          disabled
-        />
-        <div className={styles.tags}>
-          {tags?.length > 0 && tags.map((t, index) => <span key={index}>{t}</span>)}
+        <div className={styles.block_top}>
+          <div className={styles.tags}>
+            {tags?.length > 0 && tags.map((t, index) => <span key={index}>{t}</span>)}
+          </div>
+          <StyledRating
+            className={styles.course_rating}
+            size="small"
+            style={{ fontSize: '1.2em', width: '8rem' }}
+            rating={rating}
+            disabled
+          />
+        </div>  
+        <div className={styles.started}>
+          <span className={styles.membersLabel}>started: </span>
+          <span className={styles.membersText}>{members? members : 0}</span>
         </div>
         <div className={styles.course_name}>
           <NavLink exact to={`/course/${id}`}>

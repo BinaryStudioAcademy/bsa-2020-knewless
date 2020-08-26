@@ -54,6 +54,9 @@ public class CurrentUserCourseService {
         return courseService.getUserCourses(userId);
     }
 
+    public long getCountMembers(UUID courseId) {
+        return currentUserCourseRepository.getMembersByCourse(courseId);
+    }    
     public Optional<CurrentUserCourseDto> startCourse(CurrentUserCourseDto course) {
         User user = userRepository.findById(course.getUserId()).orElseThrow();
         Course userCourse = courseRepository.findById(course.getCourseId()).orElseThrow();

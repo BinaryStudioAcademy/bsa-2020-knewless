@@ -7,6 +7,8 @@ import com.knewless.core.author.model.Author;
 import com.knewless.core.course.dto.*;
 import com.knewless.core.course.model.Course;
 import com.knewless.core.course.model.Level;
+import com.knewless.core.currentUserCource.CurrentUserCourseRepository;
+import com.knewless.core.currentUserCource.CurrentUserCourseService;
 import com.knewless.core.elasticsearch.EsService;
 import com.knewless.core.elasticsearch.model.EsDataType;
 import com.knewless.core.db.SourceType;
@@ -47,6 +49,7 @@ public class CourseService {
     private final SubscriptionService subscriptionService;
     private final TagService tagService;
     private final EsService esService;
+    private final CurrentUserCourseRepository currentUserCourseRepository;
     private final WatchHistoryService watchHistoryService;
 
     @Value(value = "${fs.video_url}")
@@ -57,7 +60,8 @@ public class CourseService {
                          AuthorRepository authorRepository, HomeworkRepository homeworkRepository,
                          TagRepository tagRepository, UserService userService,
                          AuthorService authorService, SubscriptionService subscriptionService,
-                         TagService tagService, EsService esService, WatchHistoryService watchHistoryService) {
+                         TagService tagService, EsService esService,
+                         CurrentUserCourseRepository currentUserCourseRepository, WatchHistoryService watchHistoryService) {
         this.courseRepository = courseRepository;
         this.lectureRepository = lectureRepository;
         this.authorRepository = authorRepository;
@@ -68,6 +72,7 @@ public class CourseService {
         this.esService = esService;
         this.tagRepository = tagRepository;
         this.userService = userService;
+        this.currentUserCourseRepository = currentUserCourseRepository;
         this.watchHistoryService = watchHistoryService;
     }
 
@@ -122,7 +127,7 @@ public class CourseService {
         return new CreateCourseResponseDto(course.getId(), true);
     }
 
-	public CreateCourseResponseDto updateCourse(CreateCourseRequestDto request, UUID userId) {
+    public CreateCourseResponseDto updateCourse(CreateCourseRequestDto request, UUID userId) {
         Author author = authorRepository.findByUserId(userId).orElseThrow(
                 () -> new ResourceNotFoundException("Author", "userId", userId)
         );
@@ -237,6 +242,7 @@ public class CourseService {
                     tags = tags.size() > 3 ? tags.subList(0, 3) : tags;
                     CourseDetailsDto course = CourseMapper.MAPPER.courseDetailsResultToCourseDetailsDto(c);
                     course.setTags(tags);
+                    course.setMembers(currentUserCourseRepository.getMembersByCourse(c.getId()));
                     return course;
                 }).collect(Collectors.toList());
     }
@@ -249,6 +255,7 @@ public class CourseService {
                     tags = tags.size() > 3 ? tags.subList(0, 3) : tags;
                     CourseDetailsDto course = CourseMapper.MAPPER.courseDetailsResultToCourseDetailsDto(c);
                     course.setTags(tags);
+                    course.setMembers(currentUserCourseRepository.getMembersByCourse(c.getId()));
                     return course;
                 }).collect(Collectors.toList());
     }
@@ -261,6 +268,7 @@ public class CourseService {
                     tags = tags.size() > 3 ? tags.subList(0, 3) : tags;
                     CourseDetailsDto course = CourseMapper.MAPPER.courseDetailsResultToCourseDetailsDto(c);
                     course.setTags(tags);
+                    course.setMembers(currentUserCourseRepository.getMembersByCourse(c.getId()));
                     return course;
                 }).collect(Collectors.toList());
     }
@@ -279,6 +287,7 @@ public class CourseService {
                     tags = tags.size() > 3 ? tags.subList(0, 3) : tags;
                     CourseDetailsDto course = CourseMapper.MAPPER.courseDetailsResultToCourseDetailsDto(c);
                     course.setTags(tags);
+                    course.setMembers(currentUserCourseRepository.getMembersByCourse(c.getId()));
                     return course;
                 }).collect(Collectors.toList());
     }
