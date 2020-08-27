@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './styles.module.sass';
 import { Label, Icon, Popup } from 'semantic-ui-react';
+import { timeFormatLecture } from '@helpers/time.helper';
 
 export interface ILectureCardProps {
   timeMinutes: number;
@@ -28,7 +29,7 @@ export const LectureCard: React.FC<ILectureCardProps> = ({
       {name}
     </div>
     <div className={styles.meta__time}>
-      {timeMinutes === 0 ? '' : timeMinutes > 1 ? `${timeMinutes} minutes` : `${timeMinutes} minute`}
+      {timeFormatLecture(timeMinutes)}
     </div>
     <div className={styles.meta__actionButton}>
       {timeMinutes === 0 ? (

@@ -89,7 +89,7 @@ const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
           openLoginModal={openLoginModal}
           level={course?.level || ''}
           updatedAt={course?.updatedAt}
-          duration={course?.duration || ''}
+          duration={course?.duration}
           courseDescription={course?.description || ''}
           lectures={course?.lectures}
           rating={course?.rating}
@@ -122,7 +122,7 @@ const mapStateToProps = (state: IAppState) => {
   return {
     course,
     loading: state.coursePage.requests.dataRequest.loading,
-    role: state.appRouter.user.role.name,
+    role: state.appRouter.user?.role?.name,
     isAuthorized
   };
 };

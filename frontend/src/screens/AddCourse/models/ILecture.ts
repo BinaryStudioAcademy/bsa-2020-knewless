@@ -3,5 +3,5 @@ export interface ILecture {
   name: string;
   description?: string;
   urlOrigin?: string;
-  timeMinutes?: number;
+  timeSeconds?: number;
 }

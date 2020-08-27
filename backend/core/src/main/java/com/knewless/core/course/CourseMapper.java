@@ -15,26 +15,20 @@ public interface CourseMapper {
                 Math.round((float) positiveReactions / allReactions);
     }
 
-    static String calculateDuration(long minutes) {
-        long hh = minutes / 60;
-        long mm = minutes % 60;
-        return String.format("%dh %02dm", hh, mm);
-    }
-
     @Mapping(source = "category", target = "category.name")
-    @Mapping(target = "duration", expression = "java(CourseMapper.calculateDuration(s.getDuration()))")
     @Mapping(target = "level", expression = "java(s.getLevel().name())")
     @Mapping(target = "rating", expression = "java(CourseMapper.calculateRating(s.getAllReactions(), s.getPositiveReactions()))")
     CourseDto courseQueryResultToCourseDto(CourseQueryResult s);
 
     @Mapping(source = "imageSrc", target = "image")
-    @Mapping(source = "duration", target = "timeMinutes")
+    @Mapping(source = "duration", target = "timeSeconds")
     @Mapping(target = "level", expression = "java(s.getLevel().name())")
     @Mapping(target = "rating", expression = "java(CourseMapper.calculateRating(s.getAllReactions(), s.getPositiveReactions()))")
     CourseWithMinutesDto courseQueryToCourseWithMinutes(CourseQueryResult s);
 
+    @Mapping(target = "progress", ignore = true)
     @Mapping(source = "imageSrc", target = "image")
-    @Mapping(source = "duration", target = "timeMinutes")
+    @Mapping(source = "duration", target = "timeSeconds")
     @Mapping(target = "level", expression = "java(s.getLevel().name())")
     @Mapping(target = "rating", expression = "java(CourseMapper.calculateRating(s.getAllReactions(), s.getPositiveReactions()))")
     CourseProfileDto courseQueryToCourseProfileDto(CourseQueryResult s);
@@ -52,6 +46,7 @@ public interface CourseMapper {
 	@Mapping(target = "review", ignore = true)
 	CourseFullInfoDto courseToCourseFullInfoDto(Course course);
 
+    @Mapping(target = "members", ignore = true)
     @Mapping(target = "tags", ignore = true)
     @Mapping(target = "rating",
             expression =

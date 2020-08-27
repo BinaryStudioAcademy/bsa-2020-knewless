@@ -11,7 +11,6 @@ import com.knewless.core.course.model.Course;
 import com.knewless.core.course.model.Level;
 import com.knewless.core.db.SourceType;
 import com.knewless.core.currentUserCource.CurrentUserCourseRepository;
-import com.knewless.core.currentUserCource.CurrentUserCourseService;
 import com.knewless.core.elasticsearch.EsService;
 import com.knewless.core.elasticsearch.model.EsDataType;
 import com.knewless.core.exception.custom.ResourceNotFoundException;
@@ -199,7 +198,7 @@ public class CourseService {
 
     public CourseProfileDto getCourseProfileById(UUID id, UUID userId) {
         CourseProfileDto course = CourseMapper.MAPPER.courseQueryToCourseProfileDto(courseRepository.getCourseById(id));
-        long progress = ((watchHistoryService.getProgress(id, userId) * 100) / course.getTimeMinutes());
+        long progress = ((watchHistoryService.getProgress(id, userId) * 100) / course.getTimeSeconds());
         course.setProgress((int) (progress > 100 ? 100 : progress));
         return course;
     }

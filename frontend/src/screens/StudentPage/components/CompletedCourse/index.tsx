@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import styles from './styles.module.sass';
 import { minutesToDuration } from 'components/PathCard/helper';
 import { StyledRating } from 'components/StyledRating';
+import { timeFormat } from '@helpers/time.helper';
 import {CircleProgress} from 'react-gradient-progress';
 
 export interface ICompletedCourseProps {
@@ -42,8 +43,7 @@ export const CompletedCourse: React.FC<ICompletedCourseProps> = ({
           <div className={styles.dependency__meta__info_row}>
             <span className={styles.dependency__meta__author}>{author}</span>
             <div>
-              <span className={styles.dependency__meta__time_duration}>{duration}</span>
-              <span className={styles.dependency__meta__time_unit}>{timeUnit}</span>
+              <span className={styles.dependency__meta__time_duration}>{timeFormat(timeMinutes)}</span>
             </div>
             <span className={styles.dependency__level}>{level}</span>
           </div>

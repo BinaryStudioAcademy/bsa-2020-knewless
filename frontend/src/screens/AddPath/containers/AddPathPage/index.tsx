@@ -162,7 +162,7 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
         category={course.category}
         level={course.level}
         name={course.name}
-        timeMinutes={course.timeMinutes}
+        timeMinutes={course.timeSeconds}
         key={course.id}
         previewSrc={course.image}
         rating={course.rating}
@@ -173,8 +173,7 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
   };
 
   const countOverallDuration = useCallback(() => {
-    const minutes = selectedCourses.map(c => c.timeMinutes).reduce((a, b) => a + b, 0);
-    return minutesToDuration(minutes);
+    return selectedCourses.map(c => c.timeSeconds).reduce((a, b) => a + b, 0);
   }, [selectedCourses]);
 
   const forwardAddCourse = () => {

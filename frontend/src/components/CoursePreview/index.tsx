@@ -3,6 +3,7 @@ import { Button, Icon, Label } from 'semantic-ui-react';
 import { StyledRating } from '@components/StyledRating';
 import { NavLink } from 'react-router-dom';
 import styles from './styles.module.sass';
+import { timeFormat } from '@helpers/time.helper';
 
 export interface ICoursePreviewProps {
   id?: string;
@@ -109,8 +110,8 @@ export const CoursePreview: React.FC<ICoursePreviewProps> = ({
               <span className={styles.number}>{lecturesNumber}</span>
             </div>
             <div>
-              <span className={styles.meta__lectures}>minutes:</span>
-              <span className={styles.number}>{durationMinutes}</span>
+              <span className={styles.meta__lectures}>duration:</span>
+              <span className={styles.number}>{timeFormat(durationMinutes)}</span>
             </div>
             <div>
               <span className={styles.levelText}>{level}</span>

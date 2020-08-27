@@ -4,7 +4,6 @@ import com.knewless.core.author.AuthorRepository;
 import com.knewless.core.author.model.Author;
 import com.knewless.core.course.CourseMapper;
 import com.knewless.core.course.CourseRepository;
-import com.knewless.core.course.dto.CourseQueryResult;
 import com.knewless.core.course.dto.CourseWithMinutesDto;
 import com.knewless.core.db.SourceType;
 import com.knewless.core.elasticsearch.EsService;
@@ -23,14 +22,10 @@ import com.knewless.core.user.role.model.Role;
 import com.knewless.core.user.role.model.RoleType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.time.Duration;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -63,37 +58,13 @@ public class PathService {
 
     public List<PathDto> getPaths(Pageable pageable) {
         var pathInfo = pathRepository.getAllPaths(pageable);
-        return pathInfo.stream().map(p -> {
-            var path = PathMapper.MAPPER.pathQueryResultToPathDto(p);
-            path.setDuration(getDuration(p.getMinutes()));
-            return path;
-        }).collect(Collectors.toList());
-    }
-
-    public PathDurationDto getDuration(long minutes) {
-        Duration d = Duration.ofMinutes(minutes);
-        var timeWithUnits = new LinkedHashMap<Long, String>();
-
-        timeWithUnits.put(d.toDaysPart() / 7, "Weeks");
-        timeWithUnits.put(d.toDaysPart(), "Days");
-        timeWithUnits.put((long) d.toHoursPart(), "Hours");
-
-        for (Map.Entry<Long, String> entry : timeWithUnits.entrySet()) {
-            Long value = entry.getKey();
-            if (value >= 1) {
-                return new PathDurationDto(value, entry.getValue());
-            }
-        }
-        return new PathDurationDto(minutes, "Minutes");
+        return pathInfo.stream().map(PathMapper.MAPPER::pathQueryResultToPathDto)
+				.collect(Collectors.toList());
     }
 
     public List<AuthorPathDto> getLatestPathsByAuthorId(UUID authorId) {
         return pathRepository.getLatestPathsByAuthorId(authorId).stream()
-                .map(p -> {
-                    var path = PathMapper.MAPPER.authorPathQueryResultToAuthorPathDto(p);
-                    path.setDuration(getDuration(p.getMinutes()));
-                    return path;
-                })
+                .map(PathMapper.MAPPER::authorPathQueryResultToAuthorPathDto)
                 .collect(Collectors.toList());
     }
 
@@ -145,11 +116,7 @@ public class PathService {
 
 	public List<PathDto> getPathsByTag(UUID tagId) {
 		return pathRepository.getPathsByTagId(tagId)
-				.stream().map(p -> {
-					var path = PathMapper.MAPPER.pathQueryResultToPathDto(p);
-					path.setDuration(getDuration(p.getMinutes()));
-					return path;
-				}).collect(Collectors.toList());
+				.stream().map(PathMapper.MAPPER::pathQueryResultToPathDto).collect(Collectors.toList());
 	}
 
 	public List<PathDto> getAuthorPathsByUser(UserPrincipal userPrincipal) {
@@ -159,20 +126,12 @@ public class PathService {
 		}
 		Author author = authorRepository.findByUserId(userPrincipal.getId()).orElseThrow();
 		return pathRepository.getAllPathsByAuthorId(author.getId())
-				.stream().map(p -> {
-					var path = PathMapper.MAPPER.pathQueryResultToPathDto(p);
-					path.setDuration(getDuration(p.getMinutes()));
-					return path;
-				}).collect(Collectors.toList());
+				.stream().map(PathMapper.MAPPER::pathQueryResultToPathDto).collect(Collectors.toList());
 	}
 
 	public List<PathDto> getStudentPathsByUser(UserPrincipal userPrincipal) {
 		return pathRepository.getPathsByUserId(userPrincipal.getId())
-				.stream().map(p -> {
-					var path = PathMapper.MAPPER.pathQueryResultToPathDto(p);
-					path.setDuration(getDuration(p.getMinutes()));
-					return path;
-				}).collect(Collectors.toList());
+				.stream().map(PathMapper.MAPPER::pathQueryResultToPathDto).collect(Collectors.toList());
 	}
 
 	public PathDetailsDto getPathById(UUID id) {
@@ -190,12 +149,11 @@ public class PathService {
 
 		List<TagDto> tags = path.getTags().stream().map(TagMapper.INSTANCE::tagToDto).collect(Collectors.toList());
 		pathDetailsDto.setTags(tags);
-		long duration = path.getCourses().stream().mapToLong(
-				c -> c.getLectures().stream().mapToLong(Lecture::getDuration).sum()
+		int duration = path.getCourses().stream().mapToInt(
+				c -> c.getLectures().stream().mapToInt(Lecture::getDuration).sum()
 		).sum();
 
-		PathDurationDto durationDto = getDuration(duration);
-		pathDetailsDto.setDuration(durationDto);
+		pathDetailsDto.setDuration(duration);
 		return pathDetailsDto;
 	}
 }

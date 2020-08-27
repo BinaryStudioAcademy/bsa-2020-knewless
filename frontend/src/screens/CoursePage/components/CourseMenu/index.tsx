@@ -86,7 +86,7 @@ const CourseMenu: React.FunctionComponent<ICourseMenuProps> = ({
                 onClick={() => onClickLecture(lec.id)}
               >
                 <LectureCard
-                  timeMinutes={lec.timeMinutes}
+                  timeMinutes={lec.timeSeconds}
                   name={lec.name}
                   description={lec.description}
                   /* eslint-disable-next-line @typescript-eslint/no-empty-function */

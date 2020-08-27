@@ -10,7 +10,7 @@ public class CourseProfileDto {
     private String name;
     private String category;
     private String author;
-    private int timeMinutes;
+    private int timeSeconds;
     private String level;
     private String image;
     private int rating;

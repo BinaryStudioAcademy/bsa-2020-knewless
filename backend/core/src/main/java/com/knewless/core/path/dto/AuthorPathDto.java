@@ -9,6 +9,6 @@ public class AuthorPathDto {
     private String name;
     private long courses;
     private String logoSrc;
-    private PathDurationDto duration;
+    private long duration;
     private Date updatedAt;
 }

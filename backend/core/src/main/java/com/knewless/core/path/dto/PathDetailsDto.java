@@ -15,5 +15,5 @@ public class PathDetailsDto {
     private List<CourseWithMinutesDto> courses;
     private List<TagDto> tags;
     private TagDto imageTag;
-    private PathDurationDto duration;
+    private long duration;
 }

@@ -112,7 +112,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
       <LectureCard
         name={lecture.name}
         description={lecture.description}
-        timeMinutes={lecture.timeMinutes}
+        timeMinutes={lecture.timeSeconds}
         key={lecture.id}
         onClick={() => click(lecture)}
         isSelected={isSelected}

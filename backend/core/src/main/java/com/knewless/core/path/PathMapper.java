@@ -11,11 +11,11 @@ import org.mapstruct.factory.Mappers;
 public interface PathMapper {
     PathMapper MAPPER = Mappers.getMapper(PathMapper.class);
 
-    @Mapping(target = "duration", ignore = true)
+    @Mapping(source = "seconds", target = "duration")
     @Mapping(target = "logoSrc", source = "image")
     PathDto pathQueryResultToPathDto(PathQueryResult pathQueryResult);
 
-    @Mapping(target = "duration", ignore = true)
+    @Mapping(source = "seconds", target = "duration")
     @Mapping(target = "logoSrc", source = "image")
     AuthorPathDto authorPathQueryResultToAuthorPathDto(AuthorPathQueryResult pathQueryResult);
 

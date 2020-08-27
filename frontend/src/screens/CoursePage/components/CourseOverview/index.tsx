@@ -49,8 +49,8 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
         <div className={`${styles.description_content} left_container`}>
           <h1 className={styles.description__course_name}>
             {courseName}
-            {role === 'AUTHOR' && (
-              <Label
+            {role && role === 'AUTHOR' && (
+              <Label 
                 style={{
                   background: 'transparent',
                   color: '#fff',
@@ -58,6 +58,7 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
                   position: 'relative',
                   top: '-8px',
                   left: '10px',
+                  fontSize: '1.3rem',
                   cursor: 'pointer'
                 }}
                 onClick={() => history.push(`/course/edit/${courseId}`)}

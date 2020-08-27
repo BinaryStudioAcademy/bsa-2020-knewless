@@ -14,5 +14,5 @@ public class PathDto {
     private String name;
     private long courses;
     private String logoSrc;
-    private PathDurationDto duration;
+    private long duration;
 }

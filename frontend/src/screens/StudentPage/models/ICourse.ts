@@ -3,7 +3,7 @@ export interface ICourse {
     name: string;
     category: string;
     author: string;
-    timeMinutes: number;
+    timeSeconds: number;
     level: string;
     image: string;
     rating: number;

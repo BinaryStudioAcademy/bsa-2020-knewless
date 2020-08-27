@@ -14,7 +14,7 @@ public class AuthorCourseDto {
     private String author;
     private CategoryDto category;
     private String imageSrc;
-    private String duration;
+    private long duration;
     private int rating;
     private Date updatedAt;
 }

@@ -13,9 +13,10 @@ import styles from './styles.module.sass';
 interface IPathPageProps {
   loading: boolean;
   isAuthorized: boolean;
+  role: string;
 }
 
-const PathPage: React.FC<IPathPageProps> = ({ loading, isAuthorized }) => {
+const PathPage: React.FC<IPathPageProps> = ({ loading, isAuthorized, role }) => {
   const { pathId } = useParams();
 
   useEffect(() => {
@@ -27,7 +28,7 @@ const PathPage: React.FC<IPathPageProps> = ({ loading, isAuthorized }) => {
   return (
     <>
       <div className={styles.content}>
-        <PathOverview isAuthorized={isAuthorized} />
+        <PathOverview pathId={pathId} role={role} isAuthorized={isAuthorized} />
         <PathMenu />
       </div>
       <div className={styles.navigation_layer}>
@@ -44,6 +45,7 @@ const mapStateToProps = (state: IAppState) => {
   const { isAuthorized } = state.auth.auth;
   return {
     loading: state.pathPage.requests.dataRequest.loading,
+    role: state.appRouter.user?.role?.name,
     isAuthorized
   };
 };
