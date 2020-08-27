@@ -21,7 +21,8 @@ import resetpassword from '../screens/ResetPassword/reducers';
 import savepassword from '../screens/SavePassword/reducers';
 import pathPage from '../screens/PathPage/reducers';
 import pathsPage from '../screens/Paths/reducers';
-import { loginModal } from '../containers/LoginModal/reducer'
+import { loginModal } from '../containers/LoginModal/reducer';
+import searchPage from '@screens/SearchResultsPage/reducers';
 
 export default combineReducers({
   toastr,
@@ -46,5 +47,6 @@ export default combineReducers({
   coursesPage,
   search,
   loginModal,
-  pathsPage
+  pathsPage,
+  searchPage
 });

@@ -7,20 +7,8 @@ import { connect } from 'react-redux';
 import { IBindingAction } from '@models/Callbacks';
 import Highlighter from 'react-highlight-words';
 import { history } from '@helpers/history.helper';
-
-export interface ISearchResult {
-  id: string;
-  name: string;
-  sourceId: string;
-  metadata?: object;
-  type: EsDataTypes;
-  tags: string[];
-  title: '';
-}
-
-export enum EsDataTypes {
-  PATH='PATH', AUTHOR='AUTHOR', COURSE='COURSE', SCHOOL='SCHOOL'
-}
+import { EsDataType } from '@screens/Search/models/EsDataTypes';
+import { ISearchResult } from '@screens/SearchResultsPage/models/EsModels';
 
 interface ISearchHeaderProps {
   search: Function;
@@ -63,19 +51,19 @@ const SearchHeader: FunctionComponent<ISearchHeaderProps> = ({ className, clear,
     setIsOpen(false);
 
     switch (item.type) {
-      case EsDataTypes.AUTHOR: {
+      case EsDataType.AUTHOR: {
         history.push(`/author/${item.sourceId}`);
         break;
       }
-      case EsDataTypes.COURSE: {
+      case EsDataType.COURSE: {
         history.push(`/course/${item.sourceId}`);
         break;
       }
-      case EsDataTypes.PATH: {
+      case EsDataType.PATH: {
         history.push(`/path/${item.sourceId}`);
         break;
       }
-      case EsDataTypes.SCHOOL: {
+      case EsDataType.SCHOOL: {
         history.push(`/school/${item.sourceId}`);
         break;
       }

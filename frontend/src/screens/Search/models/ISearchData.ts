@@ -1,4 +1,4 @@
-import {ISearchResult} from '@screens/Search/containers/SearchHeader';
+import { ISearchResult } from '@screens/SearchResultsPage/models/EsModels';
 
 export interface ISearchData {
   data: ISearchResult[];

@@ -20,13 +20,17 @@ public class EsConfiguration {
 
     @Value("${elasticsearch.host}")
     private String host;
+    @Value("${elasticsearch.timeout.connect}")
+    private Integer connectTimeout;
+    @Value("${elasticsearch.timeout.socket}")
+    private Integer socketTimeout;
 
     @Bean
     public RestHighLevelClient client() {
         ClientConfiguration clientConfiguration = ClientConfiguration.builder()
                 .connectedTo(host)
-                .withConnectTimeout(Duration.ofSeconds(15))
-                .withSocketTimeout(Duration.ofSeconds(10))
+                .withConnectTimeout(Duration.ofSeconds(connectTimeout))
+                .withSocketTimeout(Duration.ofSeconds(socketTimeout))
                 .build();
 
         return RestClients.create(clientConfiguration).rest();

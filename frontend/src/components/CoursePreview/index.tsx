@@ -19,11 +19,12 @@ export interface ICoursePreviewProps {
   flag?: boolean;
   members?: number;
   action?: (any) => void;
+  className?: string;
 }
 
 export const CoursePreview: React.FC<ICoursePreviewProps> = ({
   image, lecturesNumber, durationMinutes, level, flag, action, name, description,
-  id, authorName, authorId, tags, rating, members
+  id, authorName, authorId, tags, rating, className, members
 }) => {
   const optionalIcon = (isSelected: boolean) => {
     switch (isSelected) {
@@ -47,7 +48,7 @@ export const CoursePreview: React.FC<ICoursePreviewProps> = ({
   };
 
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} ${className || ''}`}>
       <div className={styles.meta__image}>
         {flag !== undefined ? <img src={image} alt="" className={styles.inactive_avatar} />
           : (
@@ -72,7 +73,7 @@ export const CoursePreview: React.FC<ICoursePreviewProps> = ({
             rating={rating}
             disabled
           />
-        </div>  
+        </div>
         <div className={styles.started}>
           <span className={styles.membersLabel}>started: </span>
           <span className={styles.membersText}>{members? members : 0}</span>

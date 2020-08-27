@@ -15,6 +15,7 @@ import { ISearchState } from '@screens/./Search/models/ISearchState';
 import { ILoginModalState } from '@containers/LoginModal/models/ILoginModalState';
 import { IPathPageState } from '@screens/PathPage/models/IPathPageState';
 import { IPathsState } from '@screens/Paths/models/IPathsState';
+import { ISearchPageState } from '@screens/SearchResultsPage/models/ISearchPageState';
 
 export interface IAppState {
   toastr: any;
@@ -35,4 +36,5 @@ export interface IAppState {
   loginModal: ILoginModalState;
   resetpassword: IResetState;
   savepassword: ISavePasswordState;
+  searchPage: ISearchPageState;
 }

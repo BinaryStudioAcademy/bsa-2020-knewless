@@ -13,7 +13,7 @@ interface ITagSelectorProps {
   // to apply tag-control manually: ref.addTag(), ref.removeTag() etc.
   ref?: React.Ref<unknown>;
   minQueryLength?: number;
-  placeholderText?: string
+  placeholderText?: string;
 }
 
 // eslint-disable-next-line @typescript-eslint/interface-name-prefix

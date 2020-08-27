@@ -1,4 +1,4 @@
-import { IDuration } from "@components/PathCard";
+import { IDuration } from '@components/PathCard';
 
 export interface IPath {
   id?: string;

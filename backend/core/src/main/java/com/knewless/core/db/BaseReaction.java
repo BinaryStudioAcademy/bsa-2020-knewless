@@ -11,7 +11,7 @@ import javax.persistence.*;
 @MappedSuperclass
 public abstract class BaseReaction extends BaseEntity {
     @Column(name = "reaction")
-    private Boolean reaction;
+    private Boolean isPositive;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
     @JoinColumn(name = "user_id")

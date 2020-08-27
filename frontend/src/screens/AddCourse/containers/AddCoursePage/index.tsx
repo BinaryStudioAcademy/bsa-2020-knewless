@@ -7,7 +7,6 @@ import { Button, Dropdown, Input, Label } from 'semantic-ui-react';
 import { Footer } from '@components/Footer';
 import { useHistory, useParams } from 'react-router-dom';
 import styles from './styles.module.sass';
-import { levelOptions } from '../../models/options';
 import { compareName, getMinutes, isImage } from '../../services/helper.service';
 import { IFilterableItem } from '@components/FilterableList';
 import { ILecture } from '../../models/ILecture';
@@ -28,6 +27,7 @@ import {
   isValidCourseName,
   REQUIRED_FIELD_MESSAGE
 } from '@helpers/validation.helper';
+import { levelOptions } from '@models/LevelsEnum';
 import { IFullCourseData } from '@screens/CoursePage/models/IFullCourseData';
 import { updateCourse } from '@screens/AddCourse/services/course.service';
 import { IUpdateCourse } from '@screens/AddCourse/models/IUpdateCourse';

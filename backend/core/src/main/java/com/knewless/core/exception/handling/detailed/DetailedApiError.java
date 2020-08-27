@@ -5,6 +5,7 @@ import com.knewless.core.exception.handling.detailed.suberror.ApiSubError;
 import com.knewless.core.exception.handling.detailed.suberror.PlainMessageError;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.http.HttpStatus;
 
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ public class DetailedApiError extends BasicApiError {
 
     private static final int MAX_SUBERROR_DEPTH = 3;
     private String debugMessage;
+    private String stackTrace;
     private List<ApiSubError> subErrors;
 
     public DetailedApiError(HttpStatus status, String message) {
@@ -27,6 +29,7 @@ public class DetailedApiError extends BasicApiError {
         var error = new DetailedApiError(status, message);
         error.setDebugMessage(ex.getLocalizedMessage());
         error.setSubErrors(extractSubErrors(ex));
+        error.setStackTrace(ExceptionUtils.getStackTrace(ex));
         return error;
     }
 

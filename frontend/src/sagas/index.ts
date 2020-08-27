@@ -20,6 +20,7 @@ import coursesSagas from '../screens/Courses/sagas';
 import pathPageSagas from '@screens/PathPage/sagas';
 import searchSagas from '@screens/./Search/sagas/sagas';
 import pathsPageSagas from '@screens/Paths/sagas';
+import searchPageSagas from '@screens/SearchResultsPage/sagas';
 
 export default function* rootSaga() {
   yield all([
@@ -43,6 +44,7 @@ export default function* rootSaga() {
     coursesSagas(),
     coursePageSagas(),
     searchSagas(),
-    pathsPageSagas()
+    pathsPageSagas(),
+    searchPageSagas()
   ]);
 }

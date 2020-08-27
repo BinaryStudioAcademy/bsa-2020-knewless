@@ -1,5 +1,6 @@
 package com.knewless.core.exception.handling;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.NoSuchElementException;
 
 @ControllerAdvice
+@Slf4j
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
 	private final ApiErrorFactory errorFactory;
@@ -38,6 +40,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler({ Exception.class })
 	public ResponseEntity<Object> handleAll(Exception ex, WebRequest ignored) {
+		log.error("Error", ex);
 		return responseEntity(errorFactory.create(HttpStatus.INTERNAL_SERVER_ERROR, ex));
 	}
 }

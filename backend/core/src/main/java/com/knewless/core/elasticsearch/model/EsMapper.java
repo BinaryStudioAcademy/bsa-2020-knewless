@@ -6,27 +6,32 @@ import com.knewless.core.course.model.Course;
 import com.knewless.core.lecture.model.Lecture;
 import com.knewless.core.path.model.Path;
 import com.knewless.core.school.model.School;
-import com.knewless.core.tag.TagMapper;
-import com.knewless.core.tag.TagRepository;
 import com.knewless.core.tag.model.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * On the frontend it's mapped here
+ * frontend/src/screens/SearchResultsPage/models/EsModels.ts
+ */
 public class EsMapper {
 
     public static EsEntity esEntityFromAuthorEntity(Author entity) {
         if (entity == null) {
             return null;
         }
+    
+        Map<String, Object> metadata = new HashMap<>();
+        // todo: add subscribers to author's meta
+        
         return EsEntity.builder()
-                .name(entity.getFirstName() + " " + entity.getLastName())
+                .name(entity.getFullName())
                 .sourceId(entity.getId())
                 .type(EsDataType.AUTHOR)
+                .metadata(metadata)
                 .build();
     }
 
@@ -36,8 +41,9 @@ public class EsMapper {
         }
 
         Map<String, Object> metadata = new HashMap<>();
-        String fullName = course.getAuthor().getFirstName() + " " + course.getAuthor().getLastName();
-        metadata.put("author", fullName);
+        metadata.put("image", course.getImage());
+        metadata.put("author", course.getAuthor().getFullName());
+        metadata.put("authorId", course.getAuthor().getId());
         metadata.put("date", course.getReleasedDate());
         metadata.put("level", course.getLevel().toString());
         metadata.put("total minutes", course.getLectures().stream().mapToInt(Lecture::getDuration).sum());
@@ -62,6 +68,9 @@ public class EsMapper {
                 c -> c.getLectures().stream().mapToInt(Lecture::getDuration).sum()
         ).sum();
         metadata.put("total minutes", duration);
+        metadata.put("image", path.getImageTag().getSource());
+        metadata.put("courses", path.getCourses().size());
+        metadata.put("author", path.getAuthor().getFullName());
 
         return EsEntity.builder()
                 .name(path.getName())

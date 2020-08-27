@@ -14,6 +14,7 @@ export interface IPathCardProps {
   duration: IDuration;
   imageRef?: RefObject<HTMLImageElement>;
   clickableImage?: boolean;
+  className?: string;
 }
 
 export const PathCard: React.FunctionComponent<IPathCardProps> = (
@@ -23,9 +24,11 @@ export const PathCard: React.FunctionComponent<IPathCardProps> = (
     courses,
     duration,
     imageRef,
-    clickableImage = false }
+    clickableImage = false,
+    className
+  }
 ) => (
-  <div>
+  <div className={className || ''}>
     <div className={styles.container}>
       <img
         src={logoSrc}
@@ -34,10 +37,8 @@ export const PathCard: React.FunctionComponent<IPathCardProps> = (
         ref={imageRef}
       />
       <div className={styles.title}>
-        {
-        id ? <a href={`/path/${id}`}>{name}</a>
-          : <span>{name}</span>
-      }
+        {id ? <a href={`/path/${id}`} className={styles.link}>{name}</a>
+          : <span>{name}</span>}
       </div>
       <div className={styles.meta}>
         <div>
