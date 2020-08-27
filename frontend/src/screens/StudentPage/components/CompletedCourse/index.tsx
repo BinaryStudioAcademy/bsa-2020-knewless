@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import styles from './styles.module.sass';
 import { minutesToDuration } from 'components/PathCard/helper';
 import { StyledRating } from 'components/StyledRating';
+import {CircleProgress} from 'react-gradient-progress';
 
 export interface ICompletedCourseProps {
   id: string;
@@ -46,11 +47,17 @@ export const CompletedCourse: React.FC<ICompletedCourseProps> = ({
             </div>
             <span className={styles.dependency__level}>{level}</span>
           </div>
-          <StyledRating rating={rating} className={styles.dependency__rating} />
+          <StyledRating rating={rating} className={styles.dependency__rating} disabled />
         </div>
         <div className={styles.wrapperProgress}>
           <div className={styles.progress}>
-            {progress}%
+            <CircleProgress 
+              percentage={progress} 
+              width={80} 
+              strokeWidth={3}
+              primaryColor={['#3378BD', '#FF8576']}
+              secondaryColor={['#121421']}
+            />  
           </div>
         </div>
       </div>
