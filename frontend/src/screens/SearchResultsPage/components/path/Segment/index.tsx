@@ -1,7 +1,6 @@
 import { ISearchSegmentProps } from '@screens/SearchResultsPage/components/model';
 import { IPathSearchResult } from '@screens/SearchResultsPage/models/EsModels';
 import React from 'react';
-import { minutesToDuration } from '@components/PathCard/helper';
 import { PathCard } from '@components/PathCard';
 import styles from './styles.module.sass';
 import { history } from '@helpers/history.helper';
@@ -28,7 +27,7 @@ export const PathSegment: React.FC<IPathSegmentProps> = ({ results, category }) 
               name={path.name}
               logoSrc={path.metadata.image}
               courses={path.metadata.courses}
-              duration={minutesToDuration(path.metadata['total minutes'])}
+              duration={path.metadata['total minutes']}
             />
           </div>
         ))}
