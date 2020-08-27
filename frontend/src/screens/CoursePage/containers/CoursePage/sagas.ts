@@ -3,6 +3,7 @@ import { fetchCourseDataRoutine, startCourseRoutine } from '@screens/CoursePage/
 import * as courseService from '@screens/CoursePage/services/course.service';
 import { AnyAction } from 'redux';
 import { history } from '@helpers/history.helper';
+import { saveCourseReviewRoutine } from '@screens/LecturePage/routines';
 
 function* getData({ payload }: AnyAction) {
   try {
@@ -15,7 +16,7 @@ function* getData({ payload }: AnyAction) {
 }
 function* startCourse({ payload }: AnyAction) {
   try {
-    const response = yield call(() => courseService.startCourse({courseId: payload}));
+    const response = yield call(() => courseService.startCourse({ courseId: payload }));
     yield put(startCourseRoutine.success(response));
   } catch (error) {
     history.push('/');
@@ -29,9 +30,24 @@ function* watchStartCourseRequest() {
   yield takeEvery(startCourseRoutine.TRIGGER, startCourse);
 }
 
+function* saveReview({ payload }: AnyAction) {
+  try {
+    yield put(saveCourseReviewRoutine.request());
+    const response = yield call(() => courseService.saveReview(payload));
+    yield put(saveCourseReviewRoutine.success({ rating: response, review: payload.rating }));
+  } catch (e) {
+    yield put(saveCourseReviewRoutine.failure(e?.message));
+  }
+}
+
+function* watchSaveCourseReview() {
+  yield takeEvery(saveCourseReviewRoutine.TRIGGER, saveReview);
+}
+
 export default function* courseDataSagas() {
   yield all([
     watchGetDataRequest(),
-    watchStartCourseRequest()
+    watchStartCourseRequest(),
+    watchSaveCourseReview()
   ]);
 }

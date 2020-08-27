@@ -22,7 +22,8 @@ const basicCourseData = {
     firstName: 'Unspecified ',
     lastName: ' author!',
     id: null
-  }
+  },
+  reviewed: false
 };
 
 export const lectureDto = (state: ICourseData = basicCourseData, action: Routine<any>) => {

@@ -6,6 +6,7 @@ import com.knewless.core.db.BaseEntity;
 import com.knewless.core.elasticsearch.model.EsDataType;
 import com.knewless.core.elasticsearch.model.EsEntity;
 import com.knewless.core.elasticsearch.model.EsMapper;
+import com.knewless.core.exception.custom.ResourceNotFoundException;
 import com.knewless.core.lecture.LectureMapper;
 import com.knewless.core.lecture.LectureRepository;
 import com.knewless.core.lecture.model.Lecture;
@@ -20,8 +21,7 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.elasticsearch.index.query.QueryBuilders.matchQuery;
@@ -110,5 +110,16 @@ public class EsService {
         var response = new ArrayList<EsEntity>();
         esRepository.findAll().forEach(response::add);
         return response;
+    }
+
+    // TODO replace call of this method with "update" one from this service
+    public void updateCourseRating(UUID courseId, int rating) {
+        EsEntity entity = esRepository.findBySourceId(courseId).orElse(null);
+        if (entity == null) {
+            return;
+        }
+
+        ((Map<String, Object>) entity.getMetadata()).put("rating", rating);
+        esRepository.save(entity);
     }
 }

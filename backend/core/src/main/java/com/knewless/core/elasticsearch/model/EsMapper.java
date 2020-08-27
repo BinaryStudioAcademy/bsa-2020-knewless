@@ -1,6 +1,7 @@
 package com.knewless.core.elasticsearch.model;
 
 import com.knewless.core.author.model.Author;
+import com.knewless.core.course.courseReaction.model.CourseReaction;
 import com.knewless.core.course.model.Course;
 import com.knewless.core.lecture.model.Lecture;
 import com.knewless.core.path.model.Path;
@@ -34,14 +35,13 @@ public class EsMapper {
             return null;
         }
 
-        // TODO add rating
         Map<String, Object> metadata = new HashMap<>();
         String fullName = course.getAuthor().getFirstName() + " " + course.getAuthor().getLastName();
         metadata.put("author", fullName);
         metadata.put("date", course.getReleasedDate());
         metadata.put("level", course.getLevel().toString());
         metadata.put("total minutes", course.getLectures().stream().mapToInt(Lecture::getDuration).sum());
-//        metadata.put("rating", course.getReactions().stream());
+        metadata.put("rating", (int) Math.round(course.getReactions().stream().mapToInt(CourseReaction::getReaction).average().orElse(0)));
 
         return EsEntity.builder()
                 .name(course.getName())

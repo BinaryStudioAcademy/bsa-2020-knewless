@@ -2,7 +2,6 @@ package com.knewless.core.course;
 
 import com.knewless.core.course.dto.*;
 import com.knewless.core.course.model.Course;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -19,8 +18,8 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
             "c.name, c.level, concat(c.author.firstName,' ' , c.author.lastName), " +
             "category.name, c.image, " +
             "(SELECT COALESCE(SUM(cl.duration), 0) FROM c.lectures as cl), " +
-            "(SELECT COALESCE(SUM(CASE WHEN cr.reaction = TRUE THEN 1 ELSE 0 END), 0) " +
-            "FROM c.reactions as cr WHERE cr.reaction = TRUE), " +
+            "(SELECT COALESCE(SUM(cr.reaction), 0) " +
+            "FROM c.reactions as cr), " +
             "SIZE(c.reactions)) " +
             "FROM Course c " +
             "LEFT JOIN c.category category ";
@@ -46,8 +45,8 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
             "c.name, c.level, concat(c.author.firstName,' ' , c.author.lastName), " +
             "category.name, c.image, " +
             "(SELECT COALESCE(SUM(cl.duration), 0) FROM c.lectures as cl), " +
-            "(SELECT COALESCE(SUM(CASE WHEN cr.reaction = TRUE THEN 1 ELSE 0 END), 0) " +
-            "FROM c.reactions as cr WHERE cr.reaction = TRUE), " +
+            "(SELECT COALESCE(SUM(cr.reaction), 0) " +
+            "FROM c.reactions as cr), " +
             "SIZE(c.reactions)) " +
             "FROM Course c " +
             "LEFT JOIN c.category category " +
@@ -58,8 +57,8 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
     @Query("SELECT DISTINCT new com.knewless.core.course.dto.AuthorCourseQueryResult(c.id, " +
             "c.name, c.level, concat(c.author.firstName,' ' , c.author.lastName), c.category.name, c.image, " +
             "(SELECT COALESCE(SUM(cl.duration), 0) FROM c.lectures as cl), " +
-            "(SELECT COALESCE(SUM(CASE WHEN cr.reaction = TRUE THEN 1 ELSE 0 END), 0) " +
-            "FROM c.reactions as cr WHERE cr.reaction = TRUE), " +
+            "(SELECT COALESCE(SUM(cr.reaction), 0) " +
+            "FROM c.reactions as cr), " +
             "SIZE(c.reactions), c.updatedAt) " +
             "FROM Course as c LEFT JOIN c.category category " +
             "WHERE c.author.id = :authorId " +
@@ -73,9 +72,8 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
             "(SELECT COALESCE(SUM(cl.duration), 0) FROM c.lectures as cl), " +
             "c.description, " +
             "( " +
-            "SELECT COALESCE(SUM(CASE WHEN cr.reaction = TRUE THEN 1 ELSE 0 END), 0) " +
+            "SELECT COALESCE(SUM(cr.reaction), 0) " +
             "FROM c.reactions as cr " +
-            "WHERE cr.reaction = TRUE" +
             "), " +
             "SIZE(c.reactions), " +
             "size(c.lectures)) " +
@@ -91,9 +89,8 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
             "(SELECT COALESCE(SUM(cl.duration), 0) FROM c.lectures as cl), " +
             "c.description, " +
             "( " +
-            "SELECT COALESCE(SUM(CASE WHEN cr.reaction = TRUE THEN 1 ELSE 0 END), 0) " +
+            "SELECT COALESCE(SUM(cr.reaction), 0) " +
             "FROM c.reactions as cr " +
-            "WHERE cr.reaction = TRUE" +
             "), " +
             "SIZE(c.reactions), " +
             "SIZE(c.lectures)) " +
@@ -108,9 +105,8 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
             "(SELECT COALESCE(SUM(cl.duration), 0) FROM c.lectures as cl), " +
             "c.description, " +
             "( " +
-            "SELECT COALESCE(SUM(CASE WHEN cr.reaction = TRUE THEN 1 ELSE 0 END), 0) " +
+            "SELECT COALESCE(SUM(cr.reaction), 0) " +
             "FROM c.reactions as cr " +
-            "WHERE cr.reaction = TRUE" +
             "), " +
             "SIZE(c.reactions), " +
             "SIZE(c.lectures)) " +
@@ -128,9 +124,8 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
             "(SELECT COALESCE(SUM(cl.duration), 0) FROM c.lectures as cl), " +
             "c.description, " +
             "( " +
-            "SELECT COALESCE(SUM(CASE WHEN cr.reaction = TRUE THEN 1 ELSE 0 END), 0) " +
+            "SELECT COALESCE(SUM(cr.reaction), 0) " +
             "FROM c.reactions as cr " +
-            "WHERE cr.reaction = TRUE" +
             "), " +
             "SIZE(c.reactions), " +
             "SIZE(c.lectures)) " +

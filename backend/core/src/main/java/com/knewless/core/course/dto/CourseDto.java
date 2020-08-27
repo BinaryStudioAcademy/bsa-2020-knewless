@@ -19,4 +19,5 @@ public class CourseDto {
     private String imageSrc;
     private String duration;
     private int rating;
+    private boolean isReviewed;
 }

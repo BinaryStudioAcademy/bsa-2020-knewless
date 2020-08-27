@@ -98,7 +98,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .antMatchers("/").permitAll()
                     .antMatchers(HttpMethod.GET, "/course", "/course/**/info", "/course/all", "/course/lecture/tag/**").permitAll()
                     .antMatchers(HttpMethod.GET, "/tags").permitAll()
-                    .antMatchers(HttpMethod.GET, "/paths", "/paths/*", "/search/**", "/paths/tag/**").permitAll()
+                    .antMatchers(HttpMethod.GET, "/paths", "/es/search/**", "/paths/*", "/paths/tag/**").permitAll()
                     .antMatchers(SWAGGER_PATHS_WHITELIST).permitAll()
                     .antMatchers("/auth/**", "/oauth2/**", "/assets/images/**","/assets/video/**").permitAll()
                     .anyRequest().authenticated()

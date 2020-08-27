@@ -84,4 +84,10 @@ public class UserService implements UserDetailsService {
     public Role getUserRole(String email) {
         return userRepository.getUserRoleId(email);
     }
+
+    public User findUserById(UUID id) {
+        return userRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("User", "id", id)
+        );
+    }
 }

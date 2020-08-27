@@ -1,6 +1,5 @@
 package com.knewless.core.course;
 
-import com.knewless.core.category.model.Category;
 import com.knewless.core.course.dto.*;
 import com.knewless.core.course.model.Course;
 import org.mapstruct.Mapper;
@@ -13,7 +12,7 @@ public interface CourseMapper {
 
     static int calculateRating(long allReactions, long positiveReactions) {
         return allReactions == 0 ? 0 :
-                Math.round((float) positiveReactions / allReactions * 5);
+                Math.round((float) positiveReactions / allReactions);
     }
 
     static String calculateDuration(long minutes) {
@@ -44,13 +43,14 @@ public interface CourseMapper {
     @Mapping(target = "rating", ignore = true)
     AuthorCourseDto authorCourseQueryResultToAuthorCourseDto(AuthorCourseQueryResult courseQueryResult);
 
-    @Mapping(target = "author", ignore = true)
-    @Mapping(target = "authorCourses", ignore = true)
-    @Mapping(target = "duration", ignore = true)
-    @Mapping(target = "rating", ignore = true)
-    @Mapping(target = "lectures", ignore = true)
-    @Mapping(target = "tags", ignore = true)
-    CourseFullInfoDto courseToCourseFullInfoDto(Course course);
+	@Mapping(target = "author", ignore = true)
+	@Mapping(target = "authorCourses", ignore = true)
+	@Mapping(target = "duration", ignore = true)
+	@Mapping(target = "rating", ignore = true)
+	@Mapping(target = "lectures", ignore = true)
+	@Mapping(target = "tags", ignore = true)
+	@Mapping(target = "review", ignore = true)
+	CourseFullInfoDto courseToCourseFullInfoDto(Course course);
 
     @Mapping(target = "tags", ignore = true)
     @Mapping(target = "rating",

@@ -10,10 +10,10 @@ export const StyledRating: React.FC<IStyledRatingProps> = props => {
   const { className, rating } = props;
   return (
     <Rating
-      {...props}
       rating={rating}
       maxRating={5}
       size="huge"
+      {...props}
       className={`landing__rating_bar ${className}`}
     />
   );

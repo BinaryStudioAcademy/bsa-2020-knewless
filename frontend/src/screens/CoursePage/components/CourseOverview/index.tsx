@@ -38,11 +38,11 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
   const history = useHistory();
   const onStart = () => {
     if (!isAuthorized) openLoginModal(`/lecture/${startLectureId}`);
-    else if (startLectureId !== '') { 
+    else if (startLectureId !== '') {
       startCourse();
       window.open(`/lecture/${startLectureId}`);
     }
-  }
+  };
   return (
     <div className="content_row">
       <div className={`${styles.description} flex_item aligned_item`}>
@@ -50,7 +50,7 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
           <h1 className={styles.description__course_name}>
             {courseName}
             {role === 'AUTHOR' && (
-              <Label 
+              <Label
                 style={{
                   background: 'transparent',
                   color: '#fff',
@@ -62,7 +62,7 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
                 }}
                 onClick={() => history.push(`/course/edit/${courseId}`)}
               >
-                <Icon name='pencil' />
+                <Icon name="pencil" />
               </Label>
             )}
           </h1>

@@ -9,7 +9,7 @@ spring:
               - email
               - profile
           facebook:
-            redirectUri: "{baseScheme}://localhost{basePort}/oauth2/callback/{registrationId}"
+            redirectUri: "https://localhost{basePort}/oauth2/callback/{registrationId}"
             scope:
               - email
               - public_profile

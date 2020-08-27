@@ -26,4 +26,6 @@ public class CourseFullInfoDto {
     private String duration;
     private int rating;
     private Set<TagDto> tags;
+    private Integer review;
+    private int ratingCount;
 }

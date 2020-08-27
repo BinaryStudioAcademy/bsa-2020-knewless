@@ -23,7 +23,7 @@ const CourseMenu: React.FunctionComponent<ICourseMenuProps> = ({
   openLoginModal
 }) => {
   const [selected, setSelected] = useState(0);
-  const onClickLecture = (id) => {
+  const onClickLecture = id => {
     if (!isAuthorized) openLoginModal(`/lecture/${id}`);
     else {
       startCourse();

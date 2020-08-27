@@ -4,14 +4,16 @@ import com.knewless.core.author.AuthorMapper;
 import com.knewless.core.author.AuthorRepository;
 import com.knewless.core.author.AuthorService;
 import com.knewless.core.author.model.Author;
+import com.knewless.core.course.courseReaction.CourseReactionRepository;
+import com.knewless.core.course.courseReaction.model.CourseReaction;
 import com.knewless.core.course.dto.*;
 import com.knewless.core.course.model.Course;
 import com.knewless.core.course.model.Level;
+import com.knewless.core.db.SourceType;
 import com.knewless.core.currentUserCource.CurrentUserCourseRepository;
 import com.knewless.core.currentUserCource.CurrentUserCourseService;
 import com.knewless.core.elasticsearch.EsService;
 import com.knewless.core.elasticsearch.model.EsDataType;
-import com.knewless.core.db.SourceType;
 import com.knewless.core.exception.custom.ResourceNotFoundException;
 import com.knewless.core.history.WatchHistoryService;
 import com.knewless.core.lecture.LectureMapper;
@@ -21,12 +23,13 @@ import com.knewless.core.lecture.homework.model.Homework;
 import com.knewless.core.lecture.mapper.LectureProjectionMapper;
 import com.knewless.core.lecture.model.Lecture;
 import com.knewless.core.security.oauth.UserPrincipal;
+import com.knewless.core.subscription.SubscriptionService;
 import com.knewless.core.tag.TagRepository;
+import com.knewless.core.tag.TagService;
 import com.knewless.core.user.UserService;
+import com.knewless.core.user.model.User;
 import com.knewless.core.user.role.model.Role;
 import com.knewless.core.user.role.model.RoleType;
-import com.knewless.core.subscription.SubscriptionService;
-import com.knewless.core.tag.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
@@ -41,6 +44,7 @@ public class CourseService {
 
     private final CourseRepository courseRepository;
     private final LectureRepository lectureRepository;
+    private final CourseReactionRepository reactionRepository;
     private final AuthorRepository authorRepository;
     private final HomeworkRepository homeworkRepository;
     private final TagRepository tagRepository;
@@ -60,7 +64,7 @@ public class CourseService {
                          AuthorRepository authorRepository, HomeworkRepository homeworkRepository,
                          TagRepository tagRepository, UserService userService,
                          AuthorService authorService, SubscriptionService subscriptionService,
-                         TagService tagService, EsService esService,
+                         TagService tagService, EsService esService, CourseReactionRepository reactionRepository,
                          CurrentUserCourseRepository currentUserCourseRepository, WatchHistoryService watchHistoryService) {
         this.courseRepository = courseRepository;
         this.lectureRepository = lectureRepository;
@@ -72,6 +76,7 @@ public class CourseService {
         this.esService = esService;
         this.tagRepository = tagRepository;
         this.userService = userService;
+        this.reactionRepository = reactionRepository;
         this.currentUserCourseRepository = currentUserCourseRepository;
         this.watchHistoryService = watchHistoryService;
     }
@@ -161,7 +166,7 @@ public class CourseService {
         return new CreateCourseResponseDto(updatedCourse.getId(), true);
     }
 
-    public CourseToPlayerDto getCourseByLectureId(UUID lectureId) {
+    public CourseToPlayerDto getCourseByLectureId(UUID lectureId, UUID userId) {
         var courseProjection = courseRepository.findOneById(UUID.fromString(courseRepository.findByLectureId(lectureId).getId()));
         CourseToPlayerDto course = new CourseToPlayerDto();
         course.setId(courseProjection.getId());
@@ -171,6 +176,7 @@ public class CourseService {
                 .stream()
                 .map(l -> new LectureProjectionMapper().fromProjection(l, URL))
                 .collect(Collectors.toList()));
+        course.setReviewed(reactionRepository.existsByCourseIdAndUserId(UUID.fromString(courseProjection.getId()), userId));
         return course;
     }
 
@@ -210,13 +216,18 @@ public class CourseService {
                 .collect(Collectors.toUnmodifiableList());
     }
 
-    public CourseFullInfoDto getAllCourseInfoById(UUID id) {
+    public CourseFullInfoDto getAllCourseInfoById(UUID id, UUID userId) {
         Course courseEntity = courseRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Course", "id", id)
         );
         var course = CourseMapper.MAPPER.courseToCourseFullInfoDto(courseEntity);
         var courseWithRating = getCourseById(id);
 
+        if (userId != null) {
+            reactionRepository.findByCourseIdAndUserId(id, userId).ifPresent(userRating -> course.setReview(userRating.getReaction()));
+        }
+
+        course.setRatingCount(reactionRepository.countByCourseId(id));
         course.setRating(courseWithRating.getRating());
         course.setDuration(courseWithRating.getDuration());
         course.setAuthor(AuthorMapper.MAPPER.authorBriefInfoToMainInfoDto(
@@ -290,5 +301,32 @@ public class CourseService {
                     course.setMembers(currentUserCourseRepository.getMembersByCourse(c.getId()));
                     return course;
                 }).collect(Collectors.toList());
+    }
+
+    public int setRating(UUID userId, int rating, UUID courseId) {
+        Course course = courseRepository.findById(courseId).orElseThrow(
+                () -> new ResourceNotFoundException("Course", "courseId", courseId)
+        );
+        if (reactionRepository.existsByCourseIdAndUserId(courseId, userId)) {
+            return getCourseRating(courseId);
+        }
+        User user = userService.findUserById(userId);
+
+        CourseReaction reaction = new CourseReaction();
+        reaction.setReaction(rating);
+        reaction.setCourse(course);
+        reaction.setUser(user);
+
+        reactionRepository.save(reaction);
+
+        CompletableFuture.runAsync(() -> esService.updateCourseRating(courseId, getCourseById(courseId).getRating()));
+
+        return getCourseRating(courseId);
+    }
+
+    public int getCourseRating(UUID courseId) {
+        return (int) Math.round(reactionRepository.findByCourseId(courseId).stream()
+                .mapToInt(CourseReaction::getReaction)
+                .average().orElse(0));
     }
 }

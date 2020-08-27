@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styles from './styles.module.sass';
 import '../../styles/common.sass';
@@ -10,11 +10,13 @@ import { BottomNavigation } from '@screens/Landing/components/BottomNavigation';
 import { IAppState } from '@models/AppState';
 import { fetchCourseDataRoutine, startCourseRoutine } from '@screens/CoursePage/routines';
 import { connect } from 'react-redux';
-import { IBindingCallback1 } from '@models/Callbacks';
+import { IBindingAction, IBindingCallback1 } from '@models/Callbacks';
 import { IFullCourseData } from '@screens/CoursePage/models/IFullCourseData';
 import defaultCourseImage from 'assets/images/default_course_image.jpg';
 import { navigations } from '@screens/Landing/services/mock';
 import { openLoginModalRoutine } from '@containers/LoginModal/routines';
+import RatingModal from '@components/RatingModal';
+import { saveCourseReviewRoutine } from '@screens/LecturePage/routines';
 
 interface ICoursePageProps {
   fetchData: IBindingCallback1<string>;
@@ -24,6 +26,7 @@ interface ICoursePageProps {
   role: string;
   loading: boolean;
   isAuthorized: boolean;
+  submitReview: IBindingCallback1<object>;
 }
 
 const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
@@ -33,9 +36,11 @@ const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
   role,
   loading,
   isAuthorized,
-  openLoginModal
+  openLoginModal,
+  submitReview
 }) => {
   const { courseId } = useParams();
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     if (courseId) {
@@ -45,9 +50,24 @@ const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
   const handleOnStartCourse = () => {
     startCourse(course.id);
   };
+
+  const openViewModal = () => {
+    setIsOpen(true);
+  };
+
+  const saveReview = (rating: number) => {
+    submitReview({ courseId, rating });
+    setIsOpen(false);
+  };
+
+  const closeReview = () => {
+    setIsOpen(false);
+  };
+
   if (loading) return null;
   return (
-    <>
+    <div>
+      <RatingModal onClose={closeReview} isOpen={isOpen} submit={saveReview} isLoading={false} />
       <div className={styles.content}>
         <CourseOverview
           role={role}
@@ -74,6 +94,10 @@ const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
           lectures={course?.lectures}
           rating={course?.rating}
           tags={course?.tags}
+          review={course.review}
+          ratingCount={course.ratingCount}
+          openReviewModal={openViewModal}
+          role={role}
         />
         <div className="separator" />
         <AuthorInfo
@@ -88,7 +112,7 @@ const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
         </div>
       </div>
       <Footer />
-    </>
+    </div>
   );
 };
 
@@ -105,8 +129,9 @@ const mapStateToProps = (state: IAppState) => {
 
 const mapDispatchToProps = {
   fetchData: fetchCourseDataRoutine,
-  startCourse: startCourseRoutine,
-  openLoginModal: openLoginModalRoutine.trigger
+  openLoginModal: openLoginModalRoutine.trigger,
+  submitReview: saveCourseReviewRoutine,
+  startCourse: startCourseRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CoursePage);

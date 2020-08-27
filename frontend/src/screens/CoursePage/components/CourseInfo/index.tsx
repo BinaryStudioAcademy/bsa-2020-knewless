@@ -7,6 +7,7 @@ import { ILectureData } from '@screens/CoursePage/models/ILectureData';
 import moment from 'moment';
 import { ITagData } from '@screens/CoursePage/models/ITagData';
 import { IBindingCallback1, IBindingAction } from '@models/Callbacks';
+import GrayOutlineButton from '@components/buttons/GrayOutlineButton';
 
 interface ICourseInfoProps {
   level: string;
@@ -19,6 +20,10 @@ interface ICourseInfoProps {
   isAuthorized: boolean;
   startCourse: IBindingAction;
   openLoginModal: IBindingCallback1<string>;
+  openReviewModal: IBindingCallback1<any>;
+  review: number;
+  ratingCount: number;
+  role: string;
 }
 
 const CourseInfo: React.FunctionComponent<ICourseInfoProps> = ({
@@ -30,16 +35,44 @@ const CourseInfo: React.FunctionComponent<ICourseInfoProps> = ({
   courseDescription,
   tags,
   isAuthorized,
+  openLoginModal,
+  openReviewModal,
+  review,
+  ratingCount,
   startCourse,
-  openLoginModal
+  role
 }) => (
   <div className="content_row">
     <div className={`${styles.info} flex_item aligned_item`}>
       <div className={`${styles.info_content} left_container`}>
-        <h1 className={styles.info__title}>Course Info</h1>
+        <h1 className={styles.info__title}>
+          Course Info
+        </h1>
         <div className={styles.info__table}>
           <p className={styles.row_name}>Rating</p>
-          <StyledRating rating={rating} className={`rating ${styles.rating}`} disabled />
+          <div className={styles.rating_block}>
+            {/* <div>*/}
+            <p>
+              (
+              {' '}
+              {ratingCount}
+              {' '}
+              )
+            </p>
+            <StyledRating rating={rating} className={`rating ${styles.rating}`} disabled />
+            {/* </div>*/}
+          </div>
+          {role !== 'AUTHOR' && <p className={styles.row_name}>My rating</p>}
+          {(isAuthorized && role !== 'AUTHOR' && !review)
+          && (
+            <div className={styles.button_review_block}>
+              <GrayOutlineButton className={styles.button_review} onClick={openReviewModal}>ADD REVIEW</GrayOutlineButton>
+            </div>
+          )}
+          {(isAuthorized && role !== 'AUTHOR' && review)
+          && (
+            <StyledRating rating={review} className={`rating ${styles.rating}`} disabled />
+          )}
           <p className={styles.row_name}>Level</p>
           <p className={styles.row_data}>{level}</p>
           <p className={styles.row_name}>Updated</p>
