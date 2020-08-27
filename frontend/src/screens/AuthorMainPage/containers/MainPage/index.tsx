@@ -2,8 +2,9 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { IAuthor } from '../../models/IAuthor';
 import { IAppState } from '@models/AppState';
-import { AuthorPathCard, IAuthorPathCardProps } from '../../components/AuthorPathCard';
+import { IAuthorPathCardProps } from '../../components/AuthorPathCard';
 import { AuthorCourseCard, IAuthorCourseCardProps } from '../../components/AuthorCourseCard';
+import { PathCard } from '@components/PathCard';
 import { AuthorCardsSegment } from '../../components/AuthorCardsSegment';
 import AuthorInfoBlock from '../../components/AuthorInfoBlock';
 import { fetchAuthorCoursesRoutine, fetchAuthorPathsRoutine, fetchAuthorRoutine } from '../../routines';
@@ -75,7 +76,7 @@ const MainAuthorPage: React.FunctionComponent<IMainAuthorPageProps> = ({
           >
             {(authorPaths && authorPaths.length > 0) ? authorPaths.slice(0, 3).map(p => (
               <div className={styles.path_card} key={p.name}>
-                <AuthorPathCard
+                <PathCard
                   name={p.name}
                   logoSrc={p.logoSrc}
                   courses={p.courses}

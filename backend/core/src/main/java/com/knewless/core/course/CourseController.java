@@ -1,6 +1,7 @@
 package com.knewless.core.course;
 
 import com.knewless.core.course.dto.*;
+import com.knewless.core.course.model.Course;
 import com.knewless.core.lecture.dto.ShortLectureDto;
 import com.knewless.core.exception.custom.ResourceNotFoundException;
 import com.knewless.core.security.oauth.UserPrincipal;
@@ -9,6 +10,7 @@ import com.knewless.core.validation.SingleMessageResponse;
 import com.knewless.core.validation.ValidationMessageCreator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
@@ -41,8 +43,8 @@ public class CourseController {
     }
 
     @GetMapping("/{id}/info")
-    private CourseFullInfoDto getAllCourseInfoById(@PathVariable("id") UUID id) {
-        return courseService.getAllCourseInfoById(id);
+    private CourseFullInfoDto getAllCourseInfoById(@PathVariable("id") UUID id, @CurrentUser UserPrincipal user) {
+        return courseService.getAllCourseInfoById(id, user == null ? null : user.getId());
     }
 
     @PostMapping("/create")
@@ -63,9 +65,27 @@ public class CourseController {
         }
     }
 
+    @PutMapping("/{id}")
+    private ResponseEntity<?> updateCourse(@CurrentUser UserPrincipal user,
+                                           @Valid @RequestBody CreateCourseRequestDto request,
+                                           Errors validationResult) {
+        if (validationResult.hasErrors()) {
+            return ResponseEntity.badRequest()
+                    .body(new SingleMessageResponse(
+                                    ValidationMessageCreator.createString(validationResult, " ")
+                            )
+                    );
+        }
+        try {
+            return ResponseEntity.ok(courseService.updateCourse(request, user.getId()));
+        } catch (ResourceNotFoundException ex) {
+            return ResponseEntity.badRequest().body(new SingleMessageResponse(ex.getMessage()));
+        }
+    }
+
     @GetMapping("/lecture/{lectureId}")
-    public CourseToPlayerDto getCourseByLectureId(@PathVariable UUID lectureId) {
-        return courseService.getCourseByLectureId(lectureId);
+    public CourseToPlayerDto getCourseByLectureId(@PathVariable UUID lectureId, @CurrentUser UserPrincipal user) {
+        return courseService.getCourseByLectureId(lectureId, user.getId());
     }
 
     @GetMapping("/author-latest/{authorId}")
@@ -98,5 +118,12 @@ public class CourseController {
     @GetMapping("/author/user")
     public List<CourseDetailsDto> getAllCoursesByLectureTag(@CurrentUser UserPrincipal userPrincipal) {
         return courseService.getAllAuthorCourses(userPrincipal);
+    }
+
+    @PostMapping("/reaction/{id}")
+    public ResponseEntity<?> setRating(@CurrentUser UserPrincipal user,
+                                       @RequestBody RatingCourseRequestDto rating,
+                                       @PathVariable("id") UUID id) {
+        return ResponseEntity.ok(courseService.setRating(user.getId(), rating.getRating(), id));
     }
 }

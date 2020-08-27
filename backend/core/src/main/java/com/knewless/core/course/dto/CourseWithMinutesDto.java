@@ -6,12 +6,12 @@ import java.util.UUID;
 
 @Data
 public class CourseWithMinutesDto {
-	private UUID id;
-	private String name;
-	private String category;
-	private String author;
-	private int timeMinutes;
-	private String level;
-	private String image;
-	private int rating;
+    private UUID id;
+    private String name;
+    private String category;
+    private String author;
+    private int timeSeconds;
+    private String level;
+    private String image;
+    private int rating;
 }

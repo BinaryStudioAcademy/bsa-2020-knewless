@@ -9,6 +9,8 @@ import java.util.UUID;
 @Data
 public class CreateCourseRequestDto {
 
+    private UUID id;
+
     private UUID userId;
 
     @NotBlank(message = "Course name can't be empty.")

@@ -23,8 +23,8 @@ export function compareName(a: IFilterableItem, b: IFilterableItem): number {
 
 export function getMinutes(lectures: Array<ILecture>): number {
   if (lectures.length === 0) return 0;
-  if (lectures.length === 1) return lectures[0].timeMinutes;
-  return lectures.map(l => l.timeMinutes).reduce((t1, t2) => t1 + t2);
+  if (lectures.length === 1) return lectures[0].timeSeconds;
+  return lectures.map(l => l.timeSeconds).reduce((t1, t2) => t1 + t2);
 }
 
 export function getExtension(filename: string) {

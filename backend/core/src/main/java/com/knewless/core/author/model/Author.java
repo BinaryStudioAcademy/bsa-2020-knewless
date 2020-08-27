@@ -49,4 +49,7 @@ public class Author extends BaseEntity {
     @JoinColumn(name = "school_id")
     private School school;
 
+    public String getFullName() {
+        return this.firstName + " " + this.lastName;
+    }
 }

@@ -7,8 +7,11 @@ import java.util.List;
 
 public interface CourseToPlayerProjection {
     String getId();
+
     String getName();
+
     @Value("#{target.author}")
     AuthorToPlayerProjection getAuthor();
+
     List<LectureToPlayerDto> getLectures();
 }

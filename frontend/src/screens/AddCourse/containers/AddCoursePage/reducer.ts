@@ -1,9 +1,15 @@
 import { Routine } from 'redux-saga-routines';
-import { fetchLecturesRoutine, saveCourseRoutine, saveLectureRoutine } from 'screens/AddCourse/routines';
+import { fetchLecturesRoutine, saveCourseRoutine, saveLectureRoutine, fetchEditCourseRoutine, clearCourseRoutine } from 'screens/AddCourse/routines';
 import { ICourseData } from '../../models/ICourseData';
 
-export const data = (state: ICourseData = { lectures: [], isLecturesLoaded: false, courseId: '' },
-  action: Routine<any>) => {
+const initialState: ICourseData = {
+  lectures: [],
+  editCourse: undefined,
+  isLecturesLoaded: false,
+  courseId: ''
+}
+
+export const data = (state = initialState, action: Routine<any>) => {
   switch (action.type) {
     case fetchLecturesRoutine.SUCCESS:
       return {
@@ -11,10 +17,20 @@ export const data = (state: ICourseData = { lectures: [], isLecturesLoaded: fals
         lectures: action.payload,
         isLecturesLoaded: true
       };
+    case fetchEditCourseRoutine.SUCCESS:
+      return {
+        ...state,
+        editCourse: action.payload
+      };
     case saveCourseRoutine.SUCCESS:
       return {
         ...state,
         courseId: action.payload.id
+      };
+    case clearCourseRoutine.TRIGGER:
+      return {
+        ...state,
+        editCourse: undefined
       };
     case saveLectureRoutine.SUCCESS:
       const { lectures } = state;

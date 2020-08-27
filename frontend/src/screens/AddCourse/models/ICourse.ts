@@ -1,5 +1,3 @@
-import { ILecture } from './ILecture';
-
 export interface ICourse {
     name: string;
     image: string;

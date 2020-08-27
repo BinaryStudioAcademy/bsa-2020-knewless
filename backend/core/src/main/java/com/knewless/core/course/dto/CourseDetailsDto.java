@@ -23,4 +23,5 @@ public class CourseDetailsDto {
     private int rating;
     private int lectures;
     private List<String> tags;
+    private long members;
 }

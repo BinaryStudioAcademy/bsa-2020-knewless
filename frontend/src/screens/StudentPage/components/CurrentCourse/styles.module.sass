@@ -7,9 +7,7 @@ $meta_font_size: 0.9em
 $card_height: ($info_gap*2) + ($info_padding*2) + $first_row_size + $meta_size*2
 $image_height: ($info_gap*2) + $first_row_size + $meta_size*2
 $image_width: 10em
-
-$height_progress: 4px
-$width_progress: 200px
+$size_progress: 80px
 
 .container
   padding-left: 20px
@@ -23,13 +21,15 @@ $width_progress: 200px
 .image
   &_container
     grid-area: 1 / 1 / span 2 / span 1
-    max-height: $image_height
+    height: $image_height
+    width: $image_width
     overflow: hidden
     margin-bottom: $info_padding
     margin-top: $info_padding
 
   &_preview
-    max-height: $image_height
+    height: $image_height
+    width: $image_width
     object-fit: cover
     position: relative
 
@@ -99,31 +99,14 @@ $width_progress: 200px
       align-items: flex-end
       column-gap: 1.5em
 
-.progress
-    display: flex
-    flex-direction: row
-    margin-left: auto  
-    grid-area: 2 / 1 / span 1 / span 4     
 .wrapperProgress
-    width: $width_progress
-    height: $height_progress
+    margin-left: auto
+    overflow: hidden
+    display: flex
+    width: $size_progress
+    height: $size_progress
     align-self: center
-.progressTime
-    margin-right: 10px
-    align-self: center
-    font-family: Montserrat
-    font-style: normal
-    font-weight: bold
-    font-size: 0.9em  
-
-
-\:global(.ui.progress .bar)
-    border-radius: 0px
-    height: $height_progress
-    background: linear-gradient(83.47deg, #0084F8 9.02%, #FF8576 90.81%) !important
-\:global(.ui.progress .label)
-    color: #ffffff !important
-    font-family: Montserrat
-    font-style: normal
-    font-weight: bold
-    font-size: 0.9em 
+    grid-row: 2
+.progress
+    width: $size_progress  !important
+    height: $size_progress !important

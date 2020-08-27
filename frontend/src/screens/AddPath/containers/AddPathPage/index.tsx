@@ -1,6 +1,6 @@
 import React, { createRef, useCallback, useEffect, useState } from 'react';
 import styles from './styles.module.sass';
-import { ICourse, IPath, ITag } from '../../models/domain';
+import { ICourse, IPath, ITag, IPathDetails } from '../../models/domain';
 import { Footer } from '@components/Footer';
 import { Button, Form, Input, Label, TextArea } from 'semantic-ui-react';
 import { DependenciesSelector } from '@components/DependenciesSelector';
@@ -8,9 +8,9 @@ import { IFilterableItem } from '@components/FilterableList';
 import { CourseCard } from '../../components/ClickableCourseCard';
 import { compareName } from '@components/FilterableList/helper';
 import { minutesToDuration } from '@components/PathCard/helper';
-import { fetchCoursesRoutine, fetchTagsRoutine, savePathRoutine } from '../../routines';
+import { fetchCoursesRoutine, fetchTagsRoutine, savePathRoutine, fetchPathToEditRoutine, updatePathRoutine } from '../../routines';
 import { IAppState } from '@models/AppState';
-import { extractCourses, extractTags } from '../../models/AddPathData';
+import { extractCourses, extractTags, extractEditPath } from '../../models/AddPathData';
 import { connect } from 'react-redux';
 import { areCoursesLoading, areTagsLoading, isPathUploading } from '../../models/AddPathState';
 import { InlineLoaderWrapper } from '@components/InlineLoaderWrapper';
@@ -19,8 +19,9 @@ import { TagSelector } from '@components/TagSelector';
 import { GradientButton } from '@components/buttons/GradientButton';
 import GrayOutlineButton from '@components/buttons/GrayOutlineButton';
 import { PathPreview } from '../../components/PathPreview';
-import { history } from '@helpers/history.helper';
 import Confirmation from '@components/Confirmation';
+import { useHistory, useParams } from 'react-router-dom';
+import { IBindingCallback1 } from '@models/Callbacks';
 import {
   DESCRIPTION_MESSAGE,
   isValidPathDescription,
@@ -31,18 +32,23 @@ import {
 export interface ISavePathProps {
   courses: ICourse[];
   tags: ITag[];
+  editPath: IPathDetails;
   tagsLoading: boolean;
   coursesLoading: boolean;
   pathUploading: boolean;
   triggerFetchCourses: Function;
   triggerFetchTags: Function;
   triggerSavePath: (path: IPath) => void;
+  fetchEditPath: IBindingCallback1<string>;
+  updatePath: IBindingCallback1<IPath>;
 }
 
 export const AddPathPage: React.FC<ISavePathProps> = ({
   courses, tags, tagsLoading, coursesLoading, pathUploading,
-  triggerFetchCourses, triggerFetchTags, triggerSavePath
+  triggerFetchCourses, triggerFetchTags, triggerSavePath, fetchEditPath, editPath, updatePath
 }) => {
+  const history = useHistory();
+  const { pathId } = useParams();
   const tagsRef = createRef();
   const [selectedCourses, setSelectedCourses] = useState([]);
   const [storedCourses, setStoredCourses] = useState([]);
@@ -54,6 +60,24 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
   const [isPathNameValid, setIsPathNameValid] = useState(true);
   const [isDescriptionValid, setIsDescriptionValid] = useState(true);
   const [isConfirming, setIsConfirming] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
+
+  useEffect(() => {
+    if (history.location.pathname.startsWith('/path/edit') && !editPath) {
+      setIsEdit(true);
+      fetchEditPath(pathId);
+    }
+  }, [history.location.pathname]);
+
+  useEffect(() => {
+    if (editPath) {
+      setPathName(editPath.name);
+      setPathDescription(editPath.description);
+      setPathImageTag(editPath.imageTag);
+      setSelectedTags(editPath.tags);
+      setSelectedCourses(editPath.courses);
+    }
+  }, [editPath]);
 
   useEffect(() => {
     triggerFetchCourses();
@@ -62,12 +86,10 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
 
   useEffect(() => {
     setStoredCourses(courses);
-    setSelectedCourses([]);
   }, [courses]);
 
   useEffect(() => {
     setStoredTags(tags);
-    setSelectedTags([]);
   }, [tags]);
 
   function validatePathName(newName?: string) {
@@ -91,7 +113,11 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
       tags: selectedTags,
       imageTag: pathImageTag
     };
-    triggerSavePath(path);
+    if (isEdit) {
+      updatePath({id: pathId, ...path});
+    } else {
+      triggerSavePath(path);
+    }
   }
 
   function handleCancel() {
@@ -136,7 +162,7 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
         category={course.category}
         level={course.level}
         name={course.name}
-        timeMinutes={course.timeMinutes}
+        timeMinutes={course.timeSeconds}
         key={course.id}
         previewSrc={course.image}
         rating={course.rating}
@@ -147,8 +173,7 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
   };
 
   const countOverallDuration = useCallback(() => {
-    const minutes = selectedCourses.map(c => c.timeMinutes).reduce((a, b) => a + b, 0);
-    return minutesToDuration(minutes);
+    return selectedCourses.map(c => c.timeSeconds).reduce((a, b) => a + b, 0);
   }, [selectedCourses]);
 
   const forwardAddCourse = () => {
@@ -159,7 +184,7 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
   return (
     <>
       <div className={styles.title_container}>
-        <h3 className={`${styles.title} ${styles.wide_container}`}>New Path</h3>
+        <h3 className={`${styles.title} ${styles.wide_container}`}>{isEdit ? 'Edit' : 'New'} Path</h3>
       </div>
       <div className={styles.main_container}>
         <div className={styles.main_content}>
@@ -170,6 +195,7 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
                   <span className={styles.form__label}>Name:</span>
                   <Input
                     name="Name"
+                    value={pathName}
                     className={
                       `${!isPathNameValid && styles.no_bottom_rounding_field}`
                     }
@@ -212,6 +238,7 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
                   <span className={styles.form__label}>Description:</span>
                   <Form className={styles.form__description_wrapper}>
                     <TextArea
+                      value={pathDescription}
                       className={
                         `${styles.form__description_area} ${!isDescriptionValid && styles.no_bottom_rounding_field}`
                       }
@@ -309,13 +336,16 @@ const mapStateToProps = (state: IAppState) => ({
   courses: extractCourses(state),
   tagsLoading: areTagsLoading(state),
   coursesLoading: areCoursesLoading(state),
-  pathUploading: isPathUploading(state)
+  pathUploading: isPathUploading(state),
+  editPath: extractEditPath(state)
 });
 
 const mapDispatchToProps = {
   triggerFetchTags: fetchTagsRoutine,
   triggerFetchCourses: fetchCoursesRoutine,
-  triggerSavePath: savePathRoutine
+  triggerSavePath: savePathRoutine,
+  fetchEditPath: fetchPathToEditRoutine,
+  updatePath: updatePathRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddPathPage);

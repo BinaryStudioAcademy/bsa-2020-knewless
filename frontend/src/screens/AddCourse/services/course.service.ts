@@ -1,11 +1,29 @@
 import { callApi } from 'helpers/api.helper';
 import { ICourse } from '../models/ICourse';
-import { ISaveLecture } from '../components/UploadLectureModal';
+import { IUpdateCourse } from '../models/IUpdateCourse';
+import { history } from '@helpers/history.helper';
 
 export const getLecturesByUser = async () => {
   const response = await callApi({
-    endpoint: `api/lecture/user`,
+    endpoint: `/api/lecture/user`,
     type: 'GET'
+  });
+  return response.json();
+};
+
+export async function getCourseById(id: string) {
+  const response = await callApi({
+    endpoint: `/api/course/${id}/info`,
+    type: 'GET'
+  });
+  return response.json();
+};
+
+export const updateCourse = async (course: IUpdateCourse) => {
+  const response = await callApi({
+    type: 'PUT',
+    endpoint: `/api/course/${course.id}`,
+    requestData: course
   });
   return response.json();
 };
@@ -37,3 +55,7 @@ export const addLectureToDb = async lecture => {
   });
   return response.json();
 };
+
+export function forwardHome() {
+  history.push('/');
+}

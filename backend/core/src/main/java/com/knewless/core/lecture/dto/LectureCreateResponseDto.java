@@ -16,5 +16,5 @@ public class LectureCreateResponseDto {
    private String lectureURL;
    private String name;
    private String description;
-   private int timeMinutes;
+   private int timeSeconds;
 }

@@ -23,7 +23,9 @@ public class CourseFullInfoDto {
     private List<AuthorCourseDto> authorCourses;
     private List<ShortLectureDto> lectures = List.of();
     private Date updatedAt;
-    private String duration;
+    private long duration;
     private int rating;
     private Set<TagDto> tags;
+    private Integer review;
+    private int ratingCount;
 }

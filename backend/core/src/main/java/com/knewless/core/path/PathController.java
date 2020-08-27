@@ -1,8 +1,7 @@
 package com.knewless.core.path;
 
-import com.knewless.core.path.dto.AuthorPathDto;
-import com.knewless.core.path.dto.PathCreationRequestDto;
-import com.knewless.core.path.dto.PathDto;
+import com.knewless.core.exception.custom.ResourceNotFoundException;
+import com.knewless.core.path.dto.*;
 import com.knewless.core.security.oauth.UserPrincipal;
 import com.knewless.core.user.model.CurrentUser;
 import com.knewless.core.validation.SingleMessageResponse;
@@ -40,6 +39,15 @@ public class PathController {
         return ResponseEntity.ok(pathService.getLatestPathsByAuthorId(authorId));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getPathById(@PathVariable UUID id) {
+        try {
+            return ResponseEntity.ok(pathService.getPathById(id));
+        } catch (ResourceNotFoundException ex) {
+            return ResponseEntity.badRequest().body(new SingleMessageResponse(ex.getMessage()));
+        }
+    }
+
     @GetMapping("/author")
     private List<PathDto> getAuthorPathsByUser(@CurrentUser UserPrincipal userPrincipal) {
         return pathService.getAuthorPathsByUser(userPrincipal);
@@ -71,6 +79,24 @@ public class PathController {
             return ResponseEntity.badRequest().body(new SingleMessageResponse("User id can't be null."));
         }
         return ResponseEntity.ok(pathService.create(currentUserId, requestDto));
+    }
+
+    @PutMapping()
+    public ResponseEntity<?> update(@Valid @RequestBody PathUpdateRequestDto requestDto,
+                                    @CurrentUser UserPrincipal userPrincipal,
+                                    Errors validationResult) {
+        if (validationResult.hasErrors()) {
+            return ResponseEntity.badRequest()
+                    .body(new SingleMessageResponse(
+                                    ValidationMessageCreator.createString(validationResult, " ")
+                            )
+                    );
+        }
+        final var currentUserId = userPrincipal.getId();
+        if (currentUserId == null) {
+            return ResponseEntity.badRequest().body(new SingleMessageResponse("User id can't be null."));
+        }
+        return ResponseEntity.ok(pathService.update(currentUserId, requestDto));
     }
 
 }

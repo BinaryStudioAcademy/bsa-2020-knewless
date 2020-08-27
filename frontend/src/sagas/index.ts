@@ -21,6 +21,7 @@ import pathPageSagas from '@screens/PathPage/sagas';
 import searchSagas from '@screens/./Search/sagas/sagas';
 import pathsPageSagas from '@screens/Paths/sagas';
 import favouriteSagas from '@screens/Favourites/sagas';
+import searchPageSagas from '@screens/SearchResultsPage/sagas';
 
 export default function* rootSaga() {
   yield all([
@@ -42,10 +43,10 @@ export default function* rootSaga() {
     resetPasswordSagas(),
     savePasswordSagas(),
     coursesSagas(),
-    addPathSagas(),
     coursePageSagas(),
     searchSagas(),
     pathsPageSagas(),
-    favouriteSagas()
+    favouriteSagas(),
+    searchPageSagas()
   ]);
 }

@@ -11,6 +11,6 @@ public class AuthorPathQueryResult {
     private final String name;
     private final String image;
     private final int courses;
-    private final long minutes;
+    private final long seconds;
     private final Date updatedAt;
 }

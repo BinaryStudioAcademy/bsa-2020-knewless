@@ -99,7 +99,7 @@ const Header = ({ currentUser, isAuthorized, authorId }: IHeaderProps) => {
               </NavLink>
             </div>
           </div>
-          <SearchHeader className={searchStyle} />
+          <SearchHeader className={location.pathname === '/search' ? styles.searchHidden : searchStyle} />
         </div>
         <div className={styles.right_side}>
           {isAuthorized ? <UserElement user={currentUser} authorId={authorId} /> : <LoginRegister />}

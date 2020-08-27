@@ -1,19 +1,16 @@
 import React, { RefObject } from 'react';
 import styles from './styles.module.sass';
-
-export interface IDuration {
-  duration: number;
-  timeUnit: string;
-}
+import { timeFormat } from '@helpers/time.helper';
 
 export interface IPathCardProps {
   id?: string;
   name: string;
   logoSrc: string;
   courses: number;
-  duration: IDuration;
+  duration: number;
   imageRef?: RefObject<HTMLImageElement>;
   clickableImage?: boolean;
+  className?: string;
 }
 
 export const PathCard: React.FunctionComponent<IPathCardProps> = (
@@ -23,9 +20,11 @@ export const PathCard: React.FunctionComponent<IPathCardProps> = (
     courses,
     duration,
     imageRef,
-    clickableImage = false }
+    clickableImage = false,
+    className
+  }
 ) => (
-  <div>
+  <div className={className || ''}>
     <div className={styles.container}>
       <img
         src={logoSrc}
@@ -34,10 +33,8 @@ export const PathCard: React.FunctionComponent<IPathCardProps> = (
         ref={imageRef}
       />
       <div className={styles.title}>
-        {
-        id ? <a href={`/path/${id}`}>{name}</a>
-          : <span>{name}</span>
-      }
+        {id ? <a href={`/path/${id}`} className={styles.link}>{name}</a>
+          : <span>{name}</span>}
       </div>
       <div className={styles.meta}>
         <div>
@@ -45,8 +42,7 @@ export const PathCard: React.FunctionComponent<IPathCardProps> = (
           <span> Courses</span>
         </div>
         <div>
-          <span className={styles.indicator}>{duration.duration}</span>
-          <span>{` ${duration.timeUnit}`}</span>
+          <span className={styles.indicator}>{timeFormat(duration)}</span>
         </div>
       </div>
     </div>

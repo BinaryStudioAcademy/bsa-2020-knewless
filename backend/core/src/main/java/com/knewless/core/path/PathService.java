@@ -2,18 +2,21 @@ package com.knewless.core.path;
 
 import com.knewless.core.author.AuthorRepository;
 import com.knewless.core.author.model.Author;
+import com.knewless.core.course.CourseMapper;
 import com.knewless.core.course.CourseRepository;
+import com.knewless.core.course.dto.CourseWithMinutesDto;
 import com.knewless.core.db.SourceType;
 import com.knewless.core.elasticsearch.EsService;
 import com.knewless.core.elasticsearch.model.EsDataType;
-import com.knewless.core.path.dto.AuthorPathDto;
-import com.knewless.core.path.dto.PathCreationRequestDto;
-import com.knewless.core.path.dto.PathDto;
-import com.knewless.core.path.dto.PathDurationDto;
+import com.knewless.core.exception.custom.ResourceNotFoundException;
+import com.knewless.core.lecture.model.Lecture;
+import com.knewless.core.path.dto.*;
 import com.knewless.core.path.model.Path;
 import com.knewless.core.security.oauth.UserPrincipal;
 import com.knewless.core.subscription.SubscriptionService;
+import com.knewless.core.tag.TagMapper;
 import com.knewless.core.tag.TagRepository;
+import com.knewless.core.tag.dto.TagDto;
 import com.knewless.core.user.UserService;
 import com.knewless.core.user.role.model.Role;
 import com.knewless.core.user.role.model.RoleType;
@@ -22,10 +25,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.time.Duration;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -58,37 +58,13 @@ public class PathService {
 
     public List<PathDto> getPaths(Pageable pageable) {
         var pathInfo = pathRepository.getAllPaths(pageable);
-        return pathInfo.stream().map(p -> {
-            var path = PathMapper.MAPPER.pathQueryResultToPathDto(p);
-            path.setDuration(getDuration(p.getMinutes()));
-            return path;
-        }).collect(Collectors.toList());
-    }
-
-    public PathDurationDto getDuration(long minutes) {
-        Duration d = Duration.ofMinutes(minutes);
-        var timeWithUnits = new LinkedHashMap<Long, String>();
-
-        timeWithUnits.put(d.toDaysPart() / 7, "Weeks");
-        timeWithUnits.put(d.toDaysPart(), "Days");
-        timeWithUnits.put((long) d.toHoursPart(), "Hours");
-
-        for (Map.Entry<Long, String> entry : timeWithUnits.entrySet()) {
-            Long value = entry.getKey();
-            if (value >= 1) {
-                return new PathDurationDto(value, entry.getValue());
-            }
-        }
-        return new PathDurationDto(minutes, "Minutes");
+        return pathInfo.stream().map(PathMapper.MAPPER::pathQueryResultToPathDto)
+				.collect(Collectors.toList());
     }
 
     public List<AuthorPathDto> getLatestPathsByAuthorId(UUID authorId) {
         return pathRepository.getLatestPathsByAuthorId(authorId).stream()
-                .map(p -> {
-                    var path = PathMapper.MAPPER.authorPathQueryResultToAuthorPathDto(p);
-                    path.setDuration(getDuration(p.getMinutes()));
-                    return path;
-                })
+                .map(PathMapper.MAPPER::authorPathQueryResultToAuthorPathDto)
                 .collect(Collectors.toList());
     }
 
@@ -103,23 +79,44 @@ public class PathService {
 		path.setAuthor(authorRepository.findByUserId(userId).orElseThrow());
 		path.setTags(tags);
 		path.setCourses(courses);
-		Author author = authorRepository.findByUserId(userId).orElseThrow();
-		String message = author.getFirstName()+" "+ author.getLastName()+" added new path.";
 		Path savedPath = pathRepository.save(path);
+
 		var result = savedPath.getId();
+
+		Author author = authorRepository.findByUserId(userId).orElseThrow();
+		String message = author.getFirstName()+" "+ author.getLastName() + " added new path.";
 		subscriptionService.notifySubscribers(author.getId(), SourceType.AUTHOR, result, SourceType.PATH, message);
 
 		CompletableFuture.runAsync(() -> esService.put(EsDataType.PATH, savedPath));
 		return result;
 	}
 
+	@Transactional
+	public UUID update(UUID userId, PathUpdateRequestDto request) {
+		Path path = pathRepository.getOne(request.getId());
+		var courses = courseRepository.findAllById(request.getCourses());
+		var tags = tagRepository.findAllById(request.getTags());
+		path.setName(request.getName());
+		path.setDescription(request.getDescription());
+		path.setImageTag(tagRepository.getOne(request.getImageTag()));
+		path.setAuthor(authorRepository.findByUserId(userId).orElseThrow());
+		path.setTags(tags);
+		path.setCourses(courses);
+		Path savedPath = pathRepository.save(path);
+
+		var result = savedPath.getId();
+
+		Author author = authorRepository.findByUserId(userId).orElseThrow();
+		String message = author.getFirstName()+" "+ author.getLastName() + " updated path: " + path.getName();
+		subscriptionService.notifySubscribers(author.getId(), SourceType.AUTHOR, result, SourceType.PATH, message);
+
+		CompletableFuture.runAsync(() -> esService.update(EsDataType.PATH, savedPath));
+		return result;
+	}
+
 	public List<PathDto> getPathsByTag(UUID tagId) {
 		return pathRepository.getPathsByTagId(tagId)
-				.stream().map(p -> {
-					var path = PathMapper.MAPPER.pathQueryResultToPathDto(p);
-					path.setDuration(getDuration(p.getMinutes()));
-					return path;
-				}).collect(Collectors.toList());
+				.stream().map(PathMapper.MAPPER::pathQueryResultToPathDto).collect(Collectors.toList());
 	}
 
 	public List<PathDto> getAuthorPathsByUser(UserPrincipal userPrincipal) {
@@ -129,19 +126,34 @@ public class PathService {
 		}
 		Author author = authorRepository.findByUserId(userPrincipal.getId()).orElseThrow();
 		return pathRepository.getAllPathsByAuthorId(author.getId())
-				.stream().map(p -> {
-					var path = PathMapper.MAPPER.pathQueryResultToPathDto(p);
-					path.setDuration(getDuration(p.getMinutes()));
-					return path;
-				}).collect(Collectors.toList());
+				.stream().map(PathMapper.MAPPER::pathQueryResultToPathDto).collect(Collectors.toList());
 	}
 
 	public List<PathDto> getStudentPathsByUser(UserPrincipal userPrincipal) {
 		return pathRepository.getPathsByUserId(userPrincipal.getId())
-				.stream().map(p -> {
-					var path = PathMapper.MAPPER.pathQueryResultToPathDto(p);
-					path.setDuration(getDuration(p.getMinutes()));
-					return path;
-				}).collect(Collectors.toList());
+				.stream().map(PathMapper.MAPPER::pathQueryResultToPathDto).collect(Collectors.toList());
+	}
+
+	public PathDetailsDto getPathById(UUID id) {
+		Path path = pathRepository.findById(id).orElseThrow(
+				() -> new ResourceNotFoundException("Path", "pathId", id)
+		);
+
+		PathDetailsDto pathDetailsDto = PathMapper.MAPPER.pathToPathDetailsDto(path);
+
+		List<CourseWithMinutesDto> courses = path.getCourses().stream().map(c -> {
+			var course = courseRepository.findCourseById(c.getId()).orElseThrow();
+			return CourseMapper.MAPPER.courseQueryToCourseWithMinutes(course);
+		}).collect(Collectors.toList());
+		pathDetailsDto.setCourses(courses);
+
+		List<TagDto> tags = path.getTags().stream().map(TagMapper.INSTANCE::tagToDto).collect(Collectors.toList());
+		pathDetailsDto.setTags(tags);
+		int duration = path.getCourses().stream().mapToInt(
+				c -> c.getLectures().stream().mapToInt(Lecture::getDuration).sum()
+		).sum();
+
+		pathDetailsDto.setDuration(duration);
+		return pathDetailsDto;
 	}
 }

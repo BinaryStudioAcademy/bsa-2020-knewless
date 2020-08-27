@@ -6,22 +6,12 @@ import { ICourseData } from '../../models/ICourseData';
 import { ILecturesList } from '../../models/ILecturesList';
 
 import './styles.sass';
+import { timeFormatLecture } from '@helpers/time.helper';
 
 export interface ILecturesListProps {
     listProps: ILecturesList;
     course: ICourseData;
     setChosenVideo: Function;
-}
-
-function secondsToTime(totalTime: any): string { 
-  const HOUR = 60 * 60;
-  const MIN = 60;
-  console.log(totalTime);
-  const hours = (totalTime > HOUR ) ? Math.trunc(totalTime / HOUR): undefined;
-  totalTime = hours ? totalTime - hours * HOUR : totalTime;
-  const mins = (totalTime > MIN || hours) ? Math.ceil(totalTime / MIN) : 0;
-  const result = hours? `${hours}h ${mins}m`: `${mins}m`;
-   return result;
 }
 
 const LecturesList: React.FunctionComponent<ILecturesListProps> = ({
@@ -50,7 +40,7 @@ const LecturesList: React.FunctionComponent<ILecturesListProps> = ({
           className="videoDuration"
           meta={
             [<MdTimer className="timerImage" />,
-              <div className="durationText">{secondsToTime(l.duration)}</div>]
+              <div className="durationText">{timeFormatLecture(l.duration)}</div>]
           }
         />
       </Card>

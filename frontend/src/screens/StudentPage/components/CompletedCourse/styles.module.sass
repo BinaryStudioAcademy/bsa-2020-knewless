@@ -7,7 +7,7 @@ $meta_font_size: 0.9em
 $card_height: ($info_gap*2) + ($info_padding*2) + $first_row_size + $meta_size*2
 $image_height: ($info_gap*2) + $first_row_size + $meta_size*2
 $image_width: 10em
-$size_progress: 60px
+$size_progress: 80px
 
 .container
   padding-left: 20px
@@ -18,18 +18,19 @@ $size_progress: 60px
   border-bottom: 1px solid #4a5053
   &:hover
         background: #1b1c29
-        .progress
-            background: #1b1c29
+
 .image
   &_container
     grid-area: 1 / 1 / span 2 / span 1
-    max-height: $image_height
+    height: $image_height
+    width: $image_width
     overflow: hidden
     margin-bottom: $info_padding
     margin-top: $info_padding
 
   &_preview
-    max-height: $image_height
+    height: $image_height
+    width: $image_width
     object-fit: cover
     position: relative
 
@@ -99,24 +100,16 @@ $size_progress: 60px
       align-items: flex-end
       column-gap: 1.5em
 
+
 .wrapperProgress
     margin-left: auto
-    background: linear-gradient(52.17deg, #0084F8 9.02%, #FF8576 90.81%)
-    border-radius: 50%
     overflow: hidden
+    display: flex
     width: $size_progress
     height: $size_progress
     align-self: center
     grid-row: 2
 .progress
-    margin: 2px
-    padding: 2px
-    width: ($size_progress - 4px)
-    height: ($size_progress - 4px)
-    background: #121421
-    border-radius: 50%
-    display: flex
-    text-align: center
-    justify-content: center
-    align-items: center
-    font-size: 1.15em
+    width: $size_progress  !important
+    height: $size_progress !important
+

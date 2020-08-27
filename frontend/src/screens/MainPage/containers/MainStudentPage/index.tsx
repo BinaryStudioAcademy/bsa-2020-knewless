@@ -108,7 +108,7 @@ const MainStudentPage: React.FunctionComponent<IMainStudentPageProps> = ({
         <div className={`${styles.wide_container} ${styles.card_segment} ${styles.space_under}`}>
           <CardsSegment
             title="Paths"
-            onViewAllClick={() => (console.log('clicked view all paths'))}
+            onViewAllClick={() => history.push('/paths')}
             loading={pathsLoading}
           >
             {paths.slice(0, 3).map(p => (

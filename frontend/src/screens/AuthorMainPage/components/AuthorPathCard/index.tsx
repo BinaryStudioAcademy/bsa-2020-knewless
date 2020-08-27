@@ -10,7 +10,7 @@ export interface IAuthorPathCardProps {
   name: string;
   logoSrc: string;
   courses: number;
-  duration: IDuration;
+  duration: number;
 }
 
 export const AuthorPathCard: React.FunctionComponent<IAuthorPathCardProps> = (
@@ -27,8 +27,8 @@ export const AuthorPathCard: React.FunctionComponent<IAuthorPathCardProps> = (
         <span> Courses</span>
       </div>
       <div>
-        <span className={styles.indicator}>{duration.duration}</span>
-        <span>{` ${duration.timeUnit}`}</span>
+        <span className={styles.indicator}>{duration}</span>
+        <span>Seconds</span>
       </div>
     </div>
   </div>

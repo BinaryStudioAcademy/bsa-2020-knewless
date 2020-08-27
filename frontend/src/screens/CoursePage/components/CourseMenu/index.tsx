@@ -5,12 +5,13 @@ import { ReactComponent as InfoIcon } from '../../icons/info.svg';
 import styles from './styles.module.sass';
 import { LectureCard } from '@screens/AddCourse/components/LectureCard';
 import { ILectureData } from '@screens/CoursePage/models/ILectureData';
-import { IBindingCallback1 } from '@models/Callbacks';
+import { IBindingCallback1, IBindingAction } from '@models/Callbacks';
 
 interface ICourseMenuProps {
   lectures: ILectureData[];
   courseDescription: string;
   isAuthorized: boolean;
+  startCourse: IBindingAction;
   openLoginModal: IBindingCallback1<string>;
 }
 
@@ -18,9 +19,17 @@ const CourseMenu: React.FunctionComponent<ICourseMenuProps> = ({
   lectures,
   courseDescription,
   isAuthorized,
+  startCourse,
   openLoginModal
 }) => {
   const [selected, setSelected] = useState(0);
+  const onClickLecture = id => {
+    if (!isAuthorized) openLoginModal(`/lecture/${id}`);
+    else {
+      startCourse();
+      window.open(`/lecture/${id}`);
+    }
+  };
   return (
     <div className={styles.menu}>
       <div className={styles.menu__header}>
@@ -74,13 +83,10 @@ const CourseMenu: React.FunctionComponent<ICourseMenuProps> = ({
               <button
                 type="button"
                 className={styles.lecture}
-                onClick={() => {
-                  if (!isAuthorized) openLoginModal(`/lecture/${lec.id}`);
-                  else window.open(`/lecture/${lec.id}`);
-                }}
+                onClick={() => onClickLecture(lec.id)}
               >
                 <LectureCard
-                  timeMinutes={lec.timeMinutes}
+                  timeMinutes={lec.timeSeconds}
                   name={lec.name}
                   description={lec.description}
                   /* eslint-disable-next-line @typescript-eslint/no-empty-function */

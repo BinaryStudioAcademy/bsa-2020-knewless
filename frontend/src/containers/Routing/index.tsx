@@ -32,6 +32,7 @@ import VerifyEmail from '@components/EmailConfirmation/VerifyEmail';
 import { IBindingAction, IBindingCallback1 } from '@models/Callbacks';
 import PathsPage from '@screens/Paths/containers/PathsPage';
 import FavouritesPage from '@screens/Favourites/containers/FavouritesPage';
+import SearchResultsPage from '@screens/SearchResultsPage/containers/SearchResultsPage';
 
 export interface IRoutingProps {
   isLoading: boolean;
@@ -90,12 +91,15 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({
           <PublicRoute exact path="/register" component={RegisterPage} />
           <PublicRoute exact path="/courses" component={CoursesPage} />
           <PublicRoute exact path="/paths" component={PathsPage} />
+          <PublicRoute exact path="/search" component={SearchResultsPage} />
           <PrivateRoute exact path="/author/:authorId" component={AuthorPublicPage} />
           <PrivateRoute exact path="/favourites" component={FavouritesPage} />
           <PrivateRoute exact path="/lecture/:lectureId" component={LecturePage} />
           <PrivateRoute exact path="/add_path" roles={[RoleTypes.AUTHOR]} component={AddPathPage} />
           <PrivateRoute exact path="/add_course" roles={[RoleTypes.AUTHOR]} component={AddCourse} />
           <PrivateRoute exact path="/profile" roles={[RoleTypes.USER]} component={StudentProfile} />
+          <PublicRoute exact path="/course/edit/:courseId" roles={[RoleTypes.AUTHOR]} component={AddCourse} />
+          <PublicRoute exact path="/path/edit/:pathId" roles={[RoleTypes.AUTHOR]} component={AddPathPage} />
         </Route>
         <div>
           <LoaderWrapper loading={isLoading}>

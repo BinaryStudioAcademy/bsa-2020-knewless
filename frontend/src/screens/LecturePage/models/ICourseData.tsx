@@ -6,4 +6,5 @@ export interface ICourseData {
   name: string;
   lectures: ILectures[];
   author: IAuthor;
+  reviewed: boolean;
 }

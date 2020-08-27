@@ -1,10 +1,12 @@
 import React, { useCallback } from 'react';
 import styles from './styles.module.sass';
 import { minutesToDuration } from 'components/PathCard/helper';
-import { Progress } from 'semantic-ui-react';
 import { StyledRating } from 'components/StyledRating';
+import { timeFormat } from '@helpers/time.helper';
+import {CircleProgress} from 'react-gradient-progress';
 
 export interface ICurrentCourseProps {
+  id:string
   category: string;
   author: string;
   timeMinutes: number;
@@ -12,16 +14,20 @@ export interface ICurrentCourseProps {
   name: string;
   previewSrc: string;
   rating: number;
+  progress: number;
 }
 
 export const CurrentCourse: React.FC<ICurrentCourseProps> = ({
-  category, author, timeMinutes, level, name, previewSrc,
-  rating
+  id, category, author, timeMinutes, level, name, previewSrc,
+  rating, progress
 }) => {
   const calcDuration = useCallback(() => minutesToDuration(timeMinutes), [timeMinutes]);
   const { timeUnit, duration } = calcDuration();
+  const handleOnClick = () => {
+    window.open(`/course/${id}`);
+  };
   return (
-    <div className={styles.container}>
+    <div className={styles.container} onClick={handleOnClick}>
       <div className={styles.image_container}>
         <div className={styles.image_cover} />
         <img
@@ -37,17 +43,21 @@ export const CurrentCourse: React.FC<ICurrentCourseProps> = ({
           <div className={styles.dependency__meta__info_row}>
             <span className={styles.dependency__meta__author}>{author}</span>
             <div>
-              <span className={styles.dependency__meta__time_duration}>{duration}</span>
-              <span className={styles.dependency__meta__time_unit}>{timeUnit}</span>
+              <span className={styles.dependency__meta__time_duration}>{timeFormat(timeMinutes)}</span>
             </div>
             <span className={styles.dependency__level}>{level}</span>
           </div>
-          <StyledRating rating={rating} className={styles.dependency__rating} />
+          <StyledRating rating={rating} className={styles.dependency__rating} disabled />
         </div>
-        <div className={styles.progress}>
-          <div className={styles.progressTime}>12h 2m</div>
-          <div className={styles.wrapperProgress}>
-            <Progress percent={80} className={styles.progressBar}>80%</Progress>
+        <div className={styles.wrapperProgress}>
+          <div className={styles.progress}>
+            <CircleProgress 
+              percentage={progress} 
+              width={80} 
+              strokeWidth={3}
+              primaryColor={['#3378BD', '#FF8576']}
+              secondaryColor={['#121421']}
+            />  
           </div>
         </div>
       </div>

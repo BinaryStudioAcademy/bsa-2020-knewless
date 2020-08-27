@@ -11,16 +11,13 @@ import com.knewless.core.messaging.MessageType;
 import com.knewless.core.user.UserRepository;
 import com.knewless.core.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javassist.NotFoundException;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -48,7 +45,6 @@ public class LectureService {
         Lecture savedLecture = lectureRepository.findById(lectureId)
                 .orElseThrow(() -> new NotFoundException("Lecture with id " + lectureId + " not found"));
         String folderId = fileManager.saveVideo(file, filename);
-        System.out.println("video saved");
         String[] concatString = filename.split("\\.");
         String fileType = concatString[concatString.length - 1];
         String relativePath = "assets/video/"+folderId +"/"+ folderId + "-origin." + fileType;
@@ -61,7 +57,7 @@ public class LectureService {
         return LectureCreateResponseDto.builder()
                         .id(savedLecture.getId())
                         .description(savedLecture.getDescription())
-                        .timeMinutes((duration/60) + 1)
+                        .timeSeconds(duration)
                         .name(savedLecture.getName())
                         .build();
     }
@@ -73,7 +69,7 @@ public class LectureService {
         return LectureCreateResponseDto.builder()
                 .id(savedLecture.getId())
                 .description(savedLecture.getDescription())
-                .timeMinutes(savedLecture.getDuration())
+                .timeSeconds(savedLecture.getDuration())
                 .name(savedLecture.getName())
                 .build();
     }
@@ -97,7 +93,7 @@ public class LectureService {
                         l.getUrl1080(),
                         l.getUrl720(),
                         l.getUrl480(),
-                        l.getDuration() == 0? l.getDuration() : l.getDuration()/60 + 1))
+                        l.getDuration()))
                 .collect(Collectors.toList());
     }
 

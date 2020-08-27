@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styles from './styles.module.sass';
 import '../../styles/common.sass';
@@ -8,38 +8,49 @@ import CourseInfo from '../../components/CourseInfo';
 import { Footer } from '@components/Footer';
 import { BottomNavigation } from '@screens/Landing/components/BottomNavigation';
 import { IAppState } from '@models/AppState';
-import { fetchCourseDataRoutine, changeFavouriteStateRoutine, checkFavouriteStateRoutine } from '@screens/CoursePage/routines';
+import { fetchCourseDataRoutine, changeFavouriteStateRoutine, checkFavouriteStateRoutine, startCourseRoutine } from '@screens/CoursePage/routines';
 import { connect } from 'react-redux';
-import { IBindingCallback1 } from '@models/Callbacks';
+import { IBindingAction, IBindingCallback1 } from '@models/Callbacks';
 import { IFullCourseData } from '@screens/CoursePage/models/IFullCourseData';
 import defaultCourseImage from 'assets/images/default_course_image.jpg';
 import { navigations } from '@screens/Landing/services/mock';
 import { openLoginModalRoutine } from '@containers/LoginModal/routines';
+import RatingModal from '@components/RatingModal';
+import { saveCourseReviewRoutine } from '@screens/LecturePage/routines';
 import { IFavourite } from '@components/AddToFavouritesButton/component/index';
 import { SourceType } from '@components/AddToFavouritesButton/helper/SourceType';
 
+  
+
 interface ICoursePageProps {
   fetchData: IBindingCallback1<string>;
-  checkFavourite: IBindingCallback1<IFavourite>;
-  changeFavourite: IBindingCallback1<IFavourite>;
+  startCourse: IBindingCallback1<string>;
   openLoginModal: IBindingCallback1<string>;
   course: IFullCourseData;
+  role: string;
   loading: boolean;
   isAuthorized: boolean;
   favourite: boolean;
+  submitReview: IBindingCallback1<object>;
+  checkFavourite: IBindingCallback1<IFavourite>;
+  changeFavourite: IBindingCallback1<IFavourite>;
 }
 
 const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
   fetchData,
+  startCourse,
   course,
+  role,
   loading,
   isAuthorized,
   openLoginModal,
   changeFavourite,
   checkFavourite,
-  favourite
+  favourite,
+  submitReview
 }) => {
   const { courseId } = useParams();
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     if (courseId) {
@@ -50,35 +61,59 @@ const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
       });
     }
   }, [courseId, checkFavourite]);
+  const handleOnStartCourse = () => {
+    startCourse(course.id);
+  };
+
+  const openViewModal = () => {
+    setIsOpen(true);
+  };
+
+  const saveReview = (rating: number) => {
+    submitReview({ courseId, rating });
+    setIsOpen(false);
+  };
+
+  const closeReview = () => {
+    setIsOpen(false);
+  };
 
   if (loading) return null;
   return (
-    <>
+    <div>
+      <RatingModal onClose={closeReview} isOpen={isOpen} submit={saveReview} isLoading={false} />
       <div className={styles.content}>
         <CourseOverview
           favourite={favourite}
           changeFavourite={changeFavourite}
+          role={role}
+          courseId={course?.id}
           imageSrc={course?.image || defaultCourseImage}
           courseName={course?.name || ''}
           authorName={`${course?.author?.firstName} ${course?.author?.lastName}` || ''}
           authorId={course?.author?.id}
           rating={course?.rating}
           startLectureId={(course?.lectures && course?.lectures?.length > 0) ? course.lectures[0].id : ''}
+          startCourse={handleOnStartCourse}
           isAuthorized={isAuthorized}
           openLoginModal={openLoginModal}
-          courseId={courseId}
         />
         <div className="separator" />
         <CourseInfo
           isAuthorized={isAuthorized}
+          startCourse={handleOnStartCourse}
           openLoginModal={openLoginModal}
           level={course?.level || ''}
           updatedAt={course?.updatedAt}
-          duration={course?.duration || ''}
+          duration={course?.duration}
           courseDescription={course?.description || ''}
           lectures={course?.lectures}
           rating={course?.rating}
           tags={course?.tags}
+          review={course.review}
+          ratingCount={course.ratingCount}
+          openReviewModal={openViewModal}
+          role={role}
         />
         <div className="separator" />
         <AuthorInfo
@@ -93,7 +128,7 @@ const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
         </div>
       </div>
       <Footer />
-    </>
+    </div>
   );
 };
 
@@ -104,6 +139,7 @@ const mapStateToProps = (state: IAppState) => {
   return {
     course,
     loading: state.coursePage.requests.dataRequest.loading,
+    role: state.appRouter.user?.role?.name,
     isAuthorized,
     favourite
   };
@@ -113,7 +149,9 @@ const mapDispatchToProps = {
   fetchData: fetchCourseDataRoutine,
   openLoginModal: openLoginModalRoutine.trigger,
   changeFavourite: changeFavouriteStateRoutine,
-  checkFavourite: checkFavouriteStateRoutine
+  checkFavourite: checkFavouriteStateRoutine,
+  submitReview: saveCourseReviewRoutine,
+  startCourse: startCourseRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CoursePage);

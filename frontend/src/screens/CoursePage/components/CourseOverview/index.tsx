@@ -8,7 +8,8 @@ import '../../styles/common.sass';
 import AddToFavouriteButton from '@components/AddToFavouritesButton/component';
 import { IFavourite } from '@components/AddToFavouritesButton/component/index';
 import { SourceType } from '@components/AddToFavouritesButton/helper/SourceType';
-import { IBindingCallback1 } from '@models/Callbacks';
+import { IBindingCallback1, IBindingAction } from '@models/Callbacks';
+import { Icon, Label } from 'semantic-ui-react';
 
 interface ICourseOverviewProps {
   imageSrc: string;
@@ -19,9 +20,11 @@ interface ICourseOverviewProps {
   rating: number;
   startLectureId: string;
   isAuthorized: boolean;
+  startCourse: IBindingAction;
   openLoginModal: IBindingCallback1<string>;
   favourite: boolean;
   changeFavourite: IBindingCallback1<IFavourite>;
+  role: string;
 }
 
 const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
@@ -30,20 +33,46 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
   authorName,
   authorId,
   rating,
-  courseId,
   startLectureId,
   isAuthorized,
+  startCourse,
   openLoginModal,
+  courseId,
+  role,
   favourite,
   changeFavourite
 }) => {
   const history = useHistory();
+  const onStart = () => {
+    if (!isAuthorized) openLoginModal(`/lecture/${startLectureId}`);
+    else if (startLectureId !== '') {
+      startCourse();
+      window.open(`/lecture/${startLectureId}`);
+    }
+  };
   return (
     <div className="content_row">
       <div className={`${styles.description} flex_item aligned_item`}>
         <div className={`${styles.description_content} left_container`}>
           <h1 className={styles.description__course_name}>
             {courseName}
+            {role && role === 'AUTHOR' && (
+              <Label 
+                style={{
+                  background: 'transparent',
+                  color: '#fff',
+                  verticalAlign: 'super',
+                  position: 'relative',
+                  top: '-8px',
+                  left: '10px',
+                  fontSize: '1.3rem',
+                  cursor: 'pointer'
+                }}
+                onClick={() => history.push(`/course/edit/${courseId}`)}
+              >
+                <Icon name="pencil" />
+              </Label>
+            )}
           </h1>
           <div className={styles.description__meta_info}>
             <StyledRating rating={rating} className={`rating ${styles.rating}`} disabled />
@@ -52,7 +81,7 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
               {
                 isAuthorized
                   ? <a href={`/author/${authorId}`}>{authorName}</a>
-                  : <span>{ authorName }</span>
+                  : <span>{authorName}</span>
               }
             </p>
           </div>

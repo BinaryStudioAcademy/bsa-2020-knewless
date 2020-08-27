@@ -46,7 +46,7 @@ public class NotificationService {
     }
 
     public void createNotification(NotificationDto notificationDto, UUID userId) {
-        User user = userRepository.findById(userId).get();
+        User user = userRepository.findById(userId).orElseThrow();
         notificationRepository.save(NotificationMapper.fromDto(notificationDto, user));
 
     }

@@ -19,4 +19,5 @@ public class CourseToPlayerDto {
     private String name;
     private AuthorToPlayerProjection author;
     private List<LectureDto> lectures;
+    private boolean reviewed;
 }

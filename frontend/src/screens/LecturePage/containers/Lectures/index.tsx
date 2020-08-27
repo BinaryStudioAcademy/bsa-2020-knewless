@@ -4,12 +4,18 @@ import ReactPlayer from 'react-player/lazy';
 import { Link } from 'react-router-dom';
 import { ICourseData } from '@screens/LecturePage/models/ICourseData';
 import { IBindingCallback1 } from 'models/Callbacks';
-import { chooseVideoRoutine, fetchCourseDtoRoutine, saveWatchTimeRoutine } from 'screens/LecturePage/routines';
+import {
+  chooseVideoRoutine,
+  fetchCourseDtoRoutine,
+  saveCourseReviewRoutine,
+  saveWatchTimeRoutine
+} from 'screens/LecturePage/routines';
 import LecturesMenu from 'screens/LecturePage/containers/Lectures/lecturesMenu';
 import { ILectures } from 'screens/LecturePage/models/ILectures';
 import { IAppState } from '@models/AppState';
 import useInterval from '../../../../services/use.interval.hook';
 import './styles.sass';
+import RatingModal from '@components/RatingModal';
 
 export interface ILectureProps {
   match: any;
@@ -18,6 +24,9 @@ export interface ILectureProps {
   chosenVideoId: string;
   setChosenVideo: ({ chosenVideo }: {chosenVideo: string}) => void;
   saveWatchTime: Function;
+  saveReview: IBindingCallback1<object>;
+  isSaveReviewLoading: boolean;
+  role: string;
 }
 
 function chooseSource(lecture: ILectures) {
@@ -48,12 +57,20 @@ interface IPlayerProgress {
 
 const AUTOSAVE_MS = 10000;
 const LecturePage: React.FunctionComponent<ILectureProps> = ({
-  lecturesData, chosenVideoId, match, fetchCourseDto: getCourseDto, setChosenVideo, saveWatchTime
+  lecturesData,
+  chosenVideoId,
+  match, fetchCourseDto: getCourseDto,
+  setChosenVideo,
+  saveWatchTime,
+  saveReview,
+  isSaveReviewLoading,
+  role
 }) => {
   const [playerProgress, setPlayerProgress] = useState<IPlayerProgress>(
     { playedSeconds: 0, loaded: 0, loadedSeconds: 0, played: 0 }
   );
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isReviewOpen, setIsReviewOpen] = useState(false);
   const initialLectureId = match.params.lectureId;
 
   // without suppression it becomes one long line
@@ -96,6 +113,9 @@ const LecturePage: React.FunctionComponent<ILectureProps> = ({
     const nextId = lecturesData.lectures[prev + 1] ? lecturesData.lectures[prev + 1].id : lecturesData.lectures[0].id;
     setChosenVideo({ chosenVideo: nextId });
     triggerSaveTime();
+    if (role !== 'AUTHOR' && !lecturesData.reviewed && prev + 1 === lecturesData.lectures.length) {
+      setIsReviewOpen(true);
+    }
   };
 
   const handleChooseVideo = useCallback(chosenVideo => {
@@ -110,8 +130,18 @@ const LecturePage: React.FunctionComponent<ILectureProps> = ({
     saveWatchTime({ watchTime: 0, fraction: 0, lectureId: chosenVideo.chosenVideo });
   }, [triggerSaveTime]);
 
+  const submitReview = (rating: number) => {
+    saveReview({ rating, courseId: lecturesData.id });
+    setIsReviewOpen(false);
+  };
+
+  const closeReview = () => {
+    setIsReviewOpen(false);
+  };
+
   return (
     <div>
+      <RatingModal onClose={closeReview} isOpen={isReviewOpen} submit={submitReview} isLoading={isSaveReviewLoading} />
       <div className="mainContainer">
         <div className="player">
           <ReactPlayer
@@ -149,13 +179,16 @@ const LecturePage: React.FunctionComponent<ILectureProps> = ({
 
 const mapStateToProps = (state: IAppState) => ({
   lecturesData: state.lecturePage.lectureDto,
-  chosenVideoId: state.lecturePage.chosenVideo.chosenVideo
+  chosenVideoId: state.lecturePage.chosenVideo.chosenVideo,
+  isSaveReviewLoading: state.coursePage.requests.saveReviewRequest.loading,
+  role: state.appRouter.user.role.name
 });
 
 const mapDispatchToProps = {
   fetchCourseDto: fetchCourseDtoRoutine,
   setChosenVideo: chooseVideoRoutine,
-  saveWatchTime: saveWatchTimeRoutine
+  saveWatchTime: saveWatchTimeRoutine,
+  saveReview: saveCourseReviewRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(LecturePage);

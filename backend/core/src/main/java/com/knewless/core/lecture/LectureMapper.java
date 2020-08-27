@@ -10,6 +10,6 @@ import org.mapstruct.factory.Mappers;
 public interface LectureMapper {
     LectureMapper MAPPER = Mappers.getMapper(LectureMapper.class);
 
-    @Mapping(target = "timeMinutes", source = "duration")
+    @Mapping(target = "timeSeconds", source = "duration")
     ShortLectureDto lectureToShortLectureDto(Lecture lecture);
 }

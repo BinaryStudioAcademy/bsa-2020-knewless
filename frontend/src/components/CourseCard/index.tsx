@@ -5,6 +5,7 @@ import styles from './styles.module.sass';
 import GradientButton from '../buttons/GradientButton';
 import { StyledRating } from '../StyledRating';
 import defaultCourseImage from 'assets/images/default_course_image.jpg';
+import { timeFormat } from '@helpers/time.helper';
 
 export interface ICardCategory {
   name: string;
@@ -17,7 +18,7 @@ export interface ICourseCardProps {
   imageSrc: string;
   name: string;
   author: string;
-  duration: string;
+  duration: number;
   level: string;
   rating: number;
   hideButton?: boolean;
@@ -43,7 +44,7 @@ export const CourseCard: React.FunctionComponent<ICourseCardProps> = ({
         <CardHeader className={styles.title}>{name}</CardHeader>
         <CardMeta className={styles.meta_info}>
           <span>{author}</span>
-          <span>{duration}</span>
+          <span>{timeFormat(duration)}</span>
           <span>{level}</span>
         </CardMeta>
         <StyledRating rating={rating} disabled />

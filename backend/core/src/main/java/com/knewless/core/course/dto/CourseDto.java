@@ -17,6 +17,7 @@ public class CourseDto {
     private String author;
     private CategoryDto category;
     private String imageSrc;
-    private String duration;
+    private long duration;
     private int rating;
+    private boolean isReviewed;
 }
