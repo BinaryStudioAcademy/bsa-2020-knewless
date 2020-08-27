@@ -8,20 +8,25 @@ import CourseInfo from '../../components/CourseInfo';
 import { Footer } from '@components/Footer';
 import { BottomNavigation } from '@screens/Landing/components/BottomNavigation';
 import { IAppState } from '@models/AppState';
-import { fetchCourseDataRoutine } from '@screens/CoursePage/routines';
+import { fetchCourseDataRoutine, changeFavouriteStateRoutine, checkFavouriteStateRoutine } from '@screens/CoursePage/routines';
 import { connect } from 'react-redux';
 import { IBindingCallback1 } from '@models/Callbacks';
 import { IFullCourseData } from '@screens/CoursePage/models/IFullCourseData';
 import defaultCourseImage from 'assets/images/default_course_image.jpg';
 import { navigations } from '@screens/Landing/services/mock';
 import { openLoginModalRoutine } from '@containers/LoginModal/routines';
+import { IFavourite } from '@components/AddToFavouritesButton/component/index';
+import { SourceType } from '@components/AddToFavouritesButton/helper/SourceType';
 
 interface ICoursePageProps {
   fetchData: IBindingCallback1<string>;
+  checkFavourite: IBindingCallback1<IFavourite>;
+  changeFavourite: IBindingCallback1<IFavourite>;
   openLoginModal: IBindingCallback1<string>;
   course: IFullCourseData;
   loading: boolean;
   isAuthorized: boolean;
+  favourite: boolean;
 }
 
 const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
@@ -29,21 +34,30 @@ const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
   course,
   loading,
   isAuthorized,
-  openLoginModal
+  openLoginModal,
+  changeFavourite,
+  checkFavourite,
+  favourite
 }) => {
   const { courseId } = useParams();
 
   useEffect(() => {
     if (courseId) {
       fetchData(courseId);
+      checkFavourite({
+        id: courseId,
+        type: SourceType.COURSE 
+      });
     }
-  }, [courseId]);
+  }, [courseId, checkFavourite]);
 
   if (loading) return null;
   return (
     <>
       <div className={styles.content}>
         <CourseOverview
+          favourite={favourite}
+          changeFavourite={changeFavourite}
           imageSrc={course?.image || defaultCourseImage}
           courseName={course?.name || ''}
           authorName={`${course?.author?.firstName} ${course?.author?.lastName}` || ''}
@@ -85,17 +99,21 @@ const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
 
 const mapStateToProps = (state: IAppState) => {
   const { course } = state.coursePage.courseData;
+  const { favourite } = course;
   const { isAuthorized } = state.auth.auth;
   return {
     course,
     loading: state.coursePage.requests.dataRequest.loading,
-    isAuthorized
+    isAuthorized,
+    favourite
   };
 };
 
 const mapDispatchToProps = {
   fetchData: fetchCourseDataRoutine,
-  openLoginModal: openLoginModalRoutine.trigger
+  openLoginModal: openLoginModalRoutine.trigger,
+  changeFavourite: changeFavouriteStateRoutine,
+  checkFavourite: checkFavouriteStateRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CoursePage);

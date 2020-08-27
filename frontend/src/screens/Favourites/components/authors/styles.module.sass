@@ -1,0 +1,115 @@
+@import "src/styles/common"
+@import "src/styles/common_variables"
+
+.tablecontent
+  margin-top: 30px
+  background: inherit
+  color: white
+  display: grid
+  width: 100%
+  grid-template-rows: repeat(auto-fill, 80px)
+  grid-row-gap: .2em
+  
+.row
+  display: flex
+  justify-content: space-between
+  width: 100%
+  height: 100%
+  border-bottom: 1px solid #2c2a2a
+
+.rowheader
+  display: flex
+  justify-content: flex-start
+  width: 100%
+  height: 100%
+  border-bottom: 2px solid #7a7171
+
+.gridrowheader
+  cursor: default
+  justify-items: center
+  align-items: center
+  font-size: 1.3em
+  background: inherit
+  display: grid
+  width: 95%
+  grid-template-columns: 20% 25% 25% 15% auto 
+
+.header_item
+  font-weight: 500
+  padding: auto
+  &__first
+    font-weight: 500
+    padding: auto
+    justify-self: start
+  &__last
+    font-weight: 500
+    padding: auto
+    justify-self: end
+
+.gridrow
+  min-height: 60px
+  justify-items: center
+  align-items: center
+  background: inherit
+  cursor: pointer
+  display: grid
+  width: 95%
+  color: white
+  font-weight: 300
+  grid-template-columns: 12% auto 15% 15% 15% 15% 
+
+    
+
+.content_item
+  padding: auto
+  font-weight: 400
+  padding: auto
+  font-size: 1.1em
+  &__last
+    font-weight: 400
+    justify-self: end
+
+.color_item
+  padding: auto
+  font-weight: 400
+  padding: auto
+  font-size: 1.1em
+  color: #FF8576
+
+.header_name
+  justify-self: start
+  padding-left: 40px
+
+.content_name
+  justify-self: start
+  padding: 10px
+  padding-left: 40px
+  font-weight: 400
+  padding: auto
+  font-size: 1.1em
+  color: #b0c1e6
+
+.rating
+  justify-self: end
+
+.course_image
+  position: relative
+  width: 100%
+  height: 100%
+  max-height: 75px
+
+\:global(.ui.basic.label).toolBarIcon
+  background: inherit
+  border: none
+  padding: 5px
+  opacity: 0.7
+  &:hover
+    background: inherit
+    border: none
+    padding: 5px
+    opacity: 1
+
+.icon_wrp
+  place-self: center
+  padding: auto
+

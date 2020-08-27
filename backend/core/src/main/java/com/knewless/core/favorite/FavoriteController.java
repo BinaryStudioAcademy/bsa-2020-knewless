@@ -1,11 +1,13 @@
 package com.knewless.core.favorite;
 
+import com.knewless.core.course.dto.FavouriteCourseResponseDto;
 import com.knewless.core.db.SourceType;
 import com.knewless.core.security.oauth.UserPrincipal;
 import com.knewless.core.user.model.CurrentUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -28,5 +30,10 @@ public class FavoriteController {
     public boolean changeFavorite(@CurrentUser UserPrincipal userPrincipal, @RequestParam UUID id,
                                   @RequestParam SourceType type) {
         return favoriteService.changeFavorite(userPrincipal.getId(), id, type);
+    }
+
+    @GetMapping("/courses")
+    public List<FavouriteCourseResponseDto> getFavouriteCourses(@CurrentUser UserPrincipal userPrincipal) {
+        return favoriteService.getFavouriteCourses(userPrincipal.getId());
     }
 }

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Icon, Label, Popup } from 'semantic-ui-react';
+import { NavLink } from 'react-router-dom';
 import styles from './styles.module.sass';
 import Notifications from '@containers/Notifications';
 import PopupMenu from '../PopupMenu';
@@ -7,14 +8,15 @@ import AvatarWithGradient from '@components/avatar/AvatarWithBackground';
 
 const UserElement = ({ user, authorId }) => (
   <div className={styles.profileWrp}>
-    <Label
-      basic
-      size="tiny"
-      className={styles.toolbarBtn}
-      onClick={() => { console.log('clicked'); }}
-    >
-      <Icon name="heart" size="big" inverted />
-    </Label>
+    <NavLink exact to="/favourites">
+      <Label
+        basic
+        size="tiny"
+        className={styles.toolbarBtn}
+      >
+        <Icon name="heart" size="big" inverted />
+      </Label>
+    </NavLink>
     <Notifications userId={user.id} styleName={styles.toolbarBtn} />
     <Popup
       id={styles.popup}

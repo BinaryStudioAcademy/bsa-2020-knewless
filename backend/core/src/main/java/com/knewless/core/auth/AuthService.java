@@ -121,24 +121,22 @@ public class AuthService {
 
     public VerifyEmailResponseDto verifyEmail(UUID id) {
         TemporaryDto registerDto = emailService.getRegisterDto(id);
-        if (registerDto != null) {
-            Optional<User> userOptional = userRepository.findById(registerDto.getUserId());
-            if (userOptional.isEmpty()) return VerifyEmailResponseDto.builder().isVerified(false).build();
-            User user = userOptional.get();
-            user.setEmailVerified(true);
-            userRepository.save(user);
-            final UserDetails userDetails = customUserDetailsService.loadUserById(registerDto.getUserId());
-            final Authentication authentication = new UsernamePasswordAuthenticationToken(
-                    userDetails, null, userDetails.getAuthorities()
-            );
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            final String token = tokenProvider.createAccessToken(authentication);
-            final String refresh = tokenProvider.createRefreshToken(authentication);
-            emailService.removeRegister(id);
-            return VerifyEmailResponseDto.builder().isVerified(true).token(token).refresh(refresh).build();
-        } else {
-            return VerifyEmailResponseDto.builder().isVerified(false).build();
-        }
+        if (registerDto == null) return VerifyEmailResponseDto.builder().isVerified(false).build();
+
+        Optional<User> userOptional = userRepository.findById(registerDto.getUserId());
+        if (userOptional.isEmpty()) return VerifyEmailResponseDto.builder().isVerified(false).build();
+
+        User user = userOptional.get();
+        user.setEmailVerified(true);
+        userRepository.save(user);
+        final UserDetails userDetails = customUserDetailsService.loadUserById(registerDto.getUserId());
+        final Authentication authentication = new UsernamePasswordAuthenticationToken(
+                userDetails, null, userDetails.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        final String token = tokenProvider.createAccessToken(authentication);
+        final String refresh = tokenProvider.createRefreshToken(authentication);
+        emailService.removeRegister(id);
+        return VerifyEmailResponseDto.builder().isVerified(true).token(token).refresh(refresh).build();
     }
 
 }

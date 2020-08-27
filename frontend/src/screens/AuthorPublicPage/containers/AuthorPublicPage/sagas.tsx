@@ -2,7 +2,8 @@ import { takeEvery, put, call, all } from 'redux-saga/effects';
 import { toastr } from 'react-redux-toastr';
 import * as publicAuthorPageService from 'screens/AuthorPublicPage/services/publicAuthorPageService';
 import { Routine } from 'redux-saga-routines';
-import { fetchAuthorDataRoutine, followAuthorRoutine, unfollowAuthorRoutine } from 'screens/AuthorPublicPage/routines';
+import { fetchAuthorDataRoutine, followAuthorRoutine,
+  unfollowAuthorRoutine, changeFavouriteAuthorStateRoutine, checkFavouriteAuthorStateRoutine } from 'screens/AuthorPublicPage/routines';
 
 function* getAuthorData(action: Routine<any>) {
   try {
@@ -47,8 +48,37 @@ function* watchGetDataRequest() {
   yield takeEvery(unfollowAuthorRoutine.TRIGGER, unfollowAuthor);
 }
 
+function* changeFavouriteAuthorState(action: Routine<any>) {
+  try {
+    const response = yield call(publicAuthorPageService.changeFavouriteState, action.payload);
+    yield put(changeFavouriteAuthorStateRoutine.success(response));
+  } catch (error) {
+    yield put(changeFavouriteAuthorStateRoutine.failure(error?.message));
+  }
+}
+
+function* watchChangeFavouriteAuthorState() {
+  yield takeEvery(changeFavouriteAuthorStateRoutine.TRIGGER, changeFavouriteAuthorState);
+}
+
+function* checkFavouriteAuthorState(action: Routine<any>) {
+  try {
+    const response = yield call(publicAuthorPageService.checkFavouriteState, action.payload);
+    yield put(checkFavouriteAuthorStateRoutine.success(response));
+  } catch (error) {
+    yield put(checkFavouriteAuthorStateRoutine.failure(error?.message));
+  }
+}
+
+function* watchCheckFavouriteAuthorState() {
+  yield takeEvery(checkFavouriteAuthorStateRoutine.TRIGGER, checkFavouriteAuthorState);
+}
+
+
 export default function* dataSagas() {
   yield all([
-    watchGetDataRequest()
+    watchGetDataRequest(),
+    watchChangeFavouriteAuthorState(),
+    watchCheckFavouriteAuthorState()
   ]);
 }

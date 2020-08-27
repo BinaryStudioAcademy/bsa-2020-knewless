@@ -5,9 +5,10 @@ import { StyledRating } from 'components/StyledRating';
 import GradientButton from 'components/buttons/GradientButton';
 import GrayOutlineButton from 'components/buttons/GrayOutlineButton';
 import '../../styles/common.sass';
-import { IBindingCallback1 } from '@models/Callbacks';
 import AddToFavouriteButton from '@components/AddToFavouritesButton/component';
-import { SourceType } from '@components/AddToFavouritesButton/models/helper';
+import { IFavourite } from '@components/AddToFavouritesButton/component/index';
+import { SourceType } from '@components/AddToFavouritesButton/helper/SourceType';
+import { IBindingCallback1 } from '@models/Callbacks';
 
 interface ICourseOverviewProps {
   imageSrc: string;
@@ -19,6 +20,8 @@ interface ICourseOverviewProps {
   startLectureId: string;
   isAuthorized: boolean;
   openLoginModal: IBindingCallback1<string>;
+  favourite: boolean;
+  changeFavourite: IBindingCallback1<IFavourite>;
 }
 
 const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
@@ -30,7 +33,9 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
   courseId,
   startLectureId,
   isAuthorized,
-  openLoginModal
+  openLoginModal,
+  favourite,
+  changeFavourite
 }) => {
   const history = useHistory();
   return (
@@ -41,13 +46,6 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
             {courseName}
           </h1>
           <div className={styles.description__meta_info}>
-            {isAuthorized &&
-              <div className={styles.favourite_wrp}>
-                <AddToFavouriteButton
-                  type={SourceType.COURSE}
-                  id={courseId}
-                />
-              </div>}
             <StyledRating rating={rating} className={`rating ${styles.rating}`} disabled />
             <p>
               {'By '}
@@ -58,15 +56,27 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
               }
             </p>
           </div>
-          <div className={styles.description__buttons}>
-            <GradientButton onClick={() => {
-              if (!isAuthorized) openLoginModal(`/lecture/${startLectureId}`);
-              else if (startLectureId !== '') history.push(`/lecture/${startLectureId}`);
-            }}
-            >
-              Start
-            </GradientButton>
-            <GrayOutlineButton>Play course overview</GrayOutlineButton>
+          <div className={styles.buttons_with_favourite}>
+            <div className={styles.description__buttons}>
+              <GradientButton onClick={() => {
+                if (!isAuthorized) openLoginModal(`/lecture/${startLectureId}`);
+                else if (startLectureId !== '') history.push(`/lecture/${startLectureId}`);
+              }}
+              >
+                Start
+              </GradientButton>
+              <GrayOutlineButton>Play course overview</GrayOutlineButton>
+            </div>
+            {isAuthorized && (
+              <div className={styles.button_favourite_wrp}>
+                <AddToFavouriteButton
+                  isFavourite={favourite}
+                  changeFavourite={changeFavourite}
+                  id={courseId}
+                  type={SourceType.COURSE}
+                />
+              </div>  
+            )}
           </div>
         </div>
       </div>

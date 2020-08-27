@@ -1,38 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import styles from './styles.module.sass';
-import { connect } from 'react-redux';
-import { SourceType } from '../models/helper';
+import { SourceType } from '../helper/SourceType';
 import { IBindingCallback1 } from 'models/Callbacks';
-import { IAppState } from 'models/AppState';
-import { changeFavouriteStateRoutine, checkFavouriteStateRoutine } from  '../routines';
-import { Icon, Label } from 'semantic-ui-react';
-import LoaderWrapper from 'components/LoaderWrapper';
+import GrayOutlineButton from 'components/buttons/GrayOutlineButton';
+import GradientButton from 'components/buttons/GradientButton';
 
 interface IAddToFavouriteButtonProps {
   isFavourite: boolean;
-  checkFavourite: IBindingCallback1<IFavourite>;
   changeFavourite: IBindingCallback1<IFavourite>;
-  isLoading: boolean;
   type: SourceType;
   id: string;
 }
 
-interface IFavourite {
+export interface IFavourite {
   id: string;
   type: SourceType;
 }
 
 const AddToFavouriteButton: React.FunctionComponent<IAddToFavouriteButtonProps> = ({
-  isFavourite, isLoading, type, id, checkFavourite, changeFavourite
+  isFavourite, type, id, changeFavourite
 }) => {
-
-  useEffect(() => {
-    checkFavourite({
-      id,
-      type
-    });
-}, [checkFavourite]);
-
   const handleChange = () => {
     changeFavourite({
       id,
@@ -41,33 +28,20 @@ const AddToFavouriteButton: React.FunctionComponent<IAddToFavouriteButtonProps> 
   };
 
   return (
-    <LoaderWrapper loading={isLoading}>
-      <Label
-        basic
-        size="large"
-        as="a"
-        onClick={() => handleChange()}
-        className={styles.toolBarIcon}
-      >
-        <Icon fitted name="heart" size="large" inverted className={isFavourite? styles.pushed : styles.inactive}/>
-      </Label>
-    </LoaderWrapper>
+      <div className={styles.wrapper}>
+        {isFavourite && (
+          <GradientButton className={styles.favouriteButton} onClick={() => handleChange()}>
+            <div className={styles.unfollow}>
+              <div className={styles.textButtonFavourite}>
+                Favourite
+              </div>
+            </div>
+          </GradientButton>)}
+        {!isFavourite && (
+          <GrayOutlineButton className={styles.addbutton} onClick={() => handleChange()}>to favourites</GrayOutlineButton>
+        )}
+      </div>
   )
 }
 
-
-const mapStateToProps = (state: IAppState) => {
-  const { isFavourite } = state.favouriteButton.data;
-  const { loading } = state.favouriteButton.requests.checkFavourite;
-  return {
-    isLoading: loading,
-    isFavourite
-  };
-};
-
-const mapDispatchToProps = {
-  checkFavourite: checkFavouriteStateRoutine,
-  changeFavourite: changeFavouriteStateRoutine
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(AddToFavouriteButton);
+export default AddToFavouriteButton;

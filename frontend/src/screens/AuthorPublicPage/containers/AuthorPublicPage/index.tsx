@@ -2,16 +2,22 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { IBindingCallback1 } from 'models/Callbacks';
-import { fetchAuthorDataRoutine, followAuthorRoutine, unfollowAuthorRoutine } from '../../routines';
+import { fetchAuthorDataRoutine,
+         followAuthorRoutine,
+         unfollowAuthorRoutine,
+         changeFavouriteAuthorStateRoutine,
+         checkFavouriteAuthorStateRoutine } from '../../routines';
 import { IAuthorData } from 'screens/AuthorPublicPage/models/IAuthorData';
 import { GradientButton } from 'components/buttons/GradientButton';
 import styles from './styles.module.sass';
 import AuthorPublicMenu from './authorPublicMenu';
 import { IUser } from '@containers/AppRouter/models/IUser';
-import AddToFavouriteButton from '@components/AddToFavouritesButton/component';
-import { SourceType } from '@components/AddToFavouritesButton/models/helper';
 import AvatarWithGradient from '@components/avatar/AvatarWithBackground';
 import { InlineLoaderWrapper } from '@components/InlineLoaderWrapper';
+import { RoleTypes } from '@containers/AppRouter/models/IRole';
+import { IFavourite } from '@components/AddToFavouritesButton/component/index';
+import { SourceType } from '@components/AddToFavouritesButton/helper/SourceType';
+import AddToFavouriteButton from '@components/AddToFavouritesButton/component';
 
 export interface IAuthorPublic {
   match: any;
@@ -21,14 +27,27 @@ export interface IAuthorPublic {
   unfollowAuthor: IBindingCallback1<string>;
   user: IUser;
   loading: boolean;
+  checkFavourite: IBindingCallback1<IFavourite>;
+  changeFavourite: IBindingCallback1<IFavourite>;
+  favourite: boolean;
 }
 
 const AuthorPublicPage: React.FunctionComponent<IAuthorPublic> = ({
-  match, fetchAuthorData, authorData, followAuthor, unfollowAuthor, user, loading = true
+  match,
+  fetchAuthorData,
+  authorData,
+  followAuthor,
+  unfollowAuthor,
+  user,
+  loading = true,
+  changeFavourite,
+  checkFavourite,
+  favourite
 }) => {
   useEffect(() => {
     fetchAuthorData(match.params.authorId);
-  }, []);
+    checkFavourite({id: match.params.authorId, type: SourceType.AUTHOR});
+  }, [checkFavourite]);
   const handleOnClickFollow = () => {
     followAuthor(match.params.authorId);
   };
@@ -59,13 +78,6 @@ const AuthorPublicPage: React.FunctionComponent<IAuthorPublic> = ({
           <div className={styles.authorMainInfoWrapper}>
             <div className={styles.authorNamePublicPage}>
               {`${authorData.firstName} ${authorData.lastName}`}
-              {user && 
-                <div className={styles.favourite_wrp}>
-                  <AddToFavouriteButton
-                    type={SourceType.AUTHOR}
-                    id={match.params.authorId}
-                  />
-                </div>}
             </div>
             {authorData.schoolName !== '' && (
               <div className={styles.authorKnewlessStatic}>
@@ -92,6 +104,15 @@ const AuthorPublicPage: React.FunctionComponent<IAuthorPublic> = ({
                 </GradientButton>
               </div>
             )}
+            {user &&
+            <div className={styles.button_favourite_wrp}>
+              <AddToFavouriteButton
+                id={match.params.authorId}
+                type={SourceType.AUTHOR}
+                changeFavourite={changeFavourite}
+                isFavourite={favourite}
+              />
+            </div>}
             <div className={styles.subscribersNumber}>
               <p className={styles.authorNumberFollowers}>
                 {authorData.numberOfSubscribers}
@@ -149,13 +170,16 @@ const AuthorPublicPage: React.FunctionComponent<IAuthorPublic> = ({
 const mapStateToProps = (state: any) => ({
   authorData: state.authorPublicData.authorData,
   user: state.appRouter.user,
-  loading: state.authorPublicData.requests.dataRequest.loading
+  loading: state.authorPublicData.requests.dataRequest.loading,
+  favourite: state.authorPublicData.authorData?.favourite
 });
 
 const mapDispatchToProps = {
   fetchAuthorData: fetchAuthorDataRoutine,
   followAuthor: followAuthorRoutine,
-  unfollowAuthor: unfollowAuthorRoutine
+  unfollowAuthor: unfollowAuthorRoutine,
+  changeFavourite: changeFavouriteAuthorStateRoutine,
+  checkFavourite: checkFavouriteAuthorStateRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AuthorPublicPage);

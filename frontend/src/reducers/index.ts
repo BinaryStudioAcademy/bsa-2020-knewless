@@ -22,7 +22,7 @@ import savepassword from '../screens/SavePassword/reducers';
 import pathPage from '../screens/PathPage/reducers';
 import pathsPage from '../screens/Paths/reducers';
 import { loginModal } from '../containers/LoginModal/reducer';
-import favouriteButton from '@components/AddToFavouritesButton/reducers';
+import favourites from '../screens/Favourites/reducers';
 
 export default combineReducers({
   toastr,
@@ -48,5 +48,5 @@ export default combineReducers({
   search,
   loginModal,
   pathsPage,
-  favouriteButton
+  favourites
 });

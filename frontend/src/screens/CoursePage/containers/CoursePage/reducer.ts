@@ -1,6 +1,6 @@
 import { Routine } from 'redux-saga-routines';
 import { IFullCourseData } from '@screens/CoursePage/models/IFullCourseData';
-import { fetchCourseDataRoutine } from '@screens/CoursePage/routines';
+import { fetchCourseDataRoutine, changeFavouriteStateRoutine, checkFavouriteStateRoutine } from '@screens/CoursePage/routines';
 
 const initialState = {
   course: { } as IFullCourseData
@@ -9,9 +9,27 @@ const initialState = {
 export const courseData = (state = initialState, action: Routine<any>) => {
   switch (action.type) {
     case fetchCourseDataRoutine.SUCCESS: {
+      const course = action.payload;
+      course.favourite = state.course.favourite;
       return {
         ...state,
-        course: action.payload
+        course
+      };
+    }
+    case changeFavouriteStateRoutine.SUCCESS: {
+      const { course } = state;
+      course.favourite = action.payload;
+      return {
+        ...state,
+        course
+      };
+    }
+    case checkFavouriteStateRoutine.SUCCESS: {
+      const { course } = state;
+      course.favourite = action.payload;
+      return {
+        ...state,
+        course
       };
     }
     default:

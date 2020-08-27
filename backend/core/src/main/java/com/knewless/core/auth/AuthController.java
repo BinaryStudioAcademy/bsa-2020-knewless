@@ -67,9 +67,7 @@ public class AuthController {
 
     @GetMapping("/reset")
     public ResponseEntity<?> getResetLink(@Valid @RequestParam String email) {
-        var result = authService.getResetLink(email);
-        System.out.println(email + " " + result);
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(authService.getResetLink(email));
     }
 
     @GetMapping("/checkreset")

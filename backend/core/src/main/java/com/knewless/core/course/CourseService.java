@@ -238,4 +238,12 @@ public class CourseService {
                     return course;
                 }).collect(Collectors.toList());
     }
+
+    public List<FavouriteCourseResponseDto> getFavouriteCoursesByIds(List<UUID> uuids) {
+        List<Course> courses = courseRepository.findAll();
+        courses.removeIf(c->!uuids.contains(c.getId()));
+        List<FavouriteCourseResponseDto> result = new ArrayList<>();
+        courses.forEach(c-> result.add(CourseMapper.MAPPER.courseToFavouriteCourseResponseDto(c)));
+        return result;
+    }
 }
