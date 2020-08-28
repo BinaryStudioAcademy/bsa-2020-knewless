@@ -1,9 +1,9 @@
 import React from 'react';
 import styles from './styles.module.sass';
-import Logo from '../Header/logo';
 import { useHistory } from 'react-router-dom';
 import { Button } from 'semantic-ui-react';
 import { RoleTypes } from '@containers/AppRouter/models/IRole';
+import LogoWithText from '@components/LogoWithText';
 
 interface IRolePopUpProps {
   setSettingsMode: (role: RoleTypes) => void;
@@ -14,10 +14,7 @@ const RolePopUp: React.FunctionComponent<IRolePopUpProps> = ({ setSettingsMode }
   return (
     <div className={styles.container}>
       <div className={styles.inner_container}>
-        <div className={styles.logo}>
-          <Logo />
-          KnewLess
-        </div>
+        <LogoWithText />
         <div className={styles.title}>
           Sign up as
         </div>

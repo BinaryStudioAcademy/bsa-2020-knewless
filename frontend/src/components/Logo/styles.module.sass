@@ -1,34 +1,32 @@
+$circle_size: 30px
+$container_size: 40px
+
 .container
-  width: 43px
-  height: 43px
+  width: $container_size
+  height: $container_size
   position: relative
 
-.elipse1
+.ellipsis1, .ellipsis2, .ellipsis3, .back1, .back2, .back3
   position: absolute
-  width: 30px
-  height: 30px
+  width: $circle_size
+  height: $circle_size
+  border-radius: 50%
+
+.ellipsis1, .ellipsis2, .ellipsis3
+  background: linear-gradient(83.47deg, #0084F8 9.02%, #FF8576 90.81%)
+  mix-blend-mode: screen
+
+.back1, .back2, .back3
+  background: black
+
+.ellipsis1, .back1
   left: 0
-  top: 13px
-  background: linear-gradient(83.47deg, #0084F8 9.02%, #FF8576 90.81%)
-  mix-blend-mode: screen
-  border-radius: 50%
+  top: $container_size - $circle_size
 
-.elipse2
-  position: absolute
-  width: 30px
-  height: 30px
-  left: 6px
-  top: 4px
-  background: linear-gradient(83.47deg, #0084F8 9.02%, #FF8576 90.81%)
-  mix-blend-mode: screen
-  border-radius: 50%
+.ellipsis2, .back2
+  left: ($container_size - $circle_size) / 2
+  top: 0
 
-.elipse3
-  position: absolute
-  width: 30px
-  height: 30px
-  left: 13px
-  top: 13px
-  background: linear-gradient(83.47deg, #0084F8 9.02%, #FF8576 90.81%)
-  mix-blend-mode: screen
-  border-radius: 50%
+.ellipsis3, .back3
+  left: $container_size - $circle_size
+  top: $container_size - $circle_size
