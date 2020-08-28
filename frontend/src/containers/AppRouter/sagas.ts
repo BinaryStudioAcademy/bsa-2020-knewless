@@ -4,14 +4,10 @@ import * as appRouterService from './service';
 import { fetchUserRoutine, setRoleLoadingRoutine, setSettingsModeRoutine, setUserRoleRoutine } from './routines';
 import { AnyAction } from 'redux';
 import { loginRoutine } from '@screens/Home/routines';
-import { fetchAuthorRoutine } from '@screens/AuthorMainPage/routines';
 
 function* getCurrentUser() {
   try {
     const result: IUser = yield call(appRouterService.getCurrentUser);
-    if (result.role?.name === 'AUTHOR') {
-      yield put(fetchAuthorRoutine.trigger());
-    }
     yield put(fetchUserRoutine.success(result));
     yield put(loginRoutine.success());
   } catch (error) {

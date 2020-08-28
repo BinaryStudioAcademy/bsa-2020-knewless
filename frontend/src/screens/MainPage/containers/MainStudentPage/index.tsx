@@ -78,6 +78,7 @@ const MainStudentPage: React.FunctionComponent<IMainStudentPageProps> = ({
                   level={c.level}
                   rating={c.rating}
                   hideButton
+                  ratingCount={c.ratingCount}
                 />
               </div>
             )) : <div className={styles.no_courses}><p>You have no courses yet.</p></div>}
@@ -100,6 +101,7 @@ const MainStudentPage: React.FunctionComponent<IMainStudentPageProps> = ({
                   imageSrc={c.imageSrc}
                   level={c.level}
                   rating={c.rating}
+                  ratingCount={c.ratingCount}
                 />
               </div>
             ))}

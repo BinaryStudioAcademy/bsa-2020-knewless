@@ -20,4 +20,5 @@ public class CourseDto {
     private long duration;
     private int rating;
     private boolean isReviewed;
+    private int ratingCount;
 }

@@ -303,6 +303,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
                 durationMinutes={getMinutes(selected)}
                 action={handleUploadFile}
                 description={description}
+                ratingCount={0}
               />
               {!isValidImage && (
                 <Label

@@ -26,6 +26,7 @@ export interface ICourse {
   level: string;
   image: string;
   rating: number;
+  ratingCount: number;
 }
 
 export interface ITag {

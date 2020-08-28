@@ -130,6 +130,7 @@ export const LandingPage: React.FunctionComponent<ILandingProps> = ({
                   imageSrc={c.imageSrc}
                   level={c.level}
                   rating={c.rating}
+                  ratingCount={c.ratingCount}
                 />
               </div>
             ))}

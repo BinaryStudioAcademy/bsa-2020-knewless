@@ -22,6 +22,7 @@ export interface ICourseCardProps {
   level: string;
   rating: number;
   hideButton?: boolean;
+  ratingCount: number;
 }
 
 export const CourseCard: React.FunctionComponent<ICourseCardProps> = ({
@@ -33,7 +34,8 @@ export const CourseCard: React.FunctionComponent<ICourseCardProps> = ({
   duration,
   level,
   rating,
-  hideButton
+  hideButton,
+  ratingCount
 }) => {
   const history = useHistory();
   return (
@@ -47,7 +49,16 @@ export const CourseCard: React.FunctionComponent<ICourseCardProps> = ({
           <span>{timeFormat(duration)}</span>
           <span>{level}</span>
         </CardMeta>
-        <StyledRating rating={rating} disabled />
+        <div className={styles.rating_block}>
+          <StyledRating rating={rating} disabled />
+          <p>
+            (
+            {' '}
+            {ratingCount}
+            {' '}
+            )
+          </p>
+        </div>
         {
           !hideButton
           && (

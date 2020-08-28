@@ -21,10 +21,7 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.elasticsearch.index.query.QueryBuilders.matchQuery;
@@ -124,10 +121,14 @@ public class EsService {
             return;
         }
 
-        ((Map<String, Object>) entity.getMetadata()).put("rating", rating);
+        Map<String, Object> metadata = (Map<String, Object>) entity.getMetadata();
+        Optional<Integer> ratingCount = Optional.of((Integer) metadata.get("ratingCount"));
+
+        metadata.put("rating", rating);
+        metadata.put("ratingCount", ratingCount.map(integer -> integer + 1).orElse(0));
         esRepository.save(entity);
     }
-    
+
     public EsSearchResult advancedSearch(EsSearchRequest request) {
         var filterQueryBuilder = new BoolQueryBuilder();
         String queryString = request.getQuery().trim();

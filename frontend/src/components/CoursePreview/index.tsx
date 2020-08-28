@@ -21,11 +21,13 @@ export interface ICoursePreviewProps {
   members?: number;
   action?: (any) => void;
   className?: string;
+  ratingCount: number;
 }
 
 export const CoursePreview: React.FC<ICoursePreviewProps> = ({
   image, lecturesNumber, durationMinutes, level, flag, action, name, description,
-  id, authorName, authorId, tags, rating, className, members
+  id, authorName, authorId, tags, rating, className, members,
+  ratingCount
 }) => {
   const optionalIcon = (isSelected: boolean) => {
     switch (isSelected) {
@@ -67,13 +69,22 @@ export const CoursePreview: React.FC<ICoursePreviewProps> = ({
           <div className={styles.tags}>
             {tags?.length > 0 && tags.map((t, index) => <span key={index}>{t}</span>)}
           </div>
-          <StyledRating
-            className={styles.course_rating}
-            size="small"
-            style={{ fontSize: '1.2em', width: '8rem' }}
-            rating={rating}
-            disabled
-          />
+          <div className={styles.rating_block}>
+            <p>
+              (
+              {' '}
+              {ratingCount}
+              {' '}
+              )
+            </p>
+            <StyledRating
+              className={styles.course_rating}
+              size="small"
+              style={{ fontSize: '1.2em', width: '8rem' }}
+              rating={rating}
+              disabled
+            />
+          </div>
         </div>
         <div className={styles.started}>
           <span className={styles.membersLabel}>started: </span>

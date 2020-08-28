@@ -21,13 +21,14 @@ import GrayOutlineButton from '@components/buttons/GrayOutlineButton';
 import { PathPreview } from '../../components/PathPreview';
 import Confirmation from '@components/Confirmation';
 import { useHistory, useParams } from 'react-router-dom';
-import { IBindingCallback1 } from '@models/Callbacks';
+import {IBindingAction, IBindingCallback1} from '@models/Callbacks';
 import {
   DESCRIPTION_MESSAGE,
   isValidPathDescription,
   isValidPathName,
   PATH_NAME_MESSAGE
 } from '@helpers/validation.helper';
+import {fetchAuthorRoutine} from "@screens/AuthorMainPage/routines";
 
 export interface ISavePathProps {
   courses: ICourse[];
@@ -41,11 +42,13 @@ export interface ISavePathProps {
   triggerSavePath: (path: IPath) => void;
   fetchEditPath: IBindingCallback1<string>;
   updatePath: IBindingCallback1<IPath>;
+  fetchAuthorData: IBindingAction;
 }
 
 export const AddPathPage: React.FC<ISavePathProps> = ({
   courses, tags, tagsLoading, coursesLoading, pathUploading,
-  triggerFetchCourses, triggerFetchTags, triggerSavePath, fetchEditPath, editPath, updatePath
+  triggerFetchCourses, triggerFetchTags, triggerSavePath, fetchEditPath, editPath, updatePath,
+  fetchAuthorData
 }) => {
   const history = useHistory();
   const { pathId } = useParams();
@@ -63,6 +66,7 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
   const [isEdit, setIsEdit] = useState(false);
 
   useEffect(() => {
+
     if (history.location.pathname.startsWith('/path/edit') && !editPath) {
       setIsEdit(true);
       fetchEditPath(pathId);
@@ -80,6 +84,7 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
   }, [editPath]);
 
   useEffect(() => {
+    fetchAuthorData();
     triggerFetchCourses();
     triggerFetchTags();
   }, []);
@@ -168,6 +173,7 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
         rating={course.rating}
         onClick={() => click(course)}
         isSelectedIcon={isSelected}
+        ratingCount={course.ratingCount}
       />
     );
   };
@@ -345,7 +351,8 @@ const mapDispatchToProps = {
   triggerFetchCourses: fetchCoursesRoutine,
   triggerSavePath: savePathRoutine,
   fetchEditPath: fetchPathToEditRoutine,
-  updatePath: updatePathRoutine
+  updatePath: updatePathRoutine,
+  fetchAuthorData: fetchAuthorRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddPathPage);

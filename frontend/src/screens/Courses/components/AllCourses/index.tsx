@@ -87,6 +87,7 @@ export const AllCourses: React.FC<IAllCourses> = ({ courses, tags, fetchData, fe
                       name={c.name}
                       description={c.description}
                       members={c?.members}
+                      ratingCount={c.ratingCount}
                     />
                   ))
                 }
