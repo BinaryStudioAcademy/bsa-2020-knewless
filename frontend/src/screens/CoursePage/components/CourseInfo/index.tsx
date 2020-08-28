@@ -63,7 +63,7 @@ const CourseInfo: React.FunctionComponent<ICourseInfoProps> = ({
             <StyledRating rating={rating} className={`rating ${styles.rating}`} disabled />
             {/* </div>*/}
           </div>
-          {role !== 'AUTHOR' && <p className={styles.row_name}>My rating</p>}
+          {isAuthorized && role !== 'AUTHOR' && <p className={styles.row_name}>My rating</p>}
           {(isAuthorized && role !== 'AUTHOR' && !review)
           && (
             <div className={styles.button_review_block}>
