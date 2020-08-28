@@ -302,6 +302,20 @@ public class CourseService {
                 }).collect(Collectors.toList());
     }
 
+    public CourseFullInfoDto getEditCourseById(UserPrincipal user, UUID id) {
+        Author author = authorRepository.findByUserId(user.getId()).orElseThrow(
+                () -> new ResourceNotFoundException("Author", "userId", user.getId())
+        );
+        CourseFullInfoDto course = getAllCourseInfoById(id, user.getId());
+
+        String courseAuthorId = course.getAuthor().getId().toString();
+        String authorId = author.getId().toString();
+        if (!authorId.equals(courseAuthorId)) {
+            throw new ResourceNotFoundException("Author", "userId", user.getId());
+        }
+        return course;
+    }
+
     public int setRating(UUID userId, int rating, UUID courseId) {
         Course course = courseRepository.findById(courseId).orElseThrow(
                 () -> new ResourceNotFoundException("Course", "courseId", courseId)

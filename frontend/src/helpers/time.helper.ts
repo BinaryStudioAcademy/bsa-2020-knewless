@@ -21,11 +21,13 @@ export const timeFormat = (seconds: number) => {
 
   if (bufer >= SECONDS_IN_MINUTE) {
     const minutes = Math.floor(bufer / SECONDS_IN_MINUTE);
-    result += minutes.toString() + 'm ';
+    result += minutes.toString() + 'm';
     bufer = bufer - SECONDS_IN_HOUR * minutes;
   }
 
-  if (!result) result = '0m';
+  if (!result) {
+      result = bufer > 0 ? bufer + 's' : '0m';
+  }
 
   return result;
 }

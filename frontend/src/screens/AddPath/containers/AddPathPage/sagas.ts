@@ -5,6 +5,7 @@ import * as addPageService from '../../services/add_page.service';
 import { AnyAction } from 'redux';
 import { ICourse } from '../../models/domain';
 import { Routine } from 'redux-saga-routines';
+import { history } from '@helpers/history.helper';
 
 function* loadCourses() {
   try {
@@ -39,6 +40,7 @@ function* loadEditPath(action: Routine<any>) {
     const response = yield call(addPageService.getPath, action.payload);
     yield put(fetchPathToEditRoutine.success(response));
   } catch (error) {
+    yield call(history.push, '/');
     yield put(fetchPathToEditRoutine.failure(error?.message));
   }
 }

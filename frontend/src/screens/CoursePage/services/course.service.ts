@@ -8,6 +8,16 @@ export async function getData(id) {
   return response.json();
 }
 
+export async function getAuthorInfo() {
+  const response = await callApi({
+    endpoint: '/api/author/self-info',
+    type: 'GET'
+  });
+
+  return response.json();
+}
+
+
 export async function saveReview({ courseId, rating }) {
   const response = await callApi({
     endpoint: `/api/course/reaction/${courseId}`,

@@ -5,6 +5,7 @@ export interface ICourseState {
     requests: {
       // as you add more fields, please update screens\Home\models\IRequestState.ts
       dataRequest: IRequestState;
+      editCourseRequest: IRequestState;
     };
     data: ICourseData;
   }

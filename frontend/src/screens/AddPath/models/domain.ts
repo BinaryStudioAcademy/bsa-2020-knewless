@@ -15,6 +15,13 @@ export interface IPathDetails {
   tags: ITag[];
   imageTag: ITag;
   duration: number;
+  author: IAuthorShort
+}
+
+export interface IAuthorShort {
+  id: string;
+  firstName: string;
+  lastName: string;
 }
 
 export interface ICourse {

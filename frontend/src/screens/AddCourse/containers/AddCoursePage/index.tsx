@@ -29,7 +29,6 @@ import {
 } from '@helpers/validation.helper';
 import { levelOptions } from '@models/LevelsEnum';
 import { IFullCourseData } from '@screens/CoursePage/models/IFullCourseData';
-import { updateCourse } from '@screens/AddCourse/services/course.service';
 import { IUpdateCourse } from '@screens/AddCourse/models/IUpdateCourse';
 
 interface IAddCourseProps {
@@ -44,6 +43,7 @@ interface IAddCourseProps {
   clearCourse: IBindingAction;
   authorName: string;
   authorId: string;
+  loadingEditCourse: boolean;
 }
 
 const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
@@ -56,7 +56,8 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
   clearCourse,
   isLecturesLoaded,
   authorName,
-  authorId
+  authorId,
+  loadingEditCourse
 }) => {
   const history = useHistory();
   const { courseId } = useParams();
@@ -202,167 +203,171 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
   };
 
   return (
-    <div className={styles.main_container}>
-      <div className={styles.main_content}>
-        <div className={styles.dividerwrp}>
-          <h3 className={styles.title}>{isEdit ? 'Edit Course' : 'New Course'}</h3>
-        </div>
-        <div className={styles.wide_container}>
-          <div className={styles.settingsInput}>
-            <div className={styles.top}>
-              <div className={styles.inputfield}>
-                <div className={styles.textcontainer}>Name:</div>
-                <div className={styles.input_warning_container}>
-                  <Input
-                    fluid
-                    type="text"
-                    error={!isValidName}
-                    value={courseName}
-                    onBlur={() => validateName()}
-                    className={styles.customInput}
+    history.location.pathname.startsWith('/course/edit') && loadingEditCourse
+    ? <InlineLoaderWrapper loading={loadingEditCourse} centered/>
+    : (
+        <div className={styles.main_container}>
+          <div className={styles.main_content}>
+            <div className={styles.dividerwrp}>
+              <h3 className={styles.title}>{isEdit ? 'Edit Course' : 'New Course'}</h3>
+            </div>
+            <div className={styles.wide_container}>
+              <div className={styles.settingsInput}>
+                <div className={styles.top}>
+                  <div className={styles.inputfield}>
+                    <div className={styles.textcontainer}>Name:</div>
+                    <div className={styles.input_warning_container}>
+                      <Input
+                        fluid
+                        type="text"
+                        error={!isValidName}
+                        value={courseName}
+                        onBlur={() => validateName()}
+                        className={styles.customInput}
+                        onChange={ev => {
+                          const { value } = ev.target;
+                          setCourseName(value);
+                          validateName(value);
+                        }}
+                        inverted
+                      />
+                      {!isValidName && (
+                        <Label
+                          basic
+                          className={styles.warninglabel}
+                          promt="true"
+                          content={COURSE_NAME_MESSAGE}
+                        />
+                      )}
+                    </div>
+                  </div>
+                  <div className={styles.dropdown}>
+                    <div className={styles.textcontainer}>Complexity level:</div>
+                    <div className={styles.dropdown_warning_container}>
+                      <Dropdown
+                        error={!isValidLevel}
+                        onBlur={() => validateLevel()}
+                        className={styles.lvldrop}
+                        clearable
+                        value={level}
+                        onChange={(e, data) => {
+                          const value = data.value as string;
+                          setLevel(value);
+                          validateLevel(value);
+                        }}
+                        search
+                        selection
+                        options={levelOptions}
+                      />
+                      {!isValidLevel && (
+                        <Label
+                          basic
+                          className={styles.warninglabel}
+                          promt="true"
+                        >
+                          {REQUIRED_FIELD_MESSAGE}
+                        </Label>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                <div className={styles.textcontainer}>Description:</div>
+                <div className={styles.textareacontainer}>
+                  <textarea
+                    className={isValidDescription ? styles.customtextarea : styles.customtextarea_error}
                     onChange={ev => {
                       const { value } = ev.target;
-                      setCourseName(value);
-                      validateName(value);
+                      setDescription(value);
+                      validateDescription(value);
                     }}
-                    inverted
+                    value={description}
+                    onBlur={() => validateDescription()}
                   />
-                  {!isValidName && (
-                    <Label
-                      basic
-                      className={styles.warninglabel}
-                      promt="true"
-                      content={COURSE_NAME_MESSAGE}
-                    />
-                  )}
-                </div>
-              </div>
-              <div className={styles.dropdown}>
-                <div className={styles.textcontainer}>Complexity level:</div>
-                <div className={styles.dropdown_warning_container}>
-                  <Dropdown
-                    error={!isValidLevel}
-                    onBlur={() => validateLevel()}
-                    className={styles.lvldrop}
-                    clearable
-                    value={level}
-                    onChange={(e, data) => {
-                      const value = data.value as string;
-                      setLevel(value);
-                      validateLevel(value);
-                    }}
-                    search
-                    selection
-                    options={levelOptions}
-                  />
-                  {!isValidLevel && (
+                  {!isValidDescription && (
                     <Label
                       basic
                       className={styles.warninglabel}
                       promt="true"
                     >
-                      {REQUIRED_FIELD_MESSAGE}
+                      {DESCRIPTION_MESSAGE}
                     </Label>
                   )}
                 </div>
+                <div className={styles.textcontainer}>Preview:</div>
+                <div className={styles.preview_warning_container}>
+                  <CoursePreview
+                    authorName={author}
+                    tags={tags}
+                    rating={rating}
+                    image={previewImage}
+                    authorId={authorId}
+                    lecturesNumber={selected.length}
+                    name={courseName}
+                    level={level}
+                    durationMinutes={getMinutes(selected)}
+                    action={handleUploadFile}
+                    description={description}
+                    ratingCount={0}
+                  />
+                  {!isValidImage && (
+                    <Label
+                      basic
+                      className={styles.warninglabel}
+                      promt="true"
+                    >
+                      {IMAGE_FORMAT_MESSAGE}
+                    </Label>
+                  )}
+                </div>
+                <div className={styles.buttonGroup}>
+                  <GrayOutlineButton
+                    className={styles.buttonCancel}
+                    onClick={() => handleCancel()}
+                    content="Cancel"
+                  />
+                  <div className={styles.buttonSaveGroup}>
+                    <Button
+                      content="Save"
+                      className={styles.button_save_disabled}
+                      onClick={() => handleSave(false)}
+                      disabled
+                    />
+                    <GradientButton
+                      disabled={!isReleseble}
+                      className={isReleseble ? styles.button_release : styles.button_release_disabled}
+                      onClick={() => handleSave(true)}
+                      loading={buttonLoading}
+                      content="Release"
+                    />
+                  </div>
+                </div>
               </div>
-            </div>
-            <div className={styles.textcontainer}>Description:</div>
-            <div className={styles.textareacontainer}>
-              <textarea
-                className={isValidDescription ? styles.customtextarea : styles.customtextarea_error}
-                onChange={ev => {
-                  const { value } = ev.target;
-                  setDescription(value);
-                  validateDescription(value);
-                }}
-                value={description}
-                onBlur={() => validateDescription()}
-              />
-              {!isValidDescription && (
-                <Label
-                  basic
-                  className={styles.warninglabel}
-                  promt="true"
-                >
-                  {DESCRIPTION_MESSAGE}
-                </Label>
-              )}
-            </div>
-            <div className={styles.textcontainer}>Preview:</div>
-            <div className={styles.preview_warning_container}>
-              <CoursePreview
-                authorName={author}
-                tags={tags}
-                rating={rating}
-                image={previewImage}
-                authorId={authorId}
-                lecturesNumber={selected.length}
-                name={courseName}
-                level={level}
-                durationMinutes={getMinutes(selected)}
-                action={handleUploadFile}
-                description={description}
-                ratingCount={0}
-              />
-              {!isValidImage && (
-                <Label
-                  basic
-                  className={styles.warninglabel}
-                  promt="true"
-                >
-                  {IMAGE_FORMAT_MESSAGE}
-                </Label>
-              )}
-            </div>
-            <div className={styles.buttonGroup}>
-              <GrayOutlineButton
-                className={styles.buttonCancel}
-                onClick={() => handleCancel()}
-                content="Cancel"
-              />
-              <div className={styles.buttonSaveGroup}>
-                <Button
-                  content="Save"
-                  className={styles.button_save_disabled}
-                  onClick={() => handleSave(false)}
-                  disabled
-                />
-                <GradientButton
-                  disabled={!isReleseble}
-                  className={isReleseble ? styles.button_release : styles.button_release_disabled}
-                  onClick={() => handleSave(true)}
-                  loading={buttonLoading}
-                  content="Release"
-                />
+              <div className={styles.list_container}>
+                <InlineLoaderWrapper loading={!isLecturesLoaded} centered>
+                  {isLecturesLoaded && (
+                    <AddCourseDependenciesSelector
+                      selected={selected}
+                      stored={pool}
+                      selectedToStored={removeLectureFromSelected}
+                      storedToSelected={removeLectureFromPool}
+                      dependencyName="lecture"
+                      itemToJsx={itemToJsxWithClick}
+                      sortFn={compareName}
+                      openModalAction={setModalAddOpen}
+                      updateLectures={handleUpdateLectures}
+                    />
+                  )}
+                </InlineLoaderWrapper>
               </div>
             </div>
           </div>
-          <div className={styles.list_container}>
-            <InlineLoaderWrapper loading={!isLecturesLoaded} centered>
-              {isLecturesLoaded && (
-                <AddCourseDependenciesSelector
-                  selected={selected}
-                  stored={pool}
-                  selectedToStored={removeLectureFromSelected}
-                  storedToSelected={removeLectureFromPool}
-                  dependencyName="lecture"
-                  itemToJsx={itemToJsxWithClick}
-                  sortFn={compareName}
-                  openModalAction={setModalAddOpen}
-                  updateLectures={handleUpdateLectures}
-                />
-              )}
-            </InlineLoaderWrapper>
-          </div>
+          <Footer />
+          <UploadLectureModal
+            isOpen={modalAddOpen}
+            openAction={setModalAddOpen}
+          />
         </div>
-      </div>
-      <Footer />
-      <UploadLectureModal
-        isOpen={modalAddOpen}
-        openAction={setModalAddOpen}
-      />
-    </div>
+      )
   );
 };
 
@@ -376,6 +381,7 @@ const mapStateToProps = (state: IAppState) => {
     authorId: id,
     courseId,
     editCourse: state.addcourse.data.editCourse,
+    loadingEditCourse: state.addcourse.requests.editCourseRequest.loading,
     lectures,
     isLecturesLoaded,
     loading: state.addcourse.requests.dataRequest.loading

@@ -8,7 +8,7 @@ import CourseInfo from '../../components/CourseInfo';
 import { Footer } from '@components/Footer';
 import { BottomNavigation } from '@screens/Landing/components/BottomNavigation';
 import { IAppState } from '@models/AppState';
-import { fetchCourseDataRoutine, startCourseRoutine } from '@screens/CoursePage/routines';
+import { fetchCourseDataRoutine, startCourseRoutine, fetchAuthorInfoRoutine } from '@screens/CoursePage/routines';
 import { connect } from 'react-redux';
 import { IBindingAction, IBindingCallback1 } from '@models/Callbacks';
 import { IFullCourseData } from '@screens/CoursePage/models/IFullCourseData';
@@ -17,27 +17,32 @@ import { navigations } from '@screens/Landing/services/mock';
 import { openLoginModalRoutine } from '@containers/LoginModal/routines';
 import RatingModal from '@components/RatingModal';
 import { saveCourseReviewRoutine } from '@screens/LecturePage/routines';
+import { IAuthor } from '@screens/AuthorMainPage/models/IAuthor';
 
 interface ICoursePageProps {
   fetchData: IBindingCallback1<string>;
   startCourse: IBindingCallback1<string>;
   openLoginModal: IBindingCallback1<string>;
+  fetchAuthor: IBindingAction;
   course: IFullCourseData;
-  role: string;
+  author: IAuthor;
   loading: boolean;
   isAuthorized: boolean;
   submitReview: IBindingCallback1<object>;
+  role: string;
 }
 
 const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
   fetchData,
   startCourse,
   course,
-  role,
+  author,
   loading,
   isAuthorized,
   openLoginModal,
-  submitReview
+  submitReview,
+  fetchAuthor,
+  role
 }) => {
   const { courseId } = useParams();
   const [isOpen, setIsOpen] = useState(false);
@@ -45,6 +50,7 @@ const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
   useEffect(() => {
     if (courseId) {
       fetchData(courseId);
+      fetchAuthor();
     }
   }, [courseId]);
   const handleOnStartCourse = () => {
@@ -70,7 +76,7 @@ const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
       <RatingModal onClose={closeReview} isOpen={isOpen} submit={saveReview} isLoading={false} />
       <div className={styles.content}>
         <CourseOverview
-          role={role}
+          author={author}
           courseId={course?.id}
           imageSrc={course?.image || defaultCourseImage}
           courseName={course?.name || ''}
@@ -117,10 +123,11 @@ const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
 };
 
 const mapStateToProps = (state: IAppState) => {
-  const { course } = state.coursePage.courseData;
+  const { course, author } = state.coursePage.courseData;
   const { isAuthorized } = state.auth.auth;
   return {
     course,
+    author,
     loading: state.coursePage.requests.dataRequest.loading,
     role: state.appRouter.user?.role?.name,
     isAuthorized
@@ -129,6 +136,7 @@ const mapStateToProps = (state: IAppState) => {
 
 const mapDispatchToProps = {
   fetchData: fetchCourseDataRoutine,
+  fetchAuthor: fetchAuthorInfoRoutine,
   openLoginModal: openLoginModalRoutine.trigger,
   submitReview: saveCourseReviewRoutine,
   startCourse: startCourseRoutine

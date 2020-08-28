@@ -7,6 +7,7 @@ import GrayOutlineButton from 'components/buttons/GrayOutlineButton';
 import '../../styles/common.sass';
 import { IBindingCallback1, IBindingAction } from '@models/Callbacks';
 import { Icon, Label } from 'semantic-ui-react';
+import { IAuthor } from '@screens/AuthorMainPage/models/IAuthor';
 
 interface ICourseOverviewProps {
   imageSrc: string;
@@ -18,7 +19,7 @@ interface ICourseOverviewProps {
   isAuthorized: boolean;
   startCourse: IBindingAction;
   openLoginModal: IBindingCallback1<string>;
-  role: string;
+  author: IAuthor;
   courseId: string;
 }
 
@@ -33,7 +34,7 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
   startCourse,
   openLoginModal,
   courseId,
-  role
+  author
 }) => {
   const history = useHistory();
   const onStart = () => {
@@ -49,8 +50,8 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
         <div className={`${styles.description_content} left_container`}>
           <h1 className={styles.description__course_name}>
             {courseName}
-            {role && role === 'AUTHOR' && (
-              <Label 
+            {author && author?.id === authorId && (
+              <Label
                 style={{
                   background: 'transparent',
                   color: '#fff',
@@ -63,7 +64,7 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
                 }}
                 onClick={() => history.push(`/course/edit/${courseId}`)}
               >
-                <Icon name="pencil" />
+                <Icon name='pencil' />
               </Label>
             )}
           </h1>
