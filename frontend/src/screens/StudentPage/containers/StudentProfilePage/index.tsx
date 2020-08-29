@@ -38,7 +38,7 @@ const StudentProfile: React.FunctionComponent<IStudentProfileProps> = ({
       </div>
       <div className={styles.detailsProfile}>
         <div className={styles.title}>Currently learning</div>
-        {profile.courses && profile.courses.length !== 0 ? (
+        {profile.courses && profile.courses.filter(c=> c.progress!==100).length !== 0 ? (
           <div className={styles.currentCourse}>
             <List relaxed>
               {profile.courses.sort((a,b)=> a.progress > b.progress ? 1 : -1).map(course => (
@@ -64,7 +64,8 @@ const StudentProfile: React.FunctionComponent<IStudentProfileProps> = ({
         <div className={styles.title}>Completed courses</div>
         <div className={styles.completedCourse}>
           <List relaxed>
-            {profile.courses && profile.courses.length !== 0 ? profile.courses.map(course => (
+            {profile.courses && profile.courses.filter(c=> c.progress===100).length !== 0  ? 
+            profile.courses.map(course => (
               course.progress === 100 &&
               <List.Item className={styles.completedCourseItem}>
                 <CompletedCourse
