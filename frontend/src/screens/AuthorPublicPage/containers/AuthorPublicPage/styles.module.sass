@@ -20,8 +20,9 @@ $side_padding: 80px
   background: #121421
   display: grid
   grid-template-columns: 0 30% 70%
-  grid-template-rows: 2vh 2vh 22vh 64vh
+  grid-template-rows: 2vh 2vh 22vh 1fr
   grid-template-areas: ". . . . " " . avatar . . " " . avatar cards . " " . authorInfo list . "
+  margin-bottom: $last_margin
 
 .authorAvatarWrapper
   grid-area: avatar
@@ -167,7 +168,6 @@ $side_padding: 80px
 
 .listCoursesArticlesWrapper
   grid-area: list
-  height: 100%
 
   .authorMenu
     height: 12% !important

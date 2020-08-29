@@ -32,6 +32,7 @@ import VerifyEmail from '@components/EmailConfirmation/VerifyEmail';
 import { IBindingAction, IBindingCallback1 } from '@models/Callbacks';
 import PathsPage from '@screens/Paths/containers/PathsPage';
 import SearchResultsPage from '@screens/SearchResultsPage/containers/SearchResultsPage';
+import { Footer } from '@components/Footer';
 
 export interface IRoutingProps {
   isLoading: boolean;
@@ -98,6 +99,7 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({
           <PrivateRoute exact path="/profile" roles={[RoleTypes.USER]} component={StudentProfile} />
           <PublicRoute exact path="/course/edit/:courseId" roles={[RoleTypes.AUTHOR]} component={AddCourse} />
           <PublicRoute exact path="/path/edit/:pathId" roles={[RoleTypes.AUTHOR]} component={AddPathPage} />
+          {isHeaderShown && <Footer />}
         </Route>
         <div>
           <LoaderWrapper loading={isLoading}>

@@ -4,7 +4,8 @@ import { IAppState } from '@models/AppState';
 import { connect } from 'react-redux';
 import {
   extractIsFetching,
-  extractSearchResults, extractTags,
+  extractSearchResults,
+  extractTags,
   extractTotalResults
 } from '@screens/SearchResultsPage/models/ISearchPageState';
 import { InlineLoaderWrapper } from '@components/InlineLoaderWrapper';
@@ -17,7 +18,6 @@ import urlQueryString from 'query-string';
 import { EsDataType, esTypeOptions } from '@screens/Search/models/EsDataTypes';
 import { ISearchResult } from '@screens/SearchResultsPage/models/EsModels';
 import { SearchFeed } from '@screens/SearchResultsPage/components/SearchFeed';
-import { Footer } from '@components/Footer';
 import { AdvancedFilter } from '@screens/SearchResultsPage/components/AdvancedFilter';
 import {
   IAdvancedSearchRequest,
@@ -177,7 +177,7 @@ export const SearchResultsPage: React.FC<ISearchResultPageProps> = (
                 onChange={(e, { value }) => setSelectedSortOption(value as any)}
                 value={selectedSortOptionValue}
                 disabled={sortOptions.length === 0}
-                title={sortOptions.length === 0 && 'No sorting available'}
+                title={sortOptions.length === 0 ? 'No sorting available' : undefined}
                 clearable
               />
               <GrayOutlineButton
@@ -240,9 +240,6 @@ export const SearchResultsPage: React.FC<ISearchResultPageProps> = (
           <InlineLoaderWrapper loading={isFetching} centered className={styles.spinner} />
           {isFetching || (<SearchFeed results={results} category={EsDataType[visualFilters.c]} />)}
         </div>
-      </div>
-      <div className={styles.footer}>
-        <Footer />
       </div>
     </div>
   );

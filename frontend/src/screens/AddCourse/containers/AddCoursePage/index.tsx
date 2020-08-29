@@ -4,7 +4,6 @@ import { fetchLecturesRoutine, saveCourseRoutine, fetchEditCourseRoutine, update
 import { IBindingAction, IBindingCallback1 } from 'models/Callbacks';
 import { ICourse } from '../../models/ICourse';
 import { Button, Dropdown, Input, Label } from 'semantic-ui-react';
-import { Footer } from '@components/Footer';
 import { useHistory, useParams } from 'react-router-dom';
 import styles from './styles.module.sass';
 import { compareName, getMinutes, isImage } from '../../services/helper.service';
@@ -361,7 +360,6 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
               </div>
             </div>
           </div>
-          <Footer />
           <UploadLectureModal
             isOpen={modalAddOpen}
             openAction={setModalAddOpen}
