@@ -22,6 +22,7 @@ import savepassword from '../screens/SavePassword/reducers';
 import pathPage from '../screens/PathPage/reducers';
 import pathsPage from '../screens/Paths/reducers';
 import { loginModal } from '../containers/LoginModal/reducer';
+import favourites from '../screens/Favourites/reducers';
 import searchPage from '@screens/SearchResultsPage/reducers';
 
 export default combineReducers({
@@ -48,5 +49,6 @@ export default combineReducers({
   search,
   loginModal,
   pathsPage,
+  favourites,
   searchPage
 });

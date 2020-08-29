@@ -7,7 +7,8 @@ import AuthorInfo from '../../components/AuthorInfo';
 import CourseInfo from '../../components/CourseInfo';
 import { BottomNavigation } from '@screens/Landing/components/BottomNavigation';
 import { IAppState } from '@models/AppState';
-import { fetchCourseDataRoutine, startCourseRoutine, fetchAuthorInfoRoutine } from '@screens/CoursePage/routines';
+import { fetchCourseDataRoutine, changeFavouriteCourseStateRoutine, checkFavouriteCourseStateRoutine,
+  startCourseRoutine, changeFavouriteLectureStateRoutine, fetchAuthorInfoRoutine } from '@screens/CoursePage/routines';
 import { connect } from 'react-redux';
 import { IBindingAction, IBindingCallback1 } from '@models/Callbacks';
 import { IFullCourseData } from '@screens/CoursePage/models/IFullCourseData';
@@ -16,6 +17,10 @@ import { navigations } from '@screens/Landing/services/mock';
 import { openLoginModalRoutine } from '@containers/LoginModal/routines';
 import RatingModal from '@components/RatingModal';
 import { saveCourseReviewRoutine } from '@screens/LecturePage/routines';
+import { IFavourite } from '@components/AddToFavouritesButton/component/index';
+import { SourceType } from '@components/AddToFavouritesButton/helper/SourceType';
+
+  
 import { IAuthor } from '@screens/AuthorMainPage/models/IAuthor';
 
 interface ICoursePageProps {
@@ -27,7 +32,11 @@ interface ICoursePageProps {
   author: IAuthor;
   loading: boolean;
   isAuthorized: boolean;
+  favourite: boolean;
   submitReview: IBindingCallback1<object>;
+  checkFavourite: IBindingCallback1<IFavourite>;
+  changeFavourite: IBindingCallback1<IFavourite>;
+  changeFavouriteLecture: IBindingCallback1<IFavourite>;
   role: string;
 }
 
@@ -39,7 +48,11 @@ const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
   loading,
   isAuthorized,
   openLoginModal,
+  changeFavourite,
+  checkFavourite,
+  favourite,
   submitReview,
+  changeFavouriteLecture,
   fetchAuthor,
   role
 }) => {
@@ -49,9 +62,13 @@ const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
   useEffect(() => {
     if (courseId) {
       fetchData(courseId);
+      checkFavourite({
+        id: courseId,
+        type: SourceType.COURSE 
+      });
       fetchAuthor();
     }
-  }, [courseId]);
+  }, [courseId, checkFavourite]);
   const handleOnStartCourse = () => {
     startCourse(course.id);
   };
@@ -75,6 +92,9 @@ const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
       <RatingModal onClose={closeReview} isOpen={isOpen} submit={saveReview} isLoading={false} />
       <div className={styles.content}>
         <CourseOverview
+          favourite={favourite}
+          changeFavourite={changeFavourite}
+          role={role}
           author={author}
           courseId={course?.id}
           imageSrc={course?.image || defaultCourseImage}
@@ -89,6 +109,7 @@ const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
         />
         <div className="separator" />
         <CourseInfo
+          changeFavouriteLecture={changeFavouriteLecture}
           isAuthorized={isAuthorized}
           startCourse={handleOnStartCourse}
           openLoginModal={openLoginModal}
@@ -122,13 +143,15 @@ const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
 
 const mapStateToProps = (state: IAppState) => {
   const { course, author } = state.coursePage.courseData;
+  const { favourite } = course;
   const { isAuthorized } = state.auth.auth;
   return {
     course,
     author,
     loading: state.coursePage.requests.dataRequest.loading,
     role: state.appRouter.user?.role?.name,
-    isAuthorized
+    isAuthorized,
+    favourite
   };
 };
 
@@ -136,8 +159,11 @@ const mapDispatchToProps = {
   fetchData: fetchCourseDataRoutine,
   fetchAuthor: fetchAuthorInfoRoutine,
   openLoginModal: openLoginModalRoutine.trigger,
+  changeFavourite: changeFavouriteCourseStateRoutine,
+  checkFavourite: checkFavouriteCourseStateRoutine,
   submitReview: saveCourseReviewRoutine,
-  startCourse: startCourseRoutine
+  startCourse: startCourseRoutine,
+  changeFavouriteLecture: changeFavouriteLectureStateRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CoursePage);

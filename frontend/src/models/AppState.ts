@@ -15,6 +15,7 @@ import { ISearchState } from '@screens/./Search/models/ISearchState';
 import { ILoginModalState } from '@containers/LoginModal/models/ILoginModalState';
 import { IPathPageState } from '@screens/PathPage/models/IPathPageState';
 import { IPathsState } from '@screens/Paths/models/IPathsState';
+import { IFavouriteState } from '@screens/Favourites/models/IFavouriteState';
 import { ISearchPageState } from '@screens/SearchResultsPage/models/ISearchPageState';
 
 export interface IAppState {
@@ -36,5 +37,6 @@ export interface IAppState {
   loginModal: ILoginModalState;
   resetpassword: IResetState;
   savepassword: ISavePasswordState;
+  favourites: IFavouriteState;
   searchPage: ISearchPageState;
 }

@@ -16,6 +16,7 @@ export interface IFullCourseData {
   authorCourses: IAuthorCourseData[];
   lectures: ILectureData[];
   tags: ITagData[];
+  favourite: boolean;
   review: number;
   ratingCount: number;
 }

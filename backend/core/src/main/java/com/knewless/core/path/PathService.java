@@ -22,9 +22,11 @@ import com.knewless.core.user.role.model.Role;
 import com.knewless.core.user.role.model.RoleType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -163,5 +165,13 @@ public class PathService {
 
 		pathDetailsDto.setDuration(duration);
 		return pathDetailsDto;
+	}
+
+	public List<FavouritePathResponseDto> getFavouritePathsByUser(UUID userId){
+		List<Path> paths = pathRepository.findTop10ByAuthorIsNotNull();
+		//List<Path> paths = pathRepository.getFavouritePathsByUserId(userId, SourceType.PATH); line should be uncommented, when path could be added
+		List<FavouritePathResponseDto> result = new ArrayList<>();
+		paths.forEach(p -> result.add(PathMapper.MAPPER.pathToFavouritePathResponseDto(p)));
+		return result;
 	}
 }

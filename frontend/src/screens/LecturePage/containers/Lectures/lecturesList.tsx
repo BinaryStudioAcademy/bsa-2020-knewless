@@ -4,6 +4,11 @@ import { Card } from 'semantic-ui-react';
 import { MdTimer } from 'react-icons/md';
 import { ICourseData } from '../../models/ICourseData';
 import { ILecturesList } from '../../models/ILecturesList';
+import { IBindingCallback1 } from 'models/Callbacks';
+import { IFavourite } from '@components/AddToFavouritesButton/component/index';
+import { SourceType } from '@components/AddToFavouritesButton/helper/SourceType';
+import AddToFavouriteButton from '@components/AddToFavouritesButton/component';
+import { changeFavouriteLectureStateRoutine } from '@screens/LecturePage/routines';
 
 import './styles.sass';
 import { timeFormatLecture } from '@helpers/time.helper';
@@ -12,16 +17,17 @@ export interface ILecturesListProps {
     listProps: ILecturesList;
     course: ICourseData;
     setChosenVideo: Function;
+    changeFavourite: IBindingCallback1<IFavourite>;
 }
 
 const LecturesList: React.FunctionComponent<ILecturesListProps> = ({
-  course, listProps, setChosenVideo
+  course, listProps, setChosenVideo, changeFavourite
 }) => (
   <div>
     {course.lectures.map((l, i) => (
       <Card
         className={listProps.chosenVideo === l.id ? 'lecture active' : 'lecture'}
-        onClick={() => setChosenVideo({ chosenVideo: l.id })}
+        onClick={(e: any) => {if(e.target.tagName === "I") return; setChosenVideo({ chosenVideo: l.id });}}
         animated={false}
       >
         <div className="numberWrapper">
@@ -34,6 +40,14 @@ const LecturesList: React.FunctionComponent<ILecturesListProps> = ({
         <Card.Description className="videoDescription">
           <div className="descriptionText">
             {l.description.slice(0, 30)}
+          </div>
+          <div className="icon_wrp">
+            <AddToFavouriteButton 
+              id={l.id}
+              type={SourceType.LECTURE}
+              isFavourite={l.favourite}
+              changeFavourite={changeFavourite}
+            />
           </div>
         </Card.Description>
         <Card.Content
@@ -54,6 +68,7 @@ const mapStateToProps = (state: any) => ({
 });
 
 const mapDispatchToProps = {
+  changeFavourite: changeFavouriteLectureStateRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(LecturesList);

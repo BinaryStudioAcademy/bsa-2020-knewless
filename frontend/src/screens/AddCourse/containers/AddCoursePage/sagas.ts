@@ -45,7 +45,6 @@ function* updateCourse(action: Routine<any>) {
     toastr.success('Saved successfully!');
     courseService.forwardHome();
   } catch (error) {
-    console.log(error);
     yield put(updateCourseRoutine.failure(error?.message));
   }
 }
@@ -66,7 +65,6 @@ function* saveCourse(action: Routine<any>) {
     toastr.success('Saved successfully!');
     courseService.forwardHome();
   } catch (error) {
-    console.log(error);
     yield put(saveCourseRoutine.failure(error?.message));
   }
 }

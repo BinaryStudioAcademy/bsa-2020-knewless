@@ -8,6 +8,7 @@ import moment from 'moment';
 import { ITagData } from '@screens/CoursePage/models/ITagData';
 import { IBindingCallback1, IBindingAction } from '@models/Callbacks';
 import { timeFormat } from '@helpers/time.helper';
+import { IFavourite } from '@components/AddToFavouritesButton/component/index';
 import GrayOutlineButton from '@components/buttons/GrayOutlineButton';
 
 interface ICourseInfoProps {
@@ -25,6 +26,7 @@ interface ICourseInfoProps {
   review: number;
   ratingCount: number;
   role: string;
+  changeFavouriteLecture: IBindingCallback1<IFavourite>;
 }
 
 const CourseInfo: React.FunctionComponent<ICourseInfoProps> = ({
@@ -41,7 +43,8 @@ const CourseInfo: React.FunctionComponent<ICourseInfoProps> = ({
   review,
   ratingCount,
   startCourse,
-  role
+  role,
+  changeFavouriteLecture
 }) => (
   <div className="content_row">
     <div className={`${styles.info} flex_item aligned_item`}>
@@ -88,6 +91,7 @@ const CourseInfo: React.FunctionComponent<ICourseInfoProps> = ({
     </div>
     <div className={`${styles.menu} flex_item`}>
       <CourseMenu
+        changeFavouriteLecture={changeFavouriteLecture}
         isAuthorized={isAuthorized}
         openLoginModal={openLoginModal}
         startCourse={startCourse}

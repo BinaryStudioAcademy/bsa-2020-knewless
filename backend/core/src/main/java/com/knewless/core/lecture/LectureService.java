@@ -1,7 +1,9 @@
 package com.knewless.core.lecture;
 
+import com.knewless.core.db.SourceType;
 import com.knewless.core.emailservice.EmailService;
 import com.knewless.core.fileManager.FileManager;
+import com.knewless.core.lecture.Dto.FavouriteLectureResponseDto;
 import com.knewless.core.lecture.dto.LectureCreateResponseDto;
 import com.knewless.core.lecture.dto.ShortLectureDto;
 import com.knewless.core.lecture.model.Lecture;
@@ -93,8 +95,16 @@ public class LectureService {
                         l.getUrl1080(),
                         l.getUrl720(),
                         l.getUrl480(),
-                        l.getDuration()))
+                        l.getDuration(),
+                        false))
                 .collect(Collectors.toList());
+    }
+
+    public List<FavouriteLectureResponseDto> getFavouriteLecturesByUser(UUID userId){
+        List<Lecture> lectures = lectureRepository.getFavouriteLecturesByUserId(userId, SourceType.LECTURE);
+        List<FavouriteLectureResponseDto> result = new ArrayList<>();
+        lectures.forEach(l-> result.add(LectureMapper.MAPPER.lectureToFavouriteLectureResponseDto(l)));
+        return result;
     }
 
 }

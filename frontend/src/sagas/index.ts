@@ -20,6 +20,7 @@ import coursesSagas from '../screens/Courses/sagas';
 import pathPageSagas from '@screens/PathPage/sagas';
 import searchSagas from '@screens/./Search/sagas/sagas';
 import pathsPageSagas from '@screens/Paths/sagas';
+import favouriteSagas from '@screens/Favourites/sagas';
 import searchPageSagas from '@screens/SearchResultsPage/sagas';
 
 export default function* rootSaga() {
@@ -45,6 +46,7 @@ export default function* rootSaga() {
     coursePageSagas(),
     searchSagas(),
     pathsPageSagas(),
+    favouriteSagas(),
     searchPageSagas()
   ]);
 }

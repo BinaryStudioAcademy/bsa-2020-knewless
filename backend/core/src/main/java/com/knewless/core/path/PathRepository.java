@@ -1,5 +1,6 @@
 package com.knewless.core.path;
 
+import com.knewless.core.db.SourceType;
 import com.knewless.core.path.dto.AuthorPathQueryResult;
 import com.knewless.core.path.dto.PathQueryResult;
 import com.knewless.core.path.model.Path;
@@ -58,4 +59,13 @@ public interface PathRepository extends JpaRepository<Path, UUID> {
             "LEFT JOIN c.paths as p " +
             "WHERE cuc.user.id = :userId")
     List<PathQueryResult> getPathsByUserId(UUID userId);
+
+    @Query("SELECT p FROM Path p " +
+            "INNER JOIN Favorite f ON f.sourceId = p.id " +
+            "WHERE f.sourceType = :type AND f.user.id = :userId")
+    List<Path> getFavouritePathsByUserId(@Param("userId") UUID userId, @Param("type") SourceType type);
+
+    List<Path> findTop10ByAuthorIsNotNull();
+
+    List<Path> findAllByAuthorId(UUID id);
 }

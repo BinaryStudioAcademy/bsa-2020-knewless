@@ -43,6 +43,7 @@ interface IAddCourseProps {
   authorName: string;
   authorId: string;
   loadingEditCourse: boolean;
+  isAuthorized: boolean;
 }
 
 const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
@@ -56,7 +57,8 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
   isLecturesLoaded,
   authorName,
   authorId,
-  loadingEditCourse
+  loadingEditCourse,
+  isAuthorized
 }) => {
   const history = useHistory();
   const { courseId } = useParams();
@@ -110,6 +112,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
     const lecture = item as ILecture;
     return (
       <LectureCard
+        isAuthorized={isAuthorized}
         name={lecture.name}
         description={lecture.description}
         timeMinutes={lecture.timeSeconds}
@@ -373,6 +376,7 @@ const mapStateToProps = (state: IAppState) => {
   const { lectures, isLecturesLoaded, courseId } = state.addcourse.data;
   const { appRouter } = state;
   const { firstName, lastName, id } = state.authorMainPage.data.author;
+  const { isAuthorized } = state.auth.auth;
   return {
     userId: appRouter.user.id,
     authorName: `${firstName} ${lastName}`,
@@ -382,7 +386,8 @@ const mapStateToProps = (state: IAppState) => {
     loadingEditCourse: state.addcourse.requests.editCourseRequest.loading,
     lectures,
     isLecturesLoaded,
-    loading: state.addcourse.requests.dataRequest.loading
+    loading: state.addcourse.requests.dataRequest.loading,
+    isAuthorized
   };
 };
 

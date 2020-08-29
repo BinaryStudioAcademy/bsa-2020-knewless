@@ -12,5 +12,6 @@ export interface IAuthorData {
     numberOfSubscribers: number;
     courses: IAuthorCourse[];
     articles: IAuthorArticles[];
+    favourite: boolean;
     printFollowButton: boolean;
 }

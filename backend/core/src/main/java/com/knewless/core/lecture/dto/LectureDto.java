@@ -15,4 +15,5 @@ public class LectureDto {
     private String url720;
     private String url480;
     private int duration;
+    private boolean favourite;
 }

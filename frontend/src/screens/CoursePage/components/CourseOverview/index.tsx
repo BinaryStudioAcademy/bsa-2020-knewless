@@ -5,6 +5,9 @@ import { StyledRating } from 'components/StyledRating';
 import GradientButton from 'components/buttons/GradientButton';
 import GrayOutlineButton from 'components/buttons/GrayOutlineButton';
 import '../../styles/common.sass';
+import AddToFavouriteButton from '@components/AddToFavouritesButton/component';
+import { IFavourite } from '@components/AddToFavouritesButton/component/index';
+import { SourceType } from '@components/AddToFavouritesButton/helper/SourceType';
 import { IBindingCallback1, IBindingAction } from '@models/Callbacks';
 import { Icon, Label } from 'semantic-ui-react';
 import { IAuthor } from '@screens/AuthorMainPage/models/IAuthor';
@@ -19,6 +22,9 @@ interface ICourseOverviewProps {
   isAuthorized: boolean;
   startCourse: IBindingAction;
   openLoginModal: IBindingCallback1<string>;
+  favourite: boolean;
+  changeFavourite: IBindingCallback1<IFavourite>;
+  role: string;
   author: IAuthor;
   courseId: string;
 }
@@ -34,6 +40,9 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
   startCourse,
   openLoginModal,
   courseId,
+  role,
+  favourite,
+  changeFavourite,
   author
 }) => {
   const history = useHistory();
@@ -79,11 +88,27 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
               }
             </p>
           </div>
-          <div className={styles.description__buttons}>
-            <GradientButton onClick={onStart}>
-              Start
-            </GradientButton>
-            <GrayOutlineButton>Play course overview</GrayOutlineButton>
+          <div className={styles.buttons_with_favourite}>
+            <div className={styles.description__buttons}>
+              <GradientButton onClick={() => {
+                if (!isAuthorized) openLoginModal(`/lecture/${startLectureId}`);
+                else if (startLectureId !== '') history.push(`/lecture/${startLectureId}`);
+              }}
+              >
+                Start
+              </GradientButton>
+              <GrayOutlineButton>Play course overview</GrayOutlineButton>
+            </div>
+            {isAuthorized && (
+              <div className={styles.button_favourite_wrp}>
+                <AddToFavouriteButton
+                  isFavourite={favourite}
+                  changeFavourite={changeFavourite}
+                  id={courseId}
+                  type={SourceType.COURSE}
+                />
+              </div>  
+            )}
           </div>
         </div>
       </div>

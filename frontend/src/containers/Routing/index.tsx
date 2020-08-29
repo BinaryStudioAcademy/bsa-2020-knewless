@@ -31,6 +31,7 @@ import { openLoginModalRoutine } from '@containers/LoginModal/routines';
 import VerifyEmail from '@components/EmailConfirmation/VerifyEmail';
 import { IBindingAction, IBindingCallback1 } from '@models/Callbacks';
 import PathsPage from '@screens/Paths/containers/PathsPage';
+import FavouritesPage from '@screens/Favourites/containers/FavouritesPage';
 import SearchResultsPage from '@screens/SearchResultsPage/containers/SearchResultsPage';
 import { Footer } from '@components/Footer';
 
@@ -93,6 +94,7 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({
           <PublicRoute exact path="/paths" component={PathsPage} />
           <PublicRoute exact path="/search" component={SearchResultsPage} />
           <PrivateRoute exact path="/author/:authorId" component={AuthorPublicPage} />
+          <PrivateRoute exact path="/favourites" component={FavouritesPage} />
           <PrivateRoute exact path="/lecture/:lectureId" component={LecturePage} />
           <PrivateRoute exact path="/add_path" roles={[RoleTypes.AUTHOR]} component={AddPathPage} />
           <PrivateRoute exact path="/add_course" roles={[RoleTypes.AUTHOR]} component={AddCourse} />
