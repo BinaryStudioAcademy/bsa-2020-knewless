@@ -66,4 +66,6 @@ public interface PathRepository extends JpaRepository<Path, UUID> {
     List<Path> getFavouritePathsByUserId(@Param("userId") UUID userId, @Param("type") SourceType type);
 
     List<Path> findTop10ByAuthorIsNotNull();
+
+    List<Path> findAllByAuthorId(UUID id);
 }

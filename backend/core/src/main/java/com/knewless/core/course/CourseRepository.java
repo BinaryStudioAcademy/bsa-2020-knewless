@@ -139,4 +139,6 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
             "INNER JOIN Favorite f ON f.sourceId = c.id " +
             "WHERE f.sourceType = :type AND f.user.id = :userId")
     List<Course> getFavouriteCoursesByUserId(@Param("userId") UUID userId, @Param("type") SourceType type);
+
+    List<Course> findAllByAuthorId(UUID id);
 }

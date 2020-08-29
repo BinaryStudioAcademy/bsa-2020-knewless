@@ -38,7 +38,7 @@ export const LectureCard: React.FC<ILectureCardProps> = ({
       {name}
     </p>
     <div className={styles.meta__time}>
-      {timeFormatLecture(timeMinutes)}
+      {isAuthorized && timeFormatLecture(timeMinutes)}
     </div>
     <div className={styles.meta__actionButton}>
       {timeMinutes === 0 && !changefavourite && isAuthorized &&
@@ -67,6 +67,7 @@ export const LectureCard: React.FC<ILectureCardProps> = ({
           type={SourceType.LECTURE}
           changeFavourite={changefavourite}
         />}
+      {!isAuthorized && timeFormatLecture(timeMinutes)}
     </div>
   </div>
 );

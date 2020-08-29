@@ -138,12 +138,10 @@ public class AuthorService {
     public List<FavouriteAuthorResponseDto> getFavouriteAuthorsByUser(UUID userId) {
         List<Author> authors = authorRepository.getFavouriteAuthorsByUserId(userId, SourceType.AUTHOR);
         List<FavouriteAuthorResponseDto> result = new ArrayList<>();
-        List<Course> courses = courseRepository.findAll();
-        List<Path> paths = pathRepository.findAll();
         authors.forEach(a -> result.add(com.knewless.core.author.AuthorMapper.MAPPER.authorToFavouriteAuthorResponseDto(a)));
         result.forEach(a->a.setFollowers(authorRepository.getNumberOfSubscriptions(a.getId()).orElse(0)));
-        result.forEach(a->a.setCourses(courses.stream().filter(c->c.getAuthor().getId().equals(a.getId())).collect(Collectors.toList()).size()));
-        result.forEach(a->a.setPaths(paths.stream().filter(p->p.getAuthor().getId().equals(a.getId())).collect(Collectors.toList()).size()));
+        result.forEach(a->a.setCourses(courseRepository.findAllByAuthorId(a.getId()).size()));
+        result.forEach(a->a.setPaths(pathRepository.findAllByAuthorId(a.getId()).size()));
         return result;
     }
 }
