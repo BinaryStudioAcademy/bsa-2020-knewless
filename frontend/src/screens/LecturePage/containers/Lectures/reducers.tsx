@@ -22,6 +22,7 @@ const basicCourseData = {
     url720: '',
     url480: '',
     duration: 0,
+    progress: 0,
     favourite: undefined
   }],
   author: {

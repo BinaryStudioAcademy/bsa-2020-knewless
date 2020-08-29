@@ -180,7 +180,7 @@ const LecturePage: React.FunctionComponent<ILectureProps> = ({
               </Link>
             </div>
             <div className="lecturesList">
-              <LecturesMenu setChosenVideo={handleChooseVideo} />
+              <LecturesMenu setChosenVideo={handleChooseVideo} playerProgress={playerProgress.playedSeconds} />
             </div>
           </>
         )}

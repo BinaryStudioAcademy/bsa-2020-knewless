@@ -102,12 +102,12 @@ body, #root
 
 .ui.card.lecture, .ui.link.card.lecture
   width: 100%
-  height: 5.1vw
+  height: 70px
   margin: 0 !important
   border-radius: 0 !important
   background: #182033
   display: grid
-  grid-template-columns: 17% 83%
+  grid-template-columns: 20% 80%
   grid-template-rows: 55% 45%
   grid-template-areas: " number description" " number duration "
   box-shadow: none !important
@@ -144,9 +144,7 @@ a.ui.card.lecture.active .numberText
 .ui.card.lecture:hover .cardNumber
   background: #9a9cb2
 
-.cardNumber
-  height: 55%
-  width: 55%
+.progress
   padding: 2px
   border-radius: 50% !important
   background: #cccccc
@@ -154,19 +152,8 @@ a.ui.card.lecture.active .numberText
   align-items: center
   justify-content: center
 
-.numberText
-  width: 100%
-  height: 100%
-  margin: auto
-  border-radius: 50% !important
-  background: #182033
-  display: flex
-  align-items: center
-  justify-content: center
-  font-size: 1.15em
-  color: #f5f5f5
-
-.numberWrapper
+.progressWrapper
+  min-width: 70px
   grid-area: number
   display: flex
   align-items: center
@@ -191,7 +178,8 @@ a.ui.card.lecture.active .numberText
   display: flex
   justify-content: flex-end
   align-items: flex-start
-  width: 100%
+  margin-left: auto
+  
 
 .videoDuration
   grid-area: duration

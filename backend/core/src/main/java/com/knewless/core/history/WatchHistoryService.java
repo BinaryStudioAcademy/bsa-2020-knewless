@@ -29,6 +29,14 @@ public class WatchHistoryService {
     public long getProgress(UUID userId, UUID courseId) {
         return historyRepository.getProgressByUserAndCourse(courseId, userId);
     }
+    public int getProgressByLecture(UUID userId, UUID lectureId) {
+        var history = historyRepository.findByUser_IdAndLecture_Id(userId, lectureId);
+        if(history.isPresent()){
+            return history.get().getSecondsWatched()*100/history.get().getLecture().getDuration();
+        }
+        return 0;
+
+    }
 
     public long getViewedSeconds(UUID userId, UUID lectureId) {
         History viewHistory = historyRepository.findByUser_IdAndLecture_Id(userId, lectureId).orElseThrow();

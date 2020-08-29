@@ -8,5 +8,6 @@ export interface ILectures {
     url480: string;
     description: string;
     duration: number;
+    progress: number;
     favourite: boolean;
 }

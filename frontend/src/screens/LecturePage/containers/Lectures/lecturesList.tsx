@@ -4,6 +4,7 @@ import { Card } from 'semantic-ui-react';
 import { MdTimer } from 'react-icons/md';
 import { ICourseData } from '../../models/ICourseData';
 import { ILecturesList } from '../../models/ILecturesList';
+import {CircleProgress} from 'react-gradient-progress';
 import { IBindingCallback1 } from 'models/Callbacks';
 import { IFavourite } from '@components/AddToFavouritesButton/component/index';
 import { SourceType } from '@components/AddToFavouritesButton/helper/SourceType';
@@ -17,11 +18,12 @@ export interface ILecturesListProps {
     listProps: ILecturesList;
     course: ICourseData;
     setChosenVideo: Function;
+    playerProgress: number;
     changeFavourite: IBindingCallback1<IFavourite>;
 }
 
 const LecturesList: React.FunctionComponent<ILecturesListProps> = ({
-  course, listProps, setChosenVideo, changeFavourite
+  course, listProps, setChosenVideo, playerProgress, changeFavourite
 }) => (
   <div>
     {course.lectures.map((l, i) => (
@@ -30,16 +32,22 @@ const LecturesList: React.FunctionComponent<ILecturesListProps> = ({
         onClick={(e: any) => {if(e.target.tagName === "I") return; setChosenVideo({ chosenVideo: l.id });}}
         animated={false}
       >
-        <div className="numberWrapper">
-          <div className="cardNumber">
-            <p className="numberText">
-              {i + 1}
-            </p>
-          </div>
+        <div className="progressWrapper">
+          <CircleProgress
+            percentage={l.progress = listProps.chosenVideo === l.id ? Math.min(Math.ceil((playerProgress*100)/l.duration),100)
+              : Math.min(l.progress, 100)}
+            width={50}
+            strokeWidth={2}
+            fontSize={'12px'}
+            fontColor={['#FFFF']}
+            primaryColor={['#3378BD', '#FF8576']}
+            secondaryColor={['#121421']}
+            className="progress"
+          />
         </div>
         <Card.Description className="videoDescription">
           <div className="descriptionText">
-            {l.description.slice(0, 30)}
+          {`${i + 1}. ${l.name? l.name.slice(0, 25) : l.description.slice(0, 25)}`}
           </div>
           <div className="icon_wrp">
             <AddToFavouriteButton 

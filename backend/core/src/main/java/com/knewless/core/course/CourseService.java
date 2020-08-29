@@ -179,9 +179,12 @@ public class CourseService {
         course.setAuthor(courseProjection.getAuthor());
         var lectures = courseProjection.getLectures()
                 .stream()
-                .map(l -> new LectureProjectionMapper().fromProjection(l, URL))
+                .map(l -> {
+                    var lecture = new LectureProjectionMapper().fromProjection(l, URL);
+                    lecture.setProgress(watchHistoryService.getProgressByLecture(userId,UUID.fromString(l.getId())));
+                    return lecture;
+                })
                 .collect(Collectors.toList());
-
         course.setLectures(favoriteService.checkFavouriteLecturesToPlayer(userId, lectures));
         course.setReviewed(reactionRepository.existsByCourseIdAndUserId(UUID.fromString(courseProjection.getId()), userId));
         return course;
