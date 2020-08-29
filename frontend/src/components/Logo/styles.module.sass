@@ -1,9 +1,12 @@
-$circle_size: 30px
-$container_size: 40px
+$circle_size: 31px
+$container_width: 45px
+$container_height: 43px
 
 .container
-  width: $container_size
-  height: $container_size
+  min-width: $container_width
+  max-width: $container_width
+  max-height: $container_height
+  min-height: $container_height
   position: relative
 
 .ellipsis1, .ellipsis2, .ellipsis3, .back1, .back2, .back3
@@ -21,12 +24,12 @@ $container_size: 40px
 
 .ellipsis1, .back1
   left: 0
-  top: $container_size - $circle_size
+  bottom: 0
 
 .ellipsis2, .back2
-  left: ($container_size - $circle_size) / 2
-  top: 0
+  right: 0
+  bottom: 0
 
 .ellipsis3, .back3
-  left: $container_size - $circle_size
-  top: $container_size - $circle_size
+  left: ($container_width - $circle_size) / 2
+  top: 0
