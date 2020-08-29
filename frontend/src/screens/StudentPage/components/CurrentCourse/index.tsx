@@ -51,13 +51,13 @@ export const CurrentCourse: React.FC<ICurrentCourseProps> = ({
         </div>
         <div className={styles.wrapperProgress}>
           <div className={styles.progress}>
-            <CircleProgress 
-              percentage={progress} 
-              width={80} 
+            <CircleProgress
+              percentage={progress}
+              width={80}
               strokeWidth={3}
               primaryColor={['#3378BD', '#FF8576']}
               secondaryColor={['#121421']}
-            />  
+            />
           </div>
         </div>
       </div>

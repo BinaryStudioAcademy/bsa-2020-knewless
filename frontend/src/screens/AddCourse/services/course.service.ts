@@ -13,7 +13,7 @@ export const getLecturesByUser = async () => {
 
 export async function getCourseById(id: string) {
   const response = await callApi({
-    endpoint: `/api/course/${id}/info`,
+    endpoint: `/api/course/${id}/edit`,
     type: 'GET'
   });
   return response.json();
@@ -40,7 +40,7 @@ export const saveCourse = async (course: ICourse) => {
 export const saveLectureVideo = async lecture => {
   const response = await callApi({
     type: 'POST',
-    endpoint: `api/lecture/save`,
+    endpoint: '/api/lecture/save',
     queryParams: {id: lecture.id, duration: lecture.duration},
     attachment: lecture.video
   });
@@ -50,7 +50,7 @@ export const saveLectureVideo = async lecture => {
 export const addLectureToDb = async lecture => {
   const response = await callApi({
     type: 'POST',
-    endpoint: 'api/lecture',
+    endpoint: '/api/lecture',
     requestData: lecture
   });
   return response.json();

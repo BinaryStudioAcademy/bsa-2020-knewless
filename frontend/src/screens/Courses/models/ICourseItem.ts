@@ -11,4 +11,5 @@ export interface ICourseItem {
   rating: number;
   tags: string[];
   members: number;
+  ratingCount: number;
 }

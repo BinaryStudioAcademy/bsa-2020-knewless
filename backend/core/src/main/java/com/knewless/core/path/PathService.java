@@ -135,10 +135,18 @@ public class PathService {
 				.stream().map(PathMapper.MAPPER::pathQueryResultToPathDto).collect(Collectors.toList());
 	}
 
-	public PathDetailsDto getPathById(UUID id) {
+	public PathDetailsDto getPathById(UserPrincipal user, UUID id) {
+		Author author = authorRepository.findByUserId(user.getId()).orElseThrow(
+				() -> new ResourceNotFoundException("Author", "userId", user.getId())
+		);
+
 		Path path = pathRepository.findById(id).orElseThrow(
 				() -> new ResourceNotFoundException("Path", "pathId", id)
 		);
+
+		if (!path.getAuthor().getId().toString().equals(author.getId().toString())) {
+			throw new ResourceNotFoundException("Author", "userId", user.getId());
+		}
 
 		PathDetailsDto pathDetailsDto = PathMapper.MAPPER.pathToPathDetailsDto(path);
 

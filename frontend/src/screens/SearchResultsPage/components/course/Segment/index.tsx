@@ -34,6 +34,7 @@ export const CourseSegment: React.FC<ICourseSegmentProps> = ({ results, category
             level={course.metadata.level}
             flag={null}
             action={null}
+            ratingCount={course.metadata.ratingCount}
           />
         ))}
       </div>

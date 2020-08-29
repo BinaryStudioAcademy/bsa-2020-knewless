@@ -12,7 +12,7 @@ import { fetchCoursesRoutine, fetchTagsRoutine, savePathRoutine, fetchPathToEdit
 import { IAppState } from '@models/AppState';
 import { extractCourses, extractTags, extractEditPath } from '../../models/AddPathData';
 import { connect } from 'react-redux';
-import { areCoursesLoading, areTagsLoading, isPathUploading } from '../../models/AddPathState';
+import { areCoursesLoading, areTagsLoading, isPathUploading, isEditPathLoading } from '../../models/AddPathState';
 import { InlineLoaderWrapper } from '@components/InlineLoaderWrapper';
 import noImage from '@images/no_image.png';
 import { TagSelector } from '@components/TagSelector';
@@ -21,13 +21,14 @@ import GrayOutlineButton from '@components/buttons/GrayOutlineButton';
 import { PathPreview } from '../../components/PathPreview';
 import Confirmation from '@components/Confirmation';
 import { useHistory, useParams } from 'react-router-dom';
-import { IBindingCallback1 } from '@models/Callbacks';
+import {IBindingAction, IBindingCallback1} from '@models/Callbacks';
 import {
   DESCRIPTION_MESSAGE,
   isValidPathDescription,
   isValidPathName,
   PATH_NAME_MESSAGE
 } from '@helpers/validation.helper';
+import {fetchAuthorRoutine} from "@screens/AuthorMainPage/routines";
 
 export interface ISavePathProps {
   courses: ICourse[];
@@ -41,11 +42,13 @@ export interface ISavePathProps {
   triggerSavePath: (path: IPath) => void;
   fetchEditPath: IBindingCallback1<string>;
   updatePath: IBindingCallback1<IPath>;
+  editPathLoading: boolean;
+  fetchAuthorData: IBindingAction;
 }
 
 export const AddPathPage: React.FC<ISavePathProps> = ({
   courses, tags, tagsLoading, coursesLoading, pathUploading,
-  triggerFetchCourses, triggerFetchTags, triggerSavePath, fetchEditPath, editPath, updatePath
+  triggerFetchCourses, triggerFetchTags, triggerSavePath, fetchEditPath, editPath, updatePath, editPathLoading, fetchAuthorData
 }) => {
   const history = useHistory();
   const { pathId } = useParams();
@@ -80,6 +83,7 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
   }, [editPath]);
 
   useEffect(() => {
+    fetchAuthorData();
     triggerFetchCourses();
     triggerFetchTags();
   }, []);
@@ -114,7 +118,7 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
       imageTag: pathImageTag
     };
     if (isEdit) {
-      updatePath({id: pathId, ...path});
+      updatePath({ id: pathId, ...path });
     } else {
       triggerSavePath(path);
     }
@@ -168,6 +172,7 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
         rating={course.rating}
         onClick={() => click(course)}
         isSelectedIcon={isSelected}
+        ratingCount={course.ratingCount}
       />
     );
   };
@@ -182,152 +187,156 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
   };
 
   return (
-    <>
-      <div className={styles.title_container}>
-        <h3 className={`${styles.title} ${styles.wide_container}`}>{isEdit ? 'Edit' : 'New'} Path</h3>
-      </div>
-      <div className={styles.main_container}>
-        <div className={styles.main_content}>
-          <div className={styles.wide_container}>
-            <div className={styles.form__container}>
-              <div className={styles.form__form}>
-                <div className={styles.form__name}>
-                  <span className={styles.form__label}>Name:</span>
-                  <Input
-                    name="Name"
-                    value={pathName}
-                    className={
-                      `${!isPathNameValid && styles.no_bottom_rounding_field}`
-                    }
-                    onChange={ev => {
-                      const { value } = ev.target;
-                      setPathName(value);
-                      validatePathName(value);
-                    }}
-                    onBlur={() => validatePathName()}
-                    error={!isPathNameValid}
-                    fluid
-                  />
-                  {!isPathNameValid && (
-                    <Label
-                      basic
-                      className={styles.warningLabel}
-                      promt="true"
-                      content={PATH_NAME_MESSAGE}
-                    />
-                  )}
-                </div>
-                <div className={`${styles.form__tags} ${styles.form__group}`}>
-                  {/* <label className={styles.form__label}>Tags:</label>*/}
-                  <div className={styles.form__tags_selector}>
-                    <InlineLoaderWrapper loading={tagsLoading} centered>
-                      {!tagsLoading && (
-                        <TagSelector
-                          ref={tagsRef}
-                          onDelete={onTagDeletion}
-                          onAddition={onTagAddition}
-                          suggestions={storedTags}
-                          tags={selectedTags}
-                          id="PathTags"
+    history.location.pathname.startsWith('/path/edit') && editPathLoading
+      ? <InlineLoaderWrapper loading={editPathLoading} centered />
+      : (
+        <>
+          <div className={styles.title_container}>
+            <h3 className={`${styles.title} ${styles.wide_container}`}>{isEdit ? 'Edit' : 'New'} Path</h3>
+          </div >
+          <div className={styles.main_container}>
+            <div className={styles.main_content}>
+              <div className={styles.wide_container}>
+                <div className={styles.form__container}>
+                  <div className={styles.form__form}>
+                    <div className={styles.form__name}>
+                      <span className={styles.form__label}>Name:</span>
+                      <Input
+                        name="Name"
+                        value={pathName}
+                        className={
+                          `${!isPathNameValid && styles.no_bottom_rounding_field}`
+                        }
+                        onChange={ev => {
+                          const { value } = ev.target;
+                          setPathName(value);
+                          validatePathName(value);
+                        }}
+                        onBlur={() => validatePathName()}
+                        error={!isPathNameValid}
+                        fluid
+                      />
+                      {!isPathNameValid && (
+                        <Label
+                          basic
+                          className={styles.warningLabel}
+                          promt="true"
+                          content={PATH_NAME_MESSAGE}
+                        />
+                      )}
+                    </div>
+                    <div className={`${styles.form__tags} ${styles.form__group}`}>
+                      {/* <label className={styles.form__label}>Tags:</label>*/}
+                      <div className={styles.form__tags_selector}>
+                        <InlineLoaderWrapper loading={tagsLoading} centered>
+                          {!tagsLoading && (
+                            <TagSelector
+                              ref={tagsRef}
+                              onDelete={onTagDeletion}
+                              onAddition={onTagAddition}
+                              suggestions={storedTags}
+                              tags={selectedTags}
+                              id="PathTags"
+                            />
+                          )}
+                        </InlineLoaderWrapper>
+                      </div>
+                    </div>
+                    <div className={`${styles.form__description} ${styles.form__group}`}>
+                      <span className={styles.form__label}>Description:</span>
+                      <Form className={styles.form__description_wrapper}>
+                        <TextArea
+                          value={pathDescription}
+                          className={
+                            `${styles.form__description_area} ${!isDescriptionValid && styles.no_bottom_rounding_field}`
+                          }
+                          rows="5"
+                          onChange={(ev: any) => {
+                            const { value } = ev.target;
+                            setPathDescription(value);
+                            validateDescription(value);
+                          }}
+                          error={!isDescriptionValid}
+                          onBlur={() => validateDescription()}
+                        />
+                        {!isDescriptionValid && (
+                          <Label
+                            basic
+                            className={styles.warningLabel}
+                            promt="true"
+                            content={DESCRIPTION_MESSAGE}
+                          />
+                        )}
+                      </Form>
+                    </div>
+                    <div className={`${styles.form__preview} ${styles.form__group}`}>
+                      <span className={styles.form__label}>Preview:</span>
+                      <div className={styles.form__preview_wrapper}>
+                        <PathPreview
+                          name={pathName}
+                          logoSrc={pathImageTag?.imageSrc || noImage}
+                          courses={selectedCourses.length}
+                          duration={countOverallDuration()}
+                          availableTags={selectedTags}
+                          selectedTag={pathImageTag}
+                          handleTagSelection={handleImageTagSelection}
+                        />
+                      </div>
+                    </div>
+                    <div className={`${styles.form__buttons} ${styles.form__group}`}>
+                      <div className={styles.form__button_row}>
+                        <GrayOutlineButton
+                          content="Cancel"
+                          onClick={handleCancel}
+                          className={styles.btn_cancel}
+                        />
+                        <Button
+                          disabled
+                          className={styles.btn_save}
+                          content="Save"
+                          onClick={() => handleSavePath(false)}
+                        />
+                        <GradientButton
+                          disabled={!isReadyToRelease}
+                          className={isReadyToRelease ? styles.button_release : styles.button_release_disabled}
+                          onClick={() => handleSavePath(true)}
+                          loading={pathUploading}
+                          content="Release"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className={styles.form__list_container}>
+                    <InlineLoaderWrapper loading={coursesLoading} centered>
+                      {!coursesLoading && (
+                        <DependenciesSelector
+                          selected={selectedCourses}
+                          stored={storedCourses}
+                          selectedToStored={moveSelectedToStored}
+                          storedToSelected={moveStoredToSelected}
+                          dependencyName="course"
+                          itemToJsx={itemToJsxWithClick}
+                          sortFn={compareName}
+                          addNewDependencyFn={() => setIsConfirming(true)}
                         />
                       )}
                     </InlineLoaderWrapper>
                   </div>
                 </div>
-                <div className={`${styles.form__description} ${styles.form__group}`}>
-                  <span className={styles.form__label}>Description:</span>
-                  <Form className={styles.form__description_wrapper}>
-                    <TextArea
-                      value={pathDescription}
-                      className={
-                        `${styles.form__description_area} ${!isDescriptionValid && styles.no_bottom_rounding_field}`
-                      }
-                      rows="5"
-                      onChange={(ev: any) => {
-                        const { value } = ev.target;
-                        setPathDescription(value);
-                        validateDescription(value);
-                      }}
-                      error={!isDescriptionValid}
-                      onBlur={() => validateDescription()}
-                    />
-                    {!isDescriptionValid && (
-                      <Label
-                        basic
-                        className={styles.warningLabel}
-                        promt="true"
-                        content={DESCRIPTION_MESSAGE}
-                      />
-                    )}
-                  </Form>
-                </div>
-                <div className={`${styles.form__preview} ${styles.form__group}`}>
-                  <span className={styles.form__label}>Preview:</span>
-                  <div className={styles.form__preview_wrapper}>
-                    <PathPreview
-                      name={pathName}
-                      logoSrc={pathImageTag?.imageSrc || noImage}
-                      courses={selectedCourses.length}
-                      duration={countOverallDuration()}
-                      availableTags={selectedTags}
-                      selectedTag={pathImageTag}
-                      handleTagSelection={handleImageTagSelection}
-                    />
-                  </div>
-                </div>
-                <div className={`${styles.form__buttons} ${styles.form__group}`}>
-                  <div className={styles.form__button_row}>
-                    <GrayOutlineButton
-                      content="Cancel"
-                      onClick={handleCancel}
-                      className={styles.btn_cancel}
-                    />
-                    <Button
-                      disabled
-                      className={styles.btn_save}
-                      content="Save"
-                      onClick={() => handleSavePath(false)}
-                    />
-                    <GradientButton
-                      disabled={!isReadyToRelease}
-                      className={isReadyToRelease ? styles.button_release : styles.button_release_disabled}
-                      onClick={() => handleSavePath(true)}
-                      loading={pathUploading}
-                      content="Release"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className={styles.form__list_container}>
-                <InlineLoaderWrapper loading={coursesLoading} centered>
-                  {!coursesLoading && (
-                    <DependenciesSelector
-                      selected={selectedCourses}
-                      stored={storedCourses}
-                      selectedToStored={moveSelectedToStored}
-                      storedToSelected={moveStoredToSelected}
-                      dependencyName="course"
-                      itemToJsx={itemToJsxWithClick}
-                      sortFn={compareName}
-                      addNewDependencyFn={() => setIsConfirming(true)}
-                    />
-                  )}
-                </InlineLoaderWrapper>
               </div>
             </div>
+            <Footer />
+            <Confirmation
+              open={isConfirming}
+              title="Your unsaved changes will be lost."
+              text="Are you absolutely sure?"
+              onConfirm={forwardAddCourse}
+              onCancel={() => setIsConfirming(false)}
+              className={styles.confirmation}
+            />
           </div>
-        </div>
-        <Footer />
-        <Confirmation
-          open={isConfirming}
-          title="Your unsaved changes will be lost."
-          text="Are you absolutely sure?"
-          onConfirm={forwardAddCourse}
-          onCancel={() => setIsConfirming(false)}
-          className={styles.confirmation}
-        />
-      </div>
-    </>
+        </>
+      )
   );
 };
 
@@ -337,7 +346,8 @@ const mapStateToProps = (state: IAppState) => ({
   tagsLoading: areTagsLoading(state),
   coursesLoading: areCoursesLoading(state),
   pathUploading: isPathUploading(state),
-  editPath: extractEditPath(state)
+  editPath: extractEditPath(state),
+  editPathLoading: isEditPathLoading(state)
 });
 
 const mapDispatchToProps = {
@@ -345,7 +355,8 @@ const mapDispatchToProps = {
   triggerFetchCourses: fetchCoursesRoutine,
   triggerSavePath: savePathRoutine,
   fetchEditPath: fetchPathToEditRoutine,
-  updatePath: updatePathRoutine
+  updatePath: updatePathRoutine,
+  fetchAuthorData: fetchAuthorRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddPathPage);

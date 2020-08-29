@@ -40,9 +40,10 @@ public class PathController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getPathById(@PathVariable UUID id) {
+    public ResponseEntity<?> getPathById(@CurrentUser UserPrincipal user,
+                                         @PathVariable UUID id) {
         try {
-            return ResponseEntity.ok(pathService.getPathById(id));
+            return ResponseEntity.ok(pathService.getPathById(user, id));
         } catch (ResourceNotFoundException ex) {
             return ResponseEntity.badRequest().body(new SingleMessageResponse(ex.getMessage()));
         }

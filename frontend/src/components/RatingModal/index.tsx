@@ -25,7 +25,7 @@ const RatingModal: FC<IRatingModal> = ({ isOpen, submit, isLoading, onClose }) =
       <div className={styles.main_container}>
         <p className={styles.main_container__title}>Your opinion matters to us</p>
         <p className={styles.main_container__thanks}>
-          If you enjoy viewing this course, would you mind to leave a review? :)
+          If you enjoy viewing this course, would you mind to leaving a review? :)
         </p>
         <StyledRating
           className={styles.main_container__rating}

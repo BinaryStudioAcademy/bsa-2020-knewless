@@ -33,9 +33,9 @@ export const LectureCard: React.FC<ILectureCardProps> = ({
         <Icon name="play circle outline" size="big" inverted />
       </Label>
     </div>
-    <div className={styles.meta__name}>
+    <p className={styles.meta__name}>
       {name}
-    </div>
+    </p>
     <div className={styles.meta__time}>
       {timeFormatLecture(timeMinutes)}
     </div>

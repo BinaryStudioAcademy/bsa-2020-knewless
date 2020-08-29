@@ -11,3 +11,5 @@ export const checkFavouriteCourseStateRoutine = createRoutine('CHECK_COURSE_FAVO
 
 export const startCourseRoutine = createRoutine('START_COURSE',
   (courseId: string) => courseId);
+
+export const fetchAuthorInfoRoutine = createRoutine('FETCH_AUTHOR_INFO');

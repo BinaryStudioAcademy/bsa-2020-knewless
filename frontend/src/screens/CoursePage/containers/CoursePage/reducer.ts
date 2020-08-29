@@ -1,11 +1,12 @@
 import { Routine } from 'redux-saga-routines';
 import { IFullCourseData } from '@screens/CoursePage/models/IFullCourseData';
 import { fetchCourseDataRoutine, changeFavouriteCourseStateRoutine, checkFavouriteCourseStateRoutine,
-   changeFavouriteLectureStateRoutine } from '@screens/CoursePage/routines';
+   changeFavouriteLectureStateRoutine, fetchAuthorInfoRoutine } from '@screens/CoursePage/routines';
 import { saveCourseReviewRoutine } from '@screens/LecturePage/routines';
 
 const initialState = {
-  course: { } as IFullCourseData
+  course: { } as IFullCourseData,
+  author: undefined
 };
 
 export const courseData = (state = initialState, action: Routine<any>) => {
@@ -50,6 +51,12 @@ export const courseData = (state = initialState, action: Routine<any>) => {
           ...state.course,
           lectures: updated
         }
+      };
+    }
+    case fetchAuthorInfoRoutine.SUCCESS: {
+      return {
+        ...state,
+        author: action.payload
       };
     }
     case saveCourseReviewRoutine.SUCCESS: {

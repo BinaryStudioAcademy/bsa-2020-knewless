@@ -16,6 +16,7 @@ export interface ICourseCardProps {
   rating: number;
   // either addition or deletion
   isSelectedIcon?: boolean;
+  ratingCount: number;
 }
 
 export const CourseCard: React.FC<ICourseCardProps> = ({

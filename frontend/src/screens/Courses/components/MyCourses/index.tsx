@@ -60,6 +60,7 @@ export const MyCourses: React.FC<IMyCourses> = ({
                 name={c.name}
                 description={c.description}
                 members={c?.members}
+                ratingCount={c.ratingCount}
               />
             ))}
         </div>
@@ -87,6 +88,7 @@ export const MyCourses: React.FC<IMyCourses> = ({
                       name={c.name}
                       description={c.description}
                       members={c?.members}
+                      ratingCount={c.ratingCount}
                     />
                   ))}
               </div>

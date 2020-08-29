@@ -10,13 +10,13 @@ import { IFavourite } from '@components/AddToFavouritesButton/component/index';
 import { SourceType } from '@components/AddToFavouritesButton/helper/SourceType';
 import { IBindingCallback1, IBindingAction } from '@models/Callbacks';
 import { Icon, Label } from 'semantic-ui-react';
+import { IAuthor } from '@screens/AuthorMainPage/models/IAuthor';
 
 interface ICourseOverviewProps {
   imageSrc: string;
   courseName: string;
   authorName: string;
   authorId: string;
-  courseId: string;
   rating: number;
   startLectureId: string;
   isAuthorized: boolean;
@@ -25,6 +25,8 @@ interface ICourseOverviewProps {
   favourite: boolean;
   changeFavourite: IBindingCallback1<IFavourite>;
   role: string;
+  author: IAuthor;
+  courseId: string;
 }
 
 const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
@@ -40,7 +42,8 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
   courseId,
   role,
   favourite,
-  changeFavourite
+  changeFavourite,
+  author
 }) => {
   const history = useHistory();
   const onStart = () => {
@@ -56,8 +59,8 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
         <div className={`${styles.description_content} left_container`}>
           <h1 className={styles.description__course_name}>
             {courseName}
-            {role && role === 'AUTHOR' && (
-              <Label 
+            {author && author?.id === authorId && (
+              <Label
                 style={{
                   background: 'transparent',
                   color: '#fff',
@@ -70,7 +73,7 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
                 }}
                 onClick={() => history.push(`/course/edit/${courseId}`)}
               >
-                <Icon name="pencil" />
+                <Icon name='pencil' />
               </Label>
             )}
           </h1>

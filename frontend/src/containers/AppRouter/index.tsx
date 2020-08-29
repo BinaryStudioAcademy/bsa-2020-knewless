@@ -45,7 +45,7 @@ const AppRouter: React.FunctionComponent<IAppRouterProps> = ({
 
   useEffect(() => {
     const isTokenExist = localStorage.getItem(ACCESS_TOKEN) || localStorage.getItem(REFRESH_TOKEN);
-    if (isTokenExist && !roleLoading) {
+    if (isTokenExist && !roleLoading && !user.id) {
       fetchUser();
     }
   }, [isAuthorized, roleLoading]);

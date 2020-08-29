@@ -1,5 +1,6 @@
 package com.knewless.core.path.dto;
 
+import com.knewless.core.author.dto.AuthorShortDto;
 import com.knewless.core.course.dto.CourseWithMinutesDto;
 import com.knewless.core.tag.dto.TagDto;
 import lombok.Data;
@@ -16,4 +17,5 @@ public class PathDetailsDto {
     private List<TagDto> tags;
     private TagDto imageTag;
     private long duration;
+    private AuthorShortDto author;
 }

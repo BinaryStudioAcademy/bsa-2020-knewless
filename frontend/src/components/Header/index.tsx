@@ -1,4 +1,3 @@
-import Logo from './logo';
 import { NavLink, useLocation } from 'react-router-dom';
 import PathIcon from './icons/paths';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -10,6 +9,7 @@ import { connect } from 'react-redux';
 import { IAppState } from '@models/AppState';
 import { IUser } from '@containers/AppRouter/models/IUser';
 import SearchHeader from '@screens/Search/containers/SearchHeader/index';
+import LogoWithText from '@components/LogoWithText';
 
 interface IHeaderProps {
   currentUser: IUser;
@@ -45,10 +45,7 @@ const Header = ({ currentUser, isAuthorized, authorId }: IHeaderProps) => {
       <div className={styles.customHeader}>
         <div className={styles.left_side}>
           <NavLink exact to="/">
-            <div className={styles.mainName}>
-              <Logo />
-              KnewLess
-            </div>
+            <LogoWithText />
           </NavLink>
         </div>
         <div className={styles.middle}>

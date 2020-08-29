@@ -47,6 +47,16 @@ public class CourseController {
         return courseService.getAllCourseInfoById(id, user == null ? null : user.getId());
     }
 
+    @GetMapping("/{id}/edit")
+    private ResponseEntity<?> getEditCourseById(@CurrentUser UserPrincipal user,
+                                                @PathVariable("id") UUID id) {
+        try {
+            return ResponseEntity.ok(courseService.getEditCourseById(user, id));
+        } catch (ResourceNotFoundException ex) {
+            return ResponseEntity.badRequest().body(new SingleMessageResponse(ex.getMessage()));
+        }
+    }
+
     @PostMapping("/create")
     private ResponseEntity<?> createCourse(@CurrentUser UserPrincipal user,
                                            @Valid @RequestBody CreateCourseRequestDto request,

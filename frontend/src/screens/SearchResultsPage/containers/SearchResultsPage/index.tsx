@@ -157,7 +157,7 @@ export const SearchResultsPage: React.FC<ISearchResultPageProps> = (
                 className={styles.search_input}
                 onChange={(_, { value }) => setInputValue(value)}
                 value={inputValue}
-                placeholder="What do you want to learn?"
+                placeholder="What do you want to find?"
                 onKeyPress={handleEnterPress}
               />
               <OutlineDropdown

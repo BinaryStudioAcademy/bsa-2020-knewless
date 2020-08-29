@@ -4,6 +4,7 @@ import * as courseService from '../../services/course.service';
 import * as imageService from 'services/image.service';
 import { toastr } from 'react-redux-toastr';
 import { Routine } from 'redux-saga-routines';
+import { history } from '@helpers/history.helper';
 
 function* getLectures(action: Routine<any>) {
   try {
@@ -23,6 +24,7 @@ function* getCourse(action: Routine<any>) {
     const response = yield call(courseService.getCourseById, action.payload);
     yield put(fetchEditCourseRoutine.success(response));
   } catch (error) {
+    yield call(history.push, '/');
     yield put(fetchEditCourseRoutine.failure(error?.message));
   }
 }

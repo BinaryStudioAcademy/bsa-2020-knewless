@@ -1,6 +1,6 @@
 import { all, call, put, takeEvery } from 'redux-saga/effects';
 import { fetchCourseDataRoutine, changeFavouriteCourseStateRoutine, checkFavouriteCourseStateRoutine, startCourseRoutine,
-  changeFavouriteLectureStateRoutine } from '@screens/CoursePage/routines';
+  changeFavouriteLectureStateRoutine, fetchAuthorInfoRoutine } from '@screens/CoursePage/routines';
 import * as courseService from '@screens/CoursePage/services/course.service';
 import { AnyAction } from 'redux';
 import { Routine } from 'redux-saga-routines';
@@ -16,6 +16,16 @@ function* getData({ payload }: AnyAction) {
     yield put(fetchCourseDataRoutine.failure(error?.message));
   }
 }
+
+function* getAuthorInfo() {
+  try {
+    const author = yield call(courseService.getAuthorInfo);
+    yield put(fetchAuthorInfoRoutine.success(author));
+  } catch (error) {
+    yield put(fetchAuthorInfoRoutine.failure(error?.message));
+  }
+}
+
 function* startCourse({ payload }: AnyAction) {
   try {
     const response = yield call(() => courseService.startCourse({ courseId: payload }));
@@ -27,6 +37,9 @@ function* startCourse({ payload }: AnyAction) {
 }
 function* watchGetDataRequest() {
   yield takeEvery(fetchCourseDataRoutine.TRIGGER, getData);
+}
+function* watchGetAuthorInfoRequest() {
+  yield takeEvery(fetchAuthorInfoRoutine.TRIGGER, getAuthorInfo);
 }
 function* watchStartCourseRequest() {
   yield takeEvery(startCourseRoutine.TRIGGER, startCourse);
@@ -92,6 +105,7 @@ export default function* courseDataSagas() {
     watchCheckFavouriteCourseState(),
     watchStartCourseRequest(),
     watchSaveCourseReview(),
-    watchChangeFavouriteLecturesState()
+    watchChangeFavouriteLecturesState(),
+    watchGetAuthorInfoRequest()
   ]);
 }

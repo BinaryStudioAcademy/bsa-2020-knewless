@@ -15,6 +15,13 @@ export interface IPathDetails {
   tags: ITag[];
   imageTag: ITag;
   duration: number;
+  author: IAuthorShort
+}
+
+export interface IAuthorShort {
+  id: string;
+  firstName: string;
+  lastName: string;
 }
 
 export interface ICourse {
@@ -26,6 +33,7 @@ export interface ICourse {
   level: string;
   image: string;
   rating: number;
+  ratingCount: number;
 }
 
 export interface ITag {
