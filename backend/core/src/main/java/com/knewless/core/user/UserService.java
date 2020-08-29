@@ -10,6 +10,8 @@ import com.knewless.core.user.role.RoleRepository;
 import com.knewless.core.user.role.model.Role;
 import com.knewless.core.user.role.model.RoleType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,6 +22,9 @@ import java.util.UUID;
 
 @Service
 public class UserService implements UserDetailsService {
+
+    @Value("${user.expirationSec}")
+    private int userExpirationSec;
 
     @Autowired
     private UserRepository userRepository;
@@ -89,5 +94,10 @@ public class UserService implements UserDetailsService {
         return userRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("User", "id", id)
         );
+    }
+
+    @Scheduled(fixedDelay = 86400000)
+    public void removeExpiredUsers() {
+        userRepository.deleteExpired(userExpirationSec);
     }
 }

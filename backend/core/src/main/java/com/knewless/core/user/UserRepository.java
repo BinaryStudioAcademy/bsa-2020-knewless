@@ -32,4 +32,11 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     void setPassword(@Param("id") UUID userId, @Param("password") String password);
 
     Boolean existsByIdAndRoleIsNotNull(UUID id);
+
+//    Expiration in seconds
+    @Transactional
+    @Modifying
+    @Query(value = "DELETE FROM users " +
+            "WHERE verified_email = FALSE AND EXTRACT(EPOCH FROM timezone('Europe/Kiev', current_timestamp) - created_at) >= :expiration", nativeQuery = true)
+    void deleteExpired(long expiration);
 }
