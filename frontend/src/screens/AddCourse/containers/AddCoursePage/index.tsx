@@ -21,14 +21,17 @@ import CourseImage from '@images/default_course_image.jpg';
 import {
   COURSE_NAME_MESSAGE,
   DESCRIPTION_MESSAGE,
-  IMAGE_FORMAT_MESSAGE,
+  IMAGE_FORMAT_MESSAGE, isOverviewValid,
   isValidCourseDescription,
-  isValidCourseName,
+  isValidCourseName, OVERVIEW_MESSAGE,
   REQUIRED_FIELD_MESSAGE
 } from '@helpers/validation.helper';
 import { levelOptions } from '@models/LevelsEnum';
 import { IFullCourseData } from '@screens/CoursePage/models/IFullCourseData';
 import { IUpdateCourse } from '@screens/AddCourse/models/IUpdateCourse';
+import ReactMarkdown from "react-markdown";
+import OverviewModal from "@components/OverviewModal";
+import {Footer} from "@components/Footer";
 
 interface IAddCourseProps {
   lectures: ILecture[];
@@ -90,6 +93,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
       setLevel(editCourse.level);
       setAuthor(editCourse?.author.firstName + ' ' + editCourse?.author.lastName);
       setRating(editCourse.rating);
+      setOverview(editCourse.overview);
     }
     if (!editCourse?.tags || editCourse?.tags.length === 0) {
       setTags(['tag1', 'tag2', 'tag3']);
@@ -138,6 +142,14 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
   const [buttonLoading, setButtonLoading] = useState(false);
   const [previewImage, setPreviewImage] = useState(CourseImage);
   const [modalAddOpen, setModalAddOpen] = useState(false);
+  const [overview, setOverview] = useState('');
+  const [isShowPreview, setIsShowPreview] = useState(false);
+  const [isValidOverview, setIsValidOverview] = useState(true);
+
+  const validateOverview = (newOverview?: string) => {
+    const lastOverview = typeof newOverview === 'string' ? newOverview : overview;
+    setIsValidOverview(!!lastOverview && isOverviewValid(lastOverview));
+  };
 
   const validateName = (newName?: string) => {
     const lastChangesName = typeof newName === 'string' ? newName : courseName;
@@ -151,7 +163,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
     setIsValidLevel(!!lastChangesName && levelOptions.filter(l => l.value === lastChangesName).length > 0);
   };
   const isRequiredFieldsValid = !!courseName && isValidName && isValidDescription && !!level && isValidLevel
-    && isValidImage;
+    && isValidImage && !!overview && isValidOverview;
   const isReleseble = isRequiredFieldsValid && selected.length > 0;
 
   const handleUploadFile = file => {
@@ -183,7 +195,8 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
       lectures: selected.map(i => i.id),
       description,
       image: previewImage,
-      uploadImage
+      uploadImage,
+      overview
     };
     if (isEdit) {
       updateCourse({ id: courseId, userId: editCourse.author.id, ...course });
@@ -202,6 +215,10 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
     const updated = [...lectures.sort(compareName)];
     const filtered = updated.filter(l => !selected.map(s => s.id).includes(l.id));
     setPool(filtered);
+  };
+
+  const onOverviewClose = () => {
+    setIsShowPreview(false);
   };
 
   return (
@@ -295,6 +312,26 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
                     </Label>
                   )}
                 </div>
+                <div className={styles.textcontainer}>Overview:</div>
+                <div className={styles.textareacontainer}>
+                  <textarea
+                    className={styles.customtextarea}
+                    onChange={ev => {
+                      setOverview(ev.target.value);
+                      validateOverview(ev.target.value);
+                    }}
+                    value={overview}
+                  />
+                  {!isValidOverview && (
+                    <Label
+                      basic
+                      className={styles.warninglabel}
+                      promt="true"
+                    >
+                      {OVERVIEW_MESSAGE}
+                    </Label>
+                  )}
+                </div>
                 <div className={styles.textcontainer}>Preview:</div>
                 <div className={styles.preview_warning_container}>
                   <CoursePreview
@@ -328,6 +365,12 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
                     content="Cancel"
                   />
                   <div className={styles.buttonSaveGroup}>
+                    <GrayOutlineButton
+                      className={styles.buttonOverview}
+                      content="Overview"
+                      disabled={overview.length === 0}
+                      onClick={() => setIsShowPreview(true)}
+                    />
                     <Button
                       content="Save"
                       className={styles.button_save_disabled}
@@ -363,6 +406,12 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
               </div>
             </div>
           </div>
+          <Footer />
+          <OverviewModal
+            isOpen={isShowPreview}
+            data={overview}
+            onClose={onOverviewClose}
+          />
           <UploadLectureModal
             isOpen={modalAddOpen}
             openAction={setModalAddOpen}

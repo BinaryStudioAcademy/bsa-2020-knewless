@@ -106,6 +106,7 @@ const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
           startCourse={handleOnStartCourse}
           isAuthorized={isAuthorized}
           openLoginModal={openLoginModal}
+          overview={course.overview}
         />
         <div className="separator" />
         <CourseInfo

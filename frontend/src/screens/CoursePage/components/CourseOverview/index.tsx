@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import styles from './styles.module.sass';
 import { StyledRating } from 'components/StyledRating';
@@ -11,6 +11,7 @@ import { SourceType } from '@components/AddToFavouritesButton/helper/SourceType'
 import { IBindingCallback1, IBindingAction } from '@models/Callbacks';
 import { Icon, Label } from 'semantic-ui-react';
 import { IAuthor } from '@screens/AuthorMainPage/models/IAuthor';
+import OverviewModal from '@components/OverviewModal';
 
 interface ICourseOverviewProps {
   imageSrc: string;
@@ -27,6 +28,7 @@ interface ICourseOverviewProps {
   role: string;
   author: IAuthor;
   courseId: string;
+  overview: string;
 }
 
 const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
@@ -43,9 +45,12 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
   role,
   favourite,
   changeFavourite,
-  author
+  author,
+  overview
 }) => {
   const history = useHistory();
+  const [isOverviewOpen, setIsOverviewOpen] = useState(false);
+
   const onStart = () => {
     if (!isAuthorized) openLoginModal(`/lecture/${startLectureId}`);
     else if (startLectureId !== '') {
@@ -53,6 +58,11 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
       window.open(`/lecture/${startLectureId}`);
     }
   };
+
+  const onOverviewClose = () => {
+    setIsOverviewOpen(false);
+  };
+
   return (
     <div className="content_row">
       <div className={`${styles.description} flex_item aligned_item`}>
@@ -73,7 +83,7 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
                 }}
                 onClick={() => history.push(`/course/edit/${courseId}`)}
               >
-                <Icon name='pencil' />
+                <Icon name="pencil" />
               </Label>
             )}
           </h1>
@@ -97,7 +107,7 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
               >
                 Start
               </GradientButton>
-              <GrayOutlineButton>Play course overview</GrayOutlineButton>
+              <GrayOutlineButton onClick={() => setIsOverviewOpen(true)}>Course overview</GrayOutlineButton>
             </div>
             {isAuthorized && (
               <div className={styles.button_favourite_wrp}>
@@ -107,7 +117,7 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
                   id={courseId}
                   type={SourceType.COURSE}
                 />
-              </div>  
+              </div>
             )}
           </div>
         </div>
@@ -115,6 +125,7 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
       <div className={`${styles.course_image} flex_item`}>
         <img src={imageSrc} alt="Course" />
       </div>
+      <OverviewModal isOpen={isOverviewOpen} data={overview} onClose={onOverviewClose} />
     </div>
   );
 };

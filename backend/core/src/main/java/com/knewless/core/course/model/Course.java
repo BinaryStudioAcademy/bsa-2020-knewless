@@ -54,6 +54,8 @@ public class Course extends BaseEntity {
     @OneToMany(targetEntity = Lecture.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "course_id")
     private List<Lecture> lectures = List.of();
+    @Column
+    private String overview;
 
     public Course(UUID id) {
         this.setId(id);

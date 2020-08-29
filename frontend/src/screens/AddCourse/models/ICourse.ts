@@ -6,4 +6,5 @@ export interface ICourse {
     description: string;
     isReleased: boolean;
     uploadImage?: File;
+    overview: string;
 }

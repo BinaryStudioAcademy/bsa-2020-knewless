@@ -95,7 +95,8 @@ public class CourseService {
         List<Lecture> thisLectures = new ArrayList<>();
         List<Homework> homeworks = new ArrayList<>();
         Course course = Course.builder().level(Level.valueOf(request.getLevel())).author(author)
-                .name(request.getName()).description(request.getDescription()).image(request.getImage()).build();
+                .name(request.getName()).description(request.getDescription()).image(request.getImage())
+                .overview(request.getOverview()).build();
         for (Lecture l : allLectures) {
             Lecture lec;
             if (l.getCourse() == null) {

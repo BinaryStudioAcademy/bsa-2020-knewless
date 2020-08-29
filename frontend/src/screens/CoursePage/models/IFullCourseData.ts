@@ -19,4 +19,5 @@ export interface IFullCourseData {
   favourite: boolean;
   review: number;
   ratingCount: number;
+  overview: string;
 }
