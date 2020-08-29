@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { BottomNavigation } from '@screens/Landing/components/BottomNavigation';
 import { navigations } from '@screens/Landing/services/mock';
-import { Footer } from '@components/Footer';
 import PathOverview from '@screens/PathPage/components/PathOverview';
 import PathMenu from '@screens/PathPage/components/PathMenu';
 import { IAppState } from '@models/AppState';
@@ -36,7 +35,6 @@ const PathPage: React.FC<IPathPageProps> = ({ loading, isAuthorized, role }) => 
           <BottomNavigation navigations={navigations} />
         </div>
       </div>
-      <Footer />
     </>
   );
 };

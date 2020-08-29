@@ -1,13 +1,11 @@
 import React, { createRef, useCallback, useEffect, useState } from 'react';
 import styles from './styles.module.sass';
 import { ICourse, IPath, ITag, IPathDetails } from '../../models/domain';
-import { Footer } from '@components/Footer';
 import { Button, Form, Input, Label, TextArea } from 'semantic-ui-react';
 import { DependenciesSelector } from '@components/DependenciesSelector';
 import { IFilterableItem } from '@components/FilterableList';
 import { CourseCard } from '../../components/ClickableCourseCard';
 import { compareName } from '@components/FilterableList/helper';
-import { minutesToDuration } from '@components/PathCard/helper';
 import { fetchCoursesRoutine, fetchTagsRoutine, savePathRoutine, fetchPathToEditRoutine, updatePathRoutine } from '../../routines';
 import { IAppState } from '@models/AppState';
 import { extractCourses, extractTags, extractEditPath } from '../../models/AddPathData';
@@ -47,8 +45,8 @@ export interface ISavePathProps {
 }
 
 export const AddPathPage: React.FC<ISavePathProps> = ({
-  courses, tags, tagsLoading, coursesLoading, pathUploading,
-  triggerFetchCourses, triggerFetchTags, triggerSavePath, fetchEditPath, editPath, updatePath, editPathLoading, fetchAuthorData
+  courses, tags, tagsLoading, coursesLoading, pathUploading, triggerFetchCourses, triggerFetchTags,
+  triggerSavePath, fetchEditPath, editPath, updatePath, editPathLoading, fetchAuthorData
 }) => {
   const history = useHistory();
   const { pathId } = useParams();
@@ -325,7 +323,6 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
                 </div>
               </div>
             </div>
-            <Footer />
             <Confirmation
               open={isConfirming}
               title="Your unsaved changes will be lost."

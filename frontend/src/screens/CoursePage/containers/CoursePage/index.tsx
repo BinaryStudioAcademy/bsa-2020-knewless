@@ -5,7 +5,6 @@ import '../../styles/common.sass';
 import CourseOverview from '../../components/CourseOverview';
 import AuthorInfo from '../../components/AuthorInfo';
 import CourseInfo from '../../components/CourseInfo';
-import { Footer } from '@components/Footer';
 import { BottomNavigation } from '@screens/Landing/components/BottomNavigation';
 import { IAppState } from '@models/AppState';
 import { fetchCourseDataRoutine, changeFavouriteCourseStateRoutine, checkFavouriteCourseStateRoutine,
@@ -138,7 +137,6 @@ const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
           <BottomNavigation navigations={navigations} />
         </div>
       </div>
-      <Footer />
     </div>
   );
 };

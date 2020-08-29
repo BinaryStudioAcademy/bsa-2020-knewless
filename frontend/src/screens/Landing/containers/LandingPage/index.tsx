@@ -11,7 +11,6 @@ import { INavigationSectionProps } from '../../components/NavigationSection';
 import { IAppState } from '@models/AppState';
 import { fetchDataRoutine } from 'screens/Landing/routines';
 import { CardsSegment } from '@components/CardsSegment';
-import { Footer } from '@components/Footer';
 import { history } from '@helpers/history.helper';
 import { loginRoutine } from '@screens/Home/routines';
 
@@ -163,7 +162,6 @@ export const LandingPage: React.FunctionComponent<ILandingProps> = ({
             : <BottomNavigation navigations={navigations} />}
         </div>
       </div>
-      <Footer />
     </div>
   );
 };

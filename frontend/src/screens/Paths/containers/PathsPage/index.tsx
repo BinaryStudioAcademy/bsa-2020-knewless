@@ -62,7 +62,7 @@ const PathsPage: React.FC<IPathsPageProps> = ({
   return (
     <div className={styles.courses_content}>
       {loadingData
-        ? <InlineLoaderWrapper loading={loadingData} centered={true} />
+        ? <InlineLoaderWrapper loading={loadingData} centered />
         : (
           <>
             {role && (
