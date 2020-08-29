@@ -86,14 +86,14 @@ const AuthorPublicPage: React.FunctionComponent<IAuthorPublic> = ({
                 </Link>
               </div>
             )}
-            {!isSelfPublicPage && authorData.printFollowButton && (
+            {!isSelfPublicPage && user.role?.name!=='AUTHOR' && user && authorData.printFollowButton && (
               <div className={styles.buttonsFollowLikeAuthor}>
                 <GradientButton className={styles.authorFollowButton} onClick={handleOnClickFollow}>
                   <div className={styles.textButtonFollow}>Follow</div>
                 </GradientButton>
               </div>
             )}
-            {!isSelfPublicPage && !authorData.printFollowButton && (
+            {!isSelfPublicPage && user.role?.name!=='AUTHOR' && user && !authorData.printFollowButton && (
               <div className={styles.buttonsFollowLikeAuthor}>
                 <GradientButton className={styles.authorFollowButton} onClick={handleOnClickUnfollow}>
                   <div className={styles.unfollow}>
@@ -104,7 +104,7 @@ const AuthorPublicPage: React.FunctionComponent<IAuthorPublic> = ({
                 </GradientButton>
               </div>
             )}
-            {user && !isSelfPublicPage && 
+            { user.role?.name!=='AUTHOR' && user && !isSelfPublicPage && 
             <div className={styles.button_favourite_wrp}>
               <AddToFavouriteButton
                 id={match.params.authorId}
