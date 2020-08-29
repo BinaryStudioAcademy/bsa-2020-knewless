@@ -1,3 +1,5 @@
+import ReactPlayer from 'react-player';
+
 export function getExtension(filename: string) {
   const parts = filename.split('.');
   return parts[parts.length - 1];
@@ -15,4 +17,13 @@ export function isVideo(filename: string) {
     default:
   }
   return false;
+}
+
+export function cutLink(link: string) : string {
+  if (link.length < 45) return link;
+  return (`${link.substring(0, 40)}...${link.substring(link.length-3)}`)
+}
+
+export function isLinkValid(link: string) : boolean {
+  return ReactPlayer.canPlay(link);
 }

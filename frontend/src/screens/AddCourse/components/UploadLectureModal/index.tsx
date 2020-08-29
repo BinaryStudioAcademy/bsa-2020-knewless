@@ -3,7 +3,7 @@ import styles from './styles.module.sass';
 import { Icon, Input, Label, Modal, ModalContent } from 'semantic-ui-react';
 import GrayOutlineButton from 'components/buttons/GrayOutlineButton';
 import GradientButton from 'components/buttons/GradientButton';
-import { isVideo } from './helper';
+import { isVideo, cutLink, isLinkValid as checkLink } from './helper';
 import { IBindingCallback1 } from 'models/Callbacks';
 import { connect } from 'react-redux';
 import { fetchLecturesRoutine, saveLectureRoutine } from 'screens/AddCourse/routines';
@@ -40,6 +40,10 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
   const [isValidFile, setIsValidFile] = useState(true);
   const [buttonLoading, setButtonLoading] = useState(false);
   const inputRef = createRef<HTMLInputElement>();
+  const [addByLink, setAddByLink] = useState(false);
+  const [link, setLink] = useState('');
+  const [isLinkValid, setLinkValid] = useState(true);
+  const [isLinkAccepted, setLinkAccepted] = useState(false);
 
   const isSaveble = (duration > 0 && isValidName && isValidDescription && isValidFile
     && name.length > 1 && file && (description.length === 0 || description.length > 9));
@@ -96,7 +100,25 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
     handleClose();
   };
 
-  const warning = `${isValidFile ? '' : VIDEO_FORMAT_MESSAGE} ${isValidDescription ? '' : DESCRIPTION_MESSAGE}`;
+  const warning = `${isValidFile ? '' : VIDEO_FORMAT_MESSAGE} ${isValidDescription ? '' : DESCRIPTION_MESSAGE} 
+        ${isLinkValid ? '' : 'Link isn\'t valid'}`;
+
+  const toggleWithLink = () => {
+    setAddByLink(true);
+    setLinkAccepted(false);
+    setFile(null);
+  }
+
+  const toggleWithFile = () => {
+    setAddByLink(false);
+    setLink('');
+  }
+
+  const submitLink = () => {
+    const valid = checkLink(link);
+    setLinkValid(valid);
+    setLinkAccepted(valid);
+  }
 
   return (
     <Modal size="small" open={isOpen} onClose={() => handleClose()}>
@@ -169,6 +191,38 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
               )}
             </div>
           </div>
+          {addByLink ? (
+            <div className={styles.link_field}>
+              {isLinkAccepted && (
+              <div>
+                <Label
+                    basic
+                    className={styles.linkLabel}
+                    promt="true"
+                    as="a"
+                    onClick={() => setLinkAccepted(false)}
+                  >
+                    {cutLink(link)}
+                  </Label>
+              </div>)}
+              {!isLinkAccepted && (
+              <>
+                <Input
+                  fluid
+                  type="text"
+                  icon={<Icon name='delete' link color="grey" onClick={() => setLink("")} />}
+                  error={!isLinkValid}
+                  value={link}
+                  className={styles.linkInput}
+                  onChange={e => setLink(e.target.value)}
+                  inverted
+                />
+                <GrayOutlineButton onClick={() => submitLink()} className={styles.submit_link}>
+                  Submit
+                </GrayOutlineButton>
+              </>)}
+            </div>
+          ) : (
           <div className={styles.rightside}>
             <GrayOutlineButton
               className={isValidFile ? styles.upload_button : styles.upload_button_error}
@@ -177,6 +231,12 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
               Upload
               <input ref={inputRef} name="video/mp4" type="file" onChange={e => handleAddFile(e)} hidden />
             </GrayOutlineButton>
+          </div>
+          )}
+        </div>
+        <div className={styles.link_row}> 
+          <div className={styles.toggle_element} onClick={() => {addByLink? toggleWithFile() : toggleWithLink()}}>
+            {!addByLink? "Or add via link" : "Or upload file"}
           </div>
         </div>
         <div className={styles.textcontainer}>Description:</div>
