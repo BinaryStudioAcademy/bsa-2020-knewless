@@ -22,6 +22,7 @@ import com.knewless.core.subscription.SubscriptionService;
 import com.knewless.core.user.UserRepository;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -134,9 +135,8 @@ public class AuthorService {
                 courses, articles, printFollowButton);
     }
 
-    public List<FavouriteAuthorResponseDto> getFavouriteAuthorsByIds(List<UUID> uuids) {
-        List<Author> authors = authorRepository.findAll();
-        authors.removeIf(c->!uuids.contains(c.getId()));
+    public List<FavouriteAuthorResponseDto> getFavouriteAuthorsByUser(UUID userId) {
+        List<Author> authors = authorRepository.getFavouriteAuthorsByUserId(userId, SourceType.AUTHOR);
         List<FavouriteAuthorResponseDto> result = new ArrayList<>();
         List<Course> courses = courseRepository.findAll();
         List<Path> paths = pathRepository.findAll();

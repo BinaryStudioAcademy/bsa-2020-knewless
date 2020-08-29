@@ -1,5 +1,6 @@
 package com.knewless.core.lecture;
 
+import com.knewless.core.db.SourceType;
 import com.knewless.core.lecture.dto.ShortLectureDto;
 import com.knewless.core.lecture.model.Lecture;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -35,4 +36,9 @@ List<ShortLectureDto> getShortLecturesByUserId(@Param("id")UUID id);
             "FROM Lecture l JOIN l.course c JOIN c.paths p " +
             "WHERE p.id=:id")
     List<Lecture> getLecturesByPathId(@Param("id") UUID id);
+
+    @Query("SELECT l FROM Lecture l " +
+            "INNER JOIN Favorite f ON f.sourceId = l.id " +
+            "WHERE f.sourceType = :type AND f.user.id = :userId")
+    List<Lecture> getFavouriteLecturesByUserId(@Param("userId") UUID userId, @Param("type")SourceType type);
 }

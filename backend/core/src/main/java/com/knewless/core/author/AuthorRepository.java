@@ -1,6 +1,7 @@
 package com.knewless.core.author;
 
 import com.knewless.core.author.model.Author;
+import com.knewless.core.db.SourceType;
 import com.knewless.core.school.model.School;
 import com.knewless.core.user.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -33,5 +34,11 @@ public interface AuthorRepository extends JpaRepository<Author, UUID> {
     Optional<UUID> checkForCurrentUser(@Param("currentUserEmail") String currentUserEmail);
 
     List<Author> findBySchoolId(UUID id);
+
+
+    @Query("SELECT a FROM Author a " +
+            "INNER JOIN Favorite f ON f.sourceId = a.id " +
+            "WHERE f.sourceType = :type AND f.user.id = :userId")
+    List<Author> getFavouriteAuthorsByUserId(@Param("userId") UUID userId, @Param("type") SourceType type);
 }
 

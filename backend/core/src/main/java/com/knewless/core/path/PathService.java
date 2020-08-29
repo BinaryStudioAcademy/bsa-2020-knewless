@@ -22,6 +22,7 @@ import com.knewless.core.user.role.model.Role;
 import com.knewless.core.user.role.model.RoleType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -166,9 +167,9 @@ public class PathService {
 		return pathDetailsDto;
 	}
 
-	public List<FavouritePathResponseDto> getFavouritePathsByIds(List<UUID> uuids){
-		List<Path> paths = pathRepository.findAll();
-		// paths.removeIf(p->!uuids.contains(p.getId())); line should be uncomment when FavouritePaths could be added
+	public List<FavouritePathResponseDto> getFavouritePathsByUser(UUID userId){
+		List<Path> paths = pathRepository.findTop10ByAuthorIsNotNull();
+		//List<Path> paths = pathRepository.getFavouritePathsByUserId(userId, SourceType.PATH); line should be uncommented, when path could be added
 		List<FavouritePathResponseDto> result = new ArrayList<>();
 		paths.forEach(p -> result.add(PathMapper.MAPPER.pathToFavouritePathResponseDto(p)));
 		return result;

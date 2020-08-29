@@ -1,5 +1,6 @@
 package com.knewless.core.lecture;
 
+import com.knewless.core.db.SourceType;
 import com.knewless.core.emailservice.EmailService;
 import com.knewless.core.fileManager.FileManager;
 import com.knewless.core.lecture.Dto.FavouriteLectureResponseDto;
@@ -99,9 +100,8 @@ public class LectureService {
                 .collect(Collectors.toList());
     }
 
-    public List<FavouriteLectureResponseDto> getFavouriteLecturesByIds(List<UUID> uuids){
-        List<Lecture> lectures = lectureRepository.findAll();
-        lectures.removeIf(l->!uuids.contains(l.getId()));
+    public List<FavouriteLectureResponseDto> getFavouriteLecturesByUser(UUID userId){
+        List<Lecture> lectures = lectureRepository.getFavouriteLecturesByUserId(userId, SourceType.LECTURE);
         List<FavouriteLectureResponseDto> result = new ArrayList<>();
         lectures.forEach(l-> result.add(LectureMapper.MAPPER.lectureToFavouriteLectureResponseDto(l)));
         return result;

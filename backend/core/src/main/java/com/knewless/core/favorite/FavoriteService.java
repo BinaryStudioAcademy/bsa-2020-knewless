@@ -51,11 +51,7 @@ public class FavoriteService {
     public boolean checkIsFavorite(UUID userId, UUID favouriteId, SourceType type) {
         Optional<Favorite> favorite = favoriteRepository
                 .findFavoriteByUserIdAndSourceIdAndSourceType(userId, favouriteId, type);
-        if (favorite.isEmpty()) {
-            return false;
-        } else {
-            return true;
-        }
+        return favorite.isPresent();
     }
 
     public boolean changeFavorite(UUID userId, UUID favouriteId, SourceType type) {
@@ -74,27 +70,19 @@ public class FavoriteService {
     }
 
     public List<FavouriteCourseResponseDto> getFavouriteCourses(UUID userId) {
-        List<Favorite> favorites = favoriteRepository.findFavoriteByUserIdAndSourceType(userId, SourceType.COURSE);
-        List<UUID> courseUuids = favorites.stream().map(f->f.getSourceId()).collect(Collectors.toList());
-        return courseService.getFavouriteCoursesByIds(courseUuids);
+        return courseService.getFavouriteCoursesByUser(userId);
     }
 
     public List<FavouriteAuthorResponseDto> getFavouriteAuthors(UUID userId) {
-        List<Favorite> favorites = favoriteRepository.findFavoriteByUserIdAndSourceType(userId, SourceType.AUTHOR);
-        List<UUID> authorUuids = favorites.stream().map(f->f.getSourceId()).collect(Collectors.toList());
-        return authorService.getFavouriteAuthorsByIds(authorUuids);
+        return authorService.getFavouriteAuthorsByUser(userId);
     }
 
     public List<FavouriteLectureResponseDto> getFavouriteLectures(UUID userId) {
-        List<Favorite> favorites = favoriteRepository.findFavoriteByUserIdAndSourceType(userId, SourceType.LECTURE);
-        List<UUID> lectureUuids = favorites.stream().map(f->f.getSourceId()).collect(Collectors.toList());
-        return lectureService.getFavouriteLecturesByIds(lectureUuids);
+        return lectureService.getFavouriteLecturesByUser(userId);
     }
 
     public List<FavouritePathResponseDto> getFavouritePaths(UUID userId) {
-        List<Favorite> favorites = favoriteRepository.findFavoriteByUserIdAndSourceType(userId, SourceType.PATH);
-        List<UUID> pathUuids = favorites.stream().map(f->f.getSourceId()).collect(Collectors.toList());
-        return pathService.getFavouritePathsByIds(pathUuids);
+        return pathService.getFavouritePathsByUser(userId);
     }
 
     public List<ShortLectureDto> checkFavouriteLectures(UUID userId, List<ShortLectureDto> lectures) {

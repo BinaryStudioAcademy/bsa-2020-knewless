@@ -34,7 +34,6 @@ public interface PathMapper {
     @Mapping(target = "duration", expression = "java(PathMapper.getPathDuration(path))")
     @Mapping(target="image", expression = "java(path.getImageTag().getSource())")
     @Mapping(target="courses", expression = "java(path.getCourses().size())")
-    //@Mapping(target="courses", expression = "java(path.getCourses().stream().filter(c->c.getPath().getId().equals(path.getId())..collect(java.util.stream.Collectors.toList()).size())")
     FavouritePathResponseDto pathToFavouritePathResponseDto(Path path);
 
     static int getPathDuration(Path path) {

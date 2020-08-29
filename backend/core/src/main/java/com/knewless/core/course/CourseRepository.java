@@ -2,6 +2,7 @@ package com.knewless.core.course;
 
 import com.knewless.core.course.dto.*;
 import com.knewless.core.course.model.Course;
+import com.knewless.core.db.SourceType;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -133,4 +134,9 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
             "WHERE c.author.id = :authorId " +
             "ORDER BY c.updatedAt DESC")
     List<CourseDetailsQueryResult> getDetailCoursesByAuthorId(UUID authorId);
+
+    @Query("SELECT c FROM Course c " +
+            "INNER JOIN Favorite f ON f.sourceId = c.id " +
+            "WHERE f.sourceType = :type AND f.user.id = :userId")
+    List<Course> getFavouriteCoursesByUserId(@Param("userId") UUID userId, @Param("type") SourceType type);
 }

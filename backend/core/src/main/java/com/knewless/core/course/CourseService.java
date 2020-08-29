@@ -351,9 +351,8 @@ public class CourseService {
                 .average().orElse(0));
     }
 
-    public List<FavouriteCourseResponseDto> getFavouriteCoursesByIds(List<UUID> uuids) {
-        List<Course> courses = courseRepository.findAll();
-        courses.removeIf(c->!uuids.contains(c.getId()));
+    public List<FavouriteCourseResponseDto> getFavouriteCoursesByUser(UUID userId) {
+        List<Course> courses = courseRepository.getFavouriteCoursesByUserId(userId, SourceType.COURSE);
         List<FavouriteCourseResponseDto> result = new ArrayList<>();
         courses.forEach(c-> result.add(CourseMapper.MAPPER.courseToFavouriteCourseResponseDto(c)));
         return result;
