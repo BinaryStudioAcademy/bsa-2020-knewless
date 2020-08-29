@@ -232,6 +232,7 @@ public class CourseService {
 
         if (userId != null) {
             reactionRepository.findByCourseIdAndUserId(id, userId).ifPresent(userRating -> course.setReview(userRating.getReaction()));
+            course.setProgress(watchHistoryService.getProgress(userId, id));
         }
 
         course.setRatingCount(reactionRepository.countByCourseId(id));

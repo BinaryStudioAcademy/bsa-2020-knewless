@@ -5,8 +5,7 @@ import { StyledRating } from 'components/StyledRating';
 import GradientButton from 'components/buttons/GradientButton';
 import GrayOutlineButton from 'components/buttons/GrayOutlineButton';
 import '../../styles/common.sass';
-import AddToFavouriteButton from '@components/AddToFavouritesButton/component';
-import { IFavourite } from '@components/AddToFavouritesButton/component/index';
+import AddToFavouriteButton, { IFavourite } from '@components/AddToFavouritesButton/component';
 import { SourceType } from '@components/AddToFavouritesButton/helper/SourceType';
 import { IBindingCallback1, IBindingAction } from '@models/Callbacks';
 import { Icon, Label } from 'semantic-ui-react';
@@ -28,6 +27,7 @@ interface ICourseOverviewProps {
   role: string;
   author: IAuthor;
   courseId: string;
+  progress: number;
   overview: string;
 }
 
@@ -42,10 +42,11 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
   startCourse,
   openLoginModal,
   courseId,
+  author,
+  progress,
   role,
   favourite,
   changeFavourite,
-  author,
   overview
 }) => {
   const history = useHistory();
@@ -58,6 +59,13 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
       window.open(`/lecture/${startLectureId}`);
     }
   };
+
+  const onResume = () => {
+    if (startLectureId !== '') {
+      window.open(`/lecture/${startLectureId}`);
+    }
+  };
+
 
   const onOverviewClose = () => {
     setIsOverviewOpen(false);
@@ -100,12 +108,8 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
           </div>
           <div className={styles.buttons_with_favourite}>
             <div className={styles.description__buttons}>
-              <GradientButton onClick={() => {
-                if (!isAuthorized) openLoginModal(`/lecture/${startLectureId}`);
-                else if (startLectureId !== '') history.push(`/lecture/${startLectureId}`);
-              }}
-              >
-                Start
+              <GradientButton onClick={progress && progress > 0 && role === 'USER' ? onResume : onStart}>
+                {progress && progress > 0 && role === 'USER' ? 'Resume' : 'Start'}
               </GradientButton>
               <GrayOutlineButton onClick={() => setIsOverviewOpen(true)}>Course overview</GrayOutlineButton>
             </div>

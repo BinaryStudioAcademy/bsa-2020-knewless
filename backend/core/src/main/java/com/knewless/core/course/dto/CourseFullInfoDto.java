@@ -28,5 +28,6 @@ public class CourseFullInfoDto {
     private Set<TagDto> tags;
     private Integer review;
     private int ratingCount;
+    private long progress;
     private String overview;
 }

@@ -27,7 +27,7 @@ public class WatchHistoryService {
     }
 
     public long getProgress(UUID userId, UUID courseId) {
-        return historyRepository.getProgressByUserAndCourse(userId, courseId);
+        return historyRepository.getProgressByUserAndCourse(courseId, userId);
     }
 
     public long getViewedSeconds(UUID userId, UUID lectureId) {
