@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { Accordion, Icon } from 'semantic-ui-react';
 import styles from './styles.module.sass';
-import { courses } from '@screens/PathPage/services/mock';
 import { CourseCard } from '@screens/PathPage/components/CourseCard';
-
+import { ICourse } from '@screens/PathPage/models/ICourse';
 const Levels = ['BEGINNER', 'INTERMEDIATE', 'ADVANCED'];
 
 const courseLevels = {
@@ -12,8 +11,11 @@ const courseLevels = {
   ADVANCED: []
 };
 
-const CoursesList = () => {
-  const groupedCourses = courses.reduce((result = courseLevels, course) => {
+export interface ICourseListProps {
+  courses:ICourse[];
+}
+const CoursesList: React.FunctionComponent<ICourseListProps> = ({courses}) => {
+  const groupedCourses = courses?.reduce((result = courseLevels, course) => {
     const { level } = course;
     const res = result;
     if (!Object.prototype.hasOwnProperty.call(result, level)) {
@@ -23,7 +25,7 @@ const CoursesList = () => {
     return res;
   }, {});
   const [selected, setSelected] = useState(
-    [...Array(Object.keys(groupedCourses).length).keys()]
+    [...Array(Object.keys(groupedCourses as ICourse[]).length).keys()]
   );
   const handleClick = i => {
     if (selected.includes(i)) {
@@ -53,7 +55,7 @@ const CoursesList = () => {
               <CourseCard
                 id={c.id}
                 name={c.name}
-                author={c.author}
+                author={c.authorName}
                 level={c.level}
                 imageSrc={c.imageSrc}
                 duration={c.duration}

@@ -1,27 +1,28 @@
 import React from 'react';
 import styles from './styles.module.sass';
+import { IPath } from '@screens/PathPage/models/IPath';
 import { Label, Icon } from 'semantic-ui-react';
 import { useHistory } from 'react-router-dom';
 
-const mock = {
-  imageSrc: 'https://upload.wikimedia.org/wikipedia/commons/'
-    + 'thumb/9/99/Unofficial_JavaScript_logo_2.svg/1200px-Unofficial_JavaScript_logo_2.svg.png',
-  name: 'Js for everybody',
-  authorId: '1',
-  authorName: 'Clark Kent'
-};
-
-const PathOverview = ({ isAuthorized, role, pathId }) => {
+interface IPathOverviewProps {
+  path: IPath;
+  isAuthorized: boolean;
+  role: string;
+  pathId: string;
+  userId: string;
+}
+const PathOverview: React.FunctionComponent<IPathOverviewProps> = ({ isAuthorized,
+path, role, pathId, userId }) => {
   const history = useHistory();
   return (
     <div className={styles.content}>
       <div className={`${styles.path_image}`}>
-        <img src={mock.imageSrc} alt="Path" />
+        <img src={path.imageSrc} alt="Path" />
       </div>
       <div className={styles.description}>
         <h1 className={styles.description__path_name}>
-          {mock.name}
-          {role && role === 'AUTHOR' && (
+          {path.name}
+          {role && role === 'AUTHOR'&& userId===path.userId && (
             <Label
               style={{
                 background: 'transparent',
@@ -44,8 +45,8 @@ const PathOverview = ({ isAuthorized, role, pathId }) => {
             {'By '}
             {
               isAuthorized
-                ? <a href={`/author/${mock.authorId}`}>{mock.authorName}</a>
-                : <span>{mock.authorName}</span>
+                ? <a href={`/author/${path.author?.id}`}>{`${path.author?.firstName} ${path.author?.lastName}`}</a>
+                : <span>{`${path.author?.firstName} ${path.author?.lastName}`}</span>
             }
           </p>
         </div>

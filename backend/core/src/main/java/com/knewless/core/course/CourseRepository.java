@@ -135,6 +135,23 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
             "ORDER BY c.updatedAt DESC")
     List<CourseDetailsQueryResult> getDetailCoursesByAuthorId(UUID authorId);
 
+    @Query("SELECT new com.knewless.core.course.dto.CourseDetailsQueryResult(" +
+            "c.id, c.name, c.level, " +
+            "c.author.id, concat(c.author.firstName,' ' , c.author.lastName), " +
+            "c.image, " +
+            "(SELECT COALESCE(SUM(cl.duration), 0) FROM c.lectures as cl), " +
+            "c.description, " +
+            "( " +
+            "SELECT COALESCE(SUM(CASE WHEN cr.reaction = 1 THEN 1 ELSE 0 END), 0) " +
+            "FROM c.reactions as cr " +
+            "WHERE cr.reaction = 1" +
+            "), " +
+            "SIZE(c.reactions), " +
+            "SIZE(c.lectures)) " +
+            "FROM Course c " +
+            "WHERE c.id = :courseId ")
+    CourseDetailsQueryResult getDetailCourseById(UUID courseId);
+    
     @Query("SELECT c FROM Course c " +
             "INNER JOIN Favorite f ON f.sourceId = c.id " +
             "WHERE f.sourceType = :type AND f.user.id = :userId")

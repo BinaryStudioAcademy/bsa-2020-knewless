@@ -9,26 +9,26 @@ import java.util.UUID;
 @Data
 public class PathCreationRequestDto {
 
-	@NotBlank(message = "Path name can't be empty.")
-	@Pattern(
-			regexp = "^[\\d\\D]{2,40}$",
-			message = "Path name length must be 2-40 symbols. " +
-					"Only digits, Latin letters and special characters allowed."
-	)
-	private String name;
+    @NotBlank(message = "Path name can't be empty.")
+    @Pattern(
+            regexp = "^[\\d\\D]{2,40}$",
+            message = "Path name length must be 2-40 symbols. " +
+                    "Only digits, Latin letters and special characters allowed."
+    )
+    private String name;
 
-	@Pattern(
-			regexp = "^$|^[\\d\\D]{10,}$",
-			message = "Path description minimum length must be 10 symbols. " +
-					"Only digits, Latin letters and special characters allowed."
-	)
-	private String description;
+    @Pattern(
+            regexp = "^$|^[\\d\\D]{10,}$",
+            message = "Path description minimum length must be 10 symbols. " +
+                    "Only digits, Latin letters and special characters allowed."
+    )
+    private String description;
 
-	private List<UUID> tags;
+    private List<UUID> tags;
 
-	private List<UUID> courses;
+    private List<UUID> courses;
 
-	@NotNull
-	private UUID imageTag;
+    @NotNull
+    private UUID imageTag;
 
 }

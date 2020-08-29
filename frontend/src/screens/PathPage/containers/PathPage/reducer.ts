@@ -1,8 +1,9 @@
 import { Routine } from 'redux-saga-routines';
 import { fetchPathDataRoutine } from '@screens/PathPage/routines';
+import { IPathPageData }  from '@screens/PathPage/models/IPathPageData';
 
 const initialState = {
-  course: ''
+  path: {} as IPathPageData
 };
 
 export const pathData = (state = initialState, action: Routine<any>) => {
@@ -10,7 +11,7 @@ export const pathData = (state = initialState, action: Routine<any>) => {
     case fetchPathDataRoutine.SUCCESS: {
       return {
         ...state,
-        course: action.payload
+        path: action.payload
       };
     }
     default:

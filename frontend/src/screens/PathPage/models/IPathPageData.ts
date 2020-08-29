@@ -1,3 +1,6 @@
+
+import { IPath } from "@screens/PathPage/models/IPath";
+
 export interface IPathPageData {
-  courses: string;
+  path: IPath
 }
