@@ -32,7 +32,7 @@
   background: inherit
   display: grid
   width: 95%
-  grid-template-columns: 15% auto 15% 15% 15% 15% 
+  grid-template-columns: 10% 30% 30% 10% auto
 
 .header_item
   font-weight: 500
@@ -57,7 +57,7 @@
   width: 95%
   color: white
   font-weight: 300
-  grid-template-columns: 12% auto 15% 15% 15% 15% 
+  grid-template-columns: 10% 30% 30% 10% auto
 
     
 
@@ -82,12 +82,16 @@
   font-size: 1.1em
   color: #FF8576
 
+.image_item
+  padding: 0
+
 .header_name
   justify-self: start
   padding-left: 40px
 
 .content_name
-  justify-self: start
+  align-content: center
+  justify-content: center
   padding: 10px
   padding-left: 30px
   font-weight: 400
@@ -98,11 +102,10 @@
 .rating
   justify-self: end
 
-.course_image
-  justify-self: start
+.path_image
   position: relative
-  width: 100%
-  height: 100%
+  width: auto
+  height: auto
   max-height: 75px
 
 \:global(.ui.basic.label).toolBarIcon

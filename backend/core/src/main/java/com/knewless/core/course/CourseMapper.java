@@ -57,6 +57,6 @@ public interface CourseMapper {
     @Mapping(target="authorId", expression = "java(course.getAuthor().getId())")
 	@Mapping(target="authorName", expression = "java(course.getAuthor().getFirstName()+ '\\u00A0' + course.getAuthor().getLastName())")
 	@Mapping(target="duration", expression = "java(course.getLectures().stream().map(l->l.getDuration()).reduce(0, (a,b) -> a+b))")
-	@Mapping(target="rating", expression = "java(CourseMapper.calculateRating(course.getReactions().size(), course.getReactions().stream().map(r->r.getReaction()).filter(r -> r==true).collect(java.util.stream.Collectors.toList()).size()))")
+	@Mapping(target="rating", expression = "java(course.getReactions().stream().map(r->r.getReaction()).reduce(0,(a,b)->a+b) == 0 ? 0 : course.getReactions().stream().map(r->r.getReaction()).reduce(0,(a,b)->a+b) / course.getReactions().size())")
 	FavouriteCourseResponseDto courseToFavouriteCourseResponseDto(Course course);
 }

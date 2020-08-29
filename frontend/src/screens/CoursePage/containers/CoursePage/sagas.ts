@@ -1,5 +1,6 @@
 import { all, call, put, takeEvery } from 'redux-saga/effects';
-import { fetchCourseDataRoutine, changeFavouriteStateRoutine, checkFavouriteStateRoutine, startCourseRoutine } from '@screens/CoursePage/routines';
+import { fetchCourseDataRoutine, changeFavouriteCourseStateRoutine, checkFavouriteCourseStateRoutine, startCourseRoutine,
+  changeFavouriteLectureStateRoutine } from '@screens/CoursePage/routines';
 import * as courseService from '@screens/CoursePage/services/course.service';
 import { AnyAction } from 'redux';
 import { Routine } from 'redux-saga-routines';
@@ -45,38 +46,52 @@ function* watchSaveCourseReview() {
   yield takeEvery(saveCourseReviewRoutine.TRIGGER, saveReview);
 }
 
-function* changeFavouriteState(action: Routine<any>) {
+function* changeFavouriteCourseState(action: Routine<any>) {
   try {
     const response = yield call(courseService.changeFavouriteState, action.payload);
-    yield put(changeFavouriteStateRoutine.success(response));
+    yield put(changeFavouriteCourseStateRoutine.success(response));
   } catch (error) {
-    yield put(changeFavouriteStateRoutine.failure(error?.message));
+    yield put(changeFavouriteCourseStateRoutine.failure(error?.message));
   }
 }
 
-function* watchChangeFavouriteState() {
-  yield takeEvery(changeFavouriteStateRoutine.TRIGGER, changeFavouriteState);
+function* watchChangeFavouriteCourseState() {
+  yield takeEvery(changeFavouriteCourseStateRoutine.TRIGGER, changeFavouriteCourseState);
 }
 
-function* checkFavouriteState(action: Routine<any>) {
+function* checkFavouriteCourseState(action: Routine<any>) {
   try {
     const response = yield call(courseService.checkFavouriteState, action.payload);
-    yield put(checkFavouriteStateRoutine.success(response));
+    yield put(checkFavouriteCourseStateRoutine.success(response));
   } catch (error) {
-    yield put(checkFavouriteStateRoutine.failure(error?.message));
+    yield put(checkFavouriteCourseStateRoutine.failure(error?.message));
   }
 }
 
-function* watchCheckFavouriteState() {
-  yield takeEvery(checkFavouriteStateRoutine.TRIGGER, checkFavouriteState);
+function* watchCheckFavouriteCourseState() {
+  yield takeEvery(checkFavouriteCourseStateRoutine.TRIGGER, checkFavouriteCourseState);
+}
+
+function* changeFavouriteLecturesState(action: Routine<any>) {
+  try {
+    const response = yield call(courseService.changeFavouriteState, action.payload);
+    yield put(changeFavouriteLectureStateRoutine.success({ favourite: response, id: action.payload.id }));
+  } catch (error) {
+    yield put(changeFavouriteLectureStateRoutine.failure(error?.message));
+  }
+}
+
+function* watchChangeFavouriteLecturesState() {
+  yield takeEvery(changeFavouriteLectureStateRoutine.TRIGGER, changeFavouriteLecturesState);
 }
 
 export default function* courseDataSagas() {
   yield all([
     watchGetDataRequest(),
-    watchChangeFavouriteState(),
-    watchCheckFavouriteState(),
+    watchChangeFavouriteCourseState(),
+    watchCheckFavouriteCourseState(),
     watchStartCourseRequest(),
-    watchSaveCourseReview()
+    watchSaveCourseReview(),
+    watchChangeFavouriteLecturesState()
   ]);
 }

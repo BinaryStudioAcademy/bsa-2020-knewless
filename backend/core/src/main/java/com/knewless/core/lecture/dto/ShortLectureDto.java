@@ -19,6 +19,7 @@ public class ShortLectureDto {
     private String url720;
     private String url480;
     private int timeSeconds;
+    private boolean isFavourite;
 }
 
 //dto for reusing lectures in different courses

@@ -6,6 +6,7 @@ export interface IFavouriteState {
       authorsRequest: IRequestState;
       lecturesRequest: IRequestState;
       coursesRequest: IRequestState;
+      pathsRequest: IRequestState;
     };
     data: IFavouriteData;
   }

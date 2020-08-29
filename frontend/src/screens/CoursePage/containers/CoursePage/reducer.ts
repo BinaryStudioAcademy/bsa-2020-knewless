@@ -1,6 +1,7 @@
 import { Routine } from 'redux-saga-routines';
 import { IFullCourseData } from '@screens/CoursePage/models/IFullCourseData';
-import { fetchCourseDataRoutine, changeFavouriteStateRoutine, checkFavouriteStateRoutine } from '@screens/CoursePage/routines';
+import { fetchCourseDataRoutine, changeFavouriteCourseStateRoutine, checkFavouriteCourseStateRoutine,
+   changeFavouriteLectureStateRoutine } from '@screens/CoursePage/routines';
 import { saveCourseReviewRoutine } from '@screens/LecturePage/routines';
 
 const initialState = {
@@ -17,7 +18,7 @@ export const courseData = (state = initialState, action: Routine<any>) => {
         course
       };
     }
-    case changeFavouriteStateRoutine.SUCCESS: {
+    case changeFavouriteCourseStateRoutine.SUCCESS: {
       const { course } = state;
       course.favourite = action.payload;
       return {
@@ -25,12 +26,30 @@ export const courseData = (state = initialState, action: Routine<any>) => {
         course
       };
     }
-    case checkFavouriteStateRoutine.SUCCESS: {
+    case checkFavouriteCourseStateRoutine.SUCCESS: {
       const { course } = state;
       course.favourite = action.payload;
       return {
         ...state,
         course
+      };
+    }
+    case changeFavouriteLectureStateRoutine.SUCCESS: {
+      const { course } = state;
+      const { lectures } = course;
+      const { favourite, id } = action.payload;
+      const mapper = (lecture) => {
+        if (lecture.id !== id) return lecture;
+        lecture.favourite = favourite;
+        return lecture;
+      }
+      const updated = lectures.map(l => mapper(l));
+      return {
+        ...state,
+        course: {
+          ...state.course,
+          lectures: updated
+        }
       };
     }
     case saveCourseReviewRoutine.SUCCESS: {

@@ -32,7 +32,7 @@
   background: inherit
   display: grid
   width: 95%
-  grid-template-columns: 15% auto 15% 15% 15% 15% 
+  grid-template-columns: 12% 30% 20% 15% 10% auto
 
 .header_item
   font-weight: 500
@@ -49,6 +49,7 @@
 .gridrow
   min-height: 60px
   max-height: 80px
+  overflow: hidden
   justify-items: center
   align-items: center
   background: inherit
@@ -57,7 +58,7 @@
   width: 95%
   color: white
   font-weight: 300
-  grid-template-columns: 12% auto 15% 15% 15% 15% 
+  grid-template-columns: 12% 30% 20% 15% 10% auto
 
     
 
@@ -67,18 +68,20 @@
   text-align: center
   line-height: 1.5
   overflow: hidden
+  max-width: 100%
   align-content: center
   justify-content: center
-  padding: auto
   font-size: 1.1em
   &__last
-    padding: 5px
     font-weight: 400
     justify-self: end
 
 .color_item
   padding: 5px
+  max-width: 100%
+  padding: auto
   font-weight: 400
+  padding: auto
   font-size: 1.1em
   color: #FF8576
 
@@ -87,6 +90,10 @@
   padding-left: 40px
 
 .content_name
+  max-width: inherit
+  min-width: 0
+  min-height: 0
+  overflow: hidden
   justify-self: start
   padding: 10px
   padding-left: 30px
@@ -99,7 +106,6 @@
   justify-self: end
 
 .course_image
-  justify-self: start
   position: relative
   width: 100%
   height: 100%

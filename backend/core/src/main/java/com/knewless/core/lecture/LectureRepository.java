@@ -16,7 +16,7 @@ public interface LectureRepository extends JpaRepository<Lecture, UUID> {
 
 
 @Query("SELECT new com.knewless.core.lecture.dto.ShortLectureDto(l.id, l.name, " +
-        "l.description, l.webLink, l.urlOrigin, l.url1080, l.url720, l.url480, l.duration) FROM Lecture l " +
+        "l.description, l.webLink, l.urlOrigin, l.url1080, l.url720, l.url480, l.duration, false) FROM Lecture l " +
         "WHERE l.user.id = :id")
 List<ShortLectureDto> getShortLecturesByUserId(@Param("id")UUID id);
 

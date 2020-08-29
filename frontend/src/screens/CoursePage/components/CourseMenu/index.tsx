@@ -6,6 +6,7 @@ import styles from './styles.module.sass';
 import { LectureCard } from '@screens/AddCourse/components/LectureCard';
 import { ILectureData } from '@screens/CoursePage/models/ILectureData';
 import { IBindingCallback1, IBindingAction } from '@models/Callbacks';
+import { IFavourite } from '@components/AddToFavouritesButton/component/index';
 
 interface ICourseMenuProps {
   lectures: ILectureData[];
@@ -13,6 +14,7 @@ interface ICourseMenuProps {
   isAuthorized: boolean;
   startCourse: IBindingAction;
   openLoginModal: IBindingCallback1<string>;
+  changeFavouriteLecture: IBindingCallback1<IFavourite>;
 }
 
 const CourseMenu: React.FunctionComponent<ICourseMenuProps> = ({
@@ -20,12 +22,14 @@ const CourseMenu: React.FunctionComponent<ICourseMenuProps> = ({
   courseDescription,
   isAuthorized,
   startCourse,
-  openLoginModal
+  openLoginModal,
+  changeFavouriteLecture
 }) => {
   const [selected, setSelected] = useState(0);
-  const onClickLecture = id => {
+  const onClickLecture =(e, id) => {
     if (!isAuthorized) openLoginModal(`/lecture/${id}`);
     else {
+      if(e.target.tagName === "I" || e.target.tagName === "A") return;
       startCourse();
       window.open(`/lecture/${id}`);
     }
@@ -83,12 +87,16 @@ const CourseMenu: React.FunctionComponent<ICourseMenuProps> = ({
               <button
                 type="button"
                 className={styles.lecture}
-                onClick={() => onClickLecture(lec.id)}
+                onClick={(e) => onClickLecture(e, lec.id)}
               >
                 <LectureCard
+                  key={lec.id}
                   timeMinutes={lec.timeSeconds}
                   name={lec.name}
                   description={lec.description}
+                  favourite={lec.favourite}
+                  id={lec.id}
+                  changefavourite={changeFavouriteLecture}
                   /* eslint-disable-next-line @typescript-eslint/no-empty-function */
                   onClick={() => {}}
                 />

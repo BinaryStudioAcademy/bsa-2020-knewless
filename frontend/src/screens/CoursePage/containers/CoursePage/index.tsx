@@ -8,7 +8,8 @@ import CourseInfo from '../../components/CourseInfo';
 import { Footer } from '@components/Footer';
 import { BottomNavigation } from '@screens/Landing/components/BottomNavigation';
 import { IAppState } from '@models/AppState';
-import { fetchCourseDataRoutine, changeFavouriteStateRoutine, checkFavouriteStateRoutine, startCourseRoutine } from '@screens/CoursePage/routines';
+import { fetchCourseDataRoutine, changeFavouriteCourseStateRoutine, checkFavouriteCourseStateRoutine,
+  startCourseRoutine, changeFavouriteLectureStateRoutine } from '@screens/CoursePage/routines';
 import { connect } from 'react-redux';
 import { IBindingAction, IBindingCallback1 } from '@models/Callbacks';
 import { IFullCourseData } from '@screens/CoursePage/models/IFullCourseData';
@@ -34,6 +35,7 @@ interface ICoursePageProps {
   submitReview: IBindingCallback1<object>;
   checkFavourite: IBindingCallback1<IFavourite>;
   changeFavourite: IBindingCallback1<IFavourite>;
+  changeFavouriteLecture: IBindingCallback1<IFavourite>;
 }
 
 const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
@@ -47,8 +49,10 @@ const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
   changeFavourite,
   checkFavourite,
   favourite,
-  submitReview
+  submitReview,
+  changeFavouriteLecture
 }) => {
+  console.log(course?.lectures);
   const { courseId } = useParams();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -100,6 +104,7 @@ const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
         />
         <div className="separator" />
         <CourseInfo
+          changeFavouriteLecture={changeFavouriteLecture}
           isAuthorized={isAuthorized}
           startCourse={handleOnStartCourse}
           openLoginModal={openLoginModal}
@@ -148,10 +153,11 @@ const mapStateToProps = (state: IAppState) => {
 const mapDispatchToProps = {
   fetchData: fetchCourseDataRoutine,
   openLoginModal: openLoginModalRoutine.trigger,
-  changeFavourite: changeFavouriteStateRoutine,
-  checkFavourite: checkFavouriteStateRoutine,
+  changeFavourite: changeFavouriteCourseStateRoutine,
+  checkFavourite: checkFavouriteCourseStateRoutine,
   submitReview: saveCourseReviewRoutine,
-  startCourse: startCourseRoutine
+  startCourse: startCourseRoutine,
+  changeFavouriteLecture: changeFavouriteLectureStateRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CoursePage);

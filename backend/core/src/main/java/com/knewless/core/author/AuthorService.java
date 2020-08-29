@@ -4,14 +4,18 @@ import com.knewless.core.article.ArticleRepository;
 import com.knewless.core.author.dto.AuthorBriefInfoDto;
 import com.knewless.core.author.dto.AuthorPublicDto;
 import com.knewless.core.author.dto.AuthorSettingsDto;
+import com.knewless.core.author.dto.FavouriteAuthorResponseDto;
 import com.knewless.core.author.mapper.AuthorInfoMapper;
 import com.knewless.core.author.mapper.AuthorMapper;
 import com.knewless.core.author.model.Author;
 import com.knewless.core.course.CourseRepository;
+import com.knewless.core.course.model.Course;
 import com.knewless.core.db.SourceType;
 import com.knewless.core.elasticsearch.EsService;
 import com.knewless.core.elasticsearch.model.EsDataType;
 import com.knewless.core.exception.custom.ResourceNotFoundException;
+import com.knewless.core.path.PathRepository;
+import com.knewless.core.path.model.Path;
 import com.knewless.core.school.mapper.SchoolInfoMapper;
 import com.knewless.core.security.oauth.UserPrincipal;
 import com.knewless.core.subscription.SubscriptionService;
@@ -20,9 +24,12 @@ import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 @Service
 public class AuthorService {
@@ -32,6 +39,8 @@ public class AuthorService {
     private final UserRepository userRepository;
 
     private final CourseRepository courseRepository;
+
+    private final PathRepository pathRepository;
 
     private final ArticleRepository articleRepository;
 
@@ -45,6 +54,7 @@ public class AuthorService {
                          CourseRepository courseRepository,
                          SubscriptionService subscriptionService,
                          ArticleRepository articleRepository,
+                         PathRepository pathRepository,
                          EsService esService) {
         this.authorRepository = authorRepository;
         this.userRepository = userRepository;
@@ -52,6 +62,7 @@ public class AuthorService {
         this.articleRepository = articleRepository;
         this.subscriptionService = subscriptionService;
         this.esService = esService;
+        this.pathRepository = pathRepository;
     }
 
     public Optional<AuthorSettingsDto> getAuthorSettings(UUID userId) {
@@ -123,4 +134,16 @@ public class AuthorService {
                 courses, articles, printFollowButton);
     }
 
+    public List<FavouriteAuthorResponseDto> getFavouriteAuthorsByIds(List<UUID> uuids) {
+        List<Author> authors = authorRepository.findAll();
+        authors.removeIf(c->!uuids.contains(c.getId()));
+        List<FavouriteAuthorResponseDto> result = new ArrayList<>();
+        List<Course> courses = courseRepository.findAll();
+        List<Path> paths = pathRepository.findAll();
+        authors.forEach(a -> result.add(com.knewless.core.author.AuthorMapper.MAPPER.authorToFavouriteAuthorResponseDto(a)));
+        result.forEach(a->a.setFollowers(authorRepository.getNumberOfSubscriptions(a.getId()).orElse(0)));
+        result.forEach(a->a.setCourses(courses.stream().filter(c->c.getAuthor().getId().equals(a.getId())).collect(Collectors.toList()).size()));
+        result.forEach(a->a.setPaths(paths.stream().filter(p->p.getAuthor().getId().equals(a.getId())).collect(Collectors.toList()).size()));
+        return result;
+    }
 }

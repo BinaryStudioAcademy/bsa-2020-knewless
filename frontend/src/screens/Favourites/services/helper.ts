@@ -12,3 +12,12 @@ export const parseDate = (date: Date): string => {
     const dt = new Date(date.toString());
     return dt.toLocaleDateString();
 }
+
+export const filterByName = (item: any, filterValue: string): boolean => {
+    if (!(typeof filterValue !== 'undefined' && filterValue)) {
+      return true;
+    }
+    const name: string = item.name.toUpperCase();
+    const value: string = filterValue.toUpperCase();
+    return name.includes(value);
+  };

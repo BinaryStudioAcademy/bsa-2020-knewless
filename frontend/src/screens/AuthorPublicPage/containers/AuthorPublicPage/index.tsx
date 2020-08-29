@@ -104,7 +104,7 @@ const AuthorPublicPage: React.FunctionComponent<IAuthorPublic> = ({
                 </GradientButton>
               </div>
             )}
-            {user &&
+            {user && !isSelfPublicPage && 
             <div className={styles.button_favourite_wrp}>
               <AddToFavouriteButton
                 id={match.params.authorId}

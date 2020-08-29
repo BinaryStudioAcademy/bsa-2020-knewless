@@ -7,7 +7,7 @@
   color: white
   display: grid
   width: 100%
-  grid-template-rows: repeat(auto-fill, 80px)
+  grid-template-rows: repeat(auto-fill, 120px)
   grid-row-gap: .2em
   
 .row
@@ -32,7 +32,7 @@
   background: inherit
   display: grid
   width: 95%
-  grid-template-columns: 20% 25% 25% 15% auto 
+  grid-template-columns: 15% 15% auto  15% 15% 15%
 
 .header_item
   font-weight: 500
@@ -47,7 +47,7 @@
     justify-self: end
 
 .gridrow
-  min-height: 60px
+  min-height: 120px
   justify-items: center
   align-items: center
   background: inherit
@@ -56,18 +56,22 @@
   width: 95%
   color: white
   font-weight: 300
-  grid-template-columns: 12% auto 15% 15% 15% 15% 
+  grid-template-columns: 15% 15% auto  15% 15% 15%
 
-    
 
 .content_item
   padding: auto
+  text-align: center
+  line-height: 1.5
+  overflow: hidden
+  align-content: center
+  justify-content: center
   font-weight: 400
   padding: auto
   font-size: 1.1em
-  &__last
+  &__first
     font-weight: 400
-    justify-self: end
+    justify-self: start
 
 .color_item
   padding: auto
@@ -81,9 +85,7 @@
   padding-left: 40px
 
 .content_name
-  justify-self: start
   padding: 10px
-  padding-left: 40px
   font-weight: 400
   padding: auto
   font-size: 1.1em
@@ -92,11 +94,23 @@
 .rating
   justify-self: end
 
-.course_image
-  position: relative
-  width: 100%
+.author_avatar
   height: 100%
-  max-height: 75px
+  width: 100%
+  object-fit: cover
+  border-radius: 50%
+  max-height: 110px
+
+.avatar_wrp
+  display: flex
+  padding: 5px
+  margin: auto
+  align-items: flex-start
+  justify-content: left
+  height: 100%
+  height: 110px
+  width: 110px
+  max-height: 110px
 
 \:global(.ui.basic.label).toolBarIcon
   background: inherit
@@ -112,4 +126,8 @@
 .icon_wrp
   place-self: center
   padding: auto
+
+.placeholderwrp
+  padding: auto
+  padding-top: 25vh
 

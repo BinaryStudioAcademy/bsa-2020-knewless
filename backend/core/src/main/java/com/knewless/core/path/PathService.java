@@ -25,6 +25,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -155,5 +156,13 @@ public class PathService {
 
 		pathDetailsDto.setDuration(duration);
 		return pathDetailsDto;
+	}
+
+	public List<FavouritePathResponseDto> getFavouritePathsByIds(List<UUID> uuids){
+		List<Path> paths = pathRepository.findAll();
+		// paths.removeIf(p->!uuids.contains(p.getId())); line should be uncomment when FavouritePaths could be added
+		List<FavouritePathResponseDto> result = new ArrayList<>();
+		paths.forEach(p -> result.add(PathMapper.MAPPER.pathToFavouritePathResponseDto(p)));
+		return result;
 	}
 }

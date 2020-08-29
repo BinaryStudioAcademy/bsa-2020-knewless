@@ -1,5 +1,6 @@
 import { Routine } from 'redux-saga-routines';
-import { chooseVideoRoutine, fetchCourseDtoRoutine, setMenuActiveItemRoutine } from 'screens/LecturePage/routines';
+import { chooseVideoRoutine, fetchCourseDtoRoutine, 
+  setMenuActiveItemRoutine, changeFavouriteLectureStateRoutine } from 'screens/LecturePage/routines';
 import { ICourseData } from '@screens/LecturePage/models/ICourseData';
 import { ILecturesMenu } from 'screens/LecturePage/models/ILecturesMenu';
 import { ILecturesList } from 'screens/LecturePage/models/ILecturesList';
@@ -16,7 +17,8 @@ const basicCourseData = {
     url1080: 'undefined',
     url720: 'undefined',
     url480: 'undefined',
-    duration: 0
+    duration: 0,
+    favourite: undefined
   }],
   author: {
     firstName: 'Unspecified ',
@@ -30,6 +32,20 @@ export const lectureDto = (state: ICourseData = basicCourseData, action: Routine
   switch (action.type) {
     case fetchCourseDtoRoutine.SUCCESS:
       return action.payload;
+    case changeFavouriteLectureStateRoutine.SUCCESS: {
+      const { lectures } = state;
+      const { favourite, id } = action.payload;
+      const mapper = (lecture) => {
+        if (lecture.id !== id) return lecture;
+        lecture.favourite = favourite;
+        return lecture;
+      }
+      const updated = lectures.map(l => mapper(l));
+      return {
+        ...state,
+        lectures: updated
+      }
+    };
     default:
       return state;
   }

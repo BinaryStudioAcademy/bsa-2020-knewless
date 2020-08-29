@@ -3,4 +3,5 @@ export interface ILectureData {
   name: string;
   description: string;
   timeSeconds: number;
+  favourite: boolean;
 }

@@ -26,6 +26,7 @@ $height_btn: 40px
   margin-bottom: 5vh
 
 .wide_container
+  overflow: auto
   max-width: $container_width + ($side_padding * 2)
   margin-left: auto
   margin-right: auto
@@ -43,7 +44,7 @@ $height_btn: 40px
   justify-content: flex-start
   background: #121421
   width: inherit
-  height: 5vh
+  height: 8vh
   position: fixed
   padding-top: 20px
   top: $header_height + 55px
@@ -60,7 +61,7 @@ $height_btn: 40px
   width: 100%
   background: #121421
   display: grid
-  grid-template-columns: 10% 10% 10% 10% 10% auto
+  grid-template-columns: 11% 11% 11% 11% 11% 45%
   grid-template-rows: 1fr 0.1rem
   justify-items: center
   justify-content: start
@@ -82,7 +83,6 @@ $height_btn: 40px
   background: #121421
   outline: none
   border: none
-
   *
     transition: all 0.3s ease-in-out
 
@@ -121,4 +121,9 @@ $height_btn: 40px
   flex-direction: row
   align-items: center
   width: 100%
+
+.customInput
+  justify-self: end
+  height: 30px
+  width: 200px
       

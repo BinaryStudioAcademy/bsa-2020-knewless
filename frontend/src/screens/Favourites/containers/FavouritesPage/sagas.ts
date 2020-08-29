@@ -1,9 +1,12 @@
 import { takeEvery, put, call, all } from 'redux-saga/effects';
 import { fetchFavouriteCoursesRoutine, removeCourseFavouriteRoutine,
-  fetchFavouriteAuthorsRoutine, fetchFavouriteLecturesRoutine } from 'screens/Favourites/routines';
+  fetchFavouriteAuthorsRoutine, fetchFavouriteLecturesRoutine, 
+  removeAuthorFavouriteRoutine, removeLectureFavouriteRoutine,
+  fetchFavouritePathsRoutine, removePathFavouriteRoutine } from 'screens/Favourites/routines';
 import * as favouritesService from '../../services/favourites.service';
 import { Routine } from 'redux-saga-routines';
 import * as courseService from '@screens/CoursePage/services/course.service';
+import * as authorService from '@screens/AuthorPublicPage/services/publicAuthorPageService';
 
 function* fetchCourses(action: Routine<any>) {
   try {
@@ -16,6 +19,19 @@ function* fetchCourses(action: Routine<any>) {
 
 function* watchFetchCourses() {
   yield takeEvery(fetchFavouriteCoursesRoutine.TRIGGER, fetchCourses);
+}
+
+function* fetchPaths(action: Routine<any>) {
+  try {
+    const response = yield call(favouritesService.fetchPaths);
+    yield put(fetchFavouritePathsRoutine.success(response));
+  } catch (error) {
+    yield put(fetchFavouritePathsRoutine.failure(error?.message));
+  }
+}
+
+function* watchFetchPaths() {
+  yield takeEvery(fetchFavouritePathsRoutine.TRIGGER, fetchPaths);
 }
 
 function* fetchAuthors(action: Routine<any>) {
@@ -58,11 +74,58 @@ function* watchRemoveCourse() {
   yield takeEvery(removeCourseFavouriteRoutine.TRIGGER, removeCourseFromFavourite);
 }
 
+function* removeAuthorFromFavourite(action: Routine<any>) {
+  try {
+    yield call(authorService.changeFavouriteState, action.payload);
+    const response = yield call(favouritesService.fetchAuthors);
+    yield put(removeAuthorFavouriteRoutine.success(response));
+  } catch (error) {
+    yield put(removeAuthorFavouriteRoutine.failure(error?.message));
+  }
+}
+
+function* watchRemoveAuthor() {
+  yield takeEvery(removeAuthorFavouriteRoutine.TRIGGER, removeAuthorFromFavourite);
+}
+
+
+function* removeLectureFromFavourite(action: Routine<any>) {
+  try {
+    yield call(courseService.changeFavouriteState, action.payload);
+    const response = yield call(favouritesService.fetchLectures);
+    yield put(removeLectureFavouriteRoutine.success(response));
+  } catch (error) {
+    yield put(removeLectureFavouriteRoutine.failure(error?.message));
+  }
+}
+
+function* watchRemoveLecture() {
+  yield takeEvery(removeLectureFavouriteRoutine.TRIGGER, removeLectureFromFavourite);
+}
+
+function* removePathFromFavourite(action: Routine<any>) {
+  try {
+    yield call(courseService.changeFavouriteState, action.payload);
+    const response = yield call(favouritesService.fetchPaths);
+    yield put(removePathFavouriteRoutine.success(response));
+  } catch (error) {
+    yield put(removePathFavouriteRoutine.failure(error?.message));
+  }
+}
+
+function* watchRemovePath() {
+  yield takeEvery(removePathFavouriteRoutine.TRIGGER, removePathFromFavourite);
+}
+
 export default function* favouriteItemSagas() {
   yield all([
     watchFetchCourses(),
     watchFetchLectures(),
     watchFetchAuthors(),
-    watchRemoveCourse()
+    watchRemoveCourse(),
+    watchRemoveAuthor(),
+    watchRemoveLecture(),
+    watchFetchPaths(),
+    watchRemovePath()
   ]);
 }

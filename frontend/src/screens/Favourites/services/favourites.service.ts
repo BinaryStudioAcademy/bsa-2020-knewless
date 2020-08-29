@@ -8,6 +8,14 @@ export const fetchCourses = async () => {
   return response.json();
 };
 
+export const fetchPaths = async () => {
+  const response = await callApi({
+    endpoint: '/api/favorite/paths',
+    type: 'GET'
+  });
+  return response.json();
+};
+
 export const fetchAuthors = async () => {
   const response = await callApi({
     endpoint: '/api/favorite/authors',

@@ -1,8 +1,9 @@
 export interface IAuthor {
-    userId: string;
+    id: string;
     avatar: string;
     name: string;
     school: string;
+    paths: number;
+    courses: number;
     followers: number;
-    coursesCreated: number;
 }

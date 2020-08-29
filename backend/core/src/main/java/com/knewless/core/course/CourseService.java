@@ -14,6 +14,7 @@ import com.knewless.core.currentUserCource.CurrentUserCourseRepository;
 import com.knewless.core.elasticsearch.EsService;
 import com.knewless.core.elasticsearch.model.EsDataType;
 import com.knewless.core.exception.custom.ResourceNotFoundException;
+import com.knewless.core.favorite.FavoriteService;
 import com.knewless.core.history.WatchHistoryService;
 import com.knewless.core.lecture.LectureMapper;
 import com.knewless.core.lecture.LectureRepository;
@@ -28,6 +29,7 @@ import com.knewless.core.tag.TagService;
 import com.knewless.core.user.UserService;
 import com.knewless.core.user.model.User;
 import com.knewless.core.user.role.model.Role;
+import com.knewless.core.lecture.dto.ShortLectureDto;
 import com.knewless.core.user.role.model.RoleType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -54,6 +56,9 @@ public class CourseService {
     private final EsService esService;
     private final CurrentUserCourseRepository currentUserCourseRepository;
     private final WatchHistoryService watchHistoryService;
+
+    @Autowired
+    private FavoriteService favoriteService;
 
     @Value(value = "${fs.video_url}")
     private String URL;
@@ -171,10 +176,12 @@ public class CourseService {
         course.setId(courseProjection.getId());
         course.setName(courseProjection.getName());
         course.setAuthor(courseProjection.getAuthor());
-        course.setLectures(courseProjection.getLectures()
+        var lectures = courseProjection.getLectures()
                 .stream()
                 .map(l -> new LectureProjectionMapper().fromProjection(l, URL))
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList());
+
+        course.setLectures(favoriteService.checkFavouriteLecturesToPlayer(userId, lectures));
         course.setReviewed(reactionRepository.existsByCourseIdAndUserId(UUID.fromString(courseProjection.getId()), userId));
         return course;
     }
@@ -234,10 +241,11 @@ public class CourseService {
         ));
         course.getAuthor().setBiography(courseEntity.getAuthor().getBiography());
         course.setAuthorCourses(getLatestCoursesByAuthorId(course.getAuthor().getId()));
-        course.setLectures(courseEntity.getLectures()
+        List<ShortLectureDto> lectures = courseEntity.getLectures()
                 .stream()
                 .map(LectureMapper.MAPPER::lectureToShortLectureDto)
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList());
+        course.setLectures(favoriteService.checkFavouriteLectures(userId, lectures));
         course.setTags(courseEntity.getLectures().stream().flatMap(l ->
                 tagService.getByLectureId(l.getId()).stream()).collect(Collectors.toSet()));
         return course;
