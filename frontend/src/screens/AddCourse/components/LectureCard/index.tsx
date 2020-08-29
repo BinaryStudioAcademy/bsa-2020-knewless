@@ -16,11 +16,12 @@ export interface ILectureCardProps {
   onClick: () => void;
   isSelected?: boolean;
   favourite?: boolean;
+  isAuthorized: boolean;
   changefavourite?: IBindingCallback1<IFavourite>;
 }
 
 export const LectureCard: React.FC<ILectureCardProps> = ({
-  timeMinutes, name, onClick, isSelected, lectureURL, favourite, changefavourite, id
+  timeMinutes, name, onClick, isSelected, lectureURL, favourite, changefavourite, id, isAuthorized
 }) => {
   return  (
   <div className={styles.lecture__container}>
@@ -40,13 +41,13 @@ export const LectureCard: React.FC<ILectureCardProps> = ({
       {timeFormatLecture(timeMinutes)}
     </div>
     <div className={styles.meta__actionButton}>
-      {timeMinutes === 0 && !changefavourite && 
+      {timeMinutes === 0 && !changefavourite && isAuthorized &&
         <Popup
           trigger={<Icon loading name="spinner" />}
           content="Video is currently being processed on the server..."
           basic
         />}
-      {timeMinutes !== 0 && !changefavourite && 
+      {timeMinutes !== 0 && !changefavourite && isAuthorized &&
         <Label
           basic
           size="tiny"
@@ -59,7 +60,7 @@ export const LectureCard: React.FC<ILectureCardProps> = ({
             inverted
           />
         </Label>}
-      {changefavourite && 
+      {isAuthorized && changefavourite && 
         <AddToFavouriteButton
           isFavourite={favourite}
           id={id}

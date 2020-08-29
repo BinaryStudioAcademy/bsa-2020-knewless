@@ -90,13 +90,14 @@ const CourseMenu: React.FunctionComponent<ICourseMenuProps> = ({
                 onClick={(e) => onClickLecture(e, lec.id)}
               >
                 <LectureCard
+                  isAuthorized={isAuthorized}
                   key={lec.id}
                   timeMinutes={lec.timeSeconds}
                   name={lec.name}
                   description={lec.description}
                   favourite={lec.favourite}
                   id={lec.id}
-                  changefavourite={changeFavouriteLecture}
+                  changefavourite={isAuthorized? changeFavouriteLecture : undefined}
                   /* eslint-disable-next-line @typescript-eslint/no-empty-function */
                   onClick={() => {}}
                 />

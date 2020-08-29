@@ -57,7 +57,6 @@ const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
   fetchAuthor,
   role
 }) => {
-  console.log(course?.lectures);
   const { courseId } = useParams();
   const [isOpen, setIsOpen] = useState(false);
 

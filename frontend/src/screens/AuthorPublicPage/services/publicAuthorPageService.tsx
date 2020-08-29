@@ -18,7 +18,6 @@ export const followAuthor = async source => {
 };
 
 export const unfollowAuthor = async source => {
-  console.log(source);
   await callApi({
     endpoint: '/api/subscription/unsubscribe',
     type: 'POST',
