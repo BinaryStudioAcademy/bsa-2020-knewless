@@ -75,8 +75,9 @@ const MainAuthorPage: React.FunctionComponent<IMainAuthorPageProps> = ({
             loading={pathsLoading}
           >
             {(authorPaths && authorPaths.length > 0) ? authorPaths.slice(0, 3).map(p => (
-              <div className={styles.path_card} key={p.name}>
+              <div className={styles.path_card} key={p.id}>
                 <PathCard
+                  id={p.id}
                   name={p.name}
                   logoSrc={p.logoSrc}
                   courses={p.courses}

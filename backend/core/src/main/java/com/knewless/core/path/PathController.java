@@ -6,6 +6,7 @@ import com.knewless.core.security.oauth.UserPrincipal;
 import com.knewless.core.user.model.CurrentUser;
 import com.knewless.core.validation.SingleMessageResponse;
 import com.knewless.core.validation.ValidationMessageCreator;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -47,6 +49,11 @@ public class PathController {
         } catch (ResourceNotFoundException ex) {
             return ResponseEntity.badRequest().body(new SingleMessageResponse(ex.getMessage()));
         }
+    }
+
+    @GetMapping("/page/{id}")
+    public PathPageDto getPathDataById(@PathVariable UUID id) {
+        return pathService.getPathDataById(id);
     }
 
     @GetMapping("/author")

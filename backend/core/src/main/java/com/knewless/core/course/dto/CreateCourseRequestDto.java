@@ -33,6 +33,12 @@ public class CreateCourseRequestDto {
     )
     private String description;
 
+    @Pattern(
+            regexp = "^$|^[\\d\\D]{10,}$",
+            message = "Course overview minimum length must be 10 symbols."
+    )
+    private String overview;
+
     private Boolean isReleased = false;
 
     private List<UUID> lectures;

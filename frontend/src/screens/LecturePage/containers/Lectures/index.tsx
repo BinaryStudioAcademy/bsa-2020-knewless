@@ -16,10 +16,12 @@ import { IAppState } from '@models/AppState';
 import useInterval from '../../../../services/use.interval.hook';
 import './styles.sass';
 import RatingModal from '@components/RatingModal';
+import { InlineLoaderWrapper } from '@components/InlineLoaderWrapper';
 
 export interface ILectureProps {
   match: any;
   lecturesData: ICourseData;
+  isLecturesLoading: boolean;
   fetchCourseDto: IBindingCallback1<string>;
   chosenVideoId: string;
   setChosenVideo: ({ chosenVideo }: {chosenVideo: string}) => void;
@@ -58,8 +60,10 @@ interface IPlayerProgress {
 const AUTOSAVE_MS = 10000;
 const LecturePage: React.FunctionComponent<ILectureProps> = ({
   lecturesData,
+  isLecturesLoading,
   chosenVideoId,
-  match, fetchCourseDto: getCourseDto,
+  match,
+  fetchCourseDto: getCourseDto,
   setChosenVideo,
   saveWatchTime,
   saveReview,
@@ -73,13 +77,13 @@ const LecturePage: React.FunctionComponent<ILectureProps> = ({
   const [isReviewOpen, setIsReviewOpen] = useState(false);
   const initialLectureId = match.params.lectureId;
 
-  // without suppression it becomes one long line
-  // eslint-disable-next-line arrow-body-style
-  const triggerSaveTime: any = useCallback(() => {
-    return saveWatchTime(
-      { watchTime: Math.round(playerProgress.playedSeconds), fraction: playerProgress.played, lectureId: chosenVideoId }
-    );
-  }, [playerProgress, chosenVideoId]);
+  const triggerSaveTime: any = useCallback(
+    () => saveWatchTime({
+      watchTime: Math.round(playerProgress.playedSeconds),
+      fraction: playerProgress.played,
+      lectureId: chosenVideoId
+    }), [playerProgress, chosenVideoId]
+  );
 
   const saveCallback = useRef<Function>();
 
@@ -157,21 +161,29 @@ const LecturePage: React.FunctionComponent<ILectureProps> = ({
             onEnded={() => handleEnded()}
           />
         </div>
-        <div className="courseName">
-          {lecturesData.name}
-        </div>
-        <div className="authorName">
-          By&nbsp;
-          <Link
-            className="authorLink"
-            to={`/author/${lecturesData.author.id}`}
-          >
-            {`${lecturesData.author.firstName} ${lecturesData.author.lastName}`}
-          </Link>
-        </div>
-        <div className="lecturesList">
-          <LecturesMenu setChosenVideo={handleChooseVideo} />
-        </div>
+        {isLecturesLoading ? (
+          <div className="courseName">
+            <InlineLoaderWrapper loading={isLecturesLoading} centered={false} />
+          </div>
+        ) : (
+          <>
+            <div className="courseName">
+              {lecturesData.name}
+            </div>
+            <div className="authorName">
+              By&nbsp;
+              <Link
+                className="authorLink"
+                to={`/author/${lecturesData.author.id}`}
+              >
+                {`${lecturesData.author.firstName} ${lecturesData.author.lastName}`}
+              </Link>
+            </div>
+            <div className="lecturesList">
+              <LecturesMenu setChosenVideo={handleChooseVideo} playerProgress={playerProgress.playedSeconds} />
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
@@ -179,6 +191,7 @@ const LecturePage: React.FunctionComponent<ILectureProps> = ({
 
 const mapStateToProps = (state: IAppState) => ({
   lecturesData: state.lecturePage.lectureDto,
+  isLecturesLoading: state.lecturePage.requests.dataRequest.loading,
   chosenVideoId: state.lecturePage.chosenVideo.chosenVideo,
   isSaveReviewLoading: state.coursePage.requests.saveReviewRequest.loading,
   role: state.appRouter.user.role.name

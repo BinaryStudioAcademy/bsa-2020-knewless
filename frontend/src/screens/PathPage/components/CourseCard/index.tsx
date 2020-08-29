@@ -3,6 +3,7 @@ import styles from './styles.module.sass';
 import { useHistory } from 'react-router-dom';
 import defaultCourseImage from 'assets/images/default_course_image.jpg';
 import { Card, CardContent, CardHeader, CardMeta, Image } from 'semantic-ui-react';
+import { timeFormat } from 'helpers/time.helper';
 import GradientButton from '@components/buttons/GradientButton';
 
 export interface ICourseCardProps {
@@ -10,7 +11,7 @@ export interface ICourseCardProps {
   imageSrc: string;
   name: string;
   author: string;
-  duration: string;
+  duration: number;
   level: string;
 }
 
@@ -30,7 +31,7 @@ export const CourseCard: React.FunctionComponent<ICourseCardProps> = ({
         <CardHeader className={styles.title}>{name}</CardHeader>
         <CardMeta className={styles.meta_info}>
           <span className={styles.author_name}>{author}</span>
-          <span>{duration}</span>
+          <span>{timeFormat(duration)}</span>
           <span>{level}</span>
         </CardMeta>
         <GradientButton

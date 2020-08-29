@@ -1,28 +1,33 @@
 import { Routine } from 'redux-saga-routines';
-import { chooseVideoRoutine, fetchCourseDtoRoutine, 
-  setMenuActiveItemRoutine, changeFavouriteLectureStateRoutine } from 'screens/LecturePage/routines';
+import {
+  chooseVideoRoutine,
+  fetchCourseDtoRoutine,
+  setMenuActiveItemRoutine,
+  changeFavouriteLectureStateRoutine
+} from 'screens/LecturePage/routines';
 import { ICourseData } from '@screens/LecturePage/models/ICourseData';
 import { ILecturesMenu } from 'screens/LecturePage/models/ILecturesMenu';
 import { ILecturesList } from 'screens/LecturePage/models/ILecturesList';
 
 const basicCourseData = {
   id: null,
-  name: 'Unspecified course!',
+  name: '',
   lectures: [{
-    id: 'undefined',
-    name: 'undefined',
-    description: 'undefined',
-    webLink: 'undefined',
-    urlOrigin: 'undefined',
-    url1080: 'undefined',
-    url720: 'undefined',
-    url480: 'undefined',
+    id: '',
+    name: '',
+    description: '',
+    webLink: '',
+    urlOrigin: '',
+    url1080: '',
+    url720: '',
+    url480: '',
     duration: 0,
+    progress: 0,
     favourite: undefined
   }],
   author: {
-    firstName: 'Unspecified ',
-    lastName: ' author!',
+    firstName: '',
+    lastName: ' ',
     id: null
   },
   reviewed: false
@@ -35,17 +40,17 @@ export const lectureDto = (state: ICourseData = basicCourseData, action: Routine
     case changeFavouriteLectureStateRoutine.SUCCESS: {
       const { lectures } = state;
       const { favourite, id } = action.payload;
-      const mapper = (lecture) => {
+      const mapper = lecture => {
         if (lecture.id !== id) return lecture;
         lecture.favourite = favourite;
         return lecture;
-      }
+      };
       const updated = lectures.map(l => mapper(l));
       return {
         ...state,
         lectures: updated
-      }
-    };
+      };
+    }
     default:
       return state;
   }
@@ -78,4 +83,3 @@ export const chosenVideo = (state: ILecturesList = basicILecturesList, action: R
       return state;
   }
 };
-

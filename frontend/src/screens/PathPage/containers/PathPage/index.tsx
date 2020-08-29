@@ -8,27 +8,33 @@ import { IAppState } from '@models/AppState';
 import { connect } from 'react-redux';
 import { InlineLoaderWrapper } from '@components/InlineLoaderWrapper';
 import styles from './styles.module.sass';
+import { IBindingCallback1 } from '@models/Callbacks';
+import { IPath } from '@screens/PathPage/models/IPath';
+import { fetchPathDataRoutine } from '@screens/PathPage/routines';
 
 interface IPathPageProps {
+  fetchData: IBindingCallback1<string>;
+  path: IPath;
   loading: boolean;
   isAuthorized: boolean;
   role: string;
+  userId: string;
 }
 
-const PathPage: React.FC<IPathPageProps> = ({ loading, isAuthorized, role }) => {
+const PathPage: React.FC<IPathPageProps> = ({ fetchData, path, loading, isAuthorized, role, userId }) => {
   const { pathId } = useParams();
 
   useEffect(() => {
     if (pathId) {
-      // console.log('FETCHING');
+      fetchData(pathId);
     }
   }, [pathId]);
   if (loading) return (<InlineLoaderWrapper loading={loading} centered />);
   return (
     <>
       <div className={styles.content}>
-        <PathOverview pathId={pathId} role={role} isAuthorized={isAuthorized} />
-        <PathMenu />
+        <PathOverview isAuthorized={isAuthorized} path ={path} pathId={pathId} role={role} userId={userId}/>
+        <PathMenu path={path}/>
       </div>
       <div className={styles.navigation_layer}>
         <div className={styles.wide_container}>
@@ -38,17 +44,21 @@ const PathPage: React.FC<IPathPageProps> = ({ loading, isAuthorized, role }) => 
     </>
   );
 };
-
 const mapStateToProps = (state: IAppState) => {
+  const { path } = state.pathPage.pathData;
   const { isAuthorized } = state.auth.auth;
   return {
-    loading: state.pathPage.requests.dataRequest.loading,
-    role: state.appRouter.user?.role?.name,
+    path,
+    loading: state.coursePage.requests.dataRequest.loading,
+    userId: state.appRouter.user.id,
+    role: state.appRouter.user.role?.name,
     isAuthorized
   };
 };
 
 const mapDispatchToProps = {
+  fetchData: fetchPathDataRoutine
 };
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(PathPage);

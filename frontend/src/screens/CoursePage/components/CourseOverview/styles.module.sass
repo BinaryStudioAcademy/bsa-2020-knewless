@@ -29,8 +29,22 @@
 
 .description__buttons
   display: flex
-  justify-content: space-between
   width: $buttons_width
+  & > *
+    margin-right: 15px !important
+
+.buttons_with_favourite
+  display: flex
+  flex-wrap: wrap
+  justify-content: space-between
+  align-items: flex-end
+  max-width: $buttons_width + 12rem
+
+.button_favourite_wrp
+  width: 11.6rem
+  height: 44.7px
+  min-height: 44.7px
+  margin-top: 8px
 
 .buttons_with_favourite
   display: flex

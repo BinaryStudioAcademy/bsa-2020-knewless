@@ -22,7 +22,7 @@ public interface PathRepository extends JpaRepository<Path, UUID> {
     List<PathQueryResult> getAllPaths(Pageable pageable);
 
     @SuppressWarnings("SpringDataRepositoryMethodReturnTypeInspection")
-    @Query("SELECT DISTINCT new com.knewless.core.path.dto.AuthorPathQueryResult(p.name, " +
+    @Query("SELECT DISTINCT new com.knewless.core.path.dto.AuthorPathQueryResult(p.id, p.name, " +
             "p.imageTag.source, SIZE(p.courses), " +
             "(SELECT COALESCE(SUM(pcl.duration), 0) " +
             "FROM p.courses as pc INNER JOIN pc.lectures as pcl), p.updatedAt) " +

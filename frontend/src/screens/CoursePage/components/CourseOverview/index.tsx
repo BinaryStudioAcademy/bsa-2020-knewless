@@ -1,16 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import styles from './styles.module.sass';
 import { StyledRating } from 'components/StyledRating';
 import GradientButton from 'components/buttons/GradientButton';
 import GrayOutlineButton from 'components/buttons/GrayOutlineButton';
 import '../../styles/common.sass';
-import AddToFavouriteButton from '@components/AddToFavouritesButton/component';
-import { IFavourite } from '@components/AddToFavouritesButton/component/index';
+import AddToFavouriteButton, { IFavourite } from '@components/AddToFavouritesButton/component';
 import { SourceType } from '@components/AddToFavouritesButton/helper/SourceType';
 import { IBindingCallback1, IBindingAction } from '@models/Callbacks';
 import { Icon, Label } from 'semantic-ui-react';
 import { IAuthor } from '@screens/AuthorMainPage/models/IAuthor';
+import OverviewModal from '@components/OverviewModal';
 
 interface ICourseOverviewProps {
   imageSrc: string;
@@ -27,6 +27,8 @@ interface ICourseOverviewProps {
   role: string;
   author: IAuthor;
   courseId: string;
+  progress: number;
+  overview: string;
 }
 
 const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
@@ -40,12 +42,16 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
   startCourse,
   openLoginModal,
   courseId,
+  author,
+  progress,
   role,
   favourite,
   changeFavourite,
-  author
+  overview
 }) => {
   const history = useHistory();
+  const [isOverviewOpen, setIsOverviewOpen] = useState(false);
+
   const onStart = () => {
     if (!isAuthorized) openLoginModal(`/lecture/${startLectureId}`);
     else if (startLectureId !== '') {
@@ -53,6 +59,18 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
       window.open(`/lecture/${startLectureId}`);
     }
   };
+
+  const onResume = () => {
+    if (startLectureId !== '') {
+      window.open(`/lecture/${startLectureId}`);
+    }
+  };
+
+
+  const onOverviewClose = () => {
+    setIsOverviewOpen(false);
+  };
+
   return (
     <div className="content_row">
       <div className={`${styles.description} flex_item aligned_item`}>
@@ -73,7 +91,7 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
                 }}
                 onClick={() => history.push(`/course/edit/${courseId}`)}
               >
-                <Icon name='pencil' />
+                <Icon name="pencil" />
               </Label>
             )}
           </h1>
@@ -90,14 +108,10 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
           </div>
           <div className={styles.buttons_with_favourite}>
             <div className={styles.description__buttons}>
-              <GradientButton onClick={() => {
-                if (!isAuthorized) openLoginModal(`/lecture/${startLectureId}`);
-                else if (startLectureId !== '') history.push(`/lecture/${startLectureId}`);
-              }}
-              >
-                Start
+              <GradientButton onClick={progress && progress > 0 && role === 'USER' ? onResume : onStart}>
+                {progress && progress > 0 && role === 'USER' ? 'Resume' : 'Start'}
               </GradientButton>
-              <GrayOutlineButton>Play course overview</GrayOutlineButton>
+              <GrayOutlineButton onClick={() => setIsOverviewOpen(true)}>Course overview</GrayOutlineButton>
             </div>
             {isAuthorized && (
               <div className={styles.button_favourite_wrp}>
@@ -107,7 +121,7 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
                   id={courseId}
                   type={SourceType.COURSE}
                 />
-              </div>  
+              </div>
             )}
           </div>
         </div>
@@ -115,6 +129,7 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
       <div className={`${styles.course_image} flex_item`}>
         <img src={imageSrc} alt="Course" />
       </div>
+      <OverviewModal isOpen={isOverviewOpen} data={overview} onClose={onOverviewClose} />
     </div>
   );
 };

@@ -7,6 +7,7 @@ export interface IDuration {
 }
 
 export interface IAuthorPathCardProps {
+  id?: string;
   name: string;
   logoSrc: string;
   courses: number;

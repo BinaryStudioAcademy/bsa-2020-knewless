@@ -14,6 +14,7 @@ export const COURSE_NAME_MESSAGE = `Course name length must be 2-40 symbols ${DI
 export const PATH_NAME_MESSAGE = `Path name length must be 2-40 symbols ${DIGITS_LATIN_LETTERS_SPEC_CHARS_ONLY}.`;
 export const DESCRIPTION_MESSAGE = `
 Description minimum length must be 10 symbols ${DIGITS_LATIN_LETTERS_SPEC_CHARS_ONLY}.`;
+export const OVERVIEW_MESSAGE = 'Overview minimum length must be 10 symbols.';
 export const LECTURE_MESSAGE = `Lecture name must be 3-40 symbols ${DIGITS_LATIN_LETTERS_SPEC_CHARS_ONLY}.`;
 
 export const IMAGE_FORMAT_MESSAGE = 'Supported image formats: jpg, png, jpeg.';
@@ -34,6 +35,7 @@ const jobRegex = /^$|^[a-zA-Z][a-zA-Z- ]+$/;
 const coursePathNameRegex = /^[\d\D]{2,40}$/;
 const coursePathLectureDescriptionRegex = /^$|^[\d\D]{10,}$/;
 const lectureNameRegex = /^[\d\D]{3,40}$/;
+const overviewRegex = /\S[\s\S]{10,}/;
 
 export const isValidEmail = (str: string): boolean => emailRegex.test(str) && str.length >= 5 && str.length <= 71;
 export const isValidPassword = (str: string): boolean => passwordRegex.test(str) && str.length >= 8 && str.length <= 32;
@@ -50,3 +52,4 @@ export const isValidPathName = (str: string): boolean => coursePathNameRegex.tes
 export const isValidPathDescription = (str: string): boolean => coursePathLectureDescriptionRegex.test(str);
 export const isValidLectureName = (str: string): boolean => lectureNameRegex.test(str);
 export const isValidLectureDescription = (str: string): boolean => coursePathLectureDescriptionRegex.test(str);
+export const isOverviewValid = (str: string): boolean => overviewRegex.test(str);

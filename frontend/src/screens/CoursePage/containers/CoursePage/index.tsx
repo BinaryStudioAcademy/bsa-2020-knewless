@@ -19,8 +19,6 @@ import RatingModal from '@components/RatingModal';
 import { saveCourseReviewRoutine } from '@screens/LecturePage/routines';
 import { IFavourite } from '@components/AddToFavouritesButton/component/index';
 import { SourceType } from '@components/AddToFavouritesButton/helper/SourceType';
-
-  
 import { IAuthor } from '@screens/AuthorMainPage/models/IAuthor';
 
 interface ICoursePageProps {
@@ -64,9 +62,11 @@ const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
       fetchData(courseId);
       checkFavourite({
         id: courseId,
-        type: SourceType.COURSE 
+        type: SourceType.COURSE
       });
-      fetchAuthor();
+      if (isAuthorized && role === 'AUTHOR') {
+        fetchAuthor();
+      }
     }
   }, [courseId, checkFavourite]);
   const handleOnStartCourse = () => {
@@ -106,6 +106,8 @@ const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
           startCourse={handleOnStartCourse}
           isAuthorized={isAuthorized}
           openLoginModal={openLoginModal}
+          overview={course.overview}
+          progress={course.progress}
         />
         <div className="separator" />
         <CourseInfo

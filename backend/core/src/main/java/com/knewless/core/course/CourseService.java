@@ -95,7 +95,8 @@ public class CourseService {
         List<Lecture> thisLectures = new ArrayList<>();
         List<Homework> homeworks = new ArrayList<>();
         Course course = Course.builder().level(Level.valueOf(request.getLevel())).author(author)
-                .name(request.getName()).description(request.getDescription()).image(request.getImage()).build();
+                .name(request.getName()).description(request.getDescription()).image(request.getImage())
+                .overview(request.getOverview()).build();
         for (Lecture l : allLectures) {
             Lecture lec;
             if (l.getCourse() == null) {
@@ -178,9 +179,12 @@ public class CourseService {
         course.setAuthor(courseProjection.getAuthor());
         var lectures = courseProjection.getLectures()
                 .stream()
-                .map(l -> new LectureProjectionMapper().fromProjection(l, URL))
+                .map(l -> {
+                    var lecture = new LectureProjectionMapper().fromProjection(l, URL);
+                    lecture.setProgress(watchHistoryService.getProgressByLecture(userId,UUID.fromString(l.getId())));
+                    return lecture;
+                })
                 .collect(Collectors.toList());
-
         course.setLectures(favoriteService.checkFavouriteLecturesToPlayer(userId, lectures));
         course.setReviewed(reactionRepository.existsByCourseIdAndUserId(UUID.fromString(courseProjection.getId()), userId));
         return course;
@@ -231,6 +235,7 @@ public class CourseService {
 
         if (userId != null) {
             reactionRepository.findByCourseIdAndUserId(id, userId).ifPresent(userRating -> course.setReview(userRating.getReaction()));
+            course.setProgress(watchHistoryService.getProgress(userId, id));
         }
 
         course.setRatingCount(reactionRepository.countByCourseId(id));
