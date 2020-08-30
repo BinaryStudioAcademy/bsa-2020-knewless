@@ -88,7 +88,7 @@ export const CoursePreview: React.FC<ICoursePreviewProps> = ({
         </div>
         <div className={styles.started}>
           <span className={styles.membersLabel}>started: </span>
-          <span className={styles.membersText}>{members? members : 0}</span>
+          <span className={styles.membersText}>{members || 0}</span>
         </div>
         <div className={styles.course_name}>
           <NavLink exact to={`/course/${id}`}>

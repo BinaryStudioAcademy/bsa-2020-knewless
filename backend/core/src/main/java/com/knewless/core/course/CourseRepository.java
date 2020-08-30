@@ -17,7 +17,7 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
     //language=SpringDataQL
     String COURSE_SELECT = "SELECT new com.knewless.core.course.dto.CourseQueryResult(c.id, " +
             "c.name, c.level, concat(c.author.firstName,' ' , c.author.lastName), " +
-            "category.name, c.image, " +
+            "c.author.id, category.name, c.image, " +
             "(SELECT COALESCE(SUM(cl.duration), 0) FROM c.lectures as cl), " +
             "(SELECT COALESCE(SUM(cr.reaction), 0) " +
             "FROM c.reactions as cr), " +
@@ -43,8 +43,8 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
     List<CourseQueryResult> getCourses(Pageable pageable);
 
     @Query("SELECT new com.knewless.core.course.dto.CourseQueryResult(c.id, " +
-            "c.name, c.level, concat(c.author.firstName,' ' , c.author.lastName), " +
-            "category.name, c.image, " +
+            "c.name, c.level, concat(c.author.firstName,' ' , c.author.lastName), c.author.id, category.name, " +
+            "c.image, " +
             "(SELECT COALESCE(SUM(cl.duration), 0) FROM c.lectures as cl), " +
             "(SELECT COALESCE(SUM(cr.reaction), 0) " +
             "FROM c.reactions as cr), " +
@@ -151,7 +151,7 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
             "FROM Course c " +
             "WHERE c.id = :courseId ")
     CourseDetailsQueryResult getDetailCourseById(UUID courseId);
-    
+
     @Query("SELECT c FROM Course c " +
             "INNER JOIN Favorite f ON f.sourceId = c.id " +
             "WHERE f.sourceType = :type AND f.user.id = :userId")

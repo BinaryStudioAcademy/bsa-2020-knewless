@@ -24,7 +24,13 @@ const CoursesList: React.FunctionComponent<ICoursesListProps> = ({
               <div className={styles.course} key={c.id}>
                 <img className={styles.course__image} src={c.imageSrc || defaultCourseImage} alt="Author's course" />
                 <p className={styles.course__level}>{c.level}</p>
-                <p className={styles.course__name}>{c.name}</p>
+                {
+                  c.id ? (
+                    <a href={`/course/${c.id}`} className={styles.link}>
+                      <p className={styles.course__name}>{c.name}</p>
+                    </a>
+                  ) : <p className={styles.course__name}>{c.name}</p>
+                }
                 <div className={styles.course__separator} />
               </div>
             </React.Fragment>

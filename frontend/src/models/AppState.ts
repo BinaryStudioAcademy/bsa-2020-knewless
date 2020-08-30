@@ -17,6 +17,7 @@ import { IPathPageState } from '@screens/PathPage/models/IPathPageState';
 import { IPathsState } from '@screens/Paths/models/IPathsState';
 import { IFavouriteState } from '@screens/Favourites/models/IFavouriteState';
 import { ISearchPageState } from '@screens/SearchResultsPage/models/ISearchPageState';
+import { IHistoryState } from '@screens/History/models/IHistoryState';
 
 export interface IAppState {
   toastr: any;
@@ -39,4 +40,5 @@ export interface IAppState {
   savepassword: ISavePasswordState;
   favourites: IFavouriteState;
   searchPage: ISearchPageState;
+  historyPage: IHistoryState;
 }

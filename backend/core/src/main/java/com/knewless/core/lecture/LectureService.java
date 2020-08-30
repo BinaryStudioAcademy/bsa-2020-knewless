@@ -5,13 +5,14 @@ import com.knewless.core.emailservice.EmailService;
 import com.knewless.core.fileManager.FileManager;
 import com.knewless.core.lecture.Dto.FavouriteLectureResponseDto;
 import com.knewless.core.lecture.dto.LectureCreateResponseDto;
+import com.knewless.core.lecture.dto.SaveLectureDto;
 import com.knewless.core.lecture.dto.ShortLectureDto;
 import com.knewless.core.lecture.model.Lecture;
 import com.knewless.core.messaging.Message;
 import com.knewless.core.messaging.MessageSender;
 import com.knewless.core.messaging.MessageType;
+import com.knewless.core.tag.TagRepository;
 import com.knewless.core.user.UserRepository;
-import com.knewless.core.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javassist.NotFoundException;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -30,20 +32,23 @@ public class LectureService {
     private final FileManager fileManager;
     private final MessageSender messageSender;
     private final UserRepository userRepository;
+    private final TagRepository tagRepository;
     private final EmailService emailService;
-
 
     @Autowired
     public LectureService(LectureRepository lectureRepository, FileManager fileManager,
-                          MessageSender messageSender, UserRepository userRepository, EmailService emailService) {
+                          MessageSender messageSender, UserRepository userRepository, TagRepository tagRepository,
+                          EmailService emailService) {
         this.fileManager = fileManager;
         this.lectureRepository = lectureRepository;
         this.messageSender = messageSender;
         this.userRepository = userRepository;
+        this.tagRepository = tagRepository;
         this.emailService = emailService;
     }
 
-    public LectureCreateResponseDto saveLecture(MultipartFile file, String filename, UUID lectureId, int duration) throws NotFoundException {
+    public LectureCreateResponseDto saveLecture(MultipartFile file, String filename, UUID lectureId, int duration)
+            throws NotFoundException {
         Lecture savedLecture = lectureRepository.findById(lectureId)
                 .orElseThrow(() -> new NotFoundException("Lecture with id " + lectureId + " not found"));
         String folderId = fileManager.saveVideo(file, filename);
@@ -64,10 +69,15 @@ public class LectureService {
                         .build();
     }
 
-    public LectureCreateResponseDto addLectureToDb(String name, String description, UUID userId) {
-        User user = userRepository.getOne(userId);
-        Lecture lecture = Lecture.builder().name(name).description(description).user(user).build();
-        Lecture savedLecture = lectureRepository.save(lecture);
+    public LectureCreateResponseDto addLectureToDb(SaveLectureDto lectureDto, UUID userId) {
+        var lecture = new Lecture();
+        var user = userRepository.getOne(userId);
+        lecture.setUser(user);
+        var lectureTags = tagRepository.findAllById(lectureDto.getTagsIds());
+        lecture.setTags(new HashSet<>(lectureTags));
+        lecture.setName(lectureDto.getName());
+        lecture.setDescription(lectureDto.getDescription());
+        var savedLecture = lectureRepository.save(lecture);
         return LectureCreateResponseDto.builder()
                 .id(savedLecture.getId())
                 .description(savedLecture.getDescription())
@@ -110,7 +120,15 @@ public class LectureService {
     public LectureCreateResponseDto saveLectureWithUrl(String name, String description, UUID userId, String url, int duration) {
 
         User user = userRepository.getOne(userId);
-        Lecture lecture = Lecture.builder().name(name).description(description).webLink(url).user(user).duration(duration).build();
+        var lectureTags = tagRepository.findAllById(lectureDto.getTagsIds());
+        Lecture lecture = Lecture.builder()
+                                .name(name)
+                                .description(description)
+                                .webLink(url)
+                                .tags(new HashSet<>(lectureTags))
+                                .user(user)
+                                .duration(duration)
+                                .build();
         Lecture savedLecture = lectureRepository.save(lecture);
         return LectureCreateResponseDto.builder()
                 .id(savedLecture.getId())
@@ -119,4 +137,5 @@ public class LectureService {
                 .name(savedLecture.getName())
                 .build();
     }
+
 }

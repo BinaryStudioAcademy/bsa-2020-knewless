@@ -75,6 +75,7 @@ const LecturePage: React.FunctionComponent<ILectureProps> = ({
   );
   const [isPlaying, setIsPlaying] = useState(false);
   const [isReviewOpen, setIsReviewOpen] = useState(false);
+  const [isReviewed, setIsReviewed] = useState(false);
   const initialLectureId = match.params.lectureId;
 
   const triggerSaveTime: any = useCallback(
@@ -114,10 +115,11 @@ const LecturePage: React.FunctionComponent<ILectureProps> = ({
 
   const handleEnded = () => {
     const prev = lecturesData.lectures.findIndex(l => l.id === chosenVideoId);
-    const nextId = lecturesData.lectures[prev + 1] ? lecturesData.lectures[prev + 1].id : lecturesData.lectures[0].id;
-    setChosenVideo({ chosenVideo: nextId });
-    triggerSaveTime();
-    if (role !== 'AUTHOR' && !lecturesData.reviewed && prev + 1 === lecturesData.lectures.length) {
+    if (prev + 1 !== lecturesData.lectures.length) {
+      const nextId = lecturesData.lectures[prev + 1].id;
+      setChosenVideo({ chosenVideo: nextId });
+      triggerSaveTime();
+    } else if (role !== 'AUTHOR' && !lecturesData.reviewed && !isReviewed) {
       setIsReviewOpen(true);
     }
   };
@@ -137,6 +139,7 @@ const LecturePage: React.FunctionComponent<ILectureProps> = ({
   const submitReview = (rating: number) => {
     saveReview({ rating, courseId: lecturesData.id });
     setIsReviewOpen(false);
+    setIsReviewed(true);
   };
 
   const closeReview = () => {

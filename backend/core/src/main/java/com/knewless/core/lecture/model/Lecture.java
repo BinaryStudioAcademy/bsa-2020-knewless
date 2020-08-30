@@ -14,14 +14,16 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
+@Table(name = "lectures")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@Table(name = "lectures")
+@ToString(callSuper = true, onlyExplicitlyIncluded = true)
 public class Lecture extends BaseEntity {
     @Column(name = "name")
+    @ToString.Include
     private String name;
 
     @Column(name = "web_link")
@@ -41,6 +43,9 @@ public class Lecture extends BaseEntity {
 
     @Column(name = "description")
     private String description;
+  
+    @Column(name = "preview_image")
+    private String previewImage;
 
     @Column(name = "duration")
     private int duration;
@@ -66,6 +71,9 @@ public class Lecture extends BaseEntity {
     private List<LectureReaction> reactions = List.of();
 
     @Builder.Default
-    @ManyToMany(mappedBy = "lectures")
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+    @JoinTable(name = "lecture_tag",
+            joinColumns = @JoinColumn(name = "lecture_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private Set<Tag> tags = Set.of();
 }

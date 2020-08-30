@@ -1,7 +1,7 @@
 import { all, call, put, takeEvery } from 'redux-saga/effects';
 import { toastr } from 'react-redux-toastr';
 import { fetchCoursesRoutine, fetchTagsRoutine, savePathRoutine, fetchPathToEditRoutine, updatePathRoutine } from '../../routines';
-import * as addPageService from '../../services/add_page.service';
+import * as addPageService from '../../services/add-path.service';
 import { AnyAction } from 'redux';
 import { ICourse } from '../../models/domain';
 import { Routine } from 'redux-saga-routines';

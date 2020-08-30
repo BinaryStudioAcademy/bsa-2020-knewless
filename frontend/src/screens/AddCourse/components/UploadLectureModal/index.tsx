@@ -1,4 +1,4 @@
-import React, { createRef, useState } from 'react';
+import React, { createRef, useEffect, useState } from 'react';
 import styles from './styles.module.sass';
 import { Icon, Input, Label, Modal, ModalContent } from 'semantic-ui-react';
 import GrayOutlineButton from 'components/buttons/GrayOutlineButton';
@@ -11,27 +11,33 @@ import {
   DESCRIPTION_MESSAGE,
   isValidLectureDescription,
   isValidLectureName,
-  LECTURE_MESSAGE, VIDEO_FORMAT_MESSAGE
+  LECTURE_MESSAGE,
+  VIDEO_FORMAT_MESSAGE,
+  LECTURE_TAGS_LIMIT_MESSAGE
 } from '@helpers/validation.helper';
+import { ITag } from '@screens/AddPath/models/domain';
+import { TagSelector } from '@components/TagSelector';
+import { history } from '@helpers/history.helper';
 import ReactPlayer from 'react-player/lazy';
-import { render } from 'react-dom';
 
 export interface ISaveLecture {
-    video?: File;
-    name: string;
-    description: string;
-    duration?: number;
-    link?: string;
+  video?: File;
+  name: string;
+  description: string;
+  duration: number;
+  tags: ITag[];
+  link?: string;
 }
 
 interface IUploadLectureModalProps {
-    isOpen: boolean;
-    openAction: (isOpen: boolean) => void;
-    saveLecture: IBindingCallback1<ISaveLecture>;
-  }
+  isOpen: boolean;
+  openAction: (isOpen: boolean) => void;
+  saveLecture: IBindingCallback1<ISaveLecture>;
+  tags: ITag[];
+}
 
 export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProps> = ({
-  isOpen = false, openAction, saveLecture: save
+  isOpen = false, openAction, saveLecture: save, tags
 }) => {
   const [description, setDescription] = useState('');
   const [name, setName] = useState('');
@@ -41,14 +47,33 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
   const [isValidDescription, setIsValidDescription] = useState(true);
   const [isValidFile, setIsValidFile] = useState(true);
   const [buttonLoading, setButtonLoading] = useState(false);
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [storedTags, setStoredTags] = useState([]);
+  const [isValidTagsAmount, setIsValidTagsAmount] = useState(true);
   const inputRef = createRef<HTMLInputElement>();
+  const tagsRef = createRef();
+  const [isEdit, setIsEdit] = useState(false);
+
+  useEffect(() => {
+    if (history.location.pathname.startsWith('/course/edit')) {
+      setIsEdit(true);
+    }
+  }, [history.location.pathname]);
+
+  useEffect(() => {
+    setStoredTags(tags);
+  }, [tags]);
+
+  useEffect(() => {
+    setIsValidTagsAmount(selectedTags.length < 6);
+  }, [selectedTags]);
 
   const [addByLink, setAddByLink] = useState(false);
   const [link, setLink] = useState('');
   const [isLinkValid, setLinkValid] = useState(true);
   const [isLinkAccepted, setLinkAccepted] = useState(false);
 
-  const isSaveble = (isValidName && isValidDescription && duration > 0 
+  const isSaveble = (isValidName && isValidDescription && duration > 0 && selectedTags.length < 6
     && name.length > 1 && (description.length === 0 || description.length > 9)) 
   && ((isValidFile && file) || isLinkAccepted);
 
@@ -61,15 +86,19 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
     setIsValidDescription(isValidLectureDescription(typeof newName === 'string' ? newName : description));
   };
 
+  const validateTagsAmount = () => {
+    setIsValidTagsAmount(selectedTags.length < 6);
+  };
+
   const handleAddFile = e => {
     validateDescription();
     validateName();
+    validateTagsAmount();
     const thisFile: File = e.target.files[0];
 
     if (thisFile && isVideo(thisFile.name)) {
       const vid = document.createElement('video');
-      const fileURL = URL.createObjectURL(thisFile);
-      vid.src = fileURL;
+      vid.src = URL.createObjectURL(thisFile);
       vid.ondurationchange = function () {
         setDuration(Math.round(vid.duration));
       };
@@ -97,28 +126,28 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
     validateName();
     setIsValidFile(file);
     if (!isSaveble) return;
+
     setButtonLoading(true);
     if (addByLink) {
       save({
         name,
         description,
         link,
-        duration
+        duration,
+        tags: selectedTags
       });
     } else {
       save({
         video: file,
         name,
         description,
-        duration
+        duration,
+        tags: selectedTags
       });
     };
     setButtonLoading(false);
     handleClose();
   };
-
-  const warning = `${isValidFile ? '' : VIDEO_FORMAT_MESSAGE} ${isValidDescription ? '' : DESCRIPTION_MESSAGE} 
-        ${isLinkValid ? '' : 'Link isn\'t valid'}`;
 
   const toggleWithLink = () => {
     setDuration(0);
@@ -140,6 +169,24 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
     setLinkValid(valid);
     setLinkAccepted(valid);
   }
+  
+  function onTagAddition(tag) {
+    setSelectedTags(prev => [...prev, tag]);
+    setStoredTags(prev => prev.filter(t => t.id !== tag.id));
+  }
+
+  function onTagDeletion(i) {
+    const deletedTag = selectedTags[i];
+    if (deletedTag !== undefined) {
+      setSelectedTags(prev => prev.filter((_, index) => index !== i));
+      setStoredTags(prev => [...prev, deletedTag]);
+    }
+  }
+
+  const warning = `
+  ${isValidFile ? '' : VIDEO_FORMAT_MESSAGE}
+  ${isValidTagsAmount ? '' : LECTURE_TAGS_LIMIT_MESSAGE}
+  ${isValidDescription ? '' : DESCRIPTION_MESSAGE}`;
 
   return (
     <Modal size="small" open={isOpen} onClose={() => handleClose()}>
@@ -253,6 +300,16 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
             {!addByLink? "Or add via link" : "Or upload file"}
           </div>
         </div>
+        <div className={styles.tags_selector}>
+          <TagSelector
+            ref={tagsRef}
+            onDelete={onTagDeletion}
+            onAddition={onTagAddition}
+            suggestions={storedTags}
+            tags={selectedTags}
+            id="LectureTags"
+          />
+        </div>
         <div className={styles.textcontainer}>Description:</div>
         <div className={styles.textareacontainer}>
           <textarea
@@ -265,7 +322,7 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
             value={description}
             onBlur={() => validateDescription()}
           />
-          {warning.length > 25 && (<Label basic className={styles.warninglabel} promt="true">{warning}</Label>)}
+          {!!warning && (<Label basic className={styles.warninglabel} promt="true">{warning}</Label>)}
         </div>
         <GradientButton
           onClick={() => handleSave()}

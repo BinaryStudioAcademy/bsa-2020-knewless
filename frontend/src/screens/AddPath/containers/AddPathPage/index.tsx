@@ -6,7 +6,13 @@ import { DependenciesSelector } from '@components/DependenciesSelector';
 import { IFilterableItem } from '@components/FilterableList';
 import { CourseCard } from '../../components/ClickableCourseCard';
 import { compareName } from '@components/FilterableList/helper';
-import { fetchCoursesRoutine, fetchTagsRoutine, savePathRoutine, fetchPathToEditRoutine, updatePathRoutine } from '../../routines';
+import {
+  fetchCoursesRoutine,
+  fetchTagsRoutine,
+  savePathRoutine,
+  fetchPathToEditRoutine,
+  updatePathRoutine
+} from '../../routines';
 import { IAppState } from '@models/AppState';
 import { extractCourses, extractTags, extractEditPath } from '../../models/AddPathData';
 import { connect } from 'react-redux';
@@ -19,14 +25,14 @@ import GrayOutlineButton from '@components/buttons/GrayOutlineButton';
 import { PathPreview } from '../../components/PathPreview';
 import Confirmation from '@components/Confirmation';
 import { useHistory, useParams } from 'react-router-dom';
-import {IBindingAction, IBindingCallback1} from '@models/Callbacks';
+import { IBindingAction, IBindingCallback1 } from '@models/Callbacks';
 import {
   DESCRIPTION_MESSAGE,
   isValidPathDescription,
   isValidPathName,
   PATH_NAME_MESSAGE
 } from '@helpers/validation.helper';
-import {fetchAuthorRoutine} from "@screens/AuthorMainPage/routines";
+import { fetchAuthorRoutine } from '@screens/AuthorMainPage/routines';
 
 export interface ISavePathProps {
   courses: ICourse[];
@@ -45,8 +51,8 @@ export interface ISavePathProps {
 }
 
 export const AddPathPage: React.FC<ISavePathProps> = ({
-  courses, tags, tagsLoading, coursesLoading, pathUploading, triggerFetchCourses, triggerFetchTags,
-  triggerSavePath, fetchEditPath, editPath, updatePath, editPathLoading, fetchAuthorData
+  courses, tags, tagsLoading, coursesLoading, pathUploading, triggerFetchCourses,
+  triggerFetchTags, triggerSavePath, fetchEditPath, editPath, updatePath, editPathLoading, fetchAuthorData
 }) => {
   const history = useHistory();
   const { pathId } = useParams();
@@ -175,9 +181,9 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
     );
   };
 
-  const countOverallDuration = useCallback(() => {
-    return selectedCourses.map(c => c.timeSeconds).reduce((a, b) => a + b, 0);
-  }, [selectedCourses]);
+  const countOverallDuration = useCallback(
+    () => selectedCourses.map(c => c.timeSeconds).reduce((a, b) => a + b, 0), [selectedCourses]
+  );
 
   const forwardAddCourse = () => {
     setIsConfirming(false);
@@ -190,8 +196,12 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
       : (
         <>
           <div className={styles.title_container}>
-            <h3 className={`${styles.title} ${styles.wide_container}`}>{isEdit ? 'Edit' : 'New'} Path</h3>
-          </div >
+            <h3 className={`${styles.title} ${styles.wide_container}`}>
+              {isEdit ? 'Edit' : 'New'}
+              {' '}
+              Path
+            </h3>
+          </div>
           <div className={styles.main_container}>
             <div className={styles.main_content}>
               <div className={styles.wide_container}>

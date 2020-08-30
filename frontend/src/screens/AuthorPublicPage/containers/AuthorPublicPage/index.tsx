@@ -2,11 +2,13 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { IBindingCallback1 } from 'models/Callbacks';
-import { fetchAuthorDataRoutine,
-         followAuthorRoutine,
-         unfollowAuthorRoutine,
-         changeFavouriteAuthorStateRoutine,
-         checkFavouriteAuthorStateRoutine } from '../../routines';
+import {
+  fetchAuthorDataRoutine,
+  followAuthorRoutine,
+  unfollowAuthorRoutine,
+  changeFavouriteAuthorStateRoutine,
+  checkFavouriteAuthorStateRoutine
+} from '../../routines';
 import { IAuthorData } from 'screens/AuthorPublicPage/models/IAuthorData';
 import { GradientButton } from 'components/buttons/GradientButton';
 import styles from './styles.module.sass';
@@ -14,10 +16,10 @@ import AuthorPublicMenu from './authorPublicMenu';
 import { IUser } from '@containers/AppRouter/models/IUser';
 import AvatarWithGradient from '@components/avatar/AvatarWithBackground';
 import { InlineLoaderWrapper } from '@components/InlineLoaderWrapper';
-import { RoleTypes } from '@containers/AppRouter/models/IRole';
-import { IFavourite } from '@components/AddToFavouritesButton/component/index';
+import { ChartWrapper } from '@components/Charts/ChartWrapper';
+import CirclePackingChart from '@components/Charts/CirclePackingChart';
+import AddToFavouriteButton, { IFavourite } from '@components/AddToFavouritesButton/component/index';
 import { SourceType } from '@components/AddToFavouritesButton/helper/SourceType';
-import AddToFavouriteButton from '@components/AddToFavouritesButton/component';
 
 export interface IAuthorPublic {
   match: any;
@@ -46,7 +48,7 @@ const AuthorPublicPage: React.FunctionComponent<IAuthorPublic> = ({
 }) => {
   useEffect(() => {
     fetchAuthorData(match.params.authorId);
-    checkFavourite({id: match.params.authorId, type: SourceType.AUTHOR});
+    checkFavourite({ id: match.params.authorId, type: SourceType.AUTHOR });
   }, [checkFavourite]);
   const handleOnClickFollow = () => {
     followAuthor(match.params.authorId);
@@ -64,6 +66,11 @@ const AuthorPublicPage: React.FunctionComponent<IAuthorPublic> = ({
       </div>
     );
   }
+  const chart = {
+    wrapperId: 'chart',
+    width: 250,
+    height: 120
+  };
   return (
     <div className={styles.page}>
       <div className={styles.wideContainer}>
@@ -86,14 +93,14 @@ const AuthorPublicPage: React.FunctionComponent<IAuthorPublic> = ({
                 </Link>
               </div>
             )}
-            {!isSelfPublicPage && user.role?.name!=='AUTHOR' && user && authorData.printFollowButton && (
+            {!isSelfPublicPage && user.role?.name !== 'AUTHOR' && user && authorData.printFollowButton && (
               <div className={styles.buttonsFollowLikeAuthor}>
                 <GradientButton className={styles.authorFollowButton} onClick={handleOnClickFollow}>
                   <div className={styles.textButtonFollow}>Follow</div>
                 </GradientButton>
               </div>
             )}
-            {!isSelfPublicPage && user.role?.name!=='AUTHOR' && user && !authorData.printFollowButton && (
+            {!isSelfPublicPage && user.role?.name !== 'AUTHOR' && user && !authorData.printFollowButton && (
               <div className={styles.buttonsFollowLikeAuthor}>
                 <GradientButton className={styles.authorFollowButton} onClick={handleOnClickUnfollow}>
                   <div className={styles.unfollow}>
@@ -104,15 +111,16 @@ const AuthorPublicPage: React.FunctionComponent<IAuthorPublic> = ({
                 </GradientButton>
               </div>
             )}
-            {user.role?.name!=='AUTHOR' && user && !isSelfPublicPage && 
-            <div className={styles.button_favourite_wrp}>
-              <AddToFavouriteButton
-                id={match.params.authorId}
-                type={SourceType.AUTHOR}
-                changeFavourite={changeFavourite}
-                isFavourite={favourite}
-              />
-            </div>}
+            {user.role?.name !== 'AUTHOR' && user && !isSelfPublicPage && (
+              <div className={styles.button_favourite_wrp}>
+                <AddToFavouriteButton
+                  id={match.params.authorId}
+                  type={SourceType.AUTHOR}
+                  changeFavourite={changeFavourite}
+                  isFavourite={favourite}
+                />
+              </div>
+            )}
             <div className={styles.subscribersNumber}>
               <p className={styles.authorNumberFollowers}>
                 {authorData.numberOfSubscribers}
@@ -139,10 +147,17 @@ const AuthorPublicPage: React.FunctionComponent<IAuthorPublic> = ({
               <div className={styles.cardSchoolLinkWrapper}>
                 <div className={styles.cardStyleAuthorPublic}>
                   <div className={`${styles.cardMainInfo} ${styles.cardTextField}`}>
-                    35
+                    <ChartWrapper width={chart.width} height={chart.height} id={chart.wrapperId}>
+                      <CirclePackingChart
+                        data={authorData.courses}
+                        width={chart.width}
+                        height={chart.height}
+                        wrapperId={chart.wrapperId}
+                      />
+                    </ChartWrapper>
                   </div>
                   <div className={styles.cardBottomText}>
-                    Practices
+                    Topics
                   </div>
                 </div>
               </div>

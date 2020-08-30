@@ -17,6 +17,7 @@ import com.knewless.core.exception.custom.ResourceNotFoundException;
 import com.knewless.core.path.PathRepository;
 import com.knewless.core.path.model.Path;
 import com.knewless.core.school.mapper.SchoolInfoMapper;
+import com.knewless.core.school.model.School;
 import com.knewless.core.security.oauth.UserPrincipal;
 import com.knewless.core.subscription.SubscriptionService;
 import com.knewless.core.user.UserRepository;
@@ -106,33 +107,20 @@ public class AuthorService {
     }
 
     public AuthorPublicDto getAuthorPublicDto(UUID authorId, UserPrincipal userPrincipal) throws NotFoundException {
-
-        var author = this.authorRepository.findOneById(authorId)
-                .orElseThrow(() -> new NotFoundException("Author with id " + authorId + " not found"));
-
-        var courses = this.courseRepository.getLatestCoursesByAuthorId(authorId);
-        var articles = this.articleRepository.getArticleDtoByAuthorId(authorId);
-
-        var school = this.authorRepository.getSchoolByAuthorId(authorId);
-        String schoolName = school.isPresent() ? school.get().getName() : "";
-        String schoolId = school.isPresent() ? school.get().getId().toString() : "";
-
-        var currentUserId = this.authorRepository.checkForCurrentUser(userPrincipal.getEmail());
-        var printFollowButton = !subscriptionService.isSubscribe(userPrincipal.getId(), authorId, SourceType.AUTHOR);
-
-        var numberOfSubscriptions = this.authorRepository.getNumberOfSubscriptions(authorId)
-                .orElseThrow(() -> new NotFoundException("Cant find number of author subscribers " + authorId));
-
+        final var author = this.authorRepository.findOneById(authorId).orElseThrow(
+                () -> new NotFoundException("Author with id " + authorId + " not found")
+        );
+        final var courses = this.courseRepository.getLatestCoursesByAuthorId(authorId);
+        final var articles = this.articleRepository.getArticleDtoByAuthorId(authorId);
+        final var school = this.authorRepository.getSchoolByAuthorId(authorId);
+        final var schoolId = school.map(School::getId).map(UUID::toString).orElse("");
+        final var schoolName = school.map(School::getName).orElse("");
+        final var isSubscribed = !subscriptionService.isSubscribe(userPrincipal.getId(), authorId, SourceType.AUTHOR);
+        final var subscribesCount = this.authorRepository.getNumberOfSubscriptions(authorId).orElse(0);
         return new AuthorPublicDto(
-                author.getUser().getId(),
-                author.getFirstName(),
-                author.getLastName(),
-                author.getAvatar(),
-                author.getBiography(),
-                schoolName,
-                schoolId,
-                numberOfSubscriptions,
-                courses, articles, printFollowButton);
+                author.getUser().getId(), author.getFirstName(), author.getLastName(), author.getAvatar(),
+                author.getBiography(), schoolName, schoolId, subscribesCount, courses, articles, isSubscribed
+        );
     }
 
     public List<FavouriteAuthorResponseDto> getFavouriteAuthorsByUser(UUID userId) {

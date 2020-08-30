@@ -33,8 +33,8 @@ const PathPage: React.FC<IPathPageProps> = ({ fetchData, path, loading, isAuthor
   return (
     <>
       <div className={styles.content}>
-        <PathOverview isAuthorized={isAuthorized} path ={path} pathId={pathId} role={role} userId={userId}/>
-        <PathMenu path={path}/>
+        <PathOverview isAuthorized={isAuthorized} path={path} pathId={pathId} role={role} userId={userId} />
+        <PathMenu path={path} />
       </div>
       <div className={styles.navigation_layer}>
         <div className={styles.wide_container}>
@@ -59,6 +59,5 @@ const mapStateToProps = (state: IAppState) => {
 const mapDispatchToProps = {
   fetchData: fetchPathDataRoutine
 };
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(PathPage);

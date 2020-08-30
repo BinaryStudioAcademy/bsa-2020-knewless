@@ -1,4 +1,4 @@
-import { takeEvery, put, call, all } from 'redux-saga/effects';
+import { all, call, put, takeEvery } from 'redux-saga/effects';
 import { toastr } from 'react-redux-toastr';
 import * as publicAuthorPageService from 'screens/AuthorPublicPage/services/publicAuthorPageService';
 import { Routine } from 'redux-saga-routines';
@@ -11,7 +11,7 @@ function* getAuthorData(action: Routine<any>) {
     yield put(fetchAuthorDataRoutine.success(response));
   } catch (error) {
     yield put(fetchAuthorDataRoutine.failure(error?.message));
-    toastr.error('Oops... there was some problems :(');
+    toastr.error('An error occurred while loading information about author.');
   }
 }
 

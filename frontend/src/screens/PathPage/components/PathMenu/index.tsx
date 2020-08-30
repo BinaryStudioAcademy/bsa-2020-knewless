@@ -3,11 +3,12 @@ import styles from './styles.module.sass';
 import CoursesList from '@screens/PathPage/components/CoursesList';
 import AboutSection from '@screens/PathPage/components/AboutSection';
 import { IPath } from '@screens/PathPage/models/IPath';
+
 export interface IPathMenuProps {
-  path:IPath;
+  path: IPath;
 }
 
-const PathMenu: React.FunctionComponent<IPathMenuProps> = ({path}) => {
+const PathMenu: React.FC<IPathMenuProps> = ({ path }) => {
   const [selected, setSelected] = useState(0);
   return (
     <div className={styles.menu}>
@@ -43,10 +44,10 @@ const PathMenu: React.FunctionComponent<IPathMenuProps> = ({path}) => {
       </div>
       <div className={styles.menu__content_container}>
         {selected === 0 && path.courses && (
-          <CoursesList courses={path.courses}/>
+          <CoursesList courses={path.courses} />
         )}
         {selected === 1 && (
-          <AboutSection path={path}/>
+          <AboutSection path={path} />
         )}
       </div>
     </div>

@@ -44,22 +44,24 @@ const PopupMenu: React.FC<IPopupMenuProps> = ({ user, authorId }) => {
           <List.Content className={styles.no_overflow}>
             <List.Header>Profile</List.Header>
             {user && user.email && (
-            <List.Description className={styles.email}>
-              <MiddleEllipsis>
-                <span className={`ellipseMe ${styles.email_line}`}>
-                  {user.email}
-                </span>
-              </MiddleEllipsis>
-            </List.Description>
+              <List.Description className={styles.email}>
+                <MiddleEllipsis>
+                  <span className={`ellipseMe ${styles.email_line}`}>
+                    {user.email}
+                  </span>
+                </MiddleEllipsis>
+              </List.Description>
             )}
           </List.Content>
         </List.Item>
-        <List.Item className={styles.itemMenu} onClick={handleOnClickHistory}>
-          <List.Icon className={styles.iconMenu} name="clock outline" verticalAlign="middle" />
-          <List.Content>
-            <List.Description className={styles.titleMenu} as="a">History</List.Description>
-          </List.Content>
-        </List.Item>
+        {user.role.name !== 'AUTHOR' && (
+          <List.Item className={styles.itemMenu} onClick={handleOnClickHistory}>
+            <List.Icon className={styles.iconMenu} name="clock outline" verticalAlign="middle" />
+            <List.Content>
+              <List.Description className={styles.titleMenu} as="a">History</List.Description>
+            </List.Content>
+          </List.Item>
+        )}
         <List.Item className={styles.itemMenu} onClick={handleOnClickSettings}>
           <List.Icon className={styles.iconMenu} name="setting" verticalAlign="middle" />
           <List.Content>

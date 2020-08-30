@@ -8,6 +8,7 @@ import com.knewless.core.user.model.CurrentUser;
 import com.knewless.core.validation.SingleMessageResponse;
 import com.knewless.core.validation.ValidationMessageCreator;
 import javassist.NotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,8 +36,8 @@ public class LectureController {
     }
 
     @PostMapping
-    public ResponseEntity<?> addLectureToDb(@CurrentUser UserPrincipal userPrincipal,
-                                            @Valid @RequestBody SaveLectureDto request,
+    public ResponseEntity<?> addLectureToDb(@Valid @RequestBody SaveLectureDto request,
+                                            @CurrentUser UserPrincipal userPrincipal,
                                             Errors validationResult) {
         if (validationResult.hasErrors()) {
             return ResponseEntity.badRequest()
@@ -46,7 +47,7 @@ public class LectureController {
                     );
         }
         return ResponseEntity.ok(
-                lectureService.addLectureToDb(request.getName(), request.getDescription(), userPrincipal.getId())
+                lectureService.addLectureToDb(request, userPrincipal.getId())
         );
     }
 

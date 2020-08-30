@@ -1,9 +1,11 @@
-import { ILecture } from '../models/ILecture';
+import { ILecture } from './ILecture';
 import { IFullCourseData } from '@screens/CoursePage/models/IFullCourseData';
+import { ITag } from '@screens/AddPath/models/domain';
 
 export interface ICourseData {
-  lectures: Array<ILecture>,
-  editCourse: IFullCourseData,
-  isLecturesLoaded: boolean,
-  courseId: string
+  tags: ITag[];
+  lectures: Array<ILecture>;
+  editCourse: IFullCourseData;
+  isLecturesLoaded: boolean;
+  courseId: string;
 }
