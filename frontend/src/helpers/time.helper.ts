@@ -3,7 +3,7 @@ const SECONDS_IN_HOUR: number = 3600;
 const SECONDS_IN_MINUTE: number = 60;
 
 export const timeFormat = (seconds: number) => {
-  
+
   let bufer = seconds;
   let result = '';
 
@@ -68,7 +68,7 @@ export const timeFormatLecture = (seconds: number) => {
     result += bufer > 0 ? (bufer < 10 ? '0' + bufer : bufer) : '00';
   }
 
-  
+
 
   return result;
 }

@@ -1,5 +1,6 @@
 package com.knewless.core.history;
 
+import com.knewless.core.history.dto.HistoryDto;
 import com.knewless.core.history.dto.WatchHistorySaveRequest;
 import com.knewless.core.security.oauth.UserPrincipal;
 import com.knewless.core.user.model.CurrentUser;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -33,5 +35,10 @@ public class WatchHistoryController {
     public void saveWatchHistory(@CurrentUser UserPrincipal userPrincipal,
                                  @Valid @RequestBody WatchHistorySaveRequest request) {
         service.saveWatchHistory(userPrincipal.getId(), request);
+    }
+
+    @GetMapping("/user")
+    public List<HistoryDto> getUserHistory(@CurrentUser UserPrincipal user) {
+        return service.getUserHistory(user.getId());
     }
 }

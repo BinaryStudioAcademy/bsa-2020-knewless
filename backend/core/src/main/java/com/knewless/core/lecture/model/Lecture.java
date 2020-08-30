@@ -8,6 +8,7 @@ import com.knewless.core.lecture.lectureReaction.model.LectureReaction;
 import com.knewless.core.tag.model.Tag;
 import com.knewless.core.user.model.User;
 import lombok.*;
+import org.apache.coyote.http11.filters.SavedRequestInputFilter;
 
 import javax.persistence.*;
 import java.util.List;
@@ -41,6 +42,9 @@ public class Lecture extends BaseEntity {
 
     @Column(name = "description")
     private String description;
+
+    @Column(name = "preview_image")
+    private String previewImage;
 
     @Column(name = "duration")
     private int duration;

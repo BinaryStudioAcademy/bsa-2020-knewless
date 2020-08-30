@@ -48,10 +48,10 @@ public class VideoEncoderService {
         String baseFilePath = rootPath + "/video/" + id + "/" + id;
         String path = "assets/video/" + id + "/" + id;
         inputVideo = ffprobe.probe(baseFilePath + "-origin.mp4");
-        getThumbnail(id);
+        String thumbnail = getThumbnail(id);
         FFmpegStream videoInfo = inputVideo.getStreams().get(0);
-        updateOrigin(path + "-origin.mp4", entityId);
-        if (videoInfo.width >= 720) {
+        updateOrigin(path + "-origin.mp4", entityId, thumbnail);
+        if (videoInfo.width >= SMALL_WIDTH) {
             fFmpegExecutor.createJob(
                     getBuilder(baseFilePath + "-480.mp4", SMALL_WIDTH, SMALL_HEIGHT),
                     this::loggerProgressWhileEncoding
@@ -60,14 +60,14 @@ public class VideoEncoderService {
             update480(path + "-480.mp4", entityId);
             sendResponse(id, entityId);
         }
-        if (videoInfo.width >= 1280) {
+        if (videoInfo.width >= HD_WIDTH) {
             fFmpegExecutor.createJob(getBuilder(
-                    path + "-720.mp4", HD_WIDTH, HD_HEIGHT),
+                    baseFilePath + "-720.mp4", HD_WIDTH, HD_HEIGHT),
                     this::loggerProgressWhileEncoding
             ).run();
-            update720(baseFilePath + "-720.mp4", entityId);
+            update720(path + "-720.mp4", entityId);
         }
-        if (videoInfo.width >= 1920) {
+        if (videoInfo.width >= FULL_HD_WIDTH) {
             fFmpegExecutor.createJob(getBuilder(
                     baseFilePath + "-1080.mp4", FULL_HD_WIDTH, FULL_HD_HEIGHT),
                     this::loggerProgressWhileEncoding
@@ -76,9 +76,10 @@ public class VideoEncoderService {
         }
     }
 
-    private void updateOrigin(String sourceId, UUID lectureId) {
+    private void updateOrigin(String sourceId, UUID lectureId, String thumbnail) {
         Lecture lecture = lectureRepository.findById(lectureId).orElseThrow();
         lecture.setUrlOrigin(sourceId);
+        lecture.setPreviewImage(thumbnail);
         lecture.setDuration((int) (inputVideo.getFormat().duration));
         lectureRepository.save(lecture);
     }
@@ -123,16 +124,17 @@ public class VideoEncoderService {
                 .done();
     }
 
-    private void getThumbnail(String id) {
-
+    private String getThumbnail(String id) {
+        String imagePath = rootPath + "/video/" + id + "/thumbnail.png";
         FFmpegBuilder builder = new FFmpegBuilder()
                 .setInput(inputVideo)
                 .overrideOutputFiles(true)
-                .addOutput(rootPath + "/video/" + id + "/thumbnail.png")
+                .addOutput(imagePath)
                 .setFrames(1)
                 .setVideoFilter("select='gte(n\\,150)'")
                 .done();
         fFmpegExecutor.createJob(builder, this::loggerProgressWhileEncoding).run();
+        return "assets/video/" + id + "/thumbnail.png";
     }
 
     private void loggerProgressWhileEncoding(Progress progress) {

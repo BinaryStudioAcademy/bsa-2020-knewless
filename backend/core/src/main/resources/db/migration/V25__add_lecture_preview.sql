@@ -1,0 +1,1 @@
+ALTER TABLE lectures ADD COLUMN preview_image varchar(255);
