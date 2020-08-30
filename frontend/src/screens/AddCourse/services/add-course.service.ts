@@ -69,7 +69,8 @@ export const saveLectureWithUrl = async lecture => {
   const response = await callApi({
     type: 'POST',
     endpoint: '/api/lecture/url',
-    requestData: lecture });
+    requestData: lecture 
+  });
     return response.json();
   };
 

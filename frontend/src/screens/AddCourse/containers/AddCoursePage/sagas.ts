@@ -114,7 +114,8 @@ function* saveLecture(action: Routine<any>) {
         name: action.payload.name,
         description: action.payload.description,
         url: action.payload.link,
-        duration: action.payload.duration
+        duration: action.payload.duration,
+        tagsIds: action.payload.tags.map(t => t.id)
       };
       const responseSave = yield call(courseService.saveLectureWithUrl, saveEntity);
       yield put(saveLectureRoutine.success(responseSave));

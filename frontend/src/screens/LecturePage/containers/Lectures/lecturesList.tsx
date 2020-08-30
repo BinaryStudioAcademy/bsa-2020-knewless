@@ -57,14 +57,6 @@ const LecturesList: React.FunctionComponent<ILecturesListProps> = ({
               changeFavourite={changeFavourite}
             />
           </div>
-          <div className="icon_wrp">
-            <AddToFavouriteButton 
-              id={l.id}
-              type={SourceType.LECTURE}
-              isFavourite={l.favourite}
-              changeFavourite={changeFavourite}
-            />
-          </div>
         </Card.Description>
         <Card.Content
           className="videoDuration"

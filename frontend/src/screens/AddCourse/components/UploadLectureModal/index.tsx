@@ -13,7 +13,8 @@ import {
   isValidLectureName,
   LECTURE_MESSAGE,
   VIDEO_FORMAT_MESSAGE,
-  LECTURE_TAGS_LIMIT_MESSAGE
+  LECTURE_TAGS_LIMIT_MESSAGE,
+  INVALID_LECTURE_LINK_MESSAGE
 } from '@helpers/validation.helper';
 import { ITag } from '@screens/AddPath/models/domain';
 import { TagSelector } from '@components/TagSelector';
@@ -119,6 +120,7 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
     setLink('');
     setLinkValid(true);
     setLinkAccepted(false);
+    setSelectedTags([]);
   };
 
   const handleSave = () => {
@@ -169,7 +171,7 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
     setLinkValid(valid);
     setLinkAccepted(valid);
   }
-  
+
   function onTagAddition(tag) {
     setSelectedTags(prev => [...prev, tag]);
     setStoredTags(prev => prev.filter(t => t.id !== tag.id));
@@ -184,9 +186,10 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
   }
 
   const warning = `
-  ${isValidFile ? '' : VIDEO_FORMAT_MESSAGE}
-  ${isValidTagsAmount ? '' : LECTURE_TAGS_LIMIT_MESSAGE}
-  ${isValidDescription ? '' : DESCRIPTION_MESSAGE}`;
+    ${isValidFile ? '' : VIDEO_FORMAT_MESSAGE}
+    ${isValidTagsAmount ? '' : LECTURE_TAGS_LIMIT_MESSAGE}
+    ${isValidDescription ? '' : DESCRIPTION_MESSAGE}
+    ${isLinkValid ? '' : INVALID_LECTURE_LINK_MESSAGE}`;
 
   return (
     <Modal size="small" open={isOpen} onClose={() => handleClose()}>
@@ -322,7 +325,7 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
             value={description}
             onBlur={() => validateDescription()}
           />
-          {!!warning && (<Label basic className={styles.warninglabel} promt="true">{warning}</Label>)}
+          {warning.replace(/\s+/g, '').length > 0 && (<Label basic className={styles.warninglabel} promt="true">{warning}</Label>)}
         </div>
         <GradientButton
           onClick={() => handleSave()}

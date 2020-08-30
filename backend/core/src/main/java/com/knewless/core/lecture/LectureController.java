@@ -68,7 +68,6 @@ public class LectureController {
                     );
         }
         return ResponseEntity.ok(
-                lectureService.saveLectureWithUrl(request.getName(),
-                        request.getDescription(), userPrincipal.getId(), request.getUrl(), (int) request.getDuration()));
+                lectureService.saveLectureWithUrl(request, userPrincipal.getId()));
     }
 }

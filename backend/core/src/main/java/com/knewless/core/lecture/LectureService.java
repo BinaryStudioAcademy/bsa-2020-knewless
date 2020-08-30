@@ -117,17 +117,17 @@ public class LectureService {
         return result;
     }
 
-    public LectureCreateResponseDto saveLectureWithUrl(String name, String description, UUID userId, String url, int duration) {
+    public LectureCreateResponseDto saveLectureWithUrl(SaveLectureDto lectureDto, UUID userId) {
 
-        User user = userRepository.getOne(userId);
+        var user = userRepository.getOne(userId);
         var lectureTags = tagRepository.findAllById(lectureDto.getTagsIds());
         Lecture lecture = Lecture.builder()
-                                .name(name)
-                                .description(description)
-                                .webLink(url)
+                                .name(lectureDto.getName())
+                                .description(lectureDto.getDescription())
+                                .webLink(lectureDto.getUrl())
                                 .tags(new HashSet<>(lectureTags))
                                 .user(user)
-                                .duration(duration)
+                                .duration((int) lectureDto.getDuration())
                                 .build();
         Lecture savedLecture = lectureRepository.save(lecture);
         return LectureCreateResponseDto.builder()

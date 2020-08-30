@@ -17,6 +17,7 @@ Description minimum length must be 10 symbols ${DIGITS_LATIN_LETTERS_SPEC_CHARS_
 export const OVERVIEW_MESSAGE = 'Overview minimum length must be 10 symbols.';
 export const LECTURE_MESSAGE = `Lecture name must be 3-40 symbols ${DIGITS_LATIN_LETTERS_SPEC_CHARS_ONLY}.`;
 export const LECTURE_TAGS_LIMIT_MESSAGE = 'A single lecture can only have from 1 to 5 tags.';
+export const INVALID_LECTURE_LINK_MESSAGE = 'Invalid lecture link couldn\'t be added';
 
 export const IMAGE_FORMAT_MESSAGE = 'Supported image formats: jpg, png, jpeg.';
 export const VIDEO_FORMAT_MESSAGE = 'Supported video formats: m4v, avi, mpg, mp4, mkv.';
