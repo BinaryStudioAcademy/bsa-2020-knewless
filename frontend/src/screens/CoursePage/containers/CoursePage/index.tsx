@@ -5,7 +5,6 @@ import '../../styles/common.sass';
 import CourseOverview from '../../components/CourseOverview';
 import AuthorInfo from '../../components/AuthorInfo';
 import CourseInfo from '../../components/CourseInfo';
-import { BottomNavigation } from '@screens/Landing/components/BottomNavigation';
 import { IAppState } from '@models/AppState';
 import {
   fetchCourseDataRoutine,
@@ -19,7 +18,6 @@ import { connect } from 'react-redux';
 import { IBindingAction, IBindingCallback1 } from '@models/Callbacks';
 import { IFullCourseData } from '@screens/CoursePage/models/IFullCourseData';
 import defaultCourseImage from 'assets/images/default_course_image.jpg';
-import { navigations } from '@screens/Landing/services/mock';
 import { openLoginModalRoutine } from '@containers/LoginModal/routines';
 import RatingModal from '@components/RatingModal';
 import { saveCourseReviewRoutine } from '@screens/LecturePage/routines';
@@ -139,11 +137,6 @@ const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
           courses={course?.authorCourses}
           courseId={course?.id}
         />
-      </div>
-      <div className={styles.navigation_layer}>
-        <div className={styles.wide_container}>
-          <BottomNavigation navigations={navigations} />
-        </div>
       </div>
     </div>
   );
