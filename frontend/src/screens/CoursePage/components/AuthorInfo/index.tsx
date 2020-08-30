@@ -42,7 +42,7 @@ const AuthorInfo: React.FunctionComponent<IAuthorInfoProps> = ({
             <p className={styles.biography_header}>About author</p>
             {author?.biography}
           </p>
-)
+          )
         }
       </div>
     </div>

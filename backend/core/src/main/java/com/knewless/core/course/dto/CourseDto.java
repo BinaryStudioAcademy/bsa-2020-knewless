@@ -15,6 +15,7 @@ public class CourseDto {
     private String name;
     private String level;
     private String author;
+    private UUID authorId;
     private CategoryDto category;
     private String imageSrc;
     private long duration;

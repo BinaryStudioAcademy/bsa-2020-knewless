@@ -2,14 +2,13 @@ package com.knewless.core.currentUserCource;
 
 import com.knewless.core.course.CourseRepository;
 import com.knewless.core.course.CourseService;
-import com.knewless.core.course.dto.*;
-import com.knewless.core.course.model.Course;
+import com.knewless.core.course.dto.CourseDetailsDto;
+import com.knewless.core.course.dto.CourseDto;
+import com.knewless.core.course.dto.CourseProfileDto;
 import com.knewless.core.currentUserCource.dto.CurrentUserCourseDto;
 import com.knewless.core.currentUserCource.mapper.CurrentUserCourseMapper;
 import com.knewless.core.currentUserCource.model.CurrentUserCourse;
 import com.knewless.core.user.UserRepository;
-import com.knewless.core.user.UserService;
-import com.knewless.core.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -21,33 +20,39 @@ import java.util.stream.Collectors;
 
 @Service
 public class CurrentUserCourseService {
-    @Autowired
-    CourseService courseService;
+
+    private final CourseService courseService;
+
+    private final UserRepository userRepository;
+
+    private final CurrentUserCourseRepository currentUserCourseRepository;
+
+    private final CourseRepository courseRepository;
 
     @Autowired
-    UserRepository userRepository;
-
-    @Autowired
-    CurrentUserCourseRepository currentUserCourseRepository;
-
-    @Autowired
-    CourseRepository courseRepository;
+    public CurrentUserCourseService(CourseService courseService, UserRepository userRepository,
+                                    CurrentUserCourseRepository currentUserCourseRepository,
+                                    CourseRepository courseRepository) {
+        this.courseService = courseService;
+        this.userRepository = userRepository;
+        this.currentUserCourseRepository = currentUserCourseRepository;
+        this.courseRepository = courseRepository;
+    }
 
     public List<CourseDto> getContinueLearningCourses(UUID userId) {
         return currentUserCourseRepository
                 .getContinueLearningCoursesId(userId, PageRequest.of(0, 10))
                 .stream()
-                .map(c -> courseService.getCourseById(c))
+                .map(courseService::getCourseById)
                 .collect(Collectors.toList());
     }
 
     public List<CourseProfileDto> getLearningCourses(UUID userId) {
-        var result = currentUserCourseRepository
+        return currentUserCourseRepository
                 .getLearningCoursesId(userId)
                 .stream()
                 .map(c -> courseService.getCourseProfileById(c, userId))
                 .collect(Collectors.toList());
-        return result;
     }
 
     public List<CourseDetailsDto> getCurrentCourses(UUID userId) {
@@ -56,17 +61,19 @@ public class CurrentUserCourseService {
 
     public long getCountMembers(UUID courseId) {
         return currentUserCourseRepository.getMembersByCourse(courseId);
-    }    
+    }
+
     public Optional<CurrentUserCourseDto> startCourse(CurrentUserCourseDto course) {
-        User user = userRepository.findById(course.getUserId()).orElseThrow();
-        Course userCourse = courseRepository.findById(course.getCourseId()).orElseThrow();
-        Optional<CurrentUserCourse> currentCourse = currentUserCourseRepository.findByUserAndCourse(course.getUserId(), course.getCourseId());
+        var user = userRepository.findById(course.getUserId()).orElseThrow();
+        var userCourse = courseRepository.findById(course.getCourseId()).orElseThrow();
+        var currentCourse = currentUserCourseRepository.findByUserAndCourse(course.getUserId(), course.getCourseId());
         if (currentCourse.isPresent()) {
             return currentCourse.map(CurrentUserCourseMapper::fromEntity);
         }
-        CurrentUserCourse newCourse = new CurrentUserCourse();
+        var newCourse = new CurrentUserCourse();
         newCourse.setCourse(userCourse);
         newCourse.setUser(user);
         return Optional.of(currentUserCourseRepository.save(newCourse)).map(CurrentUserCourseMapper::fromEntity);
     }
+
 }

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardMeta, Image } from 'semantic-ui-react';
 import styles from './styles.module.sass';
-import { history } from '@helpers/history.helper';
 
 export interface IAuthorCourseCardProps {
   id?: string;
@@ -16,10 +15,11 @@ export const AuthorCourseCard: React.FC<IAuthorCourseCardProps> = ({ id, imageSr
       wrapped
       ui={false}
       className={styles.card_image}
-      onClick={() => history.push(`/course/${id}`)}
     />
     <CardContent className={styles.inner_wrapper}>
-      <CardHeader className={styles.title}>{name}</CardHeader>
+      <CardHeader className={styles.title}>
+        {id ? <span><a href={`/course/${id}`}>{name}</a></span> : <span>{name}</span>}
+      </CardHeader>
       <CardMeta className={styles.meta_info} />
     </CardContent>
   </Card>

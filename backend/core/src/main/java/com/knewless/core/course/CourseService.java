@@ -192,7 +192,8 @@ public class CourseService {
 
     public List<CourseDto> getCourses(Pageable pageable) {
         return courseRepository.getCourses(pageable).stream()
-                .map(CourseMapper.MAPPER::courseQueryResultToCourseDto).collect(Collectors.toList());
+                .map(CourseMapper.MAPPER::courseQueryResultToCourseDto)
+                .collect(Collectors.toList());
     }
 
     public List<CourseDto> getRecommendedCourses(UUID id, Pageable pageable) {

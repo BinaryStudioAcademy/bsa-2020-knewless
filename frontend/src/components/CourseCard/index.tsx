@@ -18,6 +18,7 @@ export interface ICourseCardProps {
   imageSrc: string;
   name: string;
   author: string;
+  authorId?: string;
   duration: number;
   level: string;
   rating: number;
@@ -31,6 +32,7 @@ export const CourseCard: React.FunctionComponent<ICourseCardProps> = ({
   imageSrc,
   name,
   author,
+  authorId,
   duration,
   level,
   rating,
@@ -43,9 +45,11 @@ export const CourseCard: React.FunctionComponent<ICourseCardProps> = ({
       <Image src={imageSrc || defaultCourseImage} wrapped ui={false} className={styles.card_image} />
       <CardContent className={styles.inner_wrapper}>
         <Button basic onClick={category.onClick} className={styles.btn_category}>{category.name}</Button>
-        <CardHeader className={styles.title}>{name}</CardHeader>
+        <CardHeader className={styles.title}>
+          <a href={`/course/${id}`} className={styles.link}><span>{name}</span></a>
+        </CardHeader>
         <CardMeta className={styles.meta_info}>
-          <span>{author}</span>
+          {authorId ? <span><a href={`/author/${authorId}`}>{author}</a></span> : <span>{author}</span>}
           <span>{timeFormat(duration)}</span>
           <span>{level}</span>
         </CardMeta>

@@ -1,9 +1,7 @@
 package com.knewless.core.currentUserCource;
 
 import com.knewless.core.course.dto.CourseDetailsDto;
-import com.knewless.core.course.dto.CourseDetailsQueryResult;
 import com.knewless.core.course.dto.CourseDto;
-import com.knewless.core.course.dto.CourseWithMinutesDto;
 import com.knewless.core.currentUserCource.dto.CurrentUserCourseDto;
 import com.knewless.core.security.oauth.UserPrincipal;
 import com.knewless.core.user.model.CurrentUser;
@@ -17,8 +15,13 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/course/continue")
 public class CurrentUserCourseController {
+
+    private final CurrentUserCourseService currentUserCourseService;
+
     @Autowired
-    CurrentUserCourseService currentUserCourseService;
+    public CurrentUserCourseController(CurrentUserCourseService currentUserCourseService) {
+        this.currentUserCourseService = currentUserCourseService;
+    }
 
     @GetMapping("/{id}")
     private List<CourseDto> getContinueLearningCourses(@PathVariable("id") UUID userId) {
@@ -31,9 +34,11 @@ public class CurrentUserCourseController {
     }
 
     @PostMapping("/start")
-    public Optional<CurrentUserCourseDto> startCourse(@CurrentUser UserPrincipal userPrincipal, @RequestBody CurrentUserCourseDto course) {
+    public Optional<CurrentUserCourseDto> startCourse(@CurrentUser UserPrincipal userPrincipal,
+                                                      @RequestBody CurrentUserCourseDto course) {
         course.setUserId(userPrincipal.getId());
         return currentUserCourseService.startCourse(course);
 
     }
+
 }

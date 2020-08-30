@@ -1,8 +1,6 @@
 package com.knewless.core.course;
 
 import com.knewless.core.course.dto.*;
-import com.knewless.core.course.model.Course;
-import com.knewless.core.lecture.dto.ShortLectureDto;
 import com.knewless.core.exception.custom.ResourceNotFoundException;
 import com.knewless.core.security.oauth.UserPrincipal;
 import com.knewless.core.user.model.CurrentUser;
@@ -10,7 +8,6 @@ import com.knewless.core.validation.SingleMessageResponse;
 import com.knewless.core.validation.ValidationMessageCreator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;

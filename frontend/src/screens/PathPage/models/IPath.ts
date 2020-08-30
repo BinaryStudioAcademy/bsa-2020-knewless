@@ -1,5 +1,5 @@
-import { ICourse } from "@screens/PathPage/models/ICourse";
-import { IAuthor } from "@screens/PathPage/models/IAuthor";
+import { ICourse } from '@screens/PathPage/models/ICourse';
+import { IAuthor } from '@screens/PathPage/models/IAuthor';
 
 export interface IPath {
   name: string;
