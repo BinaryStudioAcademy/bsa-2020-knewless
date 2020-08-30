@@ -1,12 +1,19 @@
 import { takeEvery, put, call, all } from 'redux-saga/effects';
-import { fetchLecturesRoutine, saveCourseRoutine, saveLectureRoutine, fetchEditCourseRoutine, updateCourseRoutine } from 'screens/AddCourse/routines';
-import * as courseService from '../../services/course.service';
+import {
+  fetchLecturesRoutine,
+  saveCourseRoutine,
+  saveLectureRoutine,
+  fetchEditCourseRoutine,
+  updateCourseRoutine,
+  fetchTagsRoutine
+} from 'screens/AddCourse/routines';
+import * as courseService from '../../services/add-course.service';
 import * as imageService from 'services/image.service';
 import { toastr } from 'react-redux-toastr';
 import { Routine } from 'redux-saga-routines';
 import { history } from '@helpers/history.helper';
 
-function* getLectures(action: Routine<any>) {
+function* getLectures() {
   try {
     const response = yield call(courseService.getLecturesByUser);
     yield put(fetchLecturesRoutine.success(response));
@@ -17,6 +24,19 @@ function* getLectures(action: Routine<any>) {
 
 function* watchGetLecturesRequest() {
   yield takeEvery(fetchLecturesRoutine.TRIGGER, getLectures);
+}
+
+function* getTags() {
+  try {
+    const response = yield call(courseService.getTags);
+    yield put(fetchTagsRoutine.success(response));
+  } catch (error) {
+    yield put(fetchTagsRoutine.failure(error?.message));
+  }
+}
+
+function* watchGetTagsRequest() {
+  yield takeEvery(fetchTagsRoutine.TRIGGER, getTags);
 }
 
 function* getCourse(action: Routine<any>) {
@@ -77,7 +97,8 @@ function* saveLecture(action: Routine<any>) {
   try {
     const addEntity = {
       name: action.payload.name,
-      description: action.payload.description
+      description: action.payload.description,
+      tags: action.payload.tags
     };
     const responseAdd = yield call(courseService.addLectureToDb, addEntity);
     yield put(saveLectureRoutine.success(responseAdd));
@@ -102,6 +123,7 @@ export default function* lectureSagas() {
     watchSaveCourseRequest(),
     watchSaveLectureRequest(),
     watchGetCourseRequest(),
-    watchUpdateCourseRequest()
+    watchUpdateCourseRequest(),
+    watchGetTagsRequest()
   ]);
 }

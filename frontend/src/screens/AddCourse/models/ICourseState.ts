@@ -3,9 +3,9 @@ import { ICourseData } from './ICourseData';
 
 export interface ICourseState {
     requests: {
-      // as you add more fields, please update screens\Home\models\IRequestState.ts
       dataRequest: IRequestState;
+      tagsRequest: IRequestState;
       editCourseRequest: IRequestState;
     };
     data: ICourseData;
-  }
+}

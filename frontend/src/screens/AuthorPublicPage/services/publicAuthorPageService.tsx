@@ -5,7 +5,6 @@ export const getData = async (authorId: string) => {
     endpoint: `/api/author/overview/${authorId}`,
     type: 'GET'
   });
-
   return response.json();
 };
 
@@ -27,7 +26,7 @@ export const unfollowAuthor = async source => {
 
 export const changeFavouriteState = async request => {
   const response = await callApi({
-    endpoint: `/api/favorite/change`,
+    endpoint: '/api/favorite/change',
     type: 'POST',
     queryParams: request
   });
@@ -36,7 +35,7 @@ export const changeFavouriteState = async request => {
 
 export const checkFavouriteState = async request => {
   const response = await callApi({
-    endpoint: `/api/favorite`,
+    endpoint: '/api/favorite',
     type: 'GET',
     queryParams: request
   });

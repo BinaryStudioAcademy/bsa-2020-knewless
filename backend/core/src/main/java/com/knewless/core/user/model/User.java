@@ -7,18 +7,21 @@ import com.knewless.core.tag.model.Tag;
 import com.knewless.core.user.role.model.Role;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.List;
 import java.util.Set;
 
-@Entity
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
+@ToString(callSuper = true, onlyExplicitlyIncluded = true)
+@Entity
 @Table(name = "users")
 public class User extends BaseEntity {
 
     @Column(name = "email", unique = true)
+    @EqualsAndHashCode.Include
     private String email;
 
     @Column(name = "nickname")

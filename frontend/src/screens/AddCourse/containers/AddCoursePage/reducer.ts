@@ -1,16 +1,30 @@
 import { Routine } from 'redux-saga-routines';
-import { fetchLecturesRoutine, saveCourseRoutine, saveLectureRoutine, fetchEditCourseRoutine, clearCourseRoutine } from 'screens/AddCourse/routines';
+import {
+  fetchLecturesRoutine,
+  saveCourseRoutine,
+  saveLectureRoutine,
+  fetchEditCourseRoutine,
+  clearCourseRoutine
+} from 'screens/AddCourse/routines';
 import { ICourseData } from '../../models/ICourseData';
+import { fetchTagsRoutine } from '@screens/AddPath/routines';
 
 const initialState: ICourseData = {
+  tags: [],
   lectures: [],
   editCourse: undefined,
   isLecturesLoaded: false,
   courseId: ''
-}
+};
 
 export const data = (state = initialState, action: Routine<any>) => {
   switch (action.type) {
+    case fetchTagsRoutine.SUCCESS:
+      return {
+        ...state,
+        tags: action.payload,
+        isTagsLoaded: true
+      };
     case fetchLecturesRoutine.SUCCESS:
       return {
         ...state,

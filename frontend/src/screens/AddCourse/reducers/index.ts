@@ -1,9 +1,16 @@
 import { combineReducers } from 'redux';
-import { fetchLecturesRoutine, saveCourseRoutine, saveLectureRoutine, fetchEditCourseRoutine } from '../routines';
+import {
+  fetchTagsRoutine,
+  fetchLecturesRoutine,
+  saveCourseRoutine,
+  saveLectureRoutine,
+  fetchEditCourseRoutine
+} from '../routines';
 import { reducerCreator } from 'helpers/reducer.helper';
 import { data } from '../containers/AddCoursePage/reducer';
 
 const requests = combineReducers({
+  tagsRequest: reducerCreator([fetchTagsRoutine.TRIGGER]),
   dataRequest: reducerCreator([fetchLecturesRoutine.TRIGGER]),
   saveCourseRequest: reducerCreator([saveCourseRoutine.TRIGGER]),
   saveLectureRequest: reducerCreator([saveLectureRoutine.TRIGGER]),

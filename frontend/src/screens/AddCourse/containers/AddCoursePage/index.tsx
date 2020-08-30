@@ -1,10 +1,19 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { fetchLecturesRoutine, saveCourseRoutine, fetchEditCourseRoutine, updateCourseRoutine, clearCourseRoutine } from 'screens/AddCourse/routines';
+import {
+  clearCourseRoutine,
+  fetchEditCourseRoutine,
+  fetchLecturesRoutine,
+  fetchTagsRoutine,
+  saveCourseRoutine,
+  updateCourseRoutine
+} from 'screens/AddCourse/routines';
 import { IBindingAction, IBindingCallback1 } from 'models/Callbacks';
 import { ICourse } from '../../models/ICourse';
 import { Button, Dropdown, Input, Label } from 'semantic-ui-react';
-import { useHistory, useParams } from 'react-router-dom';
+import { Footer } from '@components/Footer';
+import { useParams } from 'react-router-dom';
+import { history } from '@helpers/history.helper';
 import styles from './styles.module.sass';
 import { compareName, getMinutes, isImage } from '../../services/helper.service';
 import { IFilterableItem } from '@components/FilterableList';
@@ -21,24 +30,28 @@ import CourseImage from '@images/default_course_image.jpg';
 import {
   COURSE_NAME_MESSAGE,
   DESCRIPTION_MESSAGE,
-  IMAGE_FORMAT_MESSAGE, isOverviewValid,
+  IMAGE_FORMAT_MESSAGE,
+  isOverviewValid,
   isValidCourseDescription,
-  isValidCourseName, OVERVIEW_MESSAGE,
+  isValidCourseName,
+  OVERVIEW_MESSAGE,
   REQUIRED_FIELD_MESSAGE
 } from '@helpers/validation.helper';
 import { levelOptions } from '@models/LevelsEnum';
 import { IFullCourseData } from '@screens/CoursePage/models/IFullCourseData';
 import { IUpdateCourse } from '@screens/AddCourse/models/IUpdateCourse';
-import ReactMarkdown from "react-markdown";
-import OverviewModal from "@components/OverviewModal";
-import {Footer} from "@components/Footer";
+import { ITag } from '@screens/AddPath/models/domain';
+import OverviewModal from '@components/OverviewModal';
 
 interface IAddCourseProps {
   lectures: ILecture[];
-  editCourse: IFullCourseData,
+  tags: ITag[];
+  isTagsLoaded: boolean;
+  fetchTags: IBindingAction;
+  editCourse: IFullCourseData;
   courseId: string;
   isLecturesLoaded: boolean;
-  fetchLectures: IBindingAction;
+  fetchLectures: Function;
   saveCourse: IBindingCallback1<ICourse>;
   updateCourse: IBindingCallback1<IUpdateCourse>;
   fetchCourse: IBindingCallback1<string>;
@@ -51,6 +64,9 @@ interface IAddCourseProps {
 
 const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
   lectures,
+  tags,
+  isTagsLoaded,
+  fetchTags,
   editCourse,
   fetchLectures: getLectures,
   saveCourse: save,
@@ -63,17 +79,34 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
   loadingEditCourse,
   isAuthorized
 }) => {
-  const history = useHistory();
   const { courseId } = useParams();
-  const [selected, setSelected] = useState(Array<ILecture>());
+  const [selectedLectures, setSelectedLectures] = useState(Array<ILecture>());
   const [pool, setPool] = useState(Array<ILecture>());
   const [isEdit, setIsEdit] = useState(false);
+  const [isValidName, setIsValidName] = useState(true);
+  const [isValidLevel, setIsValidLevel] = useState(true);
+  const [isValidDescription, setIsValidDescription] = useState(true);
+  const [isValidImage, setIsValidImage] = useState(true);
+  const [uploadImage, setUploadImage] = useState(null);
+  const [description, setDescription] = useState('');
+  const [courseName, setCourseName] = useState('');
+  const [level, setLevel] = useState('');
+  const [courseTags, setCourseTags] = useState([]);
+  const [author, setAuthor] = useState(authorName);
+  const [rating, setRating] = useState(0);
+  const [buttonLoading, setButtonLoading] = useState(false);
+  const [previewImage, setPreviewImage] = useState(CourseImage);
+  const [modalAddOpen, setModalAddOpen] = useState(false);
+  const [overview, setOverview] = useState('');
+  const [isShowPreview, setIsShowPreview] = useState(false);
+  const [isValidOverview, setIsValidOverview] = useState(true);
+
   useEffect(() => {
     if (lectures.length === 0 && !isLecturesLoaded) {
       getLectures();
     }
     const updated = [...lectures.sort(compareName)];
-    const filtered = updated.filter(l => !selected.map(s => s.id).includes(l.id));
+    const filtered = updated.filter(l => !selectedLectures.map(s => s.id).includes(l.id));
     setPool(filtered);
   }, [lectures, getLectures]);
 
@@ -86,30 +119,28 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
 
   useEffect(() => {
     if (editCourse) {
-      setSelected([...editCourse.lectures]);
+      setSelectedLectures([...editCourse.lectures]);
       setCourseName(editCourse.name);
       setPreviewImage(editCourse.image);
       setDescription(editCourse.description);
       setLevel(editCourse.level);
-      setAuthor(editCourse?.author.firstName + ' ' + editCourse?.author.lastName);
+      setAuthor(`${editCourse?.author.firstName} ${editCourse?.author.lastName}`);
       setRating(editCourse.rating);
       setOverview(editCourse.overview);
-    }
-    if (!editCourse?.tags || editCourse?.tags.length === 0) {
-      setTags(['tag1', 'tag2', 'tag3']);
-    } else {
-      setTags(editCourse.tags.slice(0, 3).map(t => t.name));
-    }
-
-    if (editCourse?.author) {
-      setAuthor(editCourse?.author.firstName + ' ' + editCourse?.author.lastName);
-    } else {
-      setAuthor(authorName);
+      if (editCourse?.tags && editCourse.tags?.length > 0) {
+        setCourseTags(editCourse.tags.slice(0, 3).map(t => t.name));
+      }
+      if (editCourse?.author) {
+        setAuthor(`${editCourse?.author.firstName} ${editCourse?.author.lastName}`);
+      } else {
+        setAuthor(authorName);
+      }
     }
   }, [editCourse]);
 
   useEffect(() => {
-    return () => clearCourse();
+    fetchTags();
+    clearCourse();
   }, []);
 
   const itemToJsxWithClick = (item: IFilterableItem, click: (item) => void, isSelected?: boolean) => {
@@ -127,25 +158,6 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
       />
     );
   };
-
-  const [isValidName, setIsValidName] = useState(true);
-  const [isValidLevel, setIsValidLevel] = useState(true);
-  const [isValidDescription, setIsValidDescription] = useState(true);
-  const [isValidImage, setIsValidImage] = useState(true);
-  const [uploadImage, setUploadImage] = useState(null);
-  const [description, setDescription] = useState('');
-  const [courseName, setCourseName] = useState('');
-  const [level, setLevel] = useState('');
-  const [tags, setTags] = useState([]);
-  const [author, setAuthor] = useState('');
-  const [rating, setRating] = useState(0);
-  const [buttonLoading, setButtonLoading] = useState(false);
-  const [previewImage, setPreviewImage] = useState(CourseImage);
-  const [modalAddOpen, setModalAddOpen] = useState(false);
-  const [overview, setOverview] = useState('');
-  const [isShowPreview, setIsShowPreview] = useState(false);
-  const [isValidOverview, setIsValidOverview] = useState(true);
-
   const validateOverview = (newOverview?: string) => {
     const lastOverview = typeof newOverview === 'string' ? newOverview : overview;
     setIsValidOverview(!!lastOverview && isOverviewValid(lastOverview));
@@ -164,7 +176,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
   };
   const isRequiredFieldsValid = !!courseName && isValidName && isValidDescription && !!level && isValidLevel
     && isValidImage && !!overview && isValidOverview;
-  const isReleseble = isRequiredFieldsValid && selected.length > 0;
+  const isReleseble = isRequiredFieldsValid && selectedLectures.length > 0;
 
   const handleUploadFile = file => {
     const thisFile: File = file;
@@ -177,13 +189,13 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
 
   const removeLectureFromPool = useCallback((dependency: IFilterableItem) => {
     setPool(prev => prev.filter(c => c.id !== dependency.id));
-    setSelected(prev => [...prev, dependency as ILecture]);
-  }, [pool, selected]);
+    setSelectedLectures(prev => [...prev, dependency as ILecture]);
+  }, [pool, selectedLectures]);
 
   const removeLectureFromSelected = useCallback((dependency: IFilterableItem) => {
-    setSelected(prev => prev.filter(c => c.id !== dependency.id));
+    setSelectedLectures(prev => prev.filter(c => c.id !== dependency.id));
     setPool(prev => [...prev, dependency as ILecture]);
-  }, [pool, selected]);
+  }, [pool, selectedLectures]);
 
   const handleSave = (isRelease: boolean) => {
     if (isRelease && !isReleseble) return;
@@ -192,7 +204,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
       name: courseName,
       level,
       isReleased: isRelease,
-      lectures: selected.map(i => i.id),
+      lectures: selectedLectures.map(i => i.id),
       description,
       image: previewImage,
       uploadImage,
@@ -213,7 +225,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
   const handleUpdateLectures = () => {
     getLectures();
     const updated = [...lectures.sort(compareName)];
-    const filtered = updated.filter(l => !selected.map(s => s.id).includes(l.id));
+    const filtered = updated.filter(l => !selectedLectures.map(s => s.id).includes(l.id));
     setPool(filtered);
   };
 
@@ -223,8 +235,8 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
 
   return (
     history.location.pathname.startsWith('/course/edit') && loadingEditCourse
-    ? <InlineLoaderWrapper loading={loadingEditCourse} centered/>
-    : (
+      ? <InlineLoaderWrapper loading={loadingEditCourse} centered />
+      : (
         <div className={styles.main_container}>
           <div className={styles.main_content}>
             <div className={styles.dividerwrp}>
@@ -336,14 +348,14 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
                 <div className={styles.preview_warning_container}>
                   <CoursePreview
                     authorName={author}
-                    tags={tags}
+                    tags={courseTags.map(t => t.name)}
                     rating={rating}
                     image={previewImage}
                     authorId={authorId}
-                    lecturesNumber={selected.length}
+                    lecturesNumber={selectedLectures.length}
                     name={courseName}
                     level={level}
-                    durationMinutes={getMinutes(selected)}
+                    durationMinutes={getMinutes(selectedLectures)}
                     action={handleUploadFile}
                     description={description}
                     ratingCount={0}
@@ -391,7 +403,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
                 <InlineLoaderWrapper loading={!isLecturesLoaded} centered>
                   {isLecturesLoaded && (
                     <AddCourseDependenciesSelector
-                      selected={selected}
+                      selected={selectedLectures}
                       stored={pool}
                       selectedToStored={removeLectureFromSelected}
                       storedToSelected={removeLectureFromPool}
@@ -412,21 +424,28 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
             data={overview}
             onClose={onOverviewClose}
           />
-          <UploadLectureModal
-            isOpen={modalAddOpen}
-            openAction={setModalAddOpen}
-          />
+          <InlineLoaderWrapper loading={!isTagsLoaded} centered>
+            {isTagsLoaded && (
+              <UploadLectureModal
+                isOpen={modalAddOpen}
+                openAction={setModalAddOpen}
+                tags={tags}
+              />
+            )}
+          </InlineLoaderWrapper>
         </div>
       )
   );
 };
 
 const mapStateToProps = (state: IAppState) => {
-  const { lectures, isLecturesLoaded, courseId } = state.addcourse.data;
+  const { lectures, isLecturesLoaded, courseId, tags } = state.addcourse.data;
   const { appRouter } = state;
   const { firstName, lastName, id } = state.authorMainPage.data.author;
   const { isAuthorized } = state.auth.auth;
   return {
+    tags,
+    isTagsLoaded: !state.addcourse.requests.tagsRequest.loading,
     userId: appRouter.user.id,
     authorName: `${firstName} ${lastName}`,
     authorId: id,
@@ -441,6 +460,7 @@ const mapStateToProps = (state: IAppState) => {
 };
 
 const mapDispatchToProps = {
+  fetchTags: fetchTagsRoutine,
   fetchLectures: fetchLecturesRoutine,
   fetchCourse: fetchEditCourseRoutine,
   updateCourse: updateCourseRoutine,

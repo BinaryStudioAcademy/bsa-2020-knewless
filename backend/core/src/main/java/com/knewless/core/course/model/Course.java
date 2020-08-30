@@ -10,21 +10,22 @@ import com.knewless.core.path.model.Path;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true, onlyExplicitlyIncluded = true)
+@Entity
 @Table(name = "courses")
 public class Course extends BaseEntity {
 
     @Column(name = "name")
+    @ToString.Include
     private String name;
     @Column(name = "description")
     private String description;

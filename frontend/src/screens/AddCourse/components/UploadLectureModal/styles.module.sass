@@ -1,6 +1,5 @@
 @import "src/styles/common_variables"
 
-
 .customtextarea
   padding: 10px
   outline: none
@@ -86,7 +85,7 @@
   flex-direction: column
   justify-content: flex-start
   background: #2A2B37 !important
-  max-height: 80vh !important
+  max-height: 100vh !important
   height: auto !important
   border-radius: 0 !important
 
@@ -217,5 +216,9 @@
   justify-content: flex-end
   align-items: center
 
+.tags_selector
+  width: 100%
+  margin: 2em 0
 
-
+\:global(.react-tags .react-tags__selected-tag)
+  margin-top: 1em

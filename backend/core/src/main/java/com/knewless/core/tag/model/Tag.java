@@ -13,30 +13,29 @@ import java.util.Set;
 
 @Entity
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 @Table(name = "tags")
 public class Tag extends BaseEntity {
-	@Column(name = "name")
-	private String name;
-	
-	@Column(name = "source")
-	private String source;
+    @Column(name = "name")
+    @EqualsAndHashCode.Include
+    private String name;
 
-	@ManyToMany(mappedBy = "tags", cascade = {CascadeType.REFRESH, CascadeType.PERSIST})
-	private Set<User> users = Set.of();
-	
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
-	@JoinTable(name = "article_tag",
-			joinColumns = @JoinColumn(name = "tag_id"),
-			inverseJoinColumns = @JoinColumn(name = "article_id"))
-	private Set<Article> articles = Set.of();
-	
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
-	@JoinTable(name = "lecture_tag",
-			joinColumns = @JoinColumn(name = "tag_id"),
-			inverseJoinColumns = @JoinColumn(name = "lecture_id"))
-	private Set<Lecture> lectures = Set.of();
-	
-	@ManyToMany(mappedBy = "tags", cascade = {CascadeType.REFRESH, CascadeType.PERSIST})
-	private Set<Path> paths = Set.of();
+    @Column(name = "source")
+    private String source;
+
+    @ManyToMany(mappedBy = "tags", cascade = {CascadeType.REFRESH, CascadeType.PERSIST})
+    private Set<User> users = Set.of();
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+    @JoinTable(name = "article_tag",
+            joinColumns = @JoinColumn(name = "tag_id"),
+            inverseJoinColumns = @JoinColumn(name = "article_id"))
+    private Set<Article> articles = Set.of();
+
+    @ManyToMany(mappedBy = "tags", cascade = {CascadeType.REFRESH, CascadeType.PERSIST})
+    private Set<Lecture> lectures = Set.of();
+
+    @ManyToMany(mappedBy = "tags", cascade = {CascadeType.REFRESH, CascadeType.PERSIST})
+    private Set<Path> paths = Set.of();
+
 }

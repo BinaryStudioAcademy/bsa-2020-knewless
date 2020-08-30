@@ -5,13 +5,15 @@ import com.knewless.core.db.SourceType;
 import com.knewless.core.user.model.User;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.UUID;
 
-@Entity
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
+@ToString(callSuper = true, onlyExplicitlyIncluded = true)
+@Entity
 @Table(name = "notifications")
 public class Notification extends BaseEntity {
 
@@ -20,6 +22,8 @@ public class Notification extends BaseEntity {
     private User user;
 
     @Column(name = "source_id")
+    @EqualsAndHashCode.Include
+    @ToString.Include
     private UUID sourceId;
 
     @Column(name = "source_type")
