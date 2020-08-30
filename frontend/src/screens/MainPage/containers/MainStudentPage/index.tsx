@@ -63,7 +63,7 @@ const MainStudentPage: React.FunctionComponent<IMainStudentPageProps> = ({
         <div className={`${styles.wide_container} ${styles.content_row}`}>
           <CardsSegment
             title="Continue Learning"
-            onViewAllClick={() => history.push('/courses')}
+            onViewAllClick={() => history.push('/profile')}
             loading={continueCoursesLoading}
           >
             {(continueCourses && continueCourses.length > 0) ? continueCourses.slice(0, 3).map(c => (

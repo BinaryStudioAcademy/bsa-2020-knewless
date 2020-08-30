@@ -34,6 +34,7 @@ import PathsPage from '@screens/Paths/containers/PathsPage';
 import FavouritesPage from '@screens/Favourites/containers/FavouritesPage';
 import SearchResultsPage from '@screens/SearchResultsPage/containers/SearchResultsPage';
 import { Footer } from '@components/Footer';
+import styles from './styles.module.sass'
 
 export interface IRoutingProps {
   isLoading: boolean;
@@ -76,7 +77,7 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({
   });
 
   return (
-    <div>
+    <div className={styles.container}>
       <Switch>
         <Route>
           {isHeaderShown && <Header />}
