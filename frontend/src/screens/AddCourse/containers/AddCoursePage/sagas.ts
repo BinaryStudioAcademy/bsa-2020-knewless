@@ -75,18 +75,31 @@ function* watchSaveCourseRequest() {
 
 function* saveLecture(action: Routine<any>) {
   try {
-    const addEntity = {
-      name: action.payload.name,
-      description: action.payload.description
-    };
-    const responseAdd = yield call(courseService.addLectureToDb, addEntity);
-    yield put(saveLectureRoutine.success(responseAdd));
-    const saveEntity = { id: responseAdd.id, duration: action.payload.duration, video: action.payload.video };
-    window.onbeforeunload = () => true;
-    const responseSave = yield call(courseService.saveLectureVideo, saveEntity);
-    yield put(saveLectureRoutine.success(responseSave));
-    window.onbeforeunload = undefined;
-    toastr.success(`Lecture ${responseSave.name} saved!`);
+    if (!action.payload.link) {
+      const addEntity = {
+        name: action.payload.name,
+        description: action.payload.description
+      };
+      const responseAdd = yield call(courseService.addLectureToDb, addEntity);
+      yield put(saveLectureRoutine.success(responseAdd));
+      const saveEntity = { id: responseAdd.id, duration: action.payload.duration, video: action.payload.video };
+      window.onbeforeunload = () => true;
+      const responseSave = yield call(courseService.saveLectureVideo, saveEntity);
+      yield put(saveLectureRoutine.success(responseSave));
+      window.onbeforeunload = undefined;
+      toastr.success(`Lecture ${responseSave.name} saved!`);
+    } else {
+      const saveEntity = {
+        name: action.payload.name,
+        description: action.payload.description,
+        url: action.payload.link,
+        duration: action.payload.duration
+      };
+      const responseSave = yield call(courseService.saveLectureWithUrl, saveEntity);
+      yield put(saveLectureRoutine.success(responseSave));
+      toastr.success(`Lecture ${responseSave.name} saved!`);
+    }
+    
   } catch (error) {
     yield put(saveLectureRoutine.failure(error?.message));
   }

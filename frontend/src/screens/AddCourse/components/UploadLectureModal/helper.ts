@@ -20,8 +20,8 @@ export function isVideo(filename: string) {
 }
 
 export function cutLink(link: string) : string {
-  if (link.length < 45) return link;
-  return (`${link.substring(0, 40)}...${link.substring(link.length-3)}`)
+  if (link.length < 37) return link;
+  return (`${link.substring(0, 33)}...${link.substring(link.length-3)}`)
 }
 
 export function isLinkValid(link: string) : boolean {

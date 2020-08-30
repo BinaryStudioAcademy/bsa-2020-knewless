@@ -9,17 +9,19 @@ import { connect } from 'react-redux';
 import { fetchLecturesRoutine, saveLectureRoutine } from 'screens/AddCourse/routines';
 import {
   DESCRIPTION_MESSAGE,
-  IMAGE_FORMAT_MESSAGE, isValidLectureDescription,
+  isValidLectureDescription,
   isValidLectureName,
-  isValidPathName,
   LECTURE_MESSAGE, VIDEO_FORMAT_MESSAGE
 } from '@helpers/validation.helper';
+import ReactPlayer from 'react-player/lazy';
+import { render } from 'react-dom';
 
 export interface ISaveLecture {
-    video: File;
+    video?: File;
     name: string;
     description: string;
-    duration: number;
+    duration?: number;
+    link?: string;
 }
 
 interface IUploadLectureModalProps {
@@ -40,13 +42,15 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
   const [isValidFile, setIsValidFile] = useState(true);
   const [buttonLoading, setButtonLoading] = useState(false);
   const inputRef = createRef<HTMLInputElement>();
+
   const [addByLink, setAddByLink] = useState(false);
   const [link, setLink] = useState('');
   const [isLinkValid, setLinkValid] = useState(true);
   const [isLinkAccepted, setLinkAccepted] = useState(false);
 
-  const isSaveble = (duration > 0 && isValidName && isValidDescription && isValidFile
-    && name.length > 1 && file && (description.length === 0 || description.length > 9));
+  const isSaveble = (isValidName && isValidDescription && duration > 0 
+    && name.length > 1 && (description.length === 0 || description.length > 9)) 
+  && ((isValidFile && file) || isLinkAccepted);
 
   const validateName = (newName?: string) => {
     const lastChangesName = typeof newName === 'string' ? newName : name;
@@ -82,6 +86,10 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
     setIsValidDescription(true);
     setFile(undefined);
     openAction(false);
+    setAddByLink(false);
+    setLink('');
+    setLinkValid(true);
+    setLinkAccepted(false);
   };
 
   const handleSave = () => {
@@ -90,12 +98,21 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
     setIsValidFile(file);
     if (!isSaveble) return;
     setButtonLoading(true);
-    save({
-      video: file,
-      name,
-      description,
-      duration
-    });
+    if (addByLink) {
+      save({
+        name,
+        description,
+        link,
+        duration
+      });
+    } else {
+      save({
+        video: file,
+        name,
+        description,
+        duration
+      });
+    };
     setButtonLoading(false);
     handleClose();
   };
@@ -104,15 +121,19 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
         ${isLinkValid ? '' : 'Link isn\'t valid'}`;
 
   const toggleWithLink = () => {
+    setDuration(0);
     setAddByLink(true);
     setLinkAccepted(false);
     setFile(null);
   }
 
   const toggleWithFile = () => {
+    setDuration(0);
     setAddByLink(false);
     setLink('');
   }
+
+  const playerRef = createRef<ReactPlayer>();
 
   const submitLink = () => {
     const valid = checkLink(link);
@@ -193,34 +214,27 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
           </div>
           {addByLink ? (
             <div className={styles.link_field}>
-              {isLinkAccepted && (
-              <div>
-                <Label
-                    basic
-                    className={styles.linkLabel}
-                    promt="true"
-                    as="a"
-                    onClick={() => setLinkAccepted(false)}
-                  >
-                    {cutLink(link)}
-                  </Label>
-              </div>)}
-              {!isLinkAccepted && (
-              <>
                 <Input
                   fluid
                   type="text"
-                  icon={<Icon name='delete' link color="grey" onClick={() => setLink("")} />}
+                  onClick={isLinkAccepted ? () => setLinkAccepted(false) : () => {}}
+                  icon={
+                  <Icon
+                    name={isLinkAccepted ? "pencil" : "delete"}
+                    link
+                    color="grey"
+                    onClick={isLinkAccepted ? () => setLinkAccepted(false) : () => setLink("")} 
+                  />}
                   error={!isLinkValid}
-                  value={link}
-                  className={styles.linkInput}
-                  onChange={e => setLink(e.target.value)}
+                  value={isLinkAccepted ? cutLink(link) : link}
+                  className={isLinkAccepted ? styles.inactiveinput : styles.linkInput}
+                  onChange={isLinkAccepted ? () => {} : e => setLink(e.target.value)}
                   inverted
                 />
+                {!isLinkAccepted && (
                 <GrayOutlineButton onClick={() => submitLink()} className={styles.submit_link}>
                   Submit
-                </GrayOutlineButton>
-              </>)}
+                </GrayOutlineButton>)}
             </div>
           ) : (
           <div className={styles.rightside}>
@@ -267,6 +281,20 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
           Cancel
         </GrayOutlineButton>
       </ModalContent>
+      <div className={styles.hidden}>
+        <ReactPlayer
+          ref={playerRef}
+          url={link && isLinkValid ? link : 'http://'}
+          width="0px"
+          height="0px"
+          className={styles.react_player}
+          onReady={()=>setDuration(playerRef.current.getDuration())}
+          onDuration={()=>setDuration(playerRef.current.getDuration())}
+          playing={false}
+          onError={()=>{}}
+          muted
+        />
+      </div>
     </Modal>
   );
 };

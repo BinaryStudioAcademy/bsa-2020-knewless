@@ -107,4 +107,16 @@ public class LectureService {
         return result;
     }
 
+    public LectureCreateResponseDto saveLectureWithUrl(String name, String description, UUID userId, String url, int duration) {
+
+        User user = userRepository.getOne(userId);
+        Lecture lecture = Lecture.builder().name(name).description(description).webLink(url).user(user).duration(duration).build();
+        Lecture savedLecture = lectureRepository.save(lecture);
+        return LectureCreateResponseDto.builder()
+                .id(savedLecture.getId())
+                .description(savedLecture.getDescription())
+                .timeSeconds(savedLecture.getDuration())
+                .name(savedLecture.getName())
+                .build();
+    }
 }

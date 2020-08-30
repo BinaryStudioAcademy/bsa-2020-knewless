@@ -55,4 +55,19 @@ public class LectureController {
         return lectureService.getLecturesByUserId(userPrincipal.getId());
     }
 
+    @PostMapping("/url")
+    public ResponseEntity<?> saveLectureWithUrl(@CurrentUser UserPrincipal userPrincipal,
+                                            @Valid @RequestBody SaveLectureDto request,
+                                            Errors validationResult) {
+        if (validationResult.hasErrors()) {
+            return ResponseEntity.badRequest()
+                    .body(new SingleMessageResponse(
+                                    ValidationMessageCreator.createString(validationResult, " ")
+                            )
+                    );
+        }
+        return ResponseEntity.ok(
+                lectureService.saveLectureWithUrl(request.getName(),
+                        request.getDescription(), userPrincipal.getId(), request.getUrl(), (int) request.getDuration()));
+    }
 }

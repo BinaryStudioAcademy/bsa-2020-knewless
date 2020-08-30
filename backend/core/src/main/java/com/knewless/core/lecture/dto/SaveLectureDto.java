@@ -35,4 +35,6 @@ public class SaveLectureDto {
     @DecimalMin(value = "1.0", message = "Duration can't be less than 1.")
     private double duration;
 
+    private String url;
+
 }
