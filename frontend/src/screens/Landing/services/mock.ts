@@ -5,7 +5,7 @@ export const navigations: INavigationSectionProps[] = [
     title: 'Courses',
     links: [
       { id: '1', text: 'Java Beginner', url: '' },
-      { id: '2', text: 'Java Script Beginner', url: '' },
+      { id: '2', text: 'JavaScript Beginner', url: '' },
       { id: '3', text: 'PHP Intermediate', url: '' },
       { id: '4', text: '.NET Advanced', url: '' }
     ]
