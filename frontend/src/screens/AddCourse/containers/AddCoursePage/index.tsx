@@ -99,7 +99,6 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
   const [courseTags, setCourseTags] = useState([]);
   const [author, setAuthor] = useState(authorName);
   const [rating, setRating] = useState(0);
-  const [buttonLoading, setButtonLoading] = useState(false);
   const [previewImage, setPreviewImage] = useState(CourseImage);
   const [modalAddOpen, setModalAddOpen] = useState(false);
   const [overview, setOverview] = useState('');
@@ -205,7 +204,6 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
 
   const handleSave = (isRelease: boolean) => {
     if (isRelease && !isReleseble) return;
-    setButtonLoading(true);
     const course = {
       name: courseName,
       level,
@@ -221,7 +219,6 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
     } else {
       save(course);
     }
-    setButtonLoading(false);
   };
 
   const handleCancel = () => {
