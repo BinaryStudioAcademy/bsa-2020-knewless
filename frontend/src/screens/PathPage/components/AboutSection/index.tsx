@@ -11,7 +11,7 @@ const AboutSection: React.FC<IAboutSectionProps> = ({ path }) => (
   <div className={styles.content}>
     <div className={`${styles.flex_item} ${styles.description}`}>
       <h1>Description</h1>
-      <p>{path?.description || 'This path does not have a description.'}</p>
+      {path?.description ? <p>{path.description}</p> : <p className={styles.no_description}>No description.</p>}
     </div>
     <div className={styles.flex_item}>
       <h1>Authors</h1>
