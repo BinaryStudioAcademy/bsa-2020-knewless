@@ -66,7 +66,6 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
     }
   };
 
-
   const onOverviewClose = () => {
     setIsOverviewOpen(false);
   };
@@ -108,8 +107,10 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
           </div>
           <div className={styles.buttons_with_favourite}>
             <div className={styles.description__buttons}>
-              <GradientButton onClick={progress && progress > 0 && role === 'USER' ? onResume : onStart}>
-                {progress && progress > 0 && role === 'USER' ? 'Resume' : 'Start'}
+              <GradientButton
+                onClick={(progress && progress > 0 && role === 'USER') || authorId === author?.id ? onResume : onStart}
+              >
+                {(progress && progress > 0 && role === 'USER') || role === 'AUTHOR' ? 'Resume' : 'Start'}
               </GradientButton>
               <GrayOutlineButton onClick={() => setIsOverviewOpen(true)}>Course overview</GrayOutlineButton>
             </div>

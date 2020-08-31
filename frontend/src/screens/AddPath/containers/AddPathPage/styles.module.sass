@@ -7,7 +7,6 @@ $title_container_height: 55px
 .main_container
   padding-top: $header_height + $title_container_height
   background: #121421
-  min-height: 100vh
   display: flex
   flex-direction: column
 
@@ -167,6 +166,9 @@ $title_container_height: 55px
   border-radius: 3px
   opacity: 0.5
   cursor: default !important
+
+\:global(.ui.button).button_save_edit
+  margin-right: 0
 
 .confirmation
   max-width: 400px

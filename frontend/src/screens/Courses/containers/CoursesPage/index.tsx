@@ -27,7 +27,11 @@ export interface ICoursePageProps {
   fetchAllCourses: IBindingAction;
   fetchTags: IBindingAction;
   fetchCoursesByTag: IBindingCallback1<string>;
-  loading: boolean;
+  coursesLoading: boolean;
+  coursesByTagLoading: boolean;
+  allCoursesLoading: boolean;
+  allAuthorCoursesLoading: boolean;
+  allTagsLoading: boolean;
 }
 
 const CoursePage: React.FC<ICoursePageProps> = ({
@@ -39,7 +43,11 @@ const CoursePage: React.FC<ICoursePageProps> = ({
   fetchTags,
   fetchCoursesByTag,
   fetchAllAuthorCourses,
-  loading,
+  coursesLoading,
+  coursesByTagLoading,
+  allCoursesLoading,
+  allAuthorCoursesLoading,
+  allTagsLoading,
   role
 }) => {
   useEffect(() => {
@@ -56,7 +64,8 @@ const CoursePage: React.FC<ICoursePageProps> = ({
       default: fetchData();
     }
   }, [fetchData, fetchAllAuthorCourses, fetchAllCourses, role]);
-  if (loading) {
+
+  if (coursesLoading || coursesByTagLoading || allCoursesLoading || allAuthorCoursesLoading || allTagsLoading) {
     return (
       <div className={styles.courses_content}>
         <InlineLoaderWrapper loading centered />
@@ -76,7 +85,7 @@ const CoursePage: React.FC<ICoursePageProps> = ({
         {role && (
         <MyCourses
           continueCourses={continueCourses}
-          loading={loading}
+          loading={coursesLoading || allAuthorCoursesLoading}
           role={role.name}
         />
         )}
@@ -86,7 +95,7 @@ const CoursePage: React.FC<ICoursePageProps> = ({
             tags={tags}
             fetchData={fetchAllCourses}
             fetchCoursesByTag={fetchCoursesByTag}
-            loading={loading}
+            loading={allCoursesLoading || allAuthorCoursesLoading}
           />
         ) : null}
       </>
@@ -98,7 +107,11 @@ const mapStateToProps = (state: IAppState) => ({
   courses: state.coursesPage.data.courses,
   continueCourses: state.coursesPage.data.continueCourses,
   tags: state.coursesPage.data.tags,
-  loading: state.coursesPage.requests.dataRequest.loading,
+  coursesLoading: state.coursesPage.requests.coursesRequest.loading,
+  coursesByTagLoading: state.coursesPage.requests.coursesByTagRequest.loading,
+  allCoursesLoading: state.coursesPage.requests.allCoursesRequest.loading,
+  allAuthorCoursesLoading: state.coursesPage.requests.allAuthorCoursesRequest.loading,
+  allTagsLoading: state.coursesPage.requests.allTagsRequest.loading,
   role: state.appRouter.user.role
 });
 

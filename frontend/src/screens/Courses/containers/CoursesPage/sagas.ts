@@ -1,5 +1,11 @@
 import { all, call, put, takeEvery } from 'redux-saga/effects';
-import { fetchCoursesRoutine, fetchCoursesByTagRoutine, fetchAllCoursesRoutine, fetchAllAuthorCoursesRoutine, fetchAllTagsRoutine } from '../../routines';
+import {
+  fetchCoursesRoutine,
+  fetchCoursesByTagRoutine,
+  fetchAllCoursesRoutine,
+  fetchAllAuthorCoursesRoutine,
+  fetchAllTagsRoutine
+} from '../../routines';
 import * as coursesService from '../../services/courses.page.service';
 import { Routine } from 'redux-saga-routines';
 

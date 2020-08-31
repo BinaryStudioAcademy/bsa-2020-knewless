@@ -4,7 +4,8 @@
   grid-template-columns: 5em 1fr
   grid-template-rows: 3.3em 1em
   padding: 3em 2em
-  grid-gap: 0.5em
+  grid-column-gap: 0.5em
+  align-items: center
 
 .logo
   object-fit: cover
@@ -29,6 +30,7 @@
   &_none
 
 .title
+  align-self: flex-start
   font-size: 1.5em
   color: #fff
   grid-area: 1 / 2 / span 1 / span 1

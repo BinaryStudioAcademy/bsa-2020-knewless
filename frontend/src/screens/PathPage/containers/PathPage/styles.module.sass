@@ -7,12 +7,14 @@
   display: flex
   flex-direction: column
   max-width: $container_width + ($side_padding * 2)
-  margin-left: auto
-  margin-right: auto
   padding-left: $side_padding
   padding-right: $side_padding
+  flex: 1
   *
     word-break: break-word
+
+  &__loading
+    padding-top: $header_height * 2
 
 .navigation_layer
   background: #2A2B37
