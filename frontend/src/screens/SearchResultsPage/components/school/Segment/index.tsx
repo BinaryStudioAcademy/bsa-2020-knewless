@@ -21,6 +21,7 @@ export const SchoolSegment: React.FC<ISchoolSegmentProps> = ({ results, category
       <div className={styles.container}>
         {results.map(school => (
           <CommonCard
+            key={school.id}
             name={school.name}
             category={school.type}
             onClick={() => history.push(`/school/${school.sourceId}`)}

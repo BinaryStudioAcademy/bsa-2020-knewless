@@ -21,7 +21,7 @@ export const PathSegment: React.FC<IPathSegmentProps> = ({ results, category }) 
       <div className={styles.container}>
         {results.map(path => (
           // eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events
-          <div className={styles.card} onClick={() => history.push(`/path/${path.sourceId}`)}>
+          <div key={path.id} className={styles.card} onClick={() => history.push(`/path/${path.sourceId}`)}>
             <PathCard
               id={path.sourceId}
               name={path.name}

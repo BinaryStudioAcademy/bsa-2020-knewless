@@ -21,6 +21,7 @@ export const AuthorSegment: React.FC<IAuthorSegmentProps> = ({ results, category
       <div className={styles.container}>
         {results.map(author => (
           <CommonCard
+            key={author.id}
             name={author.name}
             category={author.type}
             onClick={() => history.push(`/author/${author.sourceId}`)}
