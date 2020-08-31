@@ -4,7 +4,8 @@ import {
   fetchLecturesRoutine,
   saveCourseRoutine,
   saveLectureRoutine,
-  fetchEditCourseRoutine
+  fetchEditCourseRoutine,
+  updateCourseRoutine
 } from '../routines';
 import { reducerCreator } from 'helpers/reducer.helper';
 import { data } from '../containers/AddCoursePage/reducer';
@@ -14,7 +15,8 @@ const requests = combineReducers({
   dataRequest: reducerCreator([fetchLecturesRoutine.TRIGGER]),
   saveCourseRequest: reducerCreator([saveCourseRoutine.TRIGGER]),
   saveLectureRequest: reducerCreator([saveLectureRoutine.TRIGGER]),
-  editCourseRequest: reducerCreator([fetchEditCourseRoutine.TRIGGER])
+  editCourseRequest: reducerCreator([fetchEditCourseRoutine.TRIGGER]),
+  savingEditedCourseRequest: reducerCreator([updateCourseRoutine.TRIGGER])
 });
 
 export default combineReducers({

@@ -6,6 +6,8 @@ export interface ICourseState {
       dataRequest: IRequestState;
       tagsRequest: IRequestState;
       editCourseRequest: IRequestState;
+      saveCourseRequest: IRequestState;
+      savingEditedCourseRequest: IRequestState;
     };
     data: ICourseData;
 }
