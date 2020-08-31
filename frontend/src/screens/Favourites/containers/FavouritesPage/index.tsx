@@ -19,7 +19,7 @@ import { FavouritePaths } from '@screens/Favourites/components/paths';
 import { filterByName } from '../../services/helper';
 import { IFavourite } from '@components/AddToFavouritesButton/component';
 import { SourceType } from '@components/AddToFavouritesButton/helper/SourceType';
-import { ListPlaceholder } from '@components/placeholder/ListPlaceholder';
+import { FavouriteArticles } from '@screens/Favourites/components/articles';
 
 interface IFavouritesPageProps {
   fetchCourses: IBindingAction;
@@ -187,7 +187,7 @@ const FavouritesPage: React.FC<IFavouritesPageProps> = ({
               <FavouriteLectures filterByName={filtering} remove={removeLectureFromFavourite} lectures={lectures} />
             )}
             {current === 4 && (
-              <ListPlaceholder title="It's empty here." description="Currently you have no favourite articles." />
+              <FavouriteArticles articles={[]} />
             )}
             {current === 0 && (
               <FavouritePaths filterByName={filtering} remove={removePathFromFavourite} paths={paths} />
