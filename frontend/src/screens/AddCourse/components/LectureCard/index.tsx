@@ -6,6 +6,7 @@ import AddToFavouriteButton from '@components/AddToFavouritesButton/component';
 import { IFavourite } from '@components/AddToFavouritesButton/component/index';
 import { IBindingCallback1 } from '@models/Callbacks';
 import { SourceType } from '@components/AddToFavouritesButton/helper/SourceType';
+import { IRole } from '@containers/AppRouter/models/IRole';
 
 export interface ILectureCardProps {
   timeMinutes: number;
@@ -17,11 +18,12 @@ export interface ILectureCardProps {
   isSelected?: boolean;
   favourite?: boolean;
   isAuthorized: boolean;
+  role: string;
   changefavourite?: IBindingCallback1<IFavourite>;
 }
 
 export const LectureCard: React.FC<ILectureCardProps> = ({
-  timeMinutes, name, onClick, isSelected, lectureURL, favourite, changefavourite, id, isAuthorized
+  timeMinutes, name, onClick, isSelected, lectureURL, favourite, changefavourite, id, isAuthorized, role
 }) => {
   return  (
   <div className={styles.lecture__container}>
@@ -38,16 +40,16 @@ export const LectureCard: React.FC<ILectureCardProps> = ({
       {name}
     </p>
     <div className={styles.meta__time}>
-      {isAuthorized && timeFormatLecture(timeMinutes)}
+      {role==="AUTHOR" && !changefavourite && timeFormatLecture(timeMinutes)}
     </div>
     <div className={styles.meta__actionButton}>
-      {timeMinutes === 0 && !changefavourite && isAuthorized &&
+      {timeMinutes === 0 && !changefavourite && role==="AUTHOR" &&
         <Popup
           trigger={<Icon loading name="spinner" />}
           content="Video is currently being processed on the server..."
           basic
         />}
-      {timeMinutes !== 0 && !changefavourite && isAuthorized &&
+      {timeMinutes !== 0 && !changefavourite && role==="AUTHOR" &&
         <Label
           basic
           size="tiny"
@@ -60,14 +62,14 @@ export const LectureCard: React.FC<ILectureCardProps> = ({
             inverted
           />
         </Label>}
-      {isAuthorized && changefavourite && 
+      {role==="USER" && changefavourite && 
         <AddToFavouriteButton
           isFavourite={favourite}
           id={id}
           type={SourceType.LECTURE}
           changeFavourite={changefavourite}
         />}
-      {!isAuthorized && timeFormatLecture(timeMinutes)}
+      {(!isAuthorized || (role==="AUTHOR" && changefavourite)) && timeFormatLecture(timeMinutes)}
     </div>
   </div>
 );

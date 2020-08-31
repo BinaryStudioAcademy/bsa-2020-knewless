@@ -15,6 +15,7 @@ interface ICourseMenuProps {
   startCourse: IBindingAction;
   openLoginModal: IBindingCallback1<string>;
   changeFavouriteLecture: IBindingCallback1<IFavourite>;
+  role: string;
 }
 
 const CourseMenu: React.FunctionComponent<ICourseMenuProps> = ({
@@ -23,7 +24,8 @@ const CourseMenu: React.FunctionComponent<ICourseMenuProps> = ({
   isAuthorized,
   startCourse,
   openLoginModal,
-  changeFavouriteLecture
+  changeFavouriteLecture,
+  role
 }) => {
   const [selected, setSelected] = useState(0);
   const onClickLecture =(e, id) => {
@@ -90,6 +92,7 @@ const CourseMenu: React.FunctionComponent<ICourseMenuProps> = ({
                 onClick={(e) => onClickLecture(e, lec.id)}
               >
                 <LectureCard
+                  role={role}
                   isAuthorized={isAuthorized}
                   key={lec.id}
                   timeMinutes={lec.timeSeconds}

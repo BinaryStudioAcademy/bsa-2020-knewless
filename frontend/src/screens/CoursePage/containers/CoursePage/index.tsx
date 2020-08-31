@@ -64,22 +64,6 @@ const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
   useEffect(() => {
     if (courseId) {
       fetchData(courseId);
-      checkFavourite({
-        id: courseId,
-        type: SourceType.COURSE
-      });
-      if (isAuthorized && role === 'AUTHOR') {
-        fetchAuthor();
-      }
-    }
-  }, [courseId, checkFavourite, fetchAuthor]);
-  const handleOnStartCourse = () => {
-    startCourse(course.id);
-  };
-
-  useEffect(() => {
-    if (courseId) {
-      fetchData(courseId);
     }
   }, []);
 
@@ -89,9 +73,6 @@ const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
         id: courseId,
         type: SourceType.COURSE
       });
-      if (role === 'AUTHOR') {
-        fetchAuthor();
-      }
     }
   }, []);
 
@@ -101,6 +82,9 @@ const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
       }
   }, []);
   
+  const handleOnStartCourse = () => {
+    startCourse(course.id);
+  };
 
   const openViewModal = () => {
     setIsOpen(true);
