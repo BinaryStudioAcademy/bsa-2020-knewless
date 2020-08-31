@@ -101,8 +101,7 @@ const UserInfoBlock: React.FunctionComponent<IUserInfoBlockProps> = (
                       trigger={(
                         <Progress
                           progress="percent"
-                          value={currentGoal.percentsDone}
-                          total={100}
+                          percent={currentGoal.percentsDone}
                           className={styles.progressBar}
                           color="blue"
                           autoSuccess
