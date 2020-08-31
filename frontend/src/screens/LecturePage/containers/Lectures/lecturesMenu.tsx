@@ -14,10 +14,11 @@ export interface ILecturesMenuProps {
   setMenu: IBindingCallback1<ILecturesMenu>;
   setChosenVideo: Function;
   playerProgress: number;
+  role: string;
 }
 
 const LecturesMenu: React.FunctionComponent<ILecturesMenuProps> = ({
-  menuProps, setMenu, setChosenVideo, playerProgress
+  menuProps, setMenu, setChosenVideo, playerProgress, role
 }) => (
   <div style={{ height: '100%' }}>
     <Menu className="lecturesMenu" pointing secondary widths="2">
@@ -35,7 +36,7 @@ const LecturesMenu: React.FunctionComponent<ILecturesMenuProps> = ({
     </Menu>
     <Segment className="segmentStyle">
       {menuProps.lecturesMenuActiveItem === 'Lectures'
-        ? <LecturesList setChosenVideo={setChosenVideo} playerProgress={playerProgress} /> : 'Discussions' }
+        ? <LecturesList role={role} setChosenVideo={setChosenVideo} playerProgress={playerProgress} /> : 'Discussions' }
     </Segment>
   </div>
 );

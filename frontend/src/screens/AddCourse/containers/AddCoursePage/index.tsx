@@ -42,6 +42,7 @@ import { IFullCourseData } from '@screens/CoursePage/models/IFullCourseData';
 import { IUpdateCourse } from '@screens/AddCourse/models/IUpdateCourse';
 import { ITag } from '@screens/AddPath/models/domain';
 import OverviewModal from '@components/OverviewModal';
+import { IRole } from '@containers/AppRouter/models/IRole';
 
 interface IAddCourseProps {
   lectures: ILecture[];
@@ -61,6 +62,7 @@ interface IAddCourseProps {
   loadingEditCourse: boolean;
   isAuthorized: boolean;
   saveloading: boolean;
+  role: IRole;
 }
 
 const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
@@ -79,7 +81,8 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
   authorId,
   loadingEditCourse,
   isAuthorized,
-  saveloading
+  saveloading,
+  role
 }) => {
   const { courseId } = useParams();
   const [selectedLectures, setSelectedLectures] = useState(Array<ILecture>());
@@ -157,6 +160,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
         onClick={() => click(lecture)}
         isSelected={isSelected}
         lectureURL={lecture.urlOrigin}
+        role={role.name}
       />
     );
   };
@@ -460,7 +464,8 @@ const mapStateToProps = (state: IAppState) => {
     isLecturesLoaded,
     loading: state.addcourse.requests.dataRequest.loading,
     saveloading: state.addcourse.requests.saveCourseRequest.loading || state.addcourse.requests.savingEditedCourseRequest.loading,
-    isAuthorized
+    isAuthorized,
+    role: appRouter.user.role
   };
 };
 

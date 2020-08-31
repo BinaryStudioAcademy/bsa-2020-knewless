@@ -91,6 +91,7 @@ const CourseInfo: React.FunctionComponent<ICourseInfoProps> = ({
     </div>
     <div className={`${styles.menu} flex_item`}>
       <CourseMenu
+        role={role}
         changeFavouriteLecture={changeFavouriteLecture}
         isAuthorized={isAuthorized}
         openLoginModal={openLoginModal}

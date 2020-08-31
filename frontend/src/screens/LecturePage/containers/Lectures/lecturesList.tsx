@@ -20,10 +20,11 @@ export interface ILecturesListProps {
     setChosenVideo: Function;
     playerProgress: number;
     changeFavourite: IBindingCallback1<IFavourite>;
+    role: string;
 }
 
 const LecturesList: React.FunctionComponent<ILecturesListProps> = ({
-  course, listProps, setChosenVideo, playerProgress, changeFavourite
+  course, listProps, setChosenVideo, playerProgress, changeFavourite, role
 }) =>{
   const setProgress = (progressLec,durationLec, id ) =>{
     if(listProps.chosenVideo === id ){
@@ -56,6 +57,7 @@ const LecturesList: React.FunctionComponent<ILecturesListProps> = ({
           <div className="descriptionText">
           {`${i + 1}. ${l.name? l.name.slice(0, 25) : l.description.slice(0, 25)}`}
           </div>
+          {role ==='USER' && (
           <div className="icon_wrp">
             <AddToFavouriteButton 
               id={l.id}
@@ -63,7 +65,7 @@ const LecturesList: React.FunctionComponent<ILecturesListProps> = ({
               isFavourite={l.favourite}
               changeFavourite={changeFavourite}
             />
-          </div>
+          </div>)}
         </Card.Description>
         <Card.Content
           className="videoDuration"
