@@ -1,6 +1,7 @@
 .content
   display: flex
   margin-top: 1.5rem
+
   h1
     font-size: 2em
     font-weight: 600
@@ -8,15 +9,18 @@
 
 .flex_item
   flex-grow: 1
-  width: 50%
-  margin: 0 1rem
+
+  &:first-child
+    margin-right: 3em
 
 .description
   padding-right: 3rem
+
   p
     line-height: 156%
     font-size: 1.105em
     color: #aaa
+
   .no_description
     font-size: 1.5em
     font-style: italic
