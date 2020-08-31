@@ -57,30 +57,34 @@ const CoursePage: React.FC<ICoursePageProps> = ({
     }
   }, [fetchData, fetchAllAuthorCourses, fetchAllCourses, role]);
 
+  if (loading) {
+    return (
+      <div className={styles.courses_content}>
+        <InlineLoaderWrapper loading centered />
+      </div>
+    );
+  }
+
   return (
     <div className={styles.courses_content}>
-      {loading
-        ? <InlineLoaderWrapper loading={loading} centered />
-        : (
-          <>
-            {role && (
-              <MyCourses
-                continueCourses={continueCourses}
-                loading={loading}
-                role={role.name}
-              />
-            )}
-            {!role || role.name !== 'AUTHOR' ? (
-              <AllCourses
-                courses={courses}
-                tags={tags}
-                fetchData={fetchAllCourses}
-                fetchCoursesByTag={fetchCoursesByTag}
-                loading={loading}
-              />
-            ) : null}
-          </>
+      <>
+        {role && (
+        <MyCourses
+          continueCourses={continueCourses}
+          loading={loading}
+          role={role.name}
+        />
         )}
+        {!role || role.name !== 'AUTHOR' ? (
+          <AllCourses
+            courses={courses}
+            tags={tags}
+            fetchData={fetchAllCourses}
+            fetchCoursesByTag={fetchCoursesByTag}
+            loading={loading}
+          />
+        ) : null}
+      </>
     </div>
   );
 };
