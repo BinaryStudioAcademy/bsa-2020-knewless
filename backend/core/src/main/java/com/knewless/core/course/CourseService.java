@@ -210,6 +210,7 @@ public class CourseService {
 
     public CourseProfileDto getCourseProfileById(UUID id, UUID userId) {
         CourseProfileDto course = CourseMapper.MAPPER.courseQueryToCourseProfileDto(courseRepository.getCourseById(id));
+        long duration = course.getTimeSeconds();
         long progress = ((watchHistoryService.getProgress(id, userId) * 100) / course.getTimeSeconds());
         course.setProgress((int) (progress > 100 ? 100 : progress));
         return course;
