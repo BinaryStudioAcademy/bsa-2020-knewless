@@ -110,7 +110,7 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
               <GradientButton
                 onClick={(progress && progress > 0 && role === 'USER') || authorId === author?.id ? onResume : onStart}
               >
-                {(progress && progress > 0 && role === 'USER') || authorId === author?.id ? 'Resume' : 'Start'}
+                {(progress && progress > 0 && role === 'USER') || role === 'AUTHOR' ? 'Resume' : 'Start'}
               </GradientButton>
               <GrayOutlineButton onClick={() => setIsOverviewOpen(true)}>Course overview</GrayOutlineButton>
             </div>

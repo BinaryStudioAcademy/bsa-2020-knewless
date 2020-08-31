@@ -297,11 +297,12 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
                           className={styles.btn_cancel}
                         />
                         <Button
-                          disabled
-                          className={styles.btn_save}
+                          disabled={!isReadyToRelease}
+                          className={!isEdit ? styles.btn_save : `${styles.btn_save} ${styles.button_save_edit}`}
                           content="Save"
                           onClick={() => handleSavePath(false)}
                         />
+                        {!isEdit && (
                         <GradientButton
                           disabled={!isReadyToRelease}
                           className={isReadyToRelease ? styles.button_release : styles.button_release_disabled}
@@ -309,6 +310,7 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
                           loading={pathUploading}
                           content="Release"
                         />
+                        )}
                       </div>
                     </div>
                   </div>

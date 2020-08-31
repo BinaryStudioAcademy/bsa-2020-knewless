@@ -387,10 +387,11 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
                     />
                     <Button
                       content="Save"
-                      className={styles.button_save_disabled}
+                      className={isEdit && isReleseble ? styles.button_save : styles.button_save_disabled}
                       onClick={() => handleSave(false)}
-                      disabled
+                      disabled={isEdit && !isReleseble}
                     />
+                    {!isEdit && (
                     <GradientButton
                       disabled={!isReleseble}
                       className={isReleseble ? styles.button_release : styles.button_release_disabled}
@@ -398,6 +399,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
                       loading={saveloading}
                       content="Release"
                     />
+                    )}
                   </div>
                 </div>
               </div>
