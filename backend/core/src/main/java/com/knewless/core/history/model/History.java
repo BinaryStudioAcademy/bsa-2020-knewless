@@ -29,4 +29,14 @@ public class History extends BaseEntity {
      */
     @Column(name = "fraction_watched")
     private float fractionWatched;
+
+    @Override
+    public String toString() {
+        return "History{" +
+                "user=" + user.getEmail() +
+                ", lecture=" + lecture.getName() +
+                ", secondsWatched=" + secondsWatched +
+                ", fractionWatched=" + fractionWatched +
+                '}';
+    }
 }

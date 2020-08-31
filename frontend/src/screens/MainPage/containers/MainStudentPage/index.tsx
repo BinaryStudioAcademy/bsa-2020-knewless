@@ -1,18 +1,28 @@
 import React, { useEffect } from 'react';
 import styles from './styles.module.sass';
 import { connect } from 'react-redux';
-import UserInfoBlock from '../../components/UserInfoBlock';
+import UserInfoBlock from '../UserInfoBlock';
 import { IStudent } from '../../models/IStudent';
 import { IBindingAction } from 'models/Callbacks';
 import { CardsSegment } from 'components/CardsSegment';
 import { CourseCard, ICourseCardProps } from 'components/CourseCard';
 import { IPathCardProps, PathCard } from 'components/PathCard';
 import {
-  fetchContinueCoursesRoutine, fetchPathsRoutine, fetchRecommendedCoursesRoutine, fetchStudentRoutine
+  fetchAllGoalsRoutine,
+  fetchContinueCoursesRoutine,
+  fetchCurrentGoalProgressRoutine,
+  fetchPathsRoutine,
+  fetchRecommendedCoursesRoutine,
+  fetchStudentRoutine
 } from '../../routines';
 import { IAppState } from 'models/AppState';
 import { IUser } from 'containers/AppRouter/models/IUser';
 import { history } from '@helpers/history.helper';
+import {
+  extractContinueCourseLoading,
+  extractPathsLoading,
+  extractRecommendedCoursesLoading, extractStudentLoading
+} from '@screens/MainPage/models/IMainStudentPageState';
 
 export interface IMainStudentPageProps {
   student: IStudent;
@@ -26,7 +36,10 @@ export interface IMainStudentPageProps {
   fetchStudent: IBindingAction;
   continueCoursesLoading: boolean;
   recommendedCoursesLoading: boolean;
+  studentLoading: boolean;
   pathsLoading: boolean;
+  fetchAllGoals: IBindingAction;
+  fetchCurrentGoalProgress: IBindingAction;
 }
 
 const MainStudentPage: React.FunctionComponent<IMainStudentPageProps> = ({
@@ -41,24 +54,33 @@ const MainStudentPage: React.FunctionComponent<IMainStudentPageProps> = ({
   fetchStudent: getStudent,
   continueCoursesLoading,
   recommendedCoursesLoading,
-  pathsLoading
+  studentLoading,
+  pathsLoading,
+  fetchAllGoals,
+  fetchCurrentGoalProgress
 }) => {
+  useEffect(() => {
+    fetchAllGoals();
+    fetchCurrentGoalProgress();
+  }, []);
+
   useEffect(() => {
     if (user.id) {
       getStudent();
       getStudentCourses(user.id);
     }
+  }, [user.id]);
+
+  useEffect(() => {
     if (student.id) {
       getRecommendedCourses(student.id);
       getPaths();
     }
-  }, [user.id, student.id]);
+  }, [student.id]);
 
   return (
     <div className={styles.mainPage}>
-      <UserInfoBlock
-        student={student}
-      />
+      <UserInfoBlock student={student} studentLoading={studentLoading} />
       <div className={styles.content}>
         <div className={`${styles.wide_container} ${styles.content_row}`}>
           <CardsSegment
@@ -142,9 +164,10 @@ const mapStateToProps = (state: IAppState) => {
     continueCourses,
     recommendedCourses,
     paths,
-    continueCoursesLoading: state.mainPage.requests.continueCoursesRequest.loading,
-    recommendedCoursesLoading: state.mainPage.requests.recommendedCoursesRequest.loading,
-    pathsLoading: state.mainPage.requests.pathsRequest.loading
+    studentLoading: extractStudentLoading(state),
+    continueCoursesLoading: extractContinueCourseLoading(state),
+    recommendedCoursesLoading: extractRecommendedCoursesLoading(state),
+    pathsLoading: extractPathsLoading(state)
   };
 };
 
@@ -152,7 +175,9 @@ const mapDispatchToProps = {
   fetchContinueCourses: fetchContinueCoursesRoutine,
   fetchRecommendedCourses: fetchRecommendedCoursesRoutine,
   fetchPaths: fetchPathsRoutine,
-  fetchStudent: fetchStudentRoutine
+  fetchStudent: fetchStudentRoutine,
+  fetchAllGoals: fetchAllGoalsRoutine,
+  fetchCurrentGoalProgress: fetchCurrentGoalProgressRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainStudentPage);

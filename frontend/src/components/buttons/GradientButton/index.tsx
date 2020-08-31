@@ -1,8 +1,8 @@
 import React from 'react';
-import { Button, StrictButtonProps } from 'semantic-ui-react';
+import { Button, ButtonProps } from 'semantic-ui-react';
 import styles from './styles.module.sass';
 
-export const GradientButton: React.FC<StrictButtonProps> = props => {
+export const GradientButton: React.FC<ButtonProps> = props => {
   const { className } = props;
   return (
     <Button {...props} className={`${styles.gradient} ${className || ''}`} />
