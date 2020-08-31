@@ -32,6 +32,8 @@ public class SaveLectureDto {
 
     private double duration;
 
+    private String url;
+    
     private List<UUID> tagsIds;
 
 }

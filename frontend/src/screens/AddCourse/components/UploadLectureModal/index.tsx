@@ -3,7 +3,7 @@ import styles from './styles.module.sass';
 import { Icon, Input, Label, Modal, ModalContent } from 'semantic-ui-react';
 import GrayOutlineButton from 'components/buttons/GrayOutlineButton';
 import GradientButton from 'components/buttons/GradientButton';
-import { isVideo } from './helper';
+import { isVideo, cutLink, isLinkValid as checkLink } from './helper';
 import { IBindingCallback1 } from 'models/Callbacks';
 import { connect } from 'react-redux';
 import { fetchLecturesRoutine, saveLectureRoutine } from 'screens/AddCourse/routines';
@@ -13,18 +13,21 @@ import {
   isValidLectureName,
   LECTURE_MESSAGE,
   VIDEO_FORMAT_MESSAGE,
-  LECTURE_TAGS_LIMIT_MESSAGE
+  LECTURE_TAGS_LIMIT_MESSAGE,
+  INVALID_LECTURE_LINK_MESSAGE
 } from '@helpers/validation.helper';
 import { ITag } from '@screens/AddPath/models/domain';
 import { TagSelector } from '@components/TagSelector';
 import { history } from '@helpers/history.helper';
+import ReactPlayer from 'react-player/lazy';
 
 export interface ISaveLecture {
-  video: File;
+  video?: File;
   name: string;
   description: string;
   duration: number;
   tags: ITag[];
+  link?: string;
 }
 
 interface IUploadLectureModalProps {
@@ -66,8 +69,14 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
     setIsValidTagsAmount(selectedTags.length < 6);
   }, [selectedTags]);
 
-  const isSaveble = (duration > 0 && isValidName && isValidDescription && isValidFile
-    && name.length > 1 && file && (description.length === 0 || description.length > 9) && selectedTags.length < 6);
+  const [addByLink, setAddByLink] = useState(false);
+  const [link, setLink] = useState('');
+  const [isLinkValid, setLinkValid] = useState(true);
+  const [isLinkAccepted, setLinkAccepted] = useState(false);
+
+  const isSaveble = (isValidName && isValidDescription && duration > 0 && selectedTags.length < 6
+    && name.length > 1 && (description.length === 0 || description.length > 9)) 
+  && ((isValidFile && file) || isLinkAccepted);
 
   const validateName = (newName?: string) => {
     const lastChangesName = typeof newName === 'string' ? newName : name;
@@ -107,6 +116,11 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
     setIsValidDescription(true);
     setFile(undefined);
     openAction(false);
+    setAddByLink(false);
+    setLink('');
+    setLinkValid(true);
+    setLinkAccepted(false);
+    setSelectedTags([]);
   };
 
   const handleSave = () => {
@@ -114,18 +128,49 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
     validateName();
     setIsValidFile(file);
     if (!isSaveble) return;
+
     setButtonLoading(true);
-    const lecture: ISaveLecture = {
-      video: file,
-      name,
-      description,
-      duration,
-      tags: selectedTags
+    if (addByLink) {
+      save({
+        name,
+        description,
+        link,
+        duration,
+        tags: selectedTags
+      });
+    } else {
+      save({
+        video: file,
+        name,
+        description,
+        duration,
+        tags: selectedTags
+      });
     };
-    save(lecture);
     setButtonLoading(false);
     handleClose();
   };
+
+  const toggleWithLink = () => {
+    setDuration(0);
+    setAddByLink(true);
+    setLinkAccepted(false);
+    setFile(null);
+  }
+
+  const toggleWithFile = () => {
+    setDuration(0);
+    setAddByLink(false);
+    setLink('');
+  }
+
+  const playerRef = createRef<ReactPlayer>();
+
+  const submitLink = () => {
+    const valid = checkLink(link);
+    setLinkValid(valid);
+    setLinkAccepted(valid);
+  }
 
   function onTagAddition(tag) {
     setSelectedTags(prev => [...prev, tag]);
@@ -141,9 +186,10 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
   }
 
   const warning = `
-  ${isValidFile ? '' : VIDEO_FORMAT_MESSAGE}
-  ${isValidTagsAmount ? '' : LECTURE_TAGS_LIMIT_MESSAGE}
-  ${isValidDescription ? '' : DESCRIPTION_MESSAGE}`;
+    ${isValidFile ? '' : VIDEO_FORMAT_MESSAGE}
+    ${isValidTagsAmount ? '' : LECTURE_TAGS_LIMIT_MESSAGE}
+    ${isValidDescription ? '' : DESCRIPTION_MESSAGE}
+    ${isLinkValid ? '' : INVALID_LECTURE_LINK_MESSAGE}`;
 
   return (
     <Modal size="small" open={isOpen} onClose={() => handleClose()}>
@@ -216,6 +262,31 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
               )}
             </div>
           </div>
+          {addByLink ? (
+            <div className={styles.link_field}>
+                <Input
+                  fluid
+                  type="text"
+                  onClick={isLinkAccepted ? () => setLinkAccepted(false) : () => {}}
+                  icon={
+                  <Icon
+                    name={isLinkAccepted ? "pencil" : "delete"}
+                    link
+                    color="grey"
+                    onClick={isLinkAccepted ? () => setLinkAccepted(false) : () => setLink("")} 
+                  />}
+                  error={!isLinkValid}
+                  value={isLinkAccepted ? cutLink(link) : link}
+                  className={isLinkAccepted ? styles.inactiveinput : styles.linkInput}
+                  onChange={isLinkAccepted ? () => {} : e => setLink(e.target.value)}
+                  inverted
+                />
+                {!isLinkAccepted && (
+                <GrayOutlineButton onClick={() => submitLink()} className={styles.submit_link}>
+                  Submit
+                </GrayOutlineButton>)}
+            </div>
+          ) : (
           <div className={styles.rightside}>
             <GrayOutlineButton
               className={isValidFile ? styles.upload_button : styles.upload_button_error}
@@ -224,6 +295,12 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
               Upload
               <input ref={inputRef} name="video/mp4" type="file" onChange={e => handleAddFile(e)} hidden />
             </GrayOutlineButton>
+          </div>
+          )}
+        </div>
+        <div className={styles.link_row}> 
+          <div className={styles.toggle_element} onClick={() => {addByLink? toggleWithFile() : toggleWithLink()}}>
+            {!addByLink? "Or add via link" : "Or upload file"}
           </div>
         </div>
         <div className={styles.tags_selector}>
@@ -248,7 +325,7 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
             value={description}
             onBlur={() => validateDescription()}
           />
-          {!!warning && (<Label basic className={styles.warninglabel} promt="true">{warning}</Label>)}
+          {warning.replace(/\s+/g, '').length > 0 && (<Label basic className={styles.warninglabel} promt="true">{warning}</Label>)}
         </div>
         <GradientButton
           onClick={() => handleSave()}
@@ -264,6 +341,20 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
           Cancel
         </GrayOutlineButton>
       </ModalContent>
+      <div className={styles.hidden}>
+        <ReactPlayer
+          ref={playerRef}
+          url={link && isLinkValid ? link : 'http://'}
+          width="0px"
+          height="0px"
+          className={styles.react_player}
+          onReady={()=>setDuration(playerRef.current.getDuration())}
+          onDuration={()=>setDuration(playerRef.current.getDuration())}
+          playing={false}
+          onError={()=>{}}
+          muted
+        />
+      </div>
     </Modal>
   );
 };

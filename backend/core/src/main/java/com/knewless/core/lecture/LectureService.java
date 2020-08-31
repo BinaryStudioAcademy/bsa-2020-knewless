@@ -117,4 +117,25 @@ public class LectureService {
         return result;
     }
 
+    public LectureCreateResponseDto saveLectureWithUrl(SaveLectureDto lectureDto, UUID userId) {
+
+        var user = userRepository.getOne(userId);
+        var lectureTags = tagRepository.findAllById(lectureDto.getTagsIds());
+        Lecture lecture = Lecture.builder()
+                                .name(lectureDto.getName())
+                                .description(lectureDto.getDescription())
+                                .webLink(lectureDto.getUrl())
+                                .tags(new HashSet<>(lectureTags))
+                                .user(user)
+                                .duration((int) lectureDto.getDuration())
+                                .build();
+        Lecture savedLecture = lectureRepository.save(lecture);
+        return LectureCreateResponseDto.builder()
+                .id(savedLecture.getId())
+                .description(savedLecture.getDescription())
+                .timeSeconds(savedLecture.getDuration())
+                .name(savedLecture.getName())
+                .build();
+    }
+
 }

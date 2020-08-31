@@ -65,6 +65,15 @@ export function forwardHome() {
   history.push('/');
 }
 
+export const saveLectureWithUrl = async lecture => {
+  const response = await callApi({
+    type: 'POST',
+    endpoint: '/api/lecture/url',
+    requestData: lecture 
+  });
+    return response.json();
+  };
+
 export const getTags = async () => {
   const response = await callApi({
     endpoint: '/api/tags',
