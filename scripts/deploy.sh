@@ -1,3 +1,17 @@
+docker login -u $docker_user -p $docker_pass
+
+docker tag api:latest bsa2020knewless/dockerhub:api
+docker tag fileprocessor:latest bsa2020knewless/dockerhub:fileprocessor
+docker tag emailsender:latest bsa2020knewless/dockerhub:emailsender
+docker tag push:latest bsa2020knewless/dockerhub:push
+docker tag client:latest bsa2020knewless/dockerhub:client
+
+docker push bsa2020knewless/dockerhub:api
+docker push bsa2020knewless/dockerhub:fileprocessor
+docker push bsa2020knewless/dockerhub:emailsender
+docker push bsa2020knewless/dockerhub:push
+docker push bsa2020knewless/dockerhub:client
+
 scp -r ./.docker/nginx $vm_user@$server_ip:~/.docker/nginx
 scp ./.docker/docker-compose.yml $vm_user@$server_ip:~/.docker
 
