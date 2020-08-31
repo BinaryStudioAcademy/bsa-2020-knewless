@@ -13,6 +13,8 @@ $previewheight: 15em
   height: 12em
   position: relative
   word-wrap: break-word
+  display: flex
+  flex-direction: column
 
 .inactive_avatar
   width: 100%
@@ -71,13 +73,12 @@ $previewheight: 15em
 .number
   color: #FF8576
   font-weight: bold
-  margin-right: 10px
 
 .author
   font-size: .9em
-  margin: 5px 0
+  margin: 0.7em 0 0.35em
   i
-    color: #666
+    color: #8c8c8c
     &:hover
       text-decoration: underline
 
@@ -89,7 +90,7 @@ $previewheight: 15em
 
 
   &__lectures
-    color: #666666
+    color: #8c8c8c
     overflow: hidden
     white-space: nowrap
     margin-right: 3px
@@ -104,8 +105,12 @@ $previewheight: 15em
   display: flex
   flex-direction: row
   justify-content: flex-end
+  flex-shrink: 0
+  flex-grow: 0
+  color: #8c8c8c
+
 .membersLabel
-  color: #666
+  color: #8c8c8c
 
 .membersText
   color: #FF8576
@@ -113,10 +118,11 @@ $previewheight: 15em
   text-justify: center
   font-weight: bold
   margin-left: 3px
-  margin-right: 2px
+  margin-right: 5px
 
 .course_name
   margin-top: 4px
+  flex-grow: 1
 
 .nameText
   font-size: 1.3em
@@ -133,16 +139,18 @@ $previewheight: 15em
   font-size: 0.9em
   opacity: 0.7
   line-height: 1.5
+  color: white
 
-.bottomflex
+.bottom_flex
   display: flex
-  flex-wrap: wrap
   flex-direction: row
-  align-items: flex-end
-  justify-items: center
-  justify-content: flex-start
-  position: absolute
-  bottom: 10px
+  justify-content: space-between
+  margin-top: auto
+  margin-bottom: 1em
+
+.title_container
+  display: flex
+  flex-direction: row
 
 .grid_row_flex
   margin-top: 4px
