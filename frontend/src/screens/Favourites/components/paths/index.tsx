@@ -10,33 +10,33 @@ interface IFavouritePathsProps {
   filterByName: Function;
 }
 
-export const FavouritePaths: React.FunctionComponent<IFavouritePathsProps> = ({
+export const FavouritePaths: React.FC<IFavouritePathsProps> = ({
   paths, remove, filterByName
-}) => {
-  return (
-    <>
-      {paths?.length === 0 && 
+}) => (
+  <>
+    {paths?.length === 0 && (
       <div className={styles.placeholderwrp}>
         <ListPlaceholder
-          title="It' empty now"
-          description="Currently you haven't favourite paths"
+          title="It's empty here."
+          description="Currently you have no favourite paths."
         />
-      </div>}
-      {paths?.length > 0 && (
+      </div>
+    )}
+    {paths?.length > 0 && (
       <div className={styles.tablecontent}>
         <div className={styles.rowheader}>
           <div className={styles.gridrowheader}>
-            <div className={styles.header_item}></div>
+            <div className={styles.header_item} />
             <div className={styles.header_item}>Name</div>
             <div className={styles.header_item}>Author</div>
             <div className={styles.header_item}>Courses</div>
             <div className={styles.header_item}>Duration</div>
           </div>
         </div>
-        {paths.filter(p=>filterByName(p)).map(p => (
+        {paths.filter(p => filterByName(p)).map(p => (
           <PathRow remove={remove} path={p} key={p.id} />
         ))}
-      </div>)}
-    </>
-  );    
-};
+      </div>
+    )}
+  </>
+);
