@@ -4,6 +4,7 @@ import { StyledRating } from '@components/StyledRating';
 import { NavLink } from 'react-router-dom';
 import styles from './styles.module.sass';
 import { timeFormat } from '@helpers/time.helper';
+import Ellipsis from 'react-ellipsis-pjs';
 
 export interface ICoursePreviewProps {
   id?: string;
@@ -67,16 +68,12 @@ export const CoursePreview: React.FC<ICoursePreviewProps> = ({
       <div className={styles.card_content_box}>
         <div className={styles.block_top}>
           <div className={styles.tags}>
-            {tags?.length > 0 && tags.map((t, index) => <span key={index}>{t}</span>)}
+            {tags?.length > 0 && tags.map((t, index) => (
+              <span key={index}>{t}</span>
+            ))}
           </div>
           <div className={styles.rating_block}>
-            <p>
-              (
-              {' '}
-              {ratingCount}
-              {' '}
-              )
-            </p>
+            <p>{`( ${ratingCount} )`}</p>
             <StyledRating
               className={styles.course_rating}
               size="small"
@@ -86,47 +83,45 @@ export const CoursePreview: React.FC<ICoursePreviewProps> = ({
             />
           </div>
         </div>
-        <div className={styles.started}>
-          <span className={styles.membersLabel}>started: </span>
-          <span className={styles.membersText}>{members || 0}</span>
-        </div>
-        <div className={styles.course_name}>
-          <NavLink exact to={`/course/${id}`}>
-            <span className={styles.nameText}>
-              {name}
-            </span>
-          </NavLink>
+        <div className={styles.title_container}>
+          <div className={styles.course_name}>
+            <NavLink exact to={`/course/${id}`}>
+              <div className={styles.nameText}>
+                <Ellipsis text={name} lines={2} />
+              </div>
+            </NavLink>
+          </div>
+          <div className={styles.started}>
+            <span className={styles.membersLabel}>started: </span>
+            <span className={styles.membersText}>{members || 0}</span>
+          </div>
         </div>
         <div className={styles.author}>
           <NavLink exact to={`/author/${authorId}`}>
             <span>
-              <i>
-                by&nbsp;
-                {authorName}
-              </i>
+              <i>{`by ${authorName}`}</i>
             </span>
           </NavLink>
         </div>
         <div className={styles.description}>
-          <span className={styles.description_text}>
-            {!description || description === ''
-              ? 'Fill in the fields with information about your course'
-              : description.length > 75 ? `${description.substring(0, 75)}...` : description}
-          </span>
+          <div className={styles.description_text}>
+            <Ellipsis
+              text={description}
+              lines={2}
+            />
+          </div>
         </div>
-        <div className={styles.grid_row_flex}>
-          <div className={styles.bottomflex}>
-            <div>
-              <span className={styles.meta__lectures}>lectures:</span>
-              <span className={styles.number}>{lecturesNumber}</span>
-            </div>
-            <div>
-              <span className={styles.meta__lectures}>duration:</span>
-              <span className={styles.number}>{timeFormat(durationMinutes)}</span>
-            </div>
-            <div>
-              <span className={styles.levelText}>{level}</span>
-            </div>
+        <div className={styles.bottom_flex}>
+          <div>
+            <span className={styles.meta__lectures}>lectures:</span>
+            <span className={styles.number}>{lecturesNumber}</span>
+          </div>
+          <div>
+            <span className={styles.meta__lectures}>duration:</span>
+            <span className={styles.number}>{timeFormat(durationMinutes)}</span>
+          </div>
+          <div>
+            <span className={styles.levelText}>{level || 'LEVEL'}</span>
           </div>
         </div>
         <div className={styles.optional_element}>

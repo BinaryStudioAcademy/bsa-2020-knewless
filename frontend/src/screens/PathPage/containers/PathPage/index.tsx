@@ -1,7 +1,5 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { BottomNavigation } from '@screens/Landing/components/BottomNavigation';
-import { navigations } from '@screens/Landing/services/mock';
 import PathOverview from '@screens/PathPage/components/PathOverview';
 import PathMenu from '@screens/PathPage/components/PathMenu';
 import { IAppState } from '@models/AppState';
@@ -31,17 +29,10 @@ const PathPage: React.FC<IPathPageProps> = ({ fetchData, path, loading, isAuthor
   }, [pathId]);
   if (loading) return (<InlineLoaderWrapper loading={loading} centered />);
   return (
-    <>
-      <div className={styles.content}>
-        <PathOverview isAuthorized={isAuthorized} path={path} pathId={pathId} role={role} userId={userId} />
-        <PathMenu path={path} />
-      </div>
-      <div className={styles.navigation_layer}>
-        <div className={styles.wide_container}>
-          <BottomNavigation navigations={navigations} />
-        </div>
-      </div>
-    </>
+    <div className={styles.content}>
+      <PathOverview isAuthorized={isAuthorized} path={path} pathId={pathId} role={role} userId={userId} />
+      <PathMenu path={path} />
+    </div>
   );
 };
 const mapStateToProps = (state: IAppState) => {

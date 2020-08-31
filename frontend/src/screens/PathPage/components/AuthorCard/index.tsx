@@ -8,7 +8,7 @@ interface IAuthorCardProps {
   imageSrc: string;
 }
 
-const AuthorCard: React.FunctionComponent<IAuthorCardProps> = ({
+const AuthorCard: React.FC<IAuthorCardProps> = ({
   name,
   biography,
   imageSrc

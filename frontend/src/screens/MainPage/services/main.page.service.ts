@@ -33,3 +33,29 @@ export async function getStudent() {
   });
   return response.json();
 }
+
+export async function getPersonalGoalProgress() {
+  const resp = await callApi({
+    endpoint: '/api/student/goal',
+    type: 'GET'
+  });
+  return resp.json();
+}
+
+export async function setPersonalGoal(goalId: string) {
+  await callApi({
+    endpoint: '/api/student/goal',
+    type: 'POST',
+    requestData: {
+      goalId
+    }
+  });
+}
+
+export async function getAllGoals() {
+  const resp = await callApi({
+    endpoint: '/api/goals',
+    type: 'GET'
+  });
+  return resp.json();
+}

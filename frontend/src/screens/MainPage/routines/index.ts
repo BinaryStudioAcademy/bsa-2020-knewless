@@ -11,3 +11,7 @@ export const fetchRecommendedCoursesRoutine = createRoutine(
 export const fetchPathsRoutine = createRoutine('FETCH_PATHS_DATA');
 
 export const fetchStudentRoutine = createRoutine('FETCH_STUDENT');
+
+export const fetchAllGoalsRoutine = createRoutine('STUDENT_MAIN_PAGE:FETCH_ALL_GOALS');
+export const fetchCurrentGoalProgressRoutine = createRoutine('STUDENT_MAIN_PAGE:FETCH_CURRENT_GOAL_PROGRESS');
+export const setCurrentGoalRoutine = createRoutine('STUDENT_MAIN_PAGE:SET_CURRENT_GOAL');

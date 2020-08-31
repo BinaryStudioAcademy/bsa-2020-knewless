@@ -1,11 +1,13 @@
 package com.knewless.core.student.model;
 
 import com.knewless.core.db.BaseEntity;
+import com.knewless.core.progressGoal.model.ProgressGoal;
 import com.knewless.core.user.model.User;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -64,4 +66,10 @@ public class Student extends BaseEntity {
     @Column(name = "year")
     private int year;
 
+    @ManyToOne
+    @JoinColumn(name = "goal_id")
+    private ProgressGoal currentGoal;
+
+    @Column(name = "date_goal_set")
+    private LocalDate dateGoalSet;
 }

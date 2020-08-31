@@ -55,13 +55,7 @@ export const CourseCard: React.FunctionComponent<ICourseCardProps> = ({
         </CardMeta>
         <div className={styles.rating_block}>
           <StyledRating rating={rating} disabled />
-          <p>
-            (
-            {' '}
-            {ratingCount}
-            {' '}
-            )
-          </p>
+          <p>{`( ${ratingCount} )`}</p>
         </div>
         {
           !hideButton

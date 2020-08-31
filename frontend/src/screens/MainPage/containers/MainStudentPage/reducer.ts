@@ -4,14 +4,21 @@ import { IMainPageData } from '../../models/IMainStudentPageData';
 import { ICourseCardProps } from 'components/CourseCard';
 import { IPathCardProps } from 'components/PathCard';
 import {
-  fetchContinueCoursesRoutine, fetchPathsRoutine, fetchRecommendedCoursesRoutine, fetchStudentRoutine
+  fetchAllGoalsRoutine,
+  fetchContinueCoursesRoutine,
+  fetchCurrentGoalProgressRoutine,
+  fetchPathsRoutine,
+  fetchRecommendedCoursesRoutine,
+  fetchStudentRoutine
 } from '../../routines';
 
 const initialState: IMainPageData = {
   student: { } as IStudent,
   continueCourses: [] as ICourseCardProps[],
   recommendedCourses: [] as ICourseCardProps[],
-  paths: [] as IPathCardProps[]
+  paths: [] as IPathCardProps[],
+  goals: [],
+  currentGoal: undefined
 };
 
 export const mainPageData = (state = initialState, action: Routine<any>) => {
@@ -35,6 +42,16 @@ export const mainPageData = (state = initialState, action: Routine<any>) => {
       return {
         ...state,
         student: action.payload
+      };
+    case fetchAllGoalsRoutine.SUCCESS:
+      return {
+        ...state,
+        goals: action.payload
+      };
+    case fetchCurrentGoalProgressRoutine.SUCCESS:
+      return {
+        ...state,
+        currentGoal: action.payload
       };
     default:
       return state;

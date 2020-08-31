@@ -20,6 +20,7 @@ export const CourseSegment: React.FC<ICourseSegmentProps> = ({ results, category
       <div className={styles.container}>
         {results.map(course => (
           <CoursePreview
+            key={course.id}
             className={styles.card}
             rating={course.metadata.rating}
             authorName={course.metadata.author}

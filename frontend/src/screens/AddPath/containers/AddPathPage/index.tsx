@@ -197,9 +197,7 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
         <>
           <div className={styles.title_container}>
             <h3 className={`${styles.title} ${styles.wide_container}`}>
-              {isEdit ? 'Edit' : 'New'}
-              {' '}
-              Path
+              {`${isEdit ? 'Edit' : 'New'} Path`}
             </h3>
           </div>
           <div className={styles.main_container}>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { ITag } from "@screens/Courses/models/ITag";
-import { IBindingAction, IBindingCallback1 } from "@models/Callbacks";
+import { ITag } from '@screens/Courses/models/ITag';
+import { IBindingAction, IBindingCallback1 } from '@models/Callbacks';
 
 import styles from '../../containers/PathsPage/styles.module.sass';
 import { InlineLoaderWrapper } from '@components/InlineLoaderWrapper';
@@ -29,17 +29,22 @@ export const AllPaths: React.FC<IAllPaths> = ({
     } else {
       fetchData();
     }
-  }
+  };
 
   return (
     <>
-      <div id='all_courses' className={`${styles.wide_container} ${styles.content_row}`}>
-        <h3 className={`${styles.title}`}>Courses</h3>
+      <div id="all_courses" className={`${styles.wide_container} ${styles.content_row}`}>
+        <h3 className={`${styles.title}`}>Paths</h3>
         <div className={styles.courses_title}>
           <div className={styles.tags_title_container}>
-            <div id='scrolable' className={styles.tags_wrapper}>
+            <div id="scrolable" className={styles.tags_wrapper}>
               <div className={styles.tags_content}>
-                <div onClick={() => handleClickTab('All')} className={`${styles.tag} ${activeTab === 'All' && styles.active}`}>All</div>
+                <div
+                  onClick={() => handleClickTab('All')}
+                  className={`${styles.tag} ${activeTab === 'All' && styles.active}`}
+                >
+                  All
+                </div>
                 {loadingData || tags.map(t => (
                   <div
                     key={Math.random() * 100}
@@ -53,20 +58,19 @@ export const AllPaths: React.FC<IAllPaths> = ({
             </div>
           </div>
           <div className={styles.filter}>
-            <Input size='mini' icon='search' fluid placeholder='Filter...' />
+            <Input size="mini" icon="search" fluid placeholder="Filter..." />
           </div>
         </div>
       </div>
       <div className={`${styles.wide_container} ${styles.content_row}`} style={{ minHeight: '150px' }}>
-        {
-          loadingAllPaths || loadingPathsByTag
-            ? <InlineLoaderWrapper loading={loadingAllPaths || loadingPathsByTag} centered={true} />
-            : (
-              <div className={styles.courses_container}>
-                {
-                  paths.map((p, index) => (
+        {loadingAllPaths || loadingPathsByTag
+          ? <InlineLoaderWrapper loading={loadingAllPaths || loadingPathsByTag} centered />
+          : (
+            <div className={styles.courses_container}>
+              {
+                  paths.map(p => (
                     <PathCard
-                      key={index}
+                      key={p.id}
                       id={p.id}
                       name={p.name}
                       logoSrc={p.logoSrc}
@@ -75,9 +79,9 @@ export const AllPaths: React.FC<IAllPaths> = ({
                     />
                   ))
                 }
-              </div>
-            )}
+            </div>
+          )}
       </div>
     </>
-  )
-}
+  );
+};

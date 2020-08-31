@@ -95,6 +95,16 @@ const AuthorSettings: React.FunctionComponent<IAuthorSettingsProps> = ({
   const isNonRequiredFieldsValid = (): boolean => isCompanyValid && isJobValid && isWebsiteValid && isTwitterUserValid
     && isBiographyValid;
 
+  const isLastSettingsChanged = settings.avatar !== avatar
+    || settings.firstName !== firstName
+    || settings.lastName !== lastName
+    || settings.location !== location
+    || settings.company !== company
+    || settings.job !== job
+    || settings.website !== website
+    || settings.twitter !== (TWITTER_URL_PREFIX + twitterUser)
+    || settings.biography !== biography;
+
   const handleSubmit = e => {
     e.preventDefault();
     if (isRequiredFieldsValid() && isNonRequiredFieldsValid()) {
@@ -296,7 +306,7 @@ const AuthorSettings: React.FunctionComponent<IAuthorSettingsProps> = ({
           <GradientButton
             className={styles.Btn}
             onClick={e => handleSubmit(e)}
-            disabled={!isRequiredFieldsValid() || !isNonRequiredFieldsValid()}
+            disabled={!isLastSettingsChanged || !isRequiredFieldsValid() || !isNonRequiredFieldsValid()}
             content="Save"
           />
         </Form.Group>

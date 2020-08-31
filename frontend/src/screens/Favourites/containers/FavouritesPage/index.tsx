@@ -2,25 +2,24 @@ import React, { useState, useEffect } from 'react';
 import styles from './styles.module.sass';
 import { connect } from 'react-redux';
 import { IAppState } from 'models/AppState';
-import { useHistory } from 'react-router-dom';
-import { IBindingAction } from 'models/Callbacks';
+import { IBindingAction, IBindingCallback1 } from 'models/Callbacks';
 import { ILecture } from '@screens/Favourites/models/ILecture';
 import { IAuthor } from '@screens/Favourites/models/IAuthor';
 import { ICourse } from '@screens/Favourites/models/ICourse';
 import { IPath } from '@screens/Favourites/models/IPath';
 import { fetchFavouriteAuthorsRoutine, removeCourseFavouriteRoutine, removeAuthorFavouriteRoutine,
-  fetchFavouriteCoursesRoutine, fetchFavouriteLecturesRoutine, removeLectureFavouriteRoutine, 
+  fetchFavouriteCoursesRoutine, fetchFavouriteLecturesRoutine, removeLectureFavouriteRoutine,
   fetchFavouritePathsRoutine, removePathFavouriteRoutine } from '@screens/Favourites/routines';
 import LoaderWrapper from 'components/LoaderWrapper';
 import { Input } from 'semantic-ui-react';
-import { FavouriteCourses } from '@screens/Favourites/components/courses/index';
-import { FavouriteAuthors } from '@screens/Favourites/components/authors/index';
-import { FavouriteLectures } from '@screens/Favourites/components/lectures/index';
-import { FavouritePaths } from '@screens/Favourites/components/paths/index';
-import { IBindingCallback1 } from '@models/Callbacks';
+import { FavouriteCourses } from '@screens/Favourites/components/courses';
+import { FavouriteAuthors } from '@screens/Favourites/components/authors';
+import { FavouriteLectures } from '@screens/Favourites/components/lectures';
+import { FavouritePaths } from '@screens/Favourites/components/paths';
 import { filterByName } from '../../services/helper';
-import { IFavourite } from '@components/AddToFavouritesButton/component/index';
+import { IFavourite } from '@components/AddToFavouritesButton/component';
 import { SourceType } from '@components/AddToFavouritesButton/helper/SourceType';
+import { ListPlaceholder } from '@components/placeholder/ListPlaceholder';
 
 interface IFavouritesPageProps {
   fetchCourses: IBindingAction;
@@ -41,7 +40,7 @@ interface IFavouritesPageProps {
   changeFavouritePath: IBindingCallback1<IFavourite>;
 }
 
-const FavouritesPage: React.FunctionComponent<IFavouritesPageProps> = ({
+const FavouritesPage: React.FC<IFavouritesPageProps> = ({
   changeFavouriteCourse,
   changeFavouriteAuthor,
   changeFavouriteLecture,
@@ -66,11 +65,10 @@ const FavouritesPage: React.FunctionComponent<IFavouritesPageProps> = ({
     fetchPaths();
   }, [fetchCourses, fetchAuthors, fetchLectures, fetchPaths]);
 
-  const history = useHistory();
   const [filter, setFilter] = useState('');
   const [current, setCurrent] = useState(0);
-  
-  const removeCoursefromFavourite = (id: string) => {
+
+  const removeCourseFromFavourite = (id: string) => {
     changeFavouriteCourse({
       id,
       type: SourceType.COURSE
@@ -78,7 +76,7 @@ const FavouritesPage: React.FunctionComponent<IFavouritesPageProps> = ({
     // fetchCourses();
   };
 
-  const removeAuthorfromFavourite = (id: string) => {
+  const removeAuthorFromFavourite = (id: string) => {
     changeFavouriteAuthor({
       id,
       type: SourceType.AUTHOR
@@ -86,7 +84,7 @@ const FavouritesPage: React.FunctionComponent<IFavouritesPageProps> = ({
     // fetchAuthors();
   };
 
-  const removeLecturefromFavourite = (id: string) => {
+  const removeLectureFromFavourite = (id: string) => {
     changeFavouriteLecture({
       id,
       type: SourceType.LECTURE
@@ -94,17 +92,15 @@ const FavouritesPage: React.FunctionComponent<IFavouritesPageProps> = ({
     // fetchLectures();
   };
 
-  const removePathfromFavourite = (id: string) => {
+  const removePathFromFavourite = (id: string) => {
     changeFavouritePath({
       id,
       type: SourceType.PATH
     });
   };
 
-  const filtering = (element: any) => {
-    return filterByName(element, filter);
-  };
-  
+  const filtering = (element: any) => filterByName(element, filter);
+
   return (
     <div className={styles.main_container}>
       <div className={styles.main_content}>
@@ -113,55 +109,60 @@ const FavouritesPage: React.FunctionComponent<IFavouritesPageProps> = ({
         </div>
         <div className={styles.headerRow_wrp}>
           <div className={styles.headerRow}>
-            <div className={styles.item_wrp} >
-              <button 
-                onClick={() => setCurrent(0)} 
+            <div className={styles.item_wrp}>
+              <button
+                type="button"
+                onClick={() => setCurrent(0)}
                 className={`${styles.menu_item}
                 ${current === 0 ? styles.menu_selected : styles.menu_default}`}
               >
-                  Paths
+                Paths
               </button>
-              {current === 0 && <div className={styles.underline}></div>}
+              {current === 0 && <div className={styles.underline} />}
             </div>
-            <div className={styles.item_wrp} >
-              <button 
-                onClick={() => setCurrent(1)} 
+            <div className={styles.item_wrp}>
+              <button
+                type="button"
+                onClick={() => setCurrent(1)}
                 className={`${styles.menu_item}
                 ${current === 1 ? styles.menu_selected : styles.menu_default}`}
               >
-                  Courses
+                Courses
               </button>
-              {current === 1 && <div className={styles.underline}></div>}
+              {current === 1 && <div className={styles.underline} />}
             </div>
-            <div className={styles.item_wrp} >
-              <button 
-                onClick={() => setCurrent(2)} 
+            <div className={styles.item_wrp}>
+              <button
+                type="button"
+                onClick={() => setCurrent(2)}
                 className={`${styles.menu_item}
                 ${current === 2 ? styles.menu_selected : styles.menu_default}`}
               >
-                  Lectures
+                Lectures
               </button>
-              {current === 2 && <div className={styles.underline}></div>}
+              {current === 2 && <div className={styles.underline} />}
             </div>
-            <div className={styles.item_wrp} >
-              <button 
-                onClick={() => setCurrent(3)} 
+            <div className={styles.item_wrp}>
+              <button
+                type="button"
+                onClick={() => setCurrent(3)}
                 className={`${styles.menu_item}
                 ${current === 3 ? styles.menu_selected : styles.menu_default}`}
               >
-                  Authors
+                Authors
               </button>
-              {current === 3 && <div className={styles.underline}></div>}
+              {current === 3 && <div className={styles.underline} />}
             </div>
-            <div className={styles.item_wrp} >
-              <button 
-                onClick={() => setCurrent(4)} 
+            <div className={styles.item_wrp}>
+              <button
+                type="button"
+                onClick={() => setCurrent(4)}
                 className={`${styles.menu_item}
                 ${current === 4 ? styles.menu_selected : styles.menu_default}`}
               >
-                  Articles
+                Articles
               </button>
-              {current === 4 && <div className={styles.underline}></div>}
+              {current === 4 && <div className={styles.underline} />}
             </div>
             <Input
               fluid
@@ -170,16 +171,27 @@ const FavouritesPage: React.FunctionComponent<IFavouritesPageProps> = ({
               className={styles.customInput}
               onChange={ev => setFilter(ev.target.value)}
               inverted
-              icon='search'
+              icon="search"
             />
           </div>
         </div>
         <div className={styles.wide_container}>
           <LoaderWrapper loading={isCoursesLoading || isLecturesLoading || isAuthorsLoading || isPathsLoading}>
-            {current === 1 && <FavouriteCourses filterByName={filtering} remove={removeCoursefromFavourite} courses={courses} />}
-            {current === 3 && <FavouriteAuthors filterByName={filtering} remove={removeAuthorfromFavourite} authors={authors} />}
-            {current === 2 && <FavouriteLectures filterByName={filtering} remove={removeLecturefromFavourite} lectures={lectures} />}
-            {current === 0 && <FavouritePaths filterByName={filtering} remove={removePathfromFavourite} paths={paths} />}
+            {current === 1 && (
+              <FavouriteCourses filterByName={filtering} remove={removeCourseFromFavourite} courses={courses} />
+            )}
+            {current === 3 && (
+              <FavouriteAuthors filterByName={filtering} remove={removeAuthorFromFavourite} authors={authors} />
+            )}
+            {current === 2 && (
+              <FavouriteLectures filterByName={filtering} remove={removeLectureFromFavourite} lectures={lectures} />
+            )}
+            {current === 4 && (
+              <ListPlaceholder title="It's empty here." description="Currently you have no favourite articles." />
+            )}
+            {current === 0 && (
+              <FavouritePaths filterByName={filtering} remove={removePathFromFavourite} paths={paths} />
+            )}
           </LoaderWrapper>
         </div>
       </div>

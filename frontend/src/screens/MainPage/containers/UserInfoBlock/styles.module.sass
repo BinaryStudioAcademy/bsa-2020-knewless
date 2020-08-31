@@ -1,0 +1,162 @@
+@import '../../styles/variables'
+
+.userMainInfoBlock
+  height: 14rem
+  width: auto
+  background: #FFFFFF
+  position: relative
+
+.centerContainer
+  max-width: $container_width + ($side_padding * 2)
+  margin-left: auto
+  margin-right: auto
+  padding-left: $side_padding
+  padding-right: $side_padding
+  display: flex
+  justify-content: space-between
+  height: 100%
+
+.userInfo
+  display: flex
+  flex-direction: row
+  justify-content: flex-start
+  position: relative
+  align-items: center
+
+.avatar
+  width: 9em
+  height: 9em
+  margin-right: 1.4em
+
+.userImage
+  object-fit: cover
+  width: 100%
+  height: 100%
+  border-radius: 50%
+
+.greeting
+  display: flex
+  justify-content: center
+  flex-direction: column
+  position: relative
+  padding-bottom: 3em
+  font-family: Custom Open Sans, serif
+
+.greetingText
+  font-style: normal
+  font-weight: 600
+  font-size: 1.8em
+  font-family: Custom Open Sans, serif
+  line-height: 1.5em
+  height: 1.5em
+  margin: 0
+  display: flex
+  align-items: flex-start
+  color: #001B36
+
+.studentRole
+  font-style: normal
+  font-weight: normal
+  font-size: 1.15em
+  line-height: 1.15em
+  display: flex
+  align-items: center
+  color: #596C7E
+
+.goalInfo
+  width: 26rem
+  padding-top: 2em
+  padding-bottom: 2em
+  margin-bottom: auto
+  margin-top: auto
+
+.goalTitle
+  font-family: Custom Open Sans, serif
+  font-style: normal
+  font-weight: 600
+  font-size: 1.45em
+  line-height: 1.3em
+  color: #001B36
+  margin-bottom: 0.3em
+
+.goalDescription
+  color: #596C7E
+  font-family: Custom Open Sans, serif
+  font-weight: normal
+  font-size: 1em
+  line-height: 1em
+  display: flex
+  align-items: center
+  margin-bottom: 0.6rem
+
+.goalInfoForm
+  display: flex
+  flex-direction: row
+  justify-content: space-between
+  height: 3em
+
+.goalDropdownMenu
+  height: 3em !important
+  width: 25em !important
+  margin-right: 0.7em !important
+  margin-bottom: 0 !important
+
+  & > div
+    display: flex !important
+    align-items: center
+    height: 100% !important
+
+    & > i
+      top: unset !important
+
+
+.goalDropdownMenu
+  span
+    color: #001B36
+
+.saveBtn
+  background: linear-gradient(90deg, #0084F8 0%, #FF8576 100%) !important
+  border-radius: 0 !important
+  width: 8rem
+  position: relative
+
+.btnText
+  font-style: normal
+  font-weight: bold
+  font-size: 0.75em
+  line-height: 0.75em
+  align-items: center
+  text-transform: uppercase
+  color: #FFFFFF
+  display: inline-block
+  left: 0
+  right: 0
+  top: 0
+  bottom: 0
+  font-family: Montserrat, monospace
+
+.progressBar
+  margin-top:
+  margin-bottom: 1em !important
+  border-radius: .285rem !important
+  & > div
+    & > div
+      background: none
+      padding: 0
+      font-family: Montserrat, serif !important
+      font-weight: 400 !important
+
+.current_goal_container
+  margin-top: 1em
+
+  span
+    color: black
+
+.progressBlock
+  height: 5em
+
+.submitGoalButton
+  margin-right: 0 !important
+
+.namePlaceholder
+  width: 15em

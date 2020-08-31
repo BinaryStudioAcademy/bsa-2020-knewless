@@ -56,31 +56,40 @@ const CoursePage: React.FC<ICoursePageProps> = ({
       default: fetchData();
     }
   }, [fetchData, fetchAllAuthorCourses, fetchAllCourses, role]);
-
+  if (loading) {
+    return (
+      <div className={styles.courses_content}>
+        <InlineLoaderWrapper loading centered />
+      </div>
+    );
+  }
+  const notStartedCourses = [];
+  const continueCoursesIds = continueCourses.map(c => c.id);
+  courses.forEach(course => {
+    if (!continueCoursesIds.includes(course.id)) {
+      notStartedCourses.push(course);
+    }
+  });
   return (
     <div className={styles.courses_content}>
-      {loading
-        ? <InlineLoaderWrapper loading={loading} centered />
-        : (
-          <>
-            {role && (
-              <MyCourses
-                continueCourses={continueCourses}
-                loading={loading}
-                role={role.name}
-              />
-            )}
-            {!role || role.name !== 'AUTHOR' ? (
-              <AllCourses
-                courses={courses}
-                tags={tags}
-                fetchData={fetchAllCourses}
-                fetchCoursesByTag={fetchCoursesByTag}
-                loading={loading}
-              />
-            ) : null}
-          </>
+      <>
+        {role && (
+        <MyCourses
+          continueCourses={continueCourses}
+          loading={loading}
+          role={role.name}
+        />
         )}
+        {!role || role.name !== 'AUTHOR' ? (
+          <AllCourses
+            courses={notStartedCourses}
+            tags={tags}
+            fetchData={fetchAllCourses}
+            fetchCoursesByTag={fetchCoursesByTag}
+            loading={loading}
+          />
+        ) : null}
+      </>
     </div>
   );
 };

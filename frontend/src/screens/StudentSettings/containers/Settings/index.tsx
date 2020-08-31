@@ -109,7 +109,6 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
   const [employment, setEmployment] = useState(settings.employment);
   const [education, setEducation] = useState(settings.education);
   const [year, setYear] = useState(settings.year);
-
   const [storedTags, setStoredTags] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
 
@@ -163,6 +162,22 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
   const [isWebsiteValid, setIsWebsiteValid] = useState(true);
   const isNonRequiredFieldsValid = (): boolean => isBiographyValid && isJobValid && isCompanyValid && isWebsiteValid;
 
+  const isLastSettingsChanged = settings.avatar !== avatar
+    || settings.firstName !== firstName
+    || settings.lastName !== lastName
+    || settings.location !== location
+    || settings.company !== company
+    || settings.job !== job
+    || settings.website !== website
+    || settings.biography !== biography
+    || settings.direction !== direction
+    || settings.experience !== experience
+    || settings.level !== level
+    || settings.industry !== industry
+    || settings.role !== role
+    || settings.employment !== employment
+    || settings.education !== education
+    || settings.tags.length !== selectedTags.length;
   const handleSubmit = e => {
     e.preventDefault();
     if (isRequiredFieldsValid() && isNonRequiredFieldsValid()) {
@@ -475,7 +490,7 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
           <GradientButton
             className={styles.Btn}
             onClick={e => handleSubmit(e)}
-            disabled={!isRequiredFieldsValid() || !isNonRequiredFieldsValid()}
+            disabled={!isLastSettingsChanged || !isRequiredFieldsValid() || !isNonRequiredFieldsValid()}
             content="Save"
           />
         </Form.Group>
