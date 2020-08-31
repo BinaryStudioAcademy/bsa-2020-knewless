@@ -9,15 +9,18 @@ import { List } from 'semantic-ui-react';
 import { IStudentProfile } from 'screens/StudentPage/models/IStudentProfile';
 import { IBindingAction } from 'models/Callbacks';
 import { RowPlaceholder } from '@components/placeholder/RowPlaceholder';
+import { InlineLoaderWrapper } from '@components/InlineLoaderWrapper';
 
-interface IStudentProfileProps{
+interface IStudentProfileProps {
   studentProfile: IStudentProfile;
   fetchStudentProfile: IBindingAction;
+  isStudentProfileLoading: boolean;
 }
 
-const StudentProfile: React.FunctionComponent<IStudentProfileProps> = ({
+const StudentProfile: React.FC<IStudentProfileProps> = ({
   studentProfile: profile,
-  fetchStudentProfile: getStudentProfile
+  fetchStudentProfile: getStudentProfile,
+  isStudentProfileLoading = true
 }) => {
   useEffect(() => {
     getStudentProfile();
@@ -26,6 +29,7 @@ const StudentProfile: React.FunctionComponent<IStudentProfileProps> = ({
   const handleOnClickCourse = () => {
     console.log('click');
   };
+  if (isStudentProfileLoading) return <InlineLoaderWrapper loading centered />;
   return (
     <div className={styles.profile}>
       <div className={styles.wrapperTitle}>
@@ -38,11 +42,12 @@ const StudentProfile: React.FunctionComponent<IStudentProfileProps> = ({
       </div>
       <div className={styles.detailsProfile}>
         <div className={styles.title}>Currently learning</div>
-        {profile.courses && profile.courses.filter(c=> c.progress!==100).length !== 0 ? (
+        {profile.courses && profile.courses.filter(c => c.progress !== 100).length !== 0 ? (
           <div className={styles.currentCourse}>
             <List relaxed>
-              {profile.courses.sort((a,b)=> a.progress > b.progress ? 1 : -1).map(course => (
-                course.progress !== 100 &&
+              {profile.courses.sort((a, b) => (a.progress > b.progress ? 1 : -1)).map(course => (
+                course.progress !== 100
+                && (
                 <List.Item className={styles.course} onClick={handleOnClickCourse}>
                   <CurrentCourse
                     id={course.id}
@@ -57,6 +62,7 @@ const StudentProfile: React.FunctionComponent<IStudentProfileProps> = ({
                     progress={course.progress}
                   />
                 </List.Item>
+                )
               ))}
             </List>
           </div>
@@ -64,9 +70,10 @@ const StudentProfile: React.FunctionComponent<IStudentProfileProps> = ({
         <div className={styles.title}>Completed courses</div>
         <div className={styles.completedCourse}>
           <List relaxed>
-            {profile.courses && profile.courses.filter(c=> c.progress===100).length !== 0  ? 
-            profile.courses.map(course => (
-              course.progress === 100 &&
+            {profile.courses && profile.courses.filter(c => c.progress === 100).length !== 0
+              ? profile.courses.map(course => (
+                course.progress === 100
+              && (
               <List.Item className={styles.completedCourseItem}>
                 <CompletedCourse
                   id={course.id}
@@ -81,7 +88,7 @@ const StudentProfile: React.FunctionComponent<IStudentProfileProps> = ({
                   progress={course.progress}
                 />
               </List.Item>
-            ))
+              )))
               : <RowPlaceholder webOnLeft={false} />}
           </List>
         </div>
@@ -93,7 +100,8 @@ const StudentProfile: React.FunctionComponent<IStudentProfileProps> = ({
 const mapStateToProps = (state: any) => {
   const { studentProfile: { studentProfile } } = state;
   return {
-    studentProfile
+    studentProfile,
+    isStudentProfileLoading: state.studentProfile.requests.studentProfileRequest.loading
   };
 };
 
