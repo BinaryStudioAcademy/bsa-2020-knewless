@@ -17,7 +17,7 @@ export const PathPreview: React.FC<IPathPreviewProps> = props => {
   useEffect(() => setNoTags(availableTags.length === 0), [availableTags]);
 
   return (
-    <>
+    <div>
       <Popup
         className={styles.popup}
         hoverable
@@ -51,6 +51,6 @@ export const PathPreview: React.FC<IPathPreviewProps> = props => {
           )}
         </PopupContent>
       </Popup>
-    </>
+    </div>
   );
 };
