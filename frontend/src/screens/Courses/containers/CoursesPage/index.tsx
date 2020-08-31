@@ -56,7 +56,6 @@ const CoursePage: React.FC<ICoursePageProps> = ({
       default: fetchData();
     }
   }, [fetchData, fetchAllAuthorCourses, fetchAllCourses, role]);
-
   if (loading) {
     return (
       <div className={styles.courses_content}>
@@ -64,7 +63,13 @@ const CoursePage: React.FC<ICoursePageProps> = ({
       </div>
     );
   }
-
+  const notStartedCourses = [];
+  const continueCoursesIds = continueCourses.map(c => c.id);
+  courses.forEach(course => {
+    if (!continueCoursesIds.includes(course.id)) {
+      notStartedCourses.push(course);
+    }
+  });
   return (
     <div className={styles.courses_content}>
       <>
@@ -77,7 +82,7 @@ const CoursePage: React.FC<ICoursePageProps> = ({
         )}
         {!role || role.name !== 'AUTHOR' ? (
           <AllCourses
-            courses={courses}
+            courses={notStartedCourses}
             tags={tags}
             fetchData={fetchAllCourses}
             fetchCoursesByTag={fetchCoursesByTag}
