@@ -113,7 +113,7 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
               </GradientButton>
               <GrayOutlineButton onClick={() => setIsOverviewOpen(true)}>Course overview</GrayOutlineButton>
             </div>
-            {isAuthorized && (
+            {isAuthorized && role==='USER' && (
               <div className={styles.button_favourite_wrp}>
                 <AddToFavouriteButton
                   isFavourite={favourite}

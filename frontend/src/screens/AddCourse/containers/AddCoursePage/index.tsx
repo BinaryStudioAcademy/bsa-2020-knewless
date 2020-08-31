@@ -60,6 +60,7 @@ interface IAddCourseProps {
   authorId: string;
   loadingEditCourse: boolean;
   isAuthorized: boolean;
+  saveloading: boolean;
 }
 
 const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
@@ -77,7 +78,8 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
   authorName,
   authorId,
   loadingEditCourse,
-  isAuthorized
+  isAuthorized,
+  saveloading
 }) => {
   const { courseId } = useParams();
   const [selectedLectures, setSelectedLectures] = useState(Array<ILecture>());
@@ -380,7 +382,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
                     <GrayOutlineButton
                       className={styles.buttonOverview}
                       content="Overview"
-                      disabled={overview.length === 0}
+                      disabled={overview?.length === 0}
                       onClick={() => setIsShowPreview(true)}
                     />
                     <Button
@@ -393,7 +395,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
                       disabled={!isReleseble}
                       className={isReleseble ? styles.button_release : styles.button_release_disabled}
                       onClick={() => handleSave(true)}
-                      loading={buttonLoading}
+                      loading={saveloading}
                       content="Release"
                     />
                   </div>
@@ -455,6 +457,7 @@ const mapStateToProps = (state: IAppState) => {
     lectures,
     isLecturesLoaded,
     loading: state.addcourse.requests.dataRequest.loading,
+    saveloading: state.addcourse.requests.saveCourseRequest.loading || state.addcourse.requests.savingEditedCourseRequest.loading,
     isAuthorized
   };
 };
