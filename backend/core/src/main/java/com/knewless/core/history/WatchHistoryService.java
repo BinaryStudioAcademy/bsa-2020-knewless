@@ -44,7 +44,8 @@ public class WatchHistoryService {
 	}
 
     public long getProgress(UUID userId, UUID courseId) {
-        return historyRepository.getProgressByUserAndCourse(courseId, userId);
+        long progress = historyRepository.getProgressByUserAndCourse(userId, courseId);
+        return  progress;
     }
     public int getProgressByLecture(UUID userId, UUID lectureId) {
         var history = historyRepository.findByUser_IdAndLecture_Id(userId, lectureId);

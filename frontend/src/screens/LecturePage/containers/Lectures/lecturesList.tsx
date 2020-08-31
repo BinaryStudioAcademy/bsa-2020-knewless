@@ -24,18 +24,25 @@ export interface ILecturesListProps {
 
 const LecturesList: React.FunctionComponent<ILecturesListProps> = ({
   course, listProps, setChosenVideo, playerProgress, changeFavourite
-}) => (
-  <div>
-    {course.lectures.map((l, i) => (
-      <Card
-        className={listProps.chosenVideo === l.id ? 'lecture active' : 'lecture'}
-        onClick={(e: any) => {if(e.target.tagName === "I") return; setChosenVideo({ chosenVideo: l.id });}}
-        animated={false}
-      >
+}) =>{
+  const setProgress = (progressLec,durationLec, id ) =>{
+    if(listProps.chosenVideo === id ){
+      return Math.min( Math.max(Math.ceil((playerProgress*100)/durationLec), progressLec),100);
+    }
+    return Math.min(progressLec, 100);
+  };
+
+  return (
+    <div>
+      {course.lectures.map((l, i) => (
+        <Card
+          className={listProps.chosenVideo === l.id ? 'lecture active' : 'lecture'}
+          onClick={(e: any) => {if(e.target.tagName === "I") return; setChosenVideo({ chosenVideo: l.id });}}
+          animated={false}
+        >
         <div className="progressWrapper">
           <CircleProgress
-            percentage={l.progress = listProps.chosenVideo === l.id ? Math.min(Math.ceil((playerProgress*100)/l.duration),100)
-              : Math.min(l.progress, 100)}
+            percentage={l.progress = setProgress(l.progress, l.duration, l.id)}
             width={50}
             strokeWidth={2}
             fontSize={'12px'}
@@ -69,6 +76,7 @@ const LecturesList: React.FunctionComponent<ILecturesListProps> = ({
     ))}
   </div>
 );
+};
 
 const mapStateToProps = (state: any) => ({
   listProps: state.lecturePage.chosenVideo,

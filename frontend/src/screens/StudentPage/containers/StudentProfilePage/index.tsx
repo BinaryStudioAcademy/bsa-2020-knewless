@@ -25,7 +25,6 @@ const StudentProfile: React.FC<IStudentProfileProps> = ({
   useEffect(() => {
     getStudentProfile();
   }, []);
-
   const handleOnClickCourse = () => {
     console.log('click');
   };
