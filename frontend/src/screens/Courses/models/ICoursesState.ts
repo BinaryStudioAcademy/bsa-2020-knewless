@@ -3,7 +3,11 @@ import { IRequestState } from '@models/IRequestState';
 
 export interface ICoursesState {
   requests: {
-    dataRequest: IRequestState;
+    coursesRequest: IRequestState;
+    coursesByTagRequest: IRequestState;
+    allCoursesRequest: IRequestState;
+    allAuthorCoursesRequest: IRequestState;
+    allTagsRequest: IRequestState;
   };
   data: ICoursesData;
 }

@@ -8,7 +8,13 @@ import { ITag } from '@screens/Courses/models/ITag';
 import styles from './styles.module.sass';
 import { IRole } from '@containers/AppRouter/models/IRole';
 import { IPathCardProps } from '@components/PathCard';
-import { fetchPathsRoutine, fetchPathsByTagRoutine, fetchAllPathsRoutine, fetchAllTagsRoutine, fetchAllAuthorPathsRoutine } from '@screens/Paths/routines';
+import {
+  fetchPathsRoutine,
+  fetchPathsByTagRoutine,
+  fetchAllPathsRoutine,
+  fetchAllTagsRoutine,
+  fetchAllAuthorPathsRoutine
+} from '@screens/Paths/routines';
 import { MyPaths } from '@screens/Paths/components/MyPaths';
 import { AllPaths } from '@screens/Paths/components/AllPaths';
 
@@ -41,7 +47,6 @@ const PathsPage: React.FC<IPathsPageProps> = ({
   loadingAllPaths,
   loadingPathsByTag
 }) => {
-
   useEffect(() => {
     switch (role?.name) {
       case undefined: {
@@ -85,7 +90,7 @@ const PathsPage: React.FC<IPathsPageProps> = ({
             ) : null}
           </>
         )}
-    </div >
+    </div>
   );
 };
 

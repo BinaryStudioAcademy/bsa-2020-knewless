@@ -27,7 +27,13 @@ const PathPage: React.FC<IPathPageProps> = ({ fetchData, path, loading, isAuthor
       fetchData(pathId);
     }
   }, [pathId]);
-  if (loading) return (<InlineLoaderWrapper loading={loading} centered />);
+  if (loading) {
+    return (
+      <div className={`${styles.content} ${styles.content__loading}`}>
+        <InlineLoaderWrapper loading={loading} centered />
+      </div>
+    );
+  }
   return (
     <div className={styles.content}>
       <PathOverview isAuthorized={isAuthorized} path={path} pathId={pathId} role={role} userId={userId} />
@@ -40,7 +46,7 @@ const mapStateToProps = (state: IAppState) => {
   const { isAuthorized } = state.auth.auth;
   return {
     path,
-    loading: state.coursePage.requests.dataRequest.loading,
+    loading: state.pathPage.requests.dataRequest.loading,
     userId: state.appRouter.user.id,
     role: state.appRouter.user.role?.name,
     isAuthorized

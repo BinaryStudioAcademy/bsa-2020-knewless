@@ -24,6 +24,8 @@ export const MyCourses: React.FC<IMyCourses> = ({
     }
   }, [role]);
 
+  if (loading) return null;
+
   const handleClick = (e, titleProps) => {
     const { index } = titleProps;
     const newIndex = activeIndex === index ? -1 : index;
