@@ -13,6 +13,8 @@ import { fetchDataRoutine } from 'screens/Landing/routines';
 import { CardsSegment } from '@components/CardsSegment';
 import { history } from '@helpers/history.helper';
 import { loginRoutine } from '@screens/Home/routines';
+import { CourseCardPlaceHolder } from '@components/placeholder/CourseCardPlaceHolder/index';
+import { PathCardPlaceHolder } from '@components/placeholder/PathCardPlaceHolder/index';
 
 // eslint-disable-next-line
 export interface ILandingProps {
@@ -116,9 +118,10 @@ export const LandingPage: React.FunctionComponent<ILandingProps> = ({
           <CardsSegment
             title="Most popular courses"
             onViewAllClick={() => history.push('/courses')}
-            loading={loading}
+            loading={false}
           >
-            {loading || courses.map(c => (
+            {loading && [1,2,3].map( x => <CourseCardPlaceHolder key={x} dependencyName="landing" hideButton={false}/>)}
+            {!loading && courses.map(c => (
               <div key={c.id} className={styles.course_card}>
                 <CourseCard
                   id={c.id}
@@ -139,9 +142,10 @@ export const LandingPage: React.FunctionComponent<ILandingProps> = ({
           <CardsSegment
             title="Paths"
             onViewAllClick={() => history.push('/paths')}
-            loading={loading}
+            loading={false}
           >
-            {loading || paths.map(p => (
+            {loading && [1,2,3].map( x => <PathCardPlaceHolder key={x} className={styles.path_card}/>)}
+            {!loading && paths.map(p => (
               <div key={p.id} className={styles.path_card}>
                 <PathCard
                   id={p.id}

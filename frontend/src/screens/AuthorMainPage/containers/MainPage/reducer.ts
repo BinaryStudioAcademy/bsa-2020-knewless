@@ -8,7 +8,9 @@ import { fetchAuthorCoursesRoutine, fetchAuthorPathsRoutine, fetchAuthorRoutine 
 const initialState: IAuthorMainPageData = {
   author: { } as IAuthor,
   authorCourses: [] as ICourseCardProps[],
-  authorPaths: [] as IPathCardProps[]
+  authorPaths: [] as IPathCardProps[],
+  pathsLoaded: false,
+  coursesLoaded: false
 };
 
 export const authorMainPageData = (state = initialState, action: Routine<any>) => {
@@ -21,12 +23,14 @@ export const authorMainPageData = (state = initialState, action: Routine<any>) =
     case fetchAuthorCoursesRoutine.SUCCESS:
       return {
         ...state,
-        authorCourses: [...action.payload]
+        authorCourses: [...action.payload],
+        coursesLoaded:true
       };
     case fetchAuthorPathsRoutine.SUCCESS:
       return {
         ...state,
-        authorPaths: [...action.payload]
+        authorPaths: [...action.payload],
+        pathsLoaded: true
       };
     default:
       return state;

@@ -11,6 +11,9 @@ export interface IMainPageData {
   paths: IPathCardProps[];
   goals: IPersonalGoalItem[];
   currentGoal: IPersonalGoalProgress | undefined;
+  continueCoursesLoaded: boolean;
+  recommendedCoursesLoaded: boolean;
+  pathsLoaded: boolean;
 }
 
 export const extractGoals = (state: IAppState) => state.mainPage.mainPageData.goals;

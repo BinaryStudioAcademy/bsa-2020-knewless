@@ -6,4 +6,6 @@ export interface IAuthorMainPageData {
   author: IAuthor;
   authorCourses: IAuthorCourseCardProps[];
   authorPaths: IPathCardProps[];
+  pathsLoaded: boolean;
+  coursesLoaded: boolean;
 }
