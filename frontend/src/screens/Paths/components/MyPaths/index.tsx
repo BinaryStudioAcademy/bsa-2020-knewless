@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Accordion, Icon } from 'semantic-ui-react';
 
 import styles from '../../containers/PathsPage/styles.module.sass';
 import { IPathCardProps, PathCard } from '@components/PathCard';
+import { RoleTypes } from '@containers/AppRouter/models/IRole';
 
 export interface IMyPaths {
   myPaths: IPathCardProps[];
@@ -16,7 +17,7 @@ export const MyPaths: React.FC<IMyPaths> = ({
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
-    if (role === 'AUTHOR') {
+    if (role === RoleTypes.AUTHOR) {
       setActiveIndex(1);
     }
   }, [role]);

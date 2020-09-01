@@ -1,0 +1,50 @@
+$width: 5em
+$padding: 1em
+$name_size: 1em
+$name_margin: 0.5em
+$name_line_height: 1.2em
+$item_width: $width + 2 * $padding + $name_line_height + $name_margin
+
+.container
+  min-height: 50vh
+
+.items_container
+  display: grid
+  grid-template-columns: repeat(auto-fill, minmax($item_width, 1fr))
+  grid-gap: 1em
+  max-height: 60vh
+  overflow-y: auto
+
+.item
+  width: $item_width
+  padding: $padding $padding $padding - 0.2em
+  background: #3f404c
+  color: white
+  display: flex
+  flex-direction: column
+  cursor: pointer
+  margin: auto
+  &:hover
+    background: #484954
+
+.image_container
+  max-height: $width
+  display: flex
+  justify-content: center
+
+.image
+  max-height: $width
+  object-fit: cover
+
+.name
+  margin-top: $name_margin
+  font-size: $name_size
+  color: white
+  font-weight: bold
+  overflow: hidden
+  text-overflow: ellipsis
+  text-align: center
+  line-height: $name_line_height
+
+.search
+  margin-bottom: 1em

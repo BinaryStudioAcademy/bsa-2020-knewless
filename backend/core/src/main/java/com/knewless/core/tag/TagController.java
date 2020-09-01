@@ -1,6 +1,8 @@
 package com.knewless.core.tag;
 
+import com.knewless.core.security.oauth.UserPrincipal;
 import com.knewless.core.tag.dto.TagDto;
+import com.knewless.core.user.model.CurrentUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,5 +24,10 @@ public class TagController {
 	@GetMapping
 	public List<TagDto> getAll() {
 		return tagService.getAll().stream().map(TagMapper.INSTANCE::tagToDto).collect(Collectors.toList());
+	}
+	
+	@GetMapping("user")
+	public List<TagDto> studentTags(@CurrentUser UserPrincipal userPrincipal) {
+		return tagService.getByUserId(userPrincipal.getId());
 	}
 }

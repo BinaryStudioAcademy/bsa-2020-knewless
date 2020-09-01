@@ -5,7 +5,8 @@ import {
   fetchCoursesByTagRoutine,
   fetchAllCoursesRoutine,
   fetchAllAuthorCoursesRoutine,
-  fetchAllTagsRoutine
+  fetchAllTagsRoutine,
+  fetchDataForStudentRoutine
 } from '../../routines';
 
 export const data = (state: ICoursesData = { courses: [], continueCourses: [], tags: [] }, action: Routine<any>) => {
@@ -44,6 +45,11 @@ export const data = (state: ICoursesData = { courses: [], continueCourses: [], t
       return {
         ...state,
         courses: []
+      };
+    case fetchDataForStudentRoutine.SUCCESS:
+      return {
+        ...state,
+        ...action.payload
       };
     default:
       return state;

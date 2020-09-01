@@ -3,6 +3,7 @@ import { Modal, ModalActions, ModalContent, ModalHeader } from 'semantic-ui-reac
 import GrayOutlineButton from '../buttons/GrayOutlineButton';
 import GradientButton from '../buttons/GradientButton';
 import styles from './styles.module.sass';
+import { ModalDark } from '@components/DarkModal';
 
 export interface IConfirmationProps {
   onConfirm: () => void;
@@ -15,11 +16,11 @@ export interface IConfirmationProps {
   className?: string;
 }
 
-const Confirmation: React.FC<IConfirmationProps> = (
+const ConfirmationModal: React.FC<IConfirmationProps> = (
   { onConfirm, onCancel, title, text = 'Are you sure?',
     okText = 'OK', cancelText = 'Cancel', className, open }
 ) => (
-  <Modal className={`${className} ${styles.container}`} open={open} onClose={onCancel}>
+  <ModalDark className={className} open={open} onClose={onCancel}>
     {title && (
     <ModalHeader className={styles.title}>{title}</ModalHeader>
     )}
@@ -30,7 +31,7 @@ const Confirmation: React.FC<IConfirmationProps> = (
       <GrayOutlineButton onClick={onCancel}>{cancelText}</GrayOutlineButton>
       <GradientButton onClick={onConfirm}>{okText}</GradientButton>
     </ModalActions>
-  </Modal>
+  </ModalDark>
 );
 
-export default Confirmation;
+export default ConfirmationModal;

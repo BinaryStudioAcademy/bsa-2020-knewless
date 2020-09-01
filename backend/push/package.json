@@ -26,6 +26,7 @@
     "install": "^0.13.0",
     "jsonwebtoken": "^8.5.1",
     "jwt-decode": "^2.2.0",
+    "kafkajs": "^1.12.0",
     "nodemon": "^1.19.4",
     "npm": "^6.12.0",
     "promise-retry": "^1.1.1",

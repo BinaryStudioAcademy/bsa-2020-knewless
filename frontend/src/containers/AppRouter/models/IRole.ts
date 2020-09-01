@@ -1,8 +1,8 @@
 export enum RoleTypes {
-  USER,
-  AUTHOR
+  USER='USER',
+  AUTHOR='AUTHOR'
 }
 
 export interface IRole {
-  name: string;
+  name: RoleTypes;
 }

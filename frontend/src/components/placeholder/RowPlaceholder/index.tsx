@@ -8,13 +8,14 @@ export interface IRowPlaceholderProps {
   description?: string;
   button?: {text: string; onClick: () => void};
   webOnLeft?: boolean;
+  className?: string;
 }
 
 export const RowPlaceholder: React.FC<IRowPlaceholderProps> = (
   { title = 'It\'s empty here', description = 'Content will appear later',
-    button, webOnLeft = true }
+    button, webOnLeft = true, className }
 ) => (
-  <div className={styles.container}>
+  <div className={`${styles.container} ${className || ''}`}>
     <img src={cobweb} alt="Placeholder" className={`${styles.image} ${webOnLeft ? styles.left : styles.right}`} />
     <span className={styles.title}>{title}</span>
     <span className={styles.description}>{description}</span>

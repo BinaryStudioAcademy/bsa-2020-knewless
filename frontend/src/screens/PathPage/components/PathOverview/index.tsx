@@ -3,6 +3,7 @@ import styles from './styles.module.sass';
 import { IPath } from '@screens/PathPage/models/IPath';
 import { Label, Icon } from 'semantic-ui-react';
 import { useHistory } from 'react-router-dom';
+import { RoleTypes } from '@containers/AppRouter/models/IRole';
 
 interface IPathOverviewProps {
   path: IPath;
@@ -12,7 +13,7 @@ interface IPathOverviewProps {
   userId: string;
 }
 const PathOverview: React.FunctionComponent<IPathOverviewProps> = ({ isAuthorized,
-path, role, pathId, userId }) => {
+  path, role, pathId, userId }) => {
   const history = useHistory();
   return (
     <div className={styles.content}>
@@ -22,7 +23,7 @@ path, role, pathId, userId }) => {
       <div className={styles.description}>
         <h1 className={styles.description__path_name}>
           {path.name}
-          {role && role === 'AUTHOR'&& userId===path.userId && (
+          {role && role === RoleTypes.AUTHOR && userId === path.userId && (
             <Label
               style={{
                 background: 'transparent',
@@ -36,7 +37,7 @@ path, role, pathId, userId }) => {
               }}
               onClick={() => history.push(`/path/edit/${pathId}`)}
             >
-              <Icon name='pencil' />
+              <Icon name="pencil" />
             </Label>
           )}
         </h1>
@@ -53,6 +54,6 @@ path, role, pathId, userId }) => {
       </div>
     </div>
   );
-}
+};
 
 export default PathOverview;

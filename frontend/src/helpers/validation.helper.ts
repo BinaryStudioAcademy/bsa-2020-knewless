@@ -25,7 +25,7 @@ export const REQUIRED_FIELD_MESSAGE = 'This field is required';
 export const TWITTER_URL_PREFIX = 'https://twitter.com/';
 
 // eslint-disable-next-line max-len
-const emailRegex = /^\w[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~"-]{0,34}@((\[?[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}]?)|(([a-zA-Z0-9][a-zA-Z\-0-9]*\.)+[a-zA-Z]+))$/;
+const emailRegex = /^\w[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~"-]*@((\[?[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}]?)|(([a-zA-Z0-9][a-zA-Z\-0-9]*\.)+[a-zA-Z]+))$/;
 const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,32}$/;
 const userNameRegex = /^[a-zA-Z]{2,40}$/;
 const companyRegex = /^$|^[a-zA-Z0-9- ]{2,40}$/;

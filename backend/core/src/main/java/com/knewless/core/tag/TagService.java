@@ -1,5 +1,6 @@
 package com.knewless.core.tag;
 
+import com.knewless.core.db.BaseEntity;
 import com.knewless.core.tag.dto.TagDto;
 import com.knewless.core.tag.model.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +24,20 @@ public class TagService {
 	}
 
 	public List<TagDto> getByLectureId(UUID lectureId) {
-		return tagRepository.findByLectureId(lectureId)
+		return tagRepository.findAllByLectures_Id(lectureId)
 				.stream()
 				.map(TagMapper.INSTANCE::tagToDto)
 				.collect(Collectors.toList());
 	}
 	
+	public List<TagDto> getByUserId(UUID userId) {
+		List<Tag> ofUser = tagRepository.findAllByUsers_Id(userId);
+		if (ofUser.isEmpty()) {
+			ofUser.addAll(tagRepository.findAll());
+		} else {
+			ofUser.addAll(tagRepository.findAllByIdNotIn(ofUser.stream()
+					.map(BaseEntity::getId).collect(Collectors.toList())));
+		}
+		return ofUser.stream().map(TagMapper.INSTANCE::tagToDto).collect(Collectors.toList());
+	}
 }

@@ -10,14 +10,12 @@ import com.knewless.core.lecture.dto.ShortLectureDto;
 import com.knewless.core.lecture.model.Lecture;
 import com.knewless.core.messaging.Message;
 import com.knewless.core.messaging.MessageSender;
-import com.knewless.core.messaging.MessageType;
 import com.knewless.core.tag.TagRepository;
 import com.knewless.core.user.UserRepository;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import javassist.NotFoundException;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -47,7 +45,7 @@ public class LectureService {
         this.emailService = emailService;
     }
 
-    public LectureCreateResponseDto saveLecture(MultipartFile file, String filename, UUID lectureId, int duration)
+    public LectureCreateResponseDto saveLecture(UUID userId, MultipartFile file, String filename, UUID lectureId, int duration)
             throws NotFoundException {
         Lecture savedLecture = lectureRepository.findById(lectureId)
                 .orElseThrow(() -> new NotFoundException("Lecture with id " + lectureId + " not found"));
@@ -56,10 +54,11 @@ public class LectureService {
         String fileType = concatString[concatString.length - 1];
         String relativePath = "assets/video/"+folderId +"/"+ folderId + "-origin." + fileType;
         lectureRepository.setDurationPath(lectureId, duration, relativePath);
-        Message message = new Message();
-        message.setEntityId(lectureId);
-        message.setFolderId(folderId);
-        message.setType(MessageType.REQUEST);
+        var message = Message.builder()
+                .entityId(lectureId)
+                .folderId(folderId)
+                .userId(userId)
+                .build();
         messageSender.sendToFileProcessor(message);
         return LectureCreateResponseDto.builder()
                         .id(savedLecture.getId())

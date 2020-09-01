@@ -12,6 +12,6 @@ export const InlineLoaderWrapper: React.FunctionComponent<IInlineLoaderProps> = 
 }) => (
   <>
     <Loader active={loading} inline={centered ? 'centered' : true} className={className || ''} />
-    {children}
+    {loading || children}
   </>
 );

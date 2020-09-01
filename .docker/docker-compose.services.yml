@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+  # zookeeper
+  zookeeper:
+    image: confluentinc/cp-zookeeper:5.5.1
+    container_name: zookeeper
+    ports:
+        - 2181:2181
+        - 2000:2000
+    environment:
+        ZOOKEEPER_CLIENT_PORT: 2181
+        ZOOKEEPER_TICK_TIME: 2000
+    
+  # kafka
+  kafka:
+      image: confluentinc/cp-kafka:5.5.1
+      container_name: kafka
+      depends_on:
+          - zookeeper
+      ports:
+          - 9092:9092
+      environment:
+          KAFKA_BROKER_ID: 1
+          KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+          KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+          KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+          KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+          KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+#  Elasticsearch
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.8.1
+    container_name: elasticsearch
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    env_file:
+      - ../.env/elastic.env
+    volumes:
+      - esdata:/elasticsearch/data
+    ports:
+      - 9200:9200
+
+volumes:
+  esdata:
+    driver: local

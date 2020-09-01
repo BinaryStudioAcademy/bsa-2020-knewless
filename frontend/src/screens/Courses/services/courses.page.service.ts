@@ -41,3 +41,11 @@ export async function getTags() {
   });
   return response.json();
 }
+
+export async function getStudentTags() {
+  const response = await callApi({
+    endpoint: '/api/tags/user',
+    type: 'GET'
+  });
+  return response.json();
+}

@@ -5,11 +5,10 @@ dotenv.config();
 
 export const env = {
     app: {
-        rabbitmqConnectionString: getOsEnv('RABBIT_CONNECTION'),
-        rabbitmqExchangeName: getOsEnv('EXCHANGE_NAME'),
-        pushQueueName: getOsEnv('PUSH_QUEUE_NAME'),
-        pushRoutingKey: getOsEnv('PUSH_ROUTING_KEY'),
         tokenSecret: getOsEnv('TOKEN_SECRET'),
-        port: getOsEnv('PUSH_APP')
+        port: getOsEnv('PUSH_APP'),
+        bootstrapAddress: getOsEnv('BOOTSTRAP_ADDRESS'),
+        consumerGroup: getOsEnv('CONSUMER_GROUP'),
+        notificationsTopic: getOsEnv('NOTIFICATIONS_TOPIC')
     }
 };

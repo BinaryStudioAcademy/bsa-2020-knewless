@@ -32,7 +32,7 @@ public class LectureController {
                                                 @RequestParam(value = "image", required = true) MultipartFile image,
                                                 @RequestParam UUID id,
                                                 @RequestParam int duration) throws NotFoundException {
-        return lectureService.saveLecture(image, image.getOriginalFilename(), id, duration);
+        return lectureService.saveLecture(userPrincipal.getId(), image, image.getOriginalFilename(), id, duration);
     }
 
     @PostMapping

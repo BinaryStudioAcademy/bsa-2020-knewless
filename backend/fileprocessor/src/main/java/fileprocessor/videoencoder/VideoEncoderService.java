@@ -2,9 +2,12 @@ package fileprocessor.videoencoder;
 
 import fileprocessor.lecture.LectureRepository;
 import fileprocessor.lecture.model.Lecture;
-import fileprocessor.messaging.Message;
 import fileprocessor.messaging.MessageSender;
-import fileprocessor.messaging.MessageType;
+import fileprocessor.messaging.notification.UserMessage;
+import fileprocessor.messaging.notification.UserMessageType;
+import fileprocessor.notification.NotificationService;
+import fileprocessor.notification.dto.NotificationDto;
+import fileprocessor.notification.model.Notification;
 import lombok.extern.slf4j.Slf4j;
 import net.bramp.ffmpeg.FFmpegExecutor;
 import net.bramp.ffmpeg.FFmpegUtils;
@@ -36,6 +39,8 @@ public class VideoEncoderService {
     @Autowired
     private LectureRepository lectureRepository;
     @Autowired
+    private NotificationService notificationService;
+    @Autowired
     private FFprobe ffprobe;
     @Autowired
     private FFmpegExecutor fFmpegExecutor;
@@ -44,7 +49,7 @@ public class VideoEncoderService {
 
     private FFmpegProbeResult inputVideo;
 
-    public void encode(String id, UUID entityId) throws IOException {
+    public void encode(String id, UUID entityId, UUID userId) throws IOException {
         String baseFilePath = rootPath + "/video/" + id + "/" + id;
         String path = "assets/video/" + id + "/" + id;
         inputVideo = ffprobe.probe(baseFilePath + "-origin.mp4");
@@ -58,7 +63,6 @@ public class VideoEncoderService {
             ).run();
 
             update480(path + "-480.mp4", entityId);
-            sendResponse(id, entityId);
         }
         if (videoInfo.width >= HD_WIDTH) {
             fFmpegExecutor.createJob(getBuilder(
@@ -74,6 +78,8 @@ public class VideoEncoderService {
             ).run();
             update1080(path + "-1080.mp4", entityId);
         }
+        Notification notification = notificationService.saveLectureNotification(entityId, userId);
+        sendResponse(notification, userId);
     }
 
     private void updateOrigin(String sourceId, UUID lectureId, String thumbnail) {
@@ -99,13 +105,13 @@ public class VideoEncoderService {
         lectureRepository.save(lecture);
     }
 
-
-    private void sendResponse(String folderId, UUID entityId) {
-        Message message = new Message();
-        message.setFolderId(folderId);
-        message.setEntityId(entityId);
-        message.setType(MessageType.RESPONSE);
-        messageSender.send(message);
+    private void sendResponse(Notification notification, UUID userId) {
+        var userMessage = UserMessage.builder()
+                    .receiverId(userId)
+                    .body(NotificationDto.fromEntity(notification))
+                    .type(UserMessageType.PERSONAL)
+                    .build();
+            messageSender.send(userMessage);
     }
 
     private FFmpegBuilder getBuilder(String outputFilePath, int width, int height) {

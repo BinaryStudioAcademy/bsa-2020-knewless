@@ -30,6 +30,7 @@ dependencies {
 	implementation 'org.springframework.data:spring-data-elasticsearch'
 	implementation "io.jsonwebtoken:jjwt-jackson:${jjwt}"
 	implementation 'org.springframework.boot:spring-boot-starter-amqp'
+	implementation 'org.springframework.kafka:spring-kafka'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'javax.validation:validation-api:2.0.1.Final'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
@@ -50,6 +51,7 @@ dependencies {
 	}
 	testImplementation 'org.springframework.amqp:spring-rabbit-test'
 	testImplementation 'com.h2database:h2'
+	testImplementation 'org.springframework.kafka:spring-kafka-test'
 }
 
 test {

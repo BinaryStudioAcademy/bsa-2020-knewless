@@ -23,7 +23,7 @@ import { TagSelector } from '@components/TagSelector';
 import { GradientButton } from '@components/buttons/GradientButton';
 import GrayOutlineButton from '@components/buttons/GrayOutlineButton';
 import { PathPreview } from '../../components/PathPreview';
-import Confirmation from '@components/Confirmation';
+import ConfirmationModal from '@components/ConfirmationModal';
 import { useHistory, useParams } from 'react-router-dom';
 import { IBindingAction, IBindingCallback1 } from '@models/Callbacks';
 import {
@@ -333,7 +333,7 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
                 </div>
               </div>
             </div>
-            <Confirmation
+            <ConfirmationModal
               open={isConfirming}
               title="Your unsaved changes will be lost."
               text="Are you absolutely sure?"
