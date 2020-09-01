@@ -118,6 +118,7 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
     openAction(false);
     setAddByLink(false);
     setLink('');
+    setDuration(0);
     setLinkValid(true);
     setLinkAccepted(false);
     setSelectedTags([]);

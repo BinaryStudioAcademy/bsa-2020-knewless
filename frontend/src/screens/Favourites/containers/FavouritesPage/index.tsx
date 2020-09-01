@@ -116,7 +116,7 @@ const FavouritesPage: React.FC<IFavouritesPageProps> = ({
                 className={`${styles.menu_item}
                 ${current === 0 ? styles.menu_selected : styles.menu_default}`}
               >
-                Paths
+                Courses
               </button>
               {current === 0 && <div className={styles.underline} />}
             </div>
@@ -127,7 +127,7 @@ const FavouritesPage: React.FC<IFavouritesPageProps> = ({
                 className={`${styles.menu_item}
                 ${current === 1 ? styles.menu_selected : styles.menu_default}`}
               >
-                Courses
+                Lectures
               </button>
               {current === 1 && <div className={styles.underline} />}
             </div>
@@ -138,7 +138,7 @@ const FavouritesPage: React.FC<IFavouritesPageProps> = ({
                 className={`${styles.menu_item}
                 ${current === 2 ? styles.menu_selected : styles.menu_default}`}
               >
-                Lectures
+                Paths
               </button>
               {current === 2 && <div className={styles.underline} />}
             </div>
@@ -149,7 +149,7 @@ const FavouritesPage: React.FC<IFavouritesPageProps> = ({
                 className={`${styles.menu_item}
                 ${current === 3 ? styles.menu_selected : styles.menu_default}`}
               >
-                Authors
+                Articles
               </button>
               {current === 3 && <div className={styles.underline} />}
             </div>
@@ -160,7 +160,7 @@ const FavouritesPage: React.FC<IFavouritesPageProps> = ({
                 className={`${styles.menu_item}
                 ${current === 4 ? styles.menu_selected : styles.menu_default}`}
               >
-                Articles
+                Authors
               </button>
               {current === 4 && <div className={styles.underline} />}
             </div>
@@ -177,19 +177,19 @@ const FavouritesPage: React.FC<IFavouritesPageProps> = ({
         </div>
         <div className={styles.wide_container}>
           <LoaderWrapper loading={isCoursesLoading || isLecturesLoading || isAuthorsLoading || isPathsLoading}>
-            {current === 1 && (
+            {current === 0 && (
               <FavouriteCourses filterByName={filtering} remove={removeCourseFromFavourite} courses={courses} />
             )}
-            {current === 3 && (
+            {current === 4 && (
               <FavouriteAuthors filterByName={filtering} remove={removeAuthorFromFavourite} authors={authors} />
             )}
-            {current === 2 && (
+            {current === 1 && (
               <FavouriteLectures filterByName={filtering} remove={removeLectureFromFavourite} lectures={lectures} />
             )}
-            {current === 4 && (
+            {current === 3 && (
               <FavouriteArticles articles={[]} />
             )}
-            {current === 0 && (
+            {current === 2 && (
               <FavouritePaths filterByName={filtering} remove={removePathFromFavourite} paths={paths} />
             )}
           </LoaderWrapper>

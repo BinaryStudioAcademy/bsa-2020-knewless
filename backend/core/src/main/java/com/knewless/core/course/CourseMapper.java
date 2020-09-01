@@ -12,7 +12,7 @@ public interface CourseMapper {
 
     static int calculateRating(long allReactions, long positiveReactions) {
         return allReactions == 0 ? 0 :
-                Math.round((float) positiveReactions / allReactions);
+              (int) Math.floor(((float) positiveReactions / allReactions)+0.5);
     }
 
     @Mapping(source = "category", target = "category.name")
