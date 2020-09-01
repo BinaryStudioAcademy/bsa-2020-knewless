@@ -10,7 +10,6 @@ import com.knewless.core.messaging.userMessage.UserMessageType;
 import com.knewless.core.notification.NotificationService;
 import com.knewless.core.notification.dto.NotificationDto;
 import com.knewless.core.student.StudentRepository;
-import com.knewless.core.student.model.Student;
 import com.knewless.core.subscription.dto.SubscriptionDto;
 import com.knewless.core.subscription.mapper.SubscriptionMapper;
 import com.knewless.core.subscription.model.Subscription;

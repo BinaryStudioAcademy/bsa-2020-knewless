@@ -22,7 +22,7 @@ const NotificationItem = ({ notification, readNotif }) => (
       {/* eslint-enable max-len*/}
       <div className={styles.text}>
         <a
-          href={`/${notification.sourceType.toLowerCase()}/${notification.sourceId}`}
+          href={`/${notification.sourceType?.toLowerCase()}/${notification.sourceId}`}
           target="_tab"
           className={styles.link}
         >

@@ -84,5 +84,4 @@ public class AuthController {
     public VerifyEmailResponseDto verifyEmail(@Valid @RequestParam UUID id) {
         return authService.verifyEmail(id);
     }
-
 }

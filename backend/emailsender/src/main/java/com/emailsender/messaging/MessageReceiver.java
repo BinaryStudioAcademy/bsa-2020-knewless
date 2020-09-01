@@ -4,6 +4,7 @@ import com.emailsender.service.EmailService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -14,8 +15,8 @@ public class MessageReceiver {
     @Autowired
     private EmailService emailService;
 
-    @RabbitListener(queues = "${rabbitmq.queue}")
-    public void receive(Message message) throws IOException {
+    @KafkaListener(topics = "${kafka.topic}", groupId = "${kafka.consumer.group}")
+    public void listen(Message message) {
         if (message.getType() == EmailType.REGISTRATION) {
             log.info(" [x] Received '{}'", message);
             emailService.sendRegisterMessage(message.getEmail(), message.getLink());
