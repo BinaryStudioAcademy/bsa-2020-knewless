@@ -4,7 +4,8 @@ import {
   fetchCoursesByTagRoutine,
   fetchAllCoursesRoutine,
   fetchAllAuthorCoursesRoutine,
-  fetchAllTagsRoutine
+  fetchAllTagsRoutine,
+  fetchDataForStudentRoutine
 } from '../../routines';
 import * as coursesService from '../../services/courses.page.service';
 import { Routine } from 'redux-saga-routines';
@@ -65,9 +66,7 @@ function* getAllTags() {
   try {
     const tags = yield call(coursesService.getTags);
 
-    yield put(fetchAllTagsRoutine.success({
-      tags
-    }));
+    yield put(fetchAllTagsRoutine.success({ tags }));
   } catch (error) {
     yield put(fetchAllTagsRoutine.failure(error?.message));
   }
@@ -93,12 +92,33 @@ function* watchGetAllAuthorCoursesRequest() {
   yield takeEvery(fetchAllAuthorCoursesRoutine.TRIGGER, getAllAuthorCourses);
 }
 
+function* getAllDataForStudent() {
+  try {
+    const courses = yield call(coursesService.getCourses);
+    const continueCourses = yield call(coursesService.getContinueCourses);
+    const tags = yield call(coursesService.getStudentTags);
+
+    yield put(fetchDataForStudentRoutine.success({
+      courses,
+      continueCourses,
+      tags
+    }));
+  } catch (error) {
+    yield put(fetchDataForStudentRoutine.failure(error?.message));
+  }
+}
+
+function* watchTryFetchStudentDataRequests() {
+  yield takeEvery(fetchDataForStudentRoutine.TRIGGER, getAllDataForStudent);
+}
+
 export default function* coursesPageContainerSagas() {
   yield all([
     watchGetCoursesRequest(),
     watchGetCoursesByTagRequest(),
     watchGetAllCoursesRequest(),
     watchGetAllAuthorCoursesRequest(),
-    watchGetAllTagsRequest()
+    watchGetAllTagsRequest(),
+    watchTryFetchStudentDataRequests()
   ]);
 }

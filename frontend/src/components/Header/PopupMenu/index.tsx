@@ -5,6 +5,7 @@ import { history } from '@helpers/history.helper';
 import { ACCESS_TOKEN, REFRESH_TOKEN } from 'screens/Authentication/constants';
 import { IUser } from '@containers/AppRouter/models/IUser';
 import MiddleEllipsis from 'react-middle-ellipsis';
+import { RoleTypes } from '@containers/AppRouter/models/IRole';
 
 export interface IPopupMenuProps {
   user: IUser;
@@ -14,9 +15,9 @@ export interface IPopupMenuProps {
 const PopupMenu: React.FC<IPopupMenuProps> = ({ user, authorId }) => {
   const handleOnClickProfile = () => {
     let profilePath;
-    if (user.role.name === 'USER') {
+    if (user.role.name === RoleTypes.USER) {
       profilePath = '/profile';
-    } else if (user.role.name === 'AUTHOR' && !!authorId) {
+    } else if (user.role.name === RoleTypes.AUTHOR && !!authorId) {
       profilePath = `/author/${authorId}`;
     } else {
       profilePath = '/login';
@@ -54,7 +55,7 @@ const PopupMenu: React.FC<IPopupMenuProps> = ({ user, authorId }) => {
             )}
           </List.Content>
         </List.Item>
-        {user.role.name !== 'AUTHOR' && (
+        {user.role.name !== RoleTypes.AUTHOR && (
           <List.Item className={styles.itemMenu} onClick={handleOnClickHistory}>
             <List.Icon className={styles.iconMenu} name="clock outline" verticalAlign="middle" />
             <List.Content>

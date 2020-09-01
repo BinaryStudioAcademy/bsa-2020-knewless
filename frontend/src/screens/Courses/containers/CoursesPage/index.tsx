@@ -4,18 +4,23 @@ import {
   fetchCoursesByTagRoutine,
   fetchAllCoursesRoutine,
   fetchAllAuthorCoursesRoutine,
-  fetchAllTagsRoutine
+  fetchAllTagsRoutine,
+  fetchDataForStudentRoutine
 } from '../../routines';
 import { IBindingAction, IBindingCallback1 } from '@models/Callbacks';
 import { connect } from 'react-redux';
 import { IAppState } from '@models/AppState';
-import { InlineLoaderWrapper } from '@components/InlineLoaderWrapper';
 import { ICourseItem } from '@screens/Courses/models/ICourseItem';
 import { ITag } from '@screens/Courses/models/ITag';
 import { AllCourses } from '../../components/AllCourses';
 import { MyCourses } from '@screens/Courses/components/MyCourses';
-import { IRole } from '@containers/AppRouter/models/IRole';
+import { IRole, RoleTypes } from '@containers/AppRouter/models/IRole';
 import styles from './styles.module.sass';
+import {
+  extractAllCoursesLoading,
+  extractCoursesByTagLoading,
+  extractDataForStudentLoading
+} from '@screens/Courses/models/ICoursesState';
 
 export interface ICoursePageProps {
   courses: ICourseItem[];
@@ -27,11 +32,13 @@ export interface ICoursePageProps {
   fetchAllCourses: IBindingAction;
   fetchTags: IBindingAction;
   fetchCoursesByTag: IBindingCallback1<string>;
+  fetchDataForStudent: IBindingAction;
   coursesLoading: boolean;
   coursesByTagLoading: boolean;
   allCoursesLoading: boolean;
   allAuthorCoursesLoading: boolean;
   allTagsLoading: boolean;
+  loadingDataForStudent: boolean;
 }
 
 const CoursePage: React.FC<ICoursePageProps> = ({
@@ -43,11 +50,13 @@ const CoursePage: React.FC<ICoursePageProps> = ({
   fetchTags,
   fetchCoursesByTag,
   fetchAllAuthorCourses,
+  fetchDataForStudent,
   coursesLoading,
   coursesByTagLoading,
   allCoursesLoading,
   allAuthorCoursesLoading,
   allTagsLoading,
+  loadingDataForStudent,
   role
 }) => {
   useEffect(() => {
@@ -57,21 +66,17 @@ const CoursePage: React.FC<ICoursePageProps> = ({
         fetchAllCourses();
         break;
       }
-      case 'AUTHOR': {
+      case RoleTypes.USER: {
+        fetchDataForStudent();
+        break;
+      }
+      case RoleTypes.AUTHOR: {
         fetchAllAuthorCourses();
         break;
       }
       default: fetchData();
     }
   }, [fetchData, fetchAllAuthorCourses, fetchAllCourses, role]);
-
-  if (coursesLoading || coursesByTagLoading || allCoursesLoading || allAuthorCoursesLoading || allTagsLoading) {
-    return (
-      <div className={styles.courses_content}>
-        <InlineLoaderWrapper loading centered />
-      </div>
-    );
-  }
   const notStartedCourses = [];
   const continueCoursesIds = continueCourses.map(c => c.id);
   courses.forEach(course => {
@@ -89,15 +94,17 @@ const CoursePage: React.FC<ICoursePageProps> = ({
           role={role.name}
         />
         )}
-        {!role || role.name !== 'AUTHOR' ? (
+        {(!role || role.name !== RoleTypes.AUTHOR) && (
           <AllCourses
             courses={notStartedCourses}
-            tags={tags}
+            tags={tags as any}
             fetchData={fetchAllCourses}
             fetchCoursesByTag={fetchCoursesByTag}
-            loading={allCoursesLoading || allAuthorCoursesLoading}
+            loadingCourses={allCoursesLoading || allAuthorCoursesLoading || coursesByTagLoading
+            || loadingDataForStudent}
+            loadingTags={loadingDataForStudent || allTagsLoading}
           />
-        ) : null}
+        )}
       </>
     </div>
   );
@@ -112,6 +119,7 @@ const mapStateToProps = (state: IAppState) => ({
   allCoursesLoading: state.coursesPage.requests.allCoursesRequest.loading,
   allAuthorCoursesLoading: state.coursesPage.requests.allAuthorCoursesRequest.loading,
   allTagsLoading: state.coursesPage.requests.allTagsRequest.loading,
+  loadingDataForStudent: extractDataForStudentLoading(state),
   role: state.appRouter.user.role
 });
 
@@ -120,7 +128,8 @@ const mapDispatchToProps = {
   fetchCoursesByTag: fetchCoursesByTagRoutine,
   fetchAllCourses: fetchAllCoursesRoutine,
   fetchTags: fetchAllTagsRoutine,
-  fetchAllAuthorCourses: fetchAllAuthorCoursesRoutine
+  fetchAllAuthorCourses: fetchAllAuthorCoursesRoutine,
+  fetchDataForStudent: fetchDataForStudentRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CoursePage);

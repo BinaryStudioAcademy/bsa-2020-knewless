@@ -44,16 +44,12 @@ public class WatchHistoryService {
 	}
 
     public long getProgress(UUID userId, UUID courseId) {
-        long progress = historyRepository.getProgressByUserAndCourse(userId, courseId);
-        return  progress;
+        return historyRepository.getProgressByUserAndCourse(userId, courseId);
     }
     public int getProgressByLecture(UUID userId, UUID lectureId) {
         var history = historyRepository.findByUser_IdAndLecture_Id(userId, lectureId);
-        if(history.isPresent()){
-            return history.get().getSecondsWatched()*100/history.get().getLecture().getDuration();
-        }
-        return 0;
-
+        return history.map(value -> value.getSecondsWatched() * 100 / value.getLecture().getDuration()).orElse(0);
+    
     }
 
 	public long getViewedSeconds(UUID userId, UUID lectureId) {
@@ -84,7 +80,7 @@ public class WatchHistoryService {
         return historyList.stream()
                 .map(HistoryMapper.MAPPER::historyToHistory)
                 .peek(h -> {
-                    List<String> tags = tagRepository.findByLectureId(h.getLecture().getId()).stream().map(Tag::getName).collect(Collectors.toList());
+                    List<String> tags = tagRepository.findAllByLectures_Id(h.getLecture().getId()).stream().map(Tag::getName).collect(Collectors.toList());
                     h.setTags(tags);
                 })
                 .collect(Collectors.toList());

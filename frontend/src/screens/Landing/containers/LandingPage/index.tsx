@@ -141,10 +141,9 @@ export const LandingPage: React.FunctionComponent<ILandingProps> = ({
             onViewAllClick={() => history.push('/paths')}
             loading={loading}
           >
-            {loading || paths.map((p, i) => (
-              <div key={i} className={styles.path_card}>
+            {loading || paths.map(p => (
+              <div key={p.id} className={styles.path_card}>
                 <PathCard
-                  key={p.id}
                   id={p.id}
                   name={p.name}
                   logoSrc={p.logoSrc}

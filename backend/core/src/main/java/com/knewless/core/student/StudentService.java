@@ -3,6 +3,7 @@ package com.knewless.core.student;
 import com.knewless.core.currentUserCource.CurrentUserCourseService;
 import com.knewless.core.dailyProgress.DailyProgressRepository;
 import com.knewless.core.dailyProgress.model.DailyProgress;
+import com.knewless.core.db.BaseEntity;
 import com.knewless.core.exception.custom.ResourceNotFoundException;
 import com.knewless.core.history.WatchHistoryService;
 import com.knewless.core.progressGoal.ProgressGoalRepository;
@@ -60,7 +61,8 @@ public class StudentService {
 		var user = userRepository.findById(userId).orElseThrow(
 				() -> new ResourceNotFoundException("User", "id", userId)
 		);
-		var searchingTags = tagRepository.getTagsByUserId(user.getId());
+		List<UUID> searchingTags = tagRepository.findAllByUsers_Id(user.getId())
+				.stream().map(BaseEntity::getId).collect(Collectors.toList());
 		var student = studentRepository.findByUser(user).orElseThrow(
 				() -> new ResourceNotFoundException("Student", "userId", userId)
 		);

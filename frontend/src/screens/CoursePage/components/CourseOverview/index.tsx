@@ -11,6 +11,7 @@ import { IBindingCallback1, IBindingAction } from '@models/Callbacks';
 import { Icon, Label } from 'semantic-ui-react';
 import { IAuthor } from '@screens/AuthorMainPage/models/IAuthor';
 import OverviewModal from '@components/OverviewModal';
+import { RoleTypes } from '@containers/AppRouter/models/IRole';
 
 interface ICourseOverviewProps {
   imageSrc: string;
@@ -108,13 +109,13 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
           <div className={styles.buttons_with_favourite}>
             <div className={styles.description__buttons}>
               <GradientButton
-                onClick={(progress && progress > 0 && role === 'USER') || authorId === author?.id ? onResume : onStart}
+                onClick={(progress && progress > 0 && role === RoleTypes.USER) || authorId === author?.id ? onResume : onStart}
               >
-                {(progress && progress > 0 && role === 'USER') || role === 'AUTHOR' ? 'Resume' : 'Start'}
+                {(progress && progress > 0 && role === RoleTypes.USER) || role === RoleTypes.AUTHOR ? 'Resume' : 'Start'}
               </GradientButton>
               <GrayOutlineButton onClick={() => setIsOverviewOpen(true)}>Course overview</GrayOutlineButton>
             </div>
-            {isAuthorized && role==='USER' && (
+            {isAuthorized && role===RoleTypes.USER && (
               <div className={styles.button_favourite_wrp}>
                 <AddToFavouriteButton
                   isFavourite={favourite}
