@@ -2,9 +2,7 @@ package fileprocessor.videoencoder;
 
 import fileprocessor.lecture.LectureRepository;
 import fileprocessor.lecture.model.Lecture;
-import fileprocessor.messaging.Message;
 import fileprocessor.messaging.MessageSender;
-import fileprocessor.messaging.MessageType;
 import fileprocessor.messaging.notification.UserMessage;
 import fileprocessor.messaging.notification.UserMessageType;
 import fileprocessor.notification.NotificationService;
