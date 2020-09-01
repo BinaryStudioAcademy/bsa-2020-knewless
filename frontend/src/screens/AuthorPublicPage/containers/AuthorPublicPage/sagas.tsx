@@ -21,9 +21,8 @@ function* followAuthor(action: Routine<any>) {
       sourceId: action.payload,
       sourceType: 'AUTHOR'
     };
-    const response = yield call(publicAuthorPageService.followAuthor, subscription);
-    yield put(followAuthorRoutine.success(response));
-    yield put(fetchAuthorDataRoutine.trigger(action.payload));
+    yield call(publicAuthorPageService.followAuthor, subscription);
+    yield put(followAuthorRoutine.success());
   } catch (error) {
     yield put(followAuthorRoutine.failure(error?.message));
   }
@@ -35,9 +34,8 @@ function* unfollowAuthor(action: Routine<any>) {
       sourceId: action.payload,
       sourceType: 'AUTHOR'
     };
-    const response = yield call(publicAuthorPageService.unfollowAuthor, subscription);
-    yield put(unfollowAuthorRoutine.success(response));
-    yield put(fetchAuthorDataRoutine.trigger(action.payload));
+    yield call(publicAuthorPageService.unfollowAuthor, subscription);
+    yield put(unfollowAuthorRoutine.success());
   } catch (error) {
     yield put(unfollowAuthorRoutine.failure(error?.message));
   }

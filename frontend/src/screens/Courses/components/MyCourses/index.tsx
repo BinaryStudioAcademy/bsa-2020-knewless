@@ -16,7 +16,7 @@ export interface IMyCourses {
 export const MyCourses: React.FC<IMyCourses> = ({
   continueCourses, loading, role
 }) => {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(1);
   const isAuthor = role === 'AUTHOR';
   useEffect(() => {
     if (isAuthor) {

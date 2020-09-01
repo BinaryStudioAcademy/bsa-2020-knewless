@@ -1,7 +1,9 @@
 import { Routine } from 'redux-saga-routines';
 import { IAuthorData } from 'screens/AuthorPublicPage/models/IAuthorData';
-import { fetchAuthorDataRoutine, setAuthorMenuActiveItemRoutine,
-  changeFavouriteAuthorStateRoutine, checkFavouriteAuthorStateRoutine } from 'screens/AuthorPublicPage/routines';
+import {
+  fetchAuthorDataRoutine, setAuthorMenuActiveItemRoutine,
+  changeFavouriteAuthorStateRoutine, checkFavouriteAuthorStateRoutine, followAuthorRoutine, unfollowAuthorRoutine
+} from 'screens/AuthorPublicPage/routines';
 import { IAuthorMenu } from 'screens/AuthorPublicPage/models/IAuthorMenu';
 
 const basicAuthorData = {
@@ -46,6 +48,20 @@ export const authorData = (state: IAuthorData = basicAuthorData, action: Routine
       return {
         ...state,
         favourite: action.payload
+      };
+    }
+    case followAuthorRoutine.SUCCESS: {
+      return {
+        ...state,
+        numberOfSubscribers: state.numberOfSubscribers + 1,
+        printFollowButton: false
+      };
+    }
+    case unfollowAuthorRoutine.SUCCESS: {
+      return {
+        ...state,
+        numberOfSubscribers: state.numberOfSubscribers - 1,
+        printFollowButton: true
       };
     }
     default:

@@ -37,8 +37,8 @@ const LoginPage: React.FunctionComponent<ILoginProps> = ({
               Email or password is incorrect
             </div>
           ) : null}
-`        <LoginForm isLoginLoading={isLoginLoading} login={login} isLanding={false} />
-`        <AuthImage />
+        <LoginForm isLoginLoading={isLoginLoading} login={login} isLanding={false} />
+        <AuthImage />
       </div>
     ));
 
