@@ -11,7 +11,7 @@ export interface IAuthorCardsSegment {
 }
 
 export const AuthorCardsSegment: React.FunctionComponent<IAuthorCardsSegment> = (
-  { title, onCreateClick, onViewAllClick, loading, children }
+  { title, onCreateClick, onViewAllClick, loading = false, children }
 ) => (
   <>
     <div className={styles.header}>

@@ -18,7 +18,10 @@ const initialState: IMainPageData = {
   recommendedCourses: [] as ICourseCardProps[],
   paths: [] as IPathCardProps[],
   goals: [],
-  currentGoal: undefined
+  currentGoal: undefined,
+  continueCoursesLoaded: false,
+  recommendedCoursesLoaded: false,
+  pathsLoaded: false
 };
 
 export const mainPageData = (state = initialState, action: Routine<any>) => {
@@ -26,17 +29,20 @@ export const mainPageData = (state = initialState, action: Routine<any>) => {
     case fetchContinueCoursesRoutine.SUCCESS:
       return {
         ...state,
-        continueCourses: [...action.payload]
+        continueCourses: [...action.payload],
+        continueCoursesLoaded: true
       };
     case fetchRecommendedCoursesRoutine.SUCCESS:
       return {
         ...state,
-        recommendedCourses: [...action.payload]
+        recommendedCourses: [...action.payload],
+        recommendedCoursesLoaded: true
       };
     case fetchPathsRoutine.SUCCESS:
       return {
         ...state,
-        paths: [...action.payload]
+        paths: [...action.payload],
+        pathsLoaded: true
       };
     case fetchStudentRoutine.SUCCESS:
       return {
