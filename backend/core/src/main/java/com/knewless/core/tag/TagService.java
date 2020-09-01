@@ -32,7 +32,12 @@ public class TagService {
 	
 	public List<TagDto> getByUserId(UUID userId) {
 		List<Tag> ofUser = tagRepository.findAllByUsers_Id(userId);
-		ofUser.addAll(tagRepository.findAllByIdNotIn(ofUser.stream().map(BaseEntity::getId).collect(Collectors.toList())));
+		if (ofUser.isEmpty()) {
+			ofUser.addAll(tagRepository.findAll());
+		} else {
+			ofUser.addAll(tagRepository.findAllByIdNotIn(ofUser.stream()
+					.map(BaseEntity::getId).collect(Collectors.toList())));
+		}
 		return ofUser.stream().map(TagMapper.INSTANCE::tagToDto).collect(Collectors.toList());
 	}
 }
