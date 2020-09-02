@@ -33,7 +33,7 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
 
     @SuppressWarnings("SpringDataRepositoryMethodReturnTypeInspection")
     @Query(COURSE_SELECT + "WHERE c.id = :id")
-    CourseQueryResult getCourseById(@Param("id") UUID id);
+    Optional<CourseQueryResult> getCourseById(@Param("id") UUID id);
 
     @SuppressWarnings("SpringDataRepositoryMethodReturnTypeInspection")
     @Query(COURSE_SELECT + "where c.author.id = :authorId")

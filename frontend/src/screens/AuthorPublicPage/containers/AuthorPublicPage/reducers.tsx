@@ -21,6 +21,7 @@ const basicAuthorData = {
     level: '',
     author: '',
     category: '',
+    tags: [],
     imageSrc: '',
     duration: 0
   }],
@@ -36,6 +37,7 @@ export const authorData = (state: IAuthorData = basicAuthorData, action: Routine
   switch (action.type) {
     case fetchAuthorDataRoutine.SUCCESS:
       const { favourite } = state;
+      // eslint-disable-next-line no-param-reassign
       action.payload.favourite = favourite;
       return action.payload;
     case changeFavouriteAuthorStateRoutine.SUCCESS: {

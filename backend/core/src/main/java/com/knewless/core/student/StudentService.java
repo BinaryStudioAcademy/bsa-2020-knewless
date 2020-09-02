@@ -92,12 +92,12 @@ public class StudentService {
 	}
 
 	public StudentProfileDto getStudentProfile(UUID userId) {
-		final var user = this.userRepository.findById(userId).orElseThrow(
-				() -> new ResourceNotFoundException("User", "id", userId)
-		);
+		if (!this.userRepository.existsById(userId)) {
+			throw new ResourceNotFoundException("User", "id", userId);
+		}
 		var profile = new StudentProfileDto();
-		profile.setTotalContentWatched((int) watchHistoryService.getTotalViewSeconds(userId));
-		profile.setCourses(currentUserCourseService.getLearningCourses(userId));
+		profile.setTotalContentWatched((int) this.watchHistoryService.getTotalViewSeconds(userId));
+		profile.setCourses(this.currentUserCourseService.getLearningCourses(userId));
 		return profile;
 	}
 

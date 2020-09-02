@@ -8,28 +8,25 @@ import com.knewless.core.author.dto.FavouriteAuthorResponseDto;
 import com.knewless.core.author.mapper.AuthorInfoMapper;
 import com.knewless.core.author.mapper.AuthorMapper;
 import com.knewless.core.author.model.Author;
+import com.knewless.core.course.CourseMapper;
 import com.knewless.core.course.CourseRepository;
-import com.knewless.core.course.model.Course;
 import com.knewless.core.db.SourceType;
 import com.knewless.core.elasticsearch.EsService;
 import com.knewless.core.elasticsearch.model.EsDataType;
 import com.knewless.core.exception.custom.ResourceNotFoundException;
 import com.knewless.core.path.PathRepository;
-import com.knewless.core.path.model.Path;
 import com.knewless.core.school.mapper.SchoolInfoMapper;
 import com.knewless.core.school.model.School;
 import com.knewless.core.security.oauth.UserPrincipal;
 import com.knewless.core.subscription.SubscriptionService;
+import com.knewless.core.tag.TagRepository;
+import com.knewless.core.tag.dto.TagDto;
 import com.knewless.core.user.UserRepository;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
@@ -50,6 +47,8 @@ public class AuthorService {
 
     private final EsService esService;
 
+    private final TagRepository tagRepository;
+
     @Autowired
     public AuthorService(AuthorRepository authorRepository,
                          UserRepository userRepository,
@@ -57,7 +56,7 @@ public class AuthorService {
                          SubscriptionService subscriptionService,
                          ArticleRepository articleRepository,
                          PathRepository pathRepository,
-                         EsService esService) {
+                         EsService esService, TagRepository tagRepository) {
         this.authorRepository = authorRepository;
         this.userRepository = userRepository;
         this.courseRepository = courseRepository;
@@ -65,6 +64,7 @@ public class AuthorService {
         this.subscriptionService = subscriptionService;
         this.esService = esService;
         this.pathRepository = pathRepository;
+        this.tagRepository = tagRepository;
     }
 
     public Optional<AuthorSettingsDto> getAuthorSettings(UUID userId) {
@@ -110,7 +110,16 @@ public class AuthorService {
         final var author = this.authorRepository.findOneById(authorId).orElseThrow(
                 () -> new NotFoundException("Author with id " + authorId + " not found")
         );
-        final var courses = this.courseRepository.getLatestCoursesByAuthorId(authorId);
+        final var authorCourses = courseRepository.getLatestCoursesByAuthorId(authorId).stream()
+                .map(CourseMapper.MAPPER::authorCourseQueryResultToAuthorCourseWithTagsDto)
+                .collect(Collectors.toUnmodifiableList());
+        for (var course : authorCourses) {
+            final var courseTags = this.tagRepository.getTagsByCourseId(course.getId()).stream()
+                    .filter(Objects::nonNull)
+                    .map(tag -> new TagDto(tag.getId(), tag.getName(), tag.getSource()))
+                    .collect(Collectors.toUnmodifiableList());
+            course.setTags(courseTags);
+        }
         final var articles = this.articleRepository.getArticleDtoByAuthorId(authorId);
         final var school = this.authorRepository.getSchoolByAuthorId(authorId);
         final var schoolId = school.map(School::getId).map(UUID::toString).orElse("");
@@ -119,7 +128,7 @@ public class AuthorService {
         final var subscribesCount = this.authorRepository.getNumberOfSubscriptions(authorId).orElse(0);
         return new AuthorPublicDto(
                 author.getUser().getId(), author.getFirstName(), author.getLastName(), author.getAvatar(),
-                author.getBiography(), schoolName, schoolId, subscribesCount, courses, articles, isSubscribed
+                author.getBiography(), schoolName, schoolId, subscribesCount, authorCourses, articles, isSubscribed
         );
     }
 

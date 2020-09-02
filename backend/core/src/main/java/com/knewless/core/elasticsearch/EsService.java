@@ -75,7 +75,7 @@ public class EsService {
 
             case COURSE: {
                 Course course = (Course) data;
-                List<String> tags = tagRepository.getTagsByCourse(course.getId());
+                List<String> tags = tagRepository.getTagsNamesByCourseId(course.getId());
                 entity = EsMapper.esEntityFromCourseEntity(course, tags);
                 break;
             }

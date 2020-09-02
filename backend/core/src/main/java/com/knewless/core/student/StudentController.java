@@ -56,8 +56,12 @@ public class StudentController {
 	}
 
 	@GetMapping("/profile")
-	public StudentProfileDto getStudentProfile(@CurrentUser UserPrincipal userPrincipal) {
-		return studentService.getStudentProfile(userPrincipal.getId());
+	public ResponseEntity<?> getStudentProfile(@CurrentUser UserPrincipal userPrincipal) {
+		final var currentUserId = userPrincipal.getId();
+		if (currentUserId == null) {
+			return ResponseEntity.badRequest().body(new SingleMessageResponse("User id cannot be null."));
+		}
+		return ResponseEntity.ok(this.studentService.getStudentProfile(currentUserId));
 	}
 
 	@GetMapping("/info")

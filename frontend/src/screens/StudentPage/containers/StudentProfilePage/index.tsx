@@ -10,6 +10,10 @@ import { IStudentProfile } from 'screens/StudentPage/models/IStudentProfile';
 import { IBindingAction } from 'models/Callbacks';
 import { RowPlaceholder } from '@components/placeholder/RowPlaceholder';
 import { InlineLoaderWrapper } from '@components/InlineLoaderWrapper';
+import { history } from '@helpers/history.helper';
+import CirclePackingChart from '@components/Charts/CirclePackingChart';
+import { ChartWrapper } from '@components/Charts/ChartWrapper';
+import { getTagsNameWithCountFromCourses } from '@helpers/tag.helper';
 
 interface IStudentProfileProps {
   studentProfile: IStudentProfile;
@@ -25,10 +29,35 @@ const StudentProfile: React.FC<IStudentProfileProps> = ({
   useEffect(() => {
     getStudentProfile();
   }, []);
-  const handleOnClickCourse = () => {
-    console.log('click');
-  };
+
   if (isStudentProfileLoading) return <InlineLoaderWrapper loading centered />;
+
+  const handleDiscoverCoursesButtonClick = () => history.push('/courses');
+
+  const noCoursesPlaceholder = (
+    <RowPlaceholder
+      description="Let's learn something new!"
+      button={{ text: 'Discover new courses', onClick: handleDiscoverCoursesButtonClick }}
+    />
+  );
+
+  const unfinishedCoursesAsc = [];
+  const finishedCourses = [];
+
+  if (profile?.courses?.length > 0) {
+    profile.courses.forEach(c => (c.progress >= 100 ? finishedCourses.push(c) : unfinishedCoursesAsc.push(c)));
+    unfinishedCoursesAsc.sort((a, b) => (a.progress > b.progress ? 1 : -1));
+  }
+
+  const chart = {
+    wrapperId: 'chart',
+    width: 130,
+    height: 130,
+    styles: {
+      circlesColor: '#fff'
+    }
+  };
+
   return (
     <div className={styles.profile}>
       <div className={styles.wrapperTitle}>
@@ -36,18 +65,30 @@ const StudentProfile: React.FC<IStudentProfileProps> = ({
       </div>
       <div className={styles.wrapperTime}>
         <div className={styles.timeBlock}>
-          <ViewTotalTime totalTime={profile.totalContentWatched} />
+          <div className={styles.clock}>
+            <ViewTotalTime totalTime={profile.totalContentWatched} />
+          </div>
+          <div className={styles.chart}>
+            <ChartWrapper width={chart.width} height={chart.height} id={chart.wrapperId}>
+              <CirclePackingChart
+                data={getTagsNameWithCountFromCourses(profile.courses)}
+                width={chart.width}
+                height={chart.height}
+                wrapperId={chart.wrapperId}
+                styles={chart.styles}
+              />
+            </ChartWrapper>
+            <div className={styles.chartLabel}>Topics</div>
+          </div>
         </div>
       </div>
       <div className={styles.detailsProfile}>
         <div className={styles.title}>Currently learning</div>
-        {profile.courses && profile.courses.filter(c => c.progress !== 100).length !== 0 ? (
+        {unfinishedCoursesAsc.length > 0 ? (
           <div className={styles.currentCourse}>
             <List relaxed>
-              {profile.courses.sort((a, b) => (a.progress > b.progress ? 1 : -1)).map(course => (
-                course.progress !== 100
-                && (
-                <List.Item className={styles.course} onClick={handleOnClickCourse}>
+              {unfinishedCoursesAsc.map(course => (
+                <List.Item className={styles.course}>
                   <CurrentCourse
                     id={course.id}
                     author={course.author}
@@ -61,18 +102,14 @@ const StudentProfile: React.FC<IStudentProfileProps> = ({
                     progress={course.progress}
                   />
                 </List.Item>
-                )
               ))}
             </List>
           </div>
-        ) : <RowPlaceholder />}
+        ) : noCoursesPlaceholder}
         <div className={styles.title}>Completed courses</div>
         <div className={styles.completedCourse}>
           <List relaxed>
-            {profile.courses && profile.courses.filter(c => c.progress === 100).length !== 0
-              ? profile.courses.map(course => (
-                course.progress === 100
-              && (
+            {finishedCourses.length > 0 ? (finishedCourses.map(course => (
               <List.Item className={styles.completedCourseItem}>
                 <CompletedCourse
                   id={course.id}
@@ -87,8 +124,7 @@ const StudentProfile: React.FC<IStudentProfileProps> = ({
                   progress={course.progress}
                 />
               </List.Item>
-              )))
-              : <RowPlaceholder webOnLeft={false} />}
+            ))) : <RowPlaceholder description="Just finish your first course." webOnLeft={false} />}
           </List>
         </div>
       </div>

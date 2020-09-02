@@ -26,11 +26,13 @@ import com.knewless.core.security.oauth.UserPrincipal;
 import com.knewless.core.subscription.SubscriptionService;
 import com.knewless.core.tag.TagRepository;
 import com.knewless.core.tag.TagService;
+import com.knewless.core.tag.dto.TagDto;
 import com.knewless.core.user.UserService;
 import com.knewless.core.user.model.User;
 import com.knewless.core.user.role.model.Role;
 import com.knewless.core.lecture.dto.ShortLectureDto;
 import com.knewless.core.user.role.model.RoleType;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
@@ -201,19 +203,31 @@ public class CourseService {
     }
 
     public CourseDto getCourseById(UUID id) {
-        return CourseMapper.MAPPER.courseQueryResultToCourseDto(courseRepository.getCourseById(id));
+        return CourseMapper.MAPPER.courseQueryResultToCourseDto(courseRepository.getCourseById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Course", "id", id)
+        ));
     }
 
     public CourseWithMinutesDto getCourseWithMinutesById(UUID id) {
-        return CourseMapper.MAPPER.courseQueryToCourseWithMinutes(courseRepository.getCourseById(id));
+        return CourseMapper.MAPPER.courseQueryToCourseWithMinutes(courseRepository.getCourseById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Course", "id", id)
+        ));
     }
 
     public CourseProfileDto getCourseProfileById(UUID id, UUID userId) {
-        CourseProfileDto course = CourseMapper.MAPPER.courseQueryToCourseProfileDto(courseRepository.getCourseById(id));
-        long duration = course.getTimeSeconds();
-        long progress = ((watchHistoryService.getProgress(id, userId) * 100) / course.getTimeSeconds());
-        course.setProgress((int) (progress > 100 ? 100 : progress));
-        return course;
+        final var course = this.courseRepository.getCourseById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Course", "id", id)
+        );
+        final var studentCourse = CourseMapper.MAPPER.courseQueryToCourseProfileDto(course);
+        final var courseTags = this.tagRepository.getTagsByCourseId(course.getId()).stream()
+                .filter(Objects::nonNull)
+                .map(tag -> new TagDto(tag.getId(), tag.getName(), tag.getSource()))
+                .collect(Collectors.toUnmodifiableList());
+        studentCourse.setTags(courseTags);
+        long duration = studentCourse.getTimeSeconds();
+        long progress = ((watchHistoryService.getProgress(id, userId) * 100) / studentCourse.getTimeSeconds());
+        studentCourse.setProgress((int) (progress > 100 ? 100 : progress));
+        return studentCourse;
     }
 
     public List<CourseWithMinutesDto> getCoursesWithMinutesByUserId(UUID userId) {
@@ -223,9 +237,17 @@ public class CourseService {
     }
 
     public List<AuthorCourseDto> getLatestCoursesByAuthorId(UUID authorId) {
-        return courseRepository.getLatestCoursesByAuthorId(authorId).stream()
+        final var authorCourses = courseRepository.getLatestCoursesByAuthorId(authorId).stream()
                 .map(CourseMapper.MAPPER::authorCourseQueryResultToAuthorCourseDto)
                 .collect(Collectors.toUnmodifiableList());
+        for (var course : authorCourses) {
+            final var courseTags = this.tagRepository.getTagsByCourseId(course.getId()).stream()
+                    .filter(Objects::nonNull)
+                    .map(tag -> new TagDto(tag.getId(), tag.getName(), tag.getSource()))
+                    .collect(Collectors.toUnmodifiableList());
+            course.setTags(courseTags);
+        }
+        return authorCourses;
     }
 
     public CourseFullInfoDto getAllCourseInfoById(UUID id, UUID userId) {
@@ -263,7 +285,7 @@ public class CourseService {
         return courseRepository.getDetailCoursesByUserId(id)
                 .stream()
                 .map(c -> {
-                    List<String> tags = tagRepository.getTagsByCourse(c.getId());
+                    List<String> tags = tagRepository.getTagsNamesByCourseId(c.getId());
                     tags = tags.size() > 3 ? tags.subList(0, 3) : tags;
                     CourseDetailsDto course = CourseMapper.MAPPER.courseDetailsResultToCourseDetailsDto(c);
                     course.setTags(tags);
@@ -276,7 +298,7 @@ public class CourseService {
         return courseRepository.getDetailCourses(pageable)
                 .stream()
                 .map(c -> {
-                    List<String> tags = tagRepository.getTagsByCourse(c.getId());
+                    List<String> tags = tagRepository.getTagsNamesByCourseId(c.getId());
                     tags = tags.size() > 3 ? tags.subList(0, 3) : tags;
                     CourseDetailsDto course = CourseMapper.MAPPER.courseDetailsResultToCourseDetailsDto(c);
                     course.setTags(tags);
@@ -289,7 +311,7 @@ public class CourseService {
         return courseRepository.getDetailCoursesByLectureTag(tagId)
                 .stream()
                 .map(c -> {
-                    List<String> tags = tagRepository.getTagsByCourse(c.getId());
+                    List<String> tags = tagRepository.getTagsNamesByCourseId(c.getId());
                     tags = tags.size() > 3 ? tags.subList(0, 3) : tags;
                     CourseDetailsDto course = CourseMapper.MAPPER.courseDetailsResultToCourseDetailsDto(c);
                     course.setTags(tags);
@@ -308,7 +330,7 @@ public class CourseService {
         return courseRepository.getDetailCoursesByAuthorId(author.getId())
                 .stream()
                 .map(c -> {
-                    List<String> tags = tagRepository.getTagsByCourse(c.getId());
+                    List<String> tags = tagRepository.getTagsNamesByCourseId(c.getId());
                     tags = tags.size() > 3 ? tags.subList(0, 3) : tags;
                     CourseDetailsDto course = CourseMapper.MAPPER.courseDetailsResultToCourseDetailsDto(c);
                     course.setTags(tags);

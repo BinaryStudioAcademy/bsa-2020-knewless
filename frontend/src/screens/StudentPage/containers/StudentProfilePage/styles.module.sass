@@ -8,95 +8,112 @@ $width_btn: 100px
 $height_btn: 40px
 
 body
-    background: #121421 !important
+  background: #121421 !important
 
 .profile
-    margin: auto
-    padding-top: $header-height
-    color: #ffff
-    width: 100%
-    display: flex
-    flex-direction: column
-.detailsProfile
-    margin: auto
-    width: 100%
-    max-width: $container_width + ($side_padding * 2)
-    padding-left: $side_padding
-    padding-right: $side_padding
-    padding-bottom: 100px
+  margin: auto
+  padding-top: $header-height
+  color: #ffff
+  width: 100%
+  display: flex
+  flex-direction: column
 
-.wrapperTitle    
-    width: 100%
-    background: #2A2B37 !important
+.detailsProfile
+  margin: auto
+  width: 100%
+  max-width: $container_width + ($side_padding * 2)
+  padding-left: $side_padding
+  padding-right: $side_padding
+  padding-bottom: 100px
+
+.wrapperTitle
+  width: 100%
+  background: #2A2B37 !important
+
 #profileTitle
-    margin: auto
-    width: 100%
-    padding-top: 30px
-    padding-bottom: 20px
-    max-width: $container_width + ($side_padding * 2)
-    padding-left: $side_padding
-    padding-right: $side_padding
-    color: #ffff
-    font-family: Custom Open Sans
-    font-style: normal
-    font-weight: 600
-    font-size: 1.5em
-    line-height: 1.5em
+  margin: auto
+  width: 100%
+  max-width: $container_width + ($side_padding * 2)
+  padding: 30px $side_padding 20px
+  color: #ffff
+  font-family: Custom Open Sans, sans-serif
+  font-style: normal
+  font-weight: 600
+  font-size: 1.5em
+  line-height: 1.5em
 
 .title
-    margin: auto
-    width: 100%
-    padding-top: 30px
-    padding-bottom: 20px
-    color: #ffff
-    font-family: Custom Open Sans
-    font-style: normal
-    font-weight: 600
-    font-size: 1.5em
-    line-height: 1.5em
+  margin: auto
+  width: 100%
+  padding-top: 30px
+  padding-bottom: 20px
+  color: #ffff
+  font-family: Custom Open Sans, sans-serif
+  font-style: normal
+  font-weight: 600
+  font-size: 1.5em
+  line-height: 1.5em
 
 .block
-    max-width: $container_width + ($side_padding * 2) !important
-    width: 100%
-    padding-left: $side_padding
-    padding-right: $side_padding
-    margin-left: auto !important
-    margin-right: auto !important
-    padding-bottom: 30px    
+  max-width: $container_width + ($side_padding * 2) !important
+  width: 100%
+  padding-left: $side_padding
+  padding-right: $side_padding
+  margin-left: auto !important
+  margin-right: auto !important
+  padding-bottom: 30px
+
+.wrapperTime
+  background: linear-gradient(52.17deg, #0084F8 9.02%, #FF8576 90.81%)
+  height: $height_wrap_time
+  display: flex
+  justify-items: center
+  align-items: center
+  text-align: center
+  align-content: center
 
 .timeBlock
-    max-width: $container_width + ($side_padding * 2) !important
-    width: 100%
-    padding-left: $side_padding
-    padding-right: $side_padding 
-    margin: auto   
+  display: flex
+  justify-content: flex-start
+  margin-left: auto
+  max-width: $container_width + ($side_padding * 2) !important
+  width: 100%
+  padding-left: $side_padding
+  padding-right: $side_padding
+
+  .clock
+    padding-top: 1em
+    margin-right: 30%
+
 .course
-    cursor: pointer
-    padding: 0 !important
-    margin: 0 !important
-    border-bottom: 1px solid #4a5053
-    &:last-child
-        border: none !important
+  cursor: pointer
+  padding: 0 !important
+  margin: 0 !important
+  border-bottom: 1px solid #4a5053
+
+  &:last-child
+    border: none !important
 
 .completedCourseItem
-    cursor: pointer
-    padding: 0 !important
-    margin: 0 !important
-.wrapperTime
-    background: linear-gradient(52.17deg, #0084F8 9.02%, #FF8576 90.81%)
-    height: $height_wrap_time
-    display: flex
-    justify-items: center
-    align-items: center
-    text-align: center
-    align-content: center
-.currentCourse
-    background: #2A2B37 
-    box-shadow: 0px 30px 40px rgba(0, 0, 0, 0.1)
-.completedCourse
-    background: none
-    min-height: 300px
-.empty
-    padding: 20px 10px
-    font-size: 1.25em       
+  cursor: pointer
+  padding: 0 !important
+  margin: 0 !important
 
+.currentCourse
+  background: #2A2B37
+  box-shadow: 0 30px 40px rgba(0, 0, 0, 0.1)
+
+.completedCourse
+  background: none
+  min-height: 300px
+
+.empty
+  padding: 20px 10px
+  font-size: 1.25em
+
+.chart
+  display: flex
+  flex-direction: column
+
+.chartLabel
+  font-size: 1.1em
