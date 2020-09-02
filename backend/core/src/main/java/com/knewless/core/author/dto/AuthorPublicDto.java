@@ -12,6 +12,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuthorPublicDto {
+    private UUID id;
     private UUID userId;
     private String firstName;
     private String lastName;

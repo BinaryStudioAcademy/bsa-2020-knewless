@@ -1,0 +1,66 @@
+$previewheight: 15em
+
+.container
+  background: #2A2B37
+  display: flex
+  align-items: center
+  width: 100%
+  height: 12em
+
+.card_content_box
+  padding: 0 12px 0 20px
+  width: 60%
+  height: 12em
+  position: relative
+  word-wrap: break-word
+  display: flex
+  flex-direction: column
+
+.imageArticle
+  width: 100%
+  height: 100%
+  object-fit: cover
+
+.uploadWrapper
+  width: 100%
+  height: 100%
+  position: relative
+
+.author
+  font-size: .9em
+  margin: 0.7em 0 0.35em
+  i
+    color: #8c8c8c
+    &:hover
+      text-decoration: underline
+
+.meta
+  &__image
+    height: 12em
+    width: 40%
+
+.article_name
+  margin-top: 4px
+  flex-grow: 1
+
+.nameText
+  margin-top: 12px
+  font-size: 1.3em
+  font-weight: bold
+  color: white
+  &:hover
+    text-decoration: underline
+
+.description
+  max-width: 100%
+  display: inline-block
+
+.description_text
+  margin-top: 10px
+  font-size: 1em
+  opacity: 0.7
+  line-height: 1.5
+  color: white
+  & *
+    color: white !important
+    background: none !important

@@ -21,7 +21,6 @@ import {
   isValidArticleName,
   ARTICLE_NAME_MESSAGE
 } from '@helpers/validation.helper';
-import { saveArticle } from '@screens/AddArticle/services/add-article.service';
 
 export interface IAddArticleProps {
   saveArticle: IBindingCallback1<IArticle>;
@@ -29,7 +28,7 @@ export interface IAddArticleProps {
 }
 
 export const AddArticlePage: React.FC<IAddArticleProps> = ({
-
+  saveArticle
 }) => {
   const history = useHistory();
   const [name, setName] = useState('');
@@ -44,10 +43,10 @@ export const AddArticlePage: React.FC<IAddArticleProps> = ({
   const isRequiredFieldsValid = !!name && isArticleNameValid;
   const isReadyToRelease = isRequiredFieldsValid && uploadImage && content!==undefined;
   const handleSaveArticle = () => {
-    if (!isReadyToRelease) return;
+    if (!isReadyToRelease) return; 
     const article: IArticle = {
       name: name,
-      image: image,
+      image: '',
       text: draftToHtml(convertToRaw(content.getCurrentContent())),
       uploadImage: uploadImage
     };

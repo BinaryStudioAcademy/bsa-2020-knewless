@@ -15,7 +15,7 @@ import java.util.UUID;
 public interface ArticleRepository extends JpaRepository<Article, UUID> {
     List<Article> getArticlesByAuthorId(UUID authorId);
 
-    @Query("select new com.knewless.core.author.dto.AuthorArticlesDto(a.name, a.id) " +
+    @Query("select new com.knewless.core.author.dto.AuthorArticlesDto(a.id, a.name, a.text, a.image) " +
             "from Article a where a.author.id = :authorId")
     List<AuthorArticlesDto> getArticleDtoByAuthorId(@Param("authorId") UUID authorId);
 }

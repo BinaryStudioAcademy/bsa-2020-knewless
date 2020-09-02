@@ -127,7 +127,7 @@ public class AuthorService {
         final var isSubscribed = !subscriptionService.isSubscribe(userPrincipal.getId(), authorId, SourceType.AUTHOR);
         final var subscribesCount = this.authorRepository.getNumberOfSubscriptions(authorId).orElse(0);
         return new AuthorPublicDto(
-                author.getUser().getId(), author.getFirstName(), author.getLastName(), author.getAvatar(),
+                author.getId() ,author.getUser().getId(), author.getFirstName(), author.getLastName(), author.getAvatar(),
                 author.getBiography(), schoolName, schoolId, subscribesCount, authorCourses, articles, isSubscribed
         );
     }

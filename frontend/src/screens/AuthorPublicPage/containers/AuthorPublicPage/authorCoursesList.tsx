@@ -28,7 +28,7 @@ const CoursesList: React.FC<IAuthorCoursesList> = ({ authorData, courses }) => (
             key={c.id}
             id={c.id}
             authorName={`${authorData.firstName} ${authorData.lastName}`}
-            authorId={authorData.userId}
+            authorId={authorData.id}
             tags={c.tags.map(tag => tag.name)}
             rating={0}
             image={c.imageSrc}
