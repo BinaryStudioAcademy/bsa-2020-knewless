@@ -53,7 +53,7 @@ const MainAuthorPage: React.FunctionComponent<IMainAuthorPageProps> = ({
       getAuthorCourses(author.id);
       getAuthorPaths(author.id);
     }
-  }, [user.id, author.id]);
+  }, [user.id, author.id, isSettingsFilled]);
   return (
     <div className={styles.main_page}>
       <AuthorInfoBlock author={author} isLoading={!authorLoaded}/>
