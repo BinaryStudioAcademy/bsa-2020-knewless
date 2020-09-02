@@ -6,4 +6,5 @@ export interface IAppRouterState {
   settingsMode: RoleTypes;
   roleLoading: boolean;
   userLoading: boolean;
+  settingsFilled: boolean;
 }

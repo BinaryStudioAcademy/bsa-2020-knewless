@@ -6,7 +6,6 @@ import styles from './styles.module.sass';
 import LoginRegister from './LoginRegister';
 import UserElement from './UserElement';
 import { connect } from 'react-redux';
-import { IAppState } from '@models/AppState';
 import { IUser } from '@containers/AppRouter/models/IUser';
 import SearchHeader from '@screens/Search/containers/SearchHeader/index';
 import LogoWithText from '@components/LogoWithText';
@@ -15,12 +14,12 @@ interface IHeaderProps {
   currentUser: IUser;
   isAuthorized: boolean;
   authorId?: string;
+  isSettingsFilled: boolean;
 }
 
-const Header = ({ currentUser, isAuthorized, authorId }: IHeaderProps) => {
+const Header = ({ currentUser, isAuthorized, authorId, isSettingsFilled }: IHeaderProps) => {
   const [searchStyle, setSearchStyle] = useState(styles.searchHidden);
   const location = useLocation();
-
   const hidingSearch = useCallback(() => {
     const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
     if (scrollTop < 390) {
@@ -44,14 +43,14 @@ const Header = ({ currentUser, isAuthorized, authorId }: IHeaderProps) => {
     <div className={styles.headerWrp}>
       <div className={styles.customHeader}>
         <div className={styles.left_side}>
-          <NavLink exact to="/">
+          <NavLink exact to={isSettingsFilled ? "/" : "/settings"}>
             <LogoWithText />
           </NavLink>
         </div>
         <div className={styles.middle}>
           <div className={styles.icons}>
             <div className={styles.column}>
-              <NavLink exact to="/">
+              <NavLink exact to={isAuthorized && !isSettingsFilled ? "/settings" : "/"}>
                 <Label
                   basic
                   size="tiny"
@@ -66,7 +65,7 @@ const Header = ({ currentUser, isAuthorized, authorId }: IHeaderProps) => {
               </NavLink>
             </div>
             <div className={styles.column}>
-              <NavLink exact to="/courses">
+              <NavLink exact to={isAuthorized && !isSettingsFilled ? "/settings" : "/courses"}>
                 <Label
                   basic
                   size="tiny"
@@ -81,7 +80,7 @@ const Header = ({ currentUser, isAuthorized, authorId }: IHeaderProps) => {
               </NavLink>
             </div>
             <div className={styles.column}>
-              <NavLink exact to="/paths">
+              <NavLink exact to={isAuthorized && !isSettingsFilled ? "/settings" : "/paths"}>
                 <Label
                   basic
                   size="tiny"
@@ -99,19 +98,22 @@ const Header = ({ currentUser, isAuthorized, authorId }: IHeaderProps) => {
           <SearchHeader className={location.pathname === '/search' ? styles.searchHidden : searchStyle} />
         </div>
         <div className={styles.right_side}>
-          {isAuthorized ? <UserElement user={currentUser} authorId={authorId} /> : <LoginRegister />}
+          {isAuthorized ? <UserElement user={currentUser} authorId={authorId} isSettingsFilled={isSettingsFilled}/>
+            : <LoginRegister />}
         </div>
       </div>
     </div>
   );
 };
 
-const mapStateToProps = (state: IAppState) => {
+const mapStateToProps = (state: any) => {
   const { appRouter, auth, authorMainPage } = state;
+  const { user, settingsFilled } = state.appRouter;
   return {
     currentUser: appRouter.user,
     authorId: authorMainPage.data.author.id,
-    isAuthorized: auth.auth.isAuthorized
+    isAuthorized: auth.auth.isAuthorized,
+    isSettingsFilled: settingsFilled
   };
 };
 
