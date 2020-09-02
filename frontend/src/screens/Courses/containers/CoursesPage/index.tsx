@@ -17,10 +17,9 @@ import { MyCourses } from '@screens/Courses/components/MyCourses';
 import { IRole, RoleTypes } from '@containers/AppRouter/models/IRole';
 import styles from './styles.module.sass';
 import {
-  extractAllCoursesLoading,
-  extractCoursesByTagLoading,
   extractDataForStudentLoading
 } from '@screens/Courses/models/ICoursesState';
+import { InlineLoaderWrapper } from '@components/InlineLoaderWrapper';
 
 export interface ICoursePageProps {
   courses: ICourseItem[];
@@ -77,6 +76,7 @@ const CoursePage: React.FC<ICoursePageProps> = ({
       default: fetchData();
     }
   }, [fetchData, fetchAllAuthorCourses, fetchAllCourses, role]);
+
   const notStartedCourses = [];
   const continueCoursesIds = continueCourses.map(c => c.id);
   courses.forEach(course => {
@@ -86,26 +86,28 @@ const CoursePage: React.FC<ICoursePageProps> = ({
   });
   return (
     <div className={styles.courses_content}>
-      <>
-        {role && (
-        <MyCourses
-          continueCourses={continueCourses}
-          loading={coursesLoading || allAuthorCoursesLoading}
-          role={role.name}
-        />
-        )}
-        {(!role || role.name !== RoleTypes.AUTHOR) && (
-          <AllCourses
-            courses={notStartedCourses}
-            tags={tags as any}
-            fetchData={fetchAllCourses}
-            fetchCoursesByTag={fetchCoursesByTag}
-            loadingCourses={allCoursesLoading || allAuthorCoursesLoading || coursesByTagLoading
-            || loadingDataForStudent}
-            loadingTags={loadingDataForStudent || allTagsLoading}
+      {!loadingDataForStudent && !allAuthorCoursesLoading ? (
+        <>
+          {role && (
+          <MyCourses
+            continueCourses={continueCourses}
+            loading={coursesLoading || allAuthorCoursesLoading}
+            role={role.name}
           />
-        )}
-      </>
+          )}
+          {(!role || role.name !== RoleTypes.AUTHOR) && (
+            <AllCourses
+              courses={notStartedCourses}
+              tags={tags as any}
+              fetchData={fetchAllCourses}
+              fetchCoursesByTag={fetchCoursesByTag}
+              loadingCourses={allCoursesLoading || allAuthorCoursesLoading || coursesByTagLoading
+              || loadingDataForStudent}
+              loadingTags={loadingDataForStudent || allTagsLoading}
+            />
+          )}
+        </>
+      ) : (<InlineLoaderWrapper loading centered />)}
     </div>
   );
 };
