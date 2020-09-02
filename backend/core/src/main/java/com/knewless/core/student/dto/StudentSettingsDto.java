@@ -1,5 +1,6 @@
 package com.knewless.core.student.dto;
 
+import com.knewless.core.tag.dto.TagDto;
 import lombok.Data;
 
 import javax.validation.constraints.*;
@@ -76,6 +77,6 @@ public class StudentSettingsDto {
     @DecimalMax(value = "2020", message = "Year max value is 2020.")
     private int year;
 
-    private List<UUID> tags;
+    private List<TagDto> tags;
 
 }

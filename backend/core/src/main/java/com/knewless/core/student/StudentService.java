@@ -3,7 +3,6 @@ package com.knewless.core.student;
 import com.knewless.core.currentUserCource.CurrentUserCourseService;
 import com.knewless.core.dailyProgress.DailyProgressRepository;
 import com.knewless.core.dailyProgress.model.DailyProgress;
-import com.knewless.core.db.BaseEntity;
 import com.knewless.core.exception.custom.ResourceNotFoundException;
 import com.knewless.core.history.WatchHistoryService;
 import com.knewless.core.progressGoal.ProgressGoalRepository;
@@ -13,6 +12,7 @@ import com.knewless.core.student.dto.StudentProfileDto;
 import com.knewless.core.student.dto.StudentSettingsDto;
 import com.knewless.core.student.mapper.StudentMapper;
 import com.knewless.core.tag.TagRepository;
+import com.knewless.core.tag.dto.TagDto;
 import com.knewless.core.tag.model.Tag;
 import com.knewless.core.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,16 +58,14 @@ public class StudentService {
 	}
 
 	public Optional<StudentSettingsDto> getStudentSettings(UUID userId) {
-		var user = userRepository.findById(userId).orElseThrow(
-				() -> new ResourceNotFoundException("User", "id", userId)
-		);
-		List<UUID> searchingTags = tagRepository.findAllByUsers_Id(user.getId())
-				.stream().map(BaseEntity::getId).collect(Collectors.toList());
-		var student = studentRepository.findByUser(user).orElseThrow(
+		var student = studentRepository.findByUserId(userId).orElseThrow(
 				() -> new ResourceNotFoundException("Student", "userId", userId)
 		);
 		var result = StudentMapper.fromEntity(student);
-		result.setTags(searchingTags);
+		var studentTags = tagRepository.findAllByUsers_Id(userId).stream()
+				.map(t -> new TagDto(t.getId(), t.getName(), t.getSource()))
+				.collect(Collectors.toList());
+		result.setTags(studentTags);
 		return Optional.of(result);
 	}
 
@@ -77,7 +75,7 @@ public class StudentService {
 		);
 		user.setTags(settings.getTags().stream().map(t -> {
 			var tempTag = new Tag();
-			tempTag.setId(t);
+			tempTag.setId(t.getId());
 			return tempTag;
 		}).collect(Collectors.toSet()));
 

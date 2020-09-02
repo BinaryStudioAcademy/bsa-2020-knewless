@@ -19,5 +19,6 @@ public interface AuthorMapper {
     @Mapping(target = "school", expression = "java(author.getSchool() == null? \"\" : author.getSchool().getName())")
     @Mapping(target = "paths", ignore = true)
     @Mapping(target = "courses", ignore = true)
+    @Mapping(target = "followers", ignore = true)
     FavouriteAuthorResponseDto authorToFavouriteAuthorResponseDto(Author author);
 }
