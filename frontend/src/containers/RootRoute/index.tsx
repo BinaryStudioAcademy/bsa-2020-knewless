@@ -11,9 +11,12 @@ import MainStudentPage from '@screens/MainPage/containers/MainStudentPage';
 interface IRootRouteProps {
   user: IUser;
   isAuthorized: boolean;
+  exact: boolean;
+  path: string;
 }
 
-const RootRoute: React.FunctionComponent<IRootRouteProps> = ({ isAuthorized, user }) => {
+const RootRoute: React.FunctionComponent<IRootRouteProps> = props => {
+  const { isAuthorized, user } = props;
   let currentComponent: React.FunctionComponent = () => null;
   if (!isAuthorized) {
     currentComponent = LandingPage;
@@ -25,11 +28,7 @@ const RootRoute: React.FunctionComponent<IRootRouteProps> = ({ isAuthorized, use
     }
   }
   return (
-    <PublicRoute
-      exact
-      path="/"
-      component={currentComponent}
-    />
+    <PublicRoute {...props} component={currentComponent} />
   );
 };
 
