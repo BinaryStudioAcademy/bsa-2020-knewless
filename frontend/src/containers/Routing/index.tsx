@@ -110,7 +110,8 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({
           <PrivateRoute exact path="/course/edit/:courseId" roles={[RoleTypes.AUTHOR]} component={AddCourse} />
           <PrivateRoute exact path="/path/edit/:pathId" roles={[RoleTypes.AUTHOR]} component={AddPathPage} />
           <PrivateRoute exact path="/history" roles={[RoleTypes.USER]} component={HistoryPage} />
-          <PublicRoute component={NotFoundPage} />
+          <PublicRoute exact path="/404" component={NotFoundPage} />
+          <Redirect to="/404" />
           {isHeaderShown && <Footer />}
         </Route>
       </Switch>
