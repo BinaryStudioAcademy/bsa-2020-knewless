@@ -25,6 +25,7 @@ import { loginModal } from '../containers/LoginModal/reducer';
 import favourites from '../screens/Favourites/reducers';
 import searchPage from '@screens/SearchResultsPage/reducers';
 import historyPage from '@screens/History/reducers';
+import addArticlePage from '../screens/AddArticle/reducers';
 
 export default combineReducers({
   toastr,
@@ -52,5 +53,6 @@ export default combineReducers({
   pathsPage,
   favourites,
   searchPage,
-  historyPage
+  historyPage,
+  addArticlePage,
 });

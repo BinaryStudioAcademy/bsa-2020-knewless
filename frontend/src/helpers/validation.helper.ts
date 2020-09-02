@@ -12,6 +12,7 @@ export const BIOGRAPHY_MESSAGE = `Biography maximum length can be 600 symbols ${
 export const JOB_MESSAGE = 'Job minimum length must be 2 symbol (only Latin letters, hyphen and whitespaces allowed).';
 export const COURSE_NAME_MESSAGE = `Course name length must be 2-40 symbols ${DIGITS_LATIN_LETTERS_SPEC_CHARS_ONLY}.`;
 export const PATH_NAME_MESSAGE = `Path name length must be 2-40 symbols ${DIGITS_LATIN_LETTERS_SPEC_CHARS_ONLY}.`;
+export const ARTICLE_NAME_MESSAGE = `Article name length must be 2-40 symbols ${DIGITS_LATIN_LETTERS_SPEC_CHARS_ONLY}.`;
 export const DESCRIPTION_MESSAGE = `
 Description minimum length must be 10 symbols ${DIGITS_LATIN_LETTERS_SPEC_CHARS_ONLY}.`;
 export const OVERVIEW_MESSAGE = 'Overview minimum length must be 10 symbols.';
@@ -55,3 +56,4 @@ export const isValidPathDescription = (str: string): boolean => coursePathLectur
 export const isValidLectureName = (str: string): boolean => lectureNameRegex.test(str);
 export const isValidLectureDescription = (str: string): boolean => coursePathLectureDescriptionRegex.test(str);
 export const isOverviewValid = (str: string): boolean => overviewRegex.test(str);
+export const isValidArticleName = (str: string): boolean => coursePathNameRegex.test(str);

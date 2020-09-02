@@ -23,6 +23,7 @@ import pathsPageSagas from '@screens/Paths/sagas';
 import favouriteSagas from '@screens/Favourites/sagas';
 import searchPageSagas from '@screens/SearchResultsPage/sagas';
 import historyPageSagas from '@screens/History/sagas';
+import addArticleSagas from '../screens/AddArticle/sagas';
 
 export default function* rootSaga() {
   yield all([
@@ -49,6 +50,7 @@ export default function* rootSaga() {
     pathsPageSagas(),
     searchPageSagas(),
     historyPageSagas(),
-    favouriteSagas()
+    favouriteSagas(),
+    addArticleSagas()
   ]);
 }

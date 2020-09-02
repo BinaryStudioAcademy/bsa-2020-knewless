@@ -5,6 +5,7 @@ import PublicRoute from 'components/PublicRoute';
 import Header from '@components/Header';
 import AddCourse from '@screens/AddCourse/containers/AddCoursePage';
 import AddPathPage from '@screens/AddPath/containers/AddPathPage';
+import AddArticlePage from '@screens/AddArticle/containers/AddArticlePage';
 import LoginPage from '@screens/Authentication/containers/LoginPage';
 import handler from '@components/OAuth2RedirectHandler/OAuth2RedirectHandler';
 import LecturePage from 'screens/LecturePage/containers/Lectures/index';
@@ -99,6 +100,7 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({
           <PublicRoute exact path="/courses" component={CoursesPage} />
           <PublicRoute exact path="/paths" component={PathsPage} />
           <PublicRoute exact path="/search" component={SearchResultsPage} />
+          <PrivateRoute exact path="/add_article" roles={[RoleTypes.AUTHOR]} component={AddArticlePage} />
           <PrivateRoute exact path="/author/:authorId" component={AuthorPublicPage} />
           <PrivateRoute exact path="/favourites" component={FavouritesPage} />
           <PrivateRoute exact path="/lecture/:lectureId" component={LecturePage} />
