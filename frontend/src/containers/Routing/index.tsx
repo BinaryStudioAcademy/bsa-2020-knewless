@@ -35,7 +35,9 @@ import FavouritesPage from '@screens/Favourites/containers/FavouritesPage';
 import SearchResultsPage from '@screens/SearchResultsPage/containers/SearchResultsPage';
 import HistoryPage from '@screens/History/containers/HistoryPage';
 import { Footer } from '@components/Footer';
-import styles from './styles.module.sass'
+import styles from './styles.module.sass';
+import { NotFoundPage } from '@screens/NotFound/container/NotFoundPage';
+import { InlineLoaderWrapper } from '@components/InlineLoaderWrapper';
 
 export interface IRoutingProps {
   isLoading: boolean;
@@ -77,6 +79,8 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({
     setIsHeaderShown(checkHeaderShown());
   });
 
+  if (isLoading) return <InlineLoaderWrapper loading centered />;
+
   return (
     <div className={styles.container}>
       <Switch>
@@ -104,22 +108,9 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({
           <PrivateRoute exact path="/course/edit/:courseId" roles={[RoleTypes.AUTHOR]} component={AddCourse} />
           <PrivateRoute exact path="/path/edit/:pathId" roles={[RoleTypes.AUTHOR]} component={AddPathPage} />
           <PrivateRoute exact path="/history" roles={[RoleTypes.USER]} component={HistoryPage} />
+          <PublicRoute component={NotFoundPage} />
           {isHeaderShown && <Footer />}
         </Route>
-        <div>
-          <LoaderWrapper loading={isLoading}>
-            <Switch>
-              {/* <PrivateRoute
-              exact
-              path="/private"
-              component={Private}
-            /> */}
-              <Route path="/*">
-                <Redirect to="/public" />
-              </Route>
-            </Switch>
-          </LoaderWrapper>
-        </div>
       </Switch>
       {connectToWebsocket()}
       {onOpen && (
