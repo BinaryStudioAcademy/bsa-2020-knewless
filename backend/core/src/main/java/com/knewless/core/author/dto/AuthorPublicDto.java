@@ -1,6 +1,6 @@
 package com.knewless.core.author.dto;
 
-import com.knewless.core.course.dto.AuthorCourseQueryResult;
+import com.knewless.core.course.dto.AuthorCourseWithTagsDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,6 +12,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuthorPublicDto {
+    private UUID id;
     private UUID userId;
     private String firstName;
     private String lastName;
@@ -20,7 +21,7 @@ public class AuthorPublicDto {
     private String schoolName;
     private String schoolId;
     private Integer numberOfSubscribers;
-    private List<AuthorCourseQueryResult> courses;
+    private List<AuthorCourseWithTagsDto> courses;
     private List<AuthorArticlesDto> articles;
     private Boolean printFollowButton;
 }

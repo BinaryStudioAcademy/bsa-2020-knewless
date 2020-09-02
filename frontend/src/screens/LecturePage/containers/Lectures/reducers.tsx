@@ -3,7 +3,7 @@ import {
   chooseVideoRoutine,
   fetchCourseDtoRoutine,
   setMenuActiveItemRoutine,
-  changeFavouriteLectureStateRoutine
+  changeFavouriteLectureStateRoutine, chooseVideoQualityRoutine
 } from 'screens/LecturePage/routines';
 import { ICourseData } from '@screens/LecturePage/models/ICourseData';
 import { ILecturesMenu } from 'screens/LecturePage/models/ILecturesMenu';
@@ -72,13 +72,22 @@ export const lectureMenu = (state: ILecturesMenu = basicILecturesMenu, action: R
 };
 
 const basicILecturesList = {
-  chosenVideo: 'no chosen videos'
+  chosenVideo: '',
+  quality: 720
 };
 
 export const chosenVideo = (state: ILecturesList = basicILecturesList, action: Routine<any>) => {
   switch (action.type) {
     case chooseVideoRoutine.TRIGGER:
-      return action.payload;
+      return {
+        ...state,
+        chosenVideo: action.payload.chosenVideo
+      };
+    case chooseVideoQualityRoutine.FULFILL:
+      return {
+        ...state,
+        quality: action.payload
+      };
     default:
       return state;
   }

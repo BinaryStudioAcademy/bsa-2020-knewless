@@ -8,16 +8,14 @@ import { IBindingAction } from '@models/Callbacks';
 import { HistoryItem } from '@screens/History/components/HistoryItem';
 
 export interface IHistoryPageProps {
-  history: IHistory[],
-  loading: boolean,
-  fetchHistory: IBindingAction
-
+  history: IHistory[];
+  loading: boolean;
+  fetchHistory: IBindingAction;
 }
 
 const HistoryPage: React.FC<IHistoryPageProps> = ({
   history, loading, fetchHistory
 }) => {
-
   useEffect(() => {
     fetchHistory();
   }, []);
@@ -28,25 +26,23 @@ const HistoryPage: React.FC<IHistoryPageProps> = ({
         <h3 className={`${styles.title} ${styles.wide_container}`}>History</h3>
       </div>
       {!loading && (
-          <div className={styles.wide_container}>
-            <div className={styles.table_title}>
-              <div></div>
-              <div>TITLE</div>
-              <div>TAGS</div>
-              <div>VIEW TIME</div>
-              <div>DURATION</div>
-              <div>LAST VIEWED</div>
-              <div className={styles.text_center} >COMPLETION %</div>
-            </div>
-            <div className={styles.table_content}>
-              {history && history.map(h => (
-                <HistoryItem key={h.id} historyItem={h} />
-              ))}
-            </div>
-          </div>
-        )
-      }
-
+      <div className={styles.wide_container}>
+        <div className={styles.table_title}>
+          <div />
+          <div>TITLE</div>
+          <div>TAGS</div>
+          <div>VIEW TIME</div>
+          <div>DURATION</div>
+          <div>LAST VIEWED</div>
+          <div className={styles.text_center}>COMPLETION %</div>
+        </div>
+        <div className={styles.table_content}>
+          {history && history.map(h => (
+            <HistoryItem key={h.id} historyItem={h} />
+          ))}
+        </div>
+      </div>
+      )}
     </div>
   );
 };

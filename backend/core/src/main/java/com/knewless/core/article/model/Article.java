@@ -20,6 +20,9 @@ public class Article extends BaseEntity {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "image")
+    private String image;
+
     @Column(name = "text", columnDefinition = "TEXT")
     private String text;
 

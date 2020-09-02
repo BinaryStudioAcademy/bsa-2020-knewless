@@ -7,6 +7,7 @@ import {
 import { IAuthorMenu } from 'screens/AuthorPublicPage/models/IAuthorMenu';
 
 const basicAuthorData = {
+  id: '',
   userId: '',
   avatar: '',
   firstName: '',
@@ -21,12 +22,15 @@ const basicAuthorData = {
     level: '',
     author: '',
     category: '',
+    tags: [],
     imageSrc: '',
     duration: 0
   }],
   articles: [{
     id: '',
-    name: ''
+    name: '',
+    image: '',
+    text: ''
   }],
   favourite: false,
   printFollowButton: false
@@ -36,6 +40,7 @@ export const authorData = (state: IAuthorData = basicAuthorData, action: Routine
   switch (action.type) {
     case fetchAuthorDataRoutine.SUCCESS:
       const { favourite } = state;
+      // eslint-disable-next-line no-param-reassign
       action.payload.favourite = favourite;
       return action.payload;
     case changeFavouriteAuthorStateRoutine.SUCCESS: {

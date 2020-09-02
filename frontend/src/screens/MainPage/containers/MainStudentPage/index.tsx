@@ -17,8 +17,8 @@ import {
 } from '../../routines';
 import { IAppState } from 'models/AppState';
 import { IUser } from 'containers/AppRouter/models/IUser';
-import { CourseCardPlaceHolder } from '@components/placeholder/CourseCardPlaceHolder/index';
-import { PathCardPlaceHolder } from '@components/placeholder/PathCardPlaceHolder/index';
+import { CourseCardPlaceHolder } from '@components/placeholder/CourseCardPlaceHolder';
+import { PathCardPlaceHolder } from '@components/placeholder/PathCardPlaceHolder';
 import { history } from '@helpers/history.helper';
 import {
   extractContinueCourseLoading,
@@ -96,27 +96,27 @@ const MainStudentPage: React.FunctionComponent<IMainStudentPageProps> = ({
             onViewAllClick={() => history.push('/profile')}
             loading={false}
           >
-            {!continueCoursesLoaded ? 
-              [1,2,3].map( x => <CourseCardPlaceHolder key={x} dependencyName="landing" hideButton={true}/>) : (
+            {!continueCoursesLoaded
+              ? [1, 2, 3].map(x => <CourseCardPlaceHolder key={x} dependencyName="landing" hideButton />) : (
                 <>
-                 {(continueCourses && continueCourses.length > 0) ? continueCourses.slice(0, 3).map(c => (
-                  <div className={styles.course_card}>
-                    <CourseCard
-                      id={c.id}
-                      category={c.category}
-                      name={c.name}
-                      author={c.author}
-                      authorId={c.authorId}
-                      duration={c.duration}
-                      imageSrc={c.imageSrc}
-                      level={c.level}
-                      rating={c.rating}
-                      hideButton
-                      ratingCount={c.ratingCount}
-                    />
-                  </div>
-                )) : continueCoursesLoaded &&
-                  <div className={styles.no_courses}><p>You have no courses yet.</p></div>}
+                  {(continueCourses && continueCourses.length > 0) ? continueCourses.slice(0, 3).map(c => (
+                    <div className={styles.course_card}>
+                      <CourseCard
+                        id={c.id}
+                        category={c.category}
+                        name={c.name}
+                        author={c.author}
+                        authorId={c.authorId}
+                        duration={c.duration}
+                        imageSrc={c.imageSrc}
+                        level={c.level}
+                        rating={c.rating}
+                        hideButton
+                        ratingCount={c.ratingCount}
+                      />
+                    </div>
+                  )) : continueCoursesLoaded
+                  && <div className={styles.no_courses}><p>You have no courses yet.</p></div>}
                 </>
               )}
           </CardsSegment>
@@ -127,25 +127,25 @@ const MainStudentPage: React.FunctionComponent<IMainStudentPageProps> = ({
             onViewAllClick={() => history.push('/courses')}
             loading={false}
           >
-            {!recommendedCoursesLoaded ? 
-              [1,2,3].map( x => <CourseCardPlaceHolder key={x} dependencyName="landing" hideButton={false}/>) : (
+            {!recommendedCoursesLoaded
+              ? [1, 2, 3].map(x => <CourseCardPlaceHolder key={x} dependencyName="landing" hideButton={false} />) : (
                 <>
-                {recommendedCourses.slice(0, 3).map(c => (
-                  <div className={styles.course_card}>
-                    <CourseCard
-                      id={c.id}
-                      category={c.category}
-                      name={c.name}
-                      author={c.author}
-                      authorId={c.authorId}
-                      duration={c.duration}
-                      imageSrc={c.imageSrc}
-                      level={c.level}
-                      rating={c.rating}
-                      ratingCount={c.ratingCount}
-                    />
-                  </div>
-                ))}
+                  {recommendedCourses.slice(0, 3).map(c => (
+                    <div className={styles.course_card}>
+                      <CourseCard
+                        id={c.id}
+                        category={c.category}
+                        name={c.name}
+                        author={c.author}
+                        authorId={c.authorId}
+                        duration={c.duration}
+                        imageSrc={c.imageSrc}
+                        level={c.level}
+                        rating={c.rating}
+                        ratingCount={c.ratingCount}
+                      />
+                    </div>
+                  ))}
                 </>
               )}
           </CardsSegment>
@@ -156,24 +156,24 @@ const MainStudentPage: React.FunctionComponent<IMainStudentPageProps> = ({
             onViewAllClick={() => history.push('/paths')}
             loading={false}
           >
-            {!pathsLoaded ? 
-              [1,2,3].map( x => 
-              <div className={styles.path_card}>
-                <PathCardPlaceHolder key={x} />
-              </div>
-              ) : (
+            {!pathsLoaded
+              ? [1, 2, 3].map(x => (
+                <div className={styles.path_card}>
+                  <PathCardPlaceHolder key={x} />
+                </div>
+              )) : (
                 <>
-                {paths.slice(0, 3).map(p => (
-                  <div className={styles.path_card}>
-                    <PathCard
-                      id={p.id}
-                      name={p.name}
-                      logoSrc={p.logoSrc}
-                      courses={p.courses}
-                      duration={p.duration}
-                    />
-                  </div>
-                ))}
+                  {paths.slice(0, 3).map(p => (
+                    <div className={styles.path_card}>
+                      <PathCard
+                        id={p.id}
+                        name={p.name}
+                        logoSrc={p.logoSrc}
+                        courses={p.courses}
+                        duration={p.duration}
+                      />
+                    </div>
+                  ))}
                 </>
               )}
           </CardsSegment>

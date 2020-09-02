@@ -48,10 +48,10 @@ public class CurrentUserCourseService {
     }
 
     public List<CourseProfileDto> getLearningCourses(UUID userId) {
-        return currentUserCourseRepository
+        return this.currentUserCourseRepository
                 .getLearningCoursesId(userId)
                 .stream()
-                .map(c -> courseService.getCourseProfileById(c, userId))
+                .map(c -> this.courseService.getCourseProfileById(c, userId))
                 .collect(Collectors.toList());
     }
 

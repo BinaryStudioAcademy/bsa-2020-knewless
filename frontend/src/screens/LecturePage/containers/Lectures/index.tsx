@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { ICourseData } from '@screens/LecturePage/models/ICourseData';
 import { IBindingCallback1 } from 'models/Callbacks';
 import {
+  chooseVideoQualityRoutine,
   chooseVideoRoutine,
   fetchCourseDtoRoutine,
   saveCourseReviewRoutine,
@@ -17,6 +18,7 @@ import useInterval from '../../../../services/use.interval.hook';
 import './styles.sass';
 import RatingModal from '@components/RatingModal';
 import { InlineLoaderWrapper } from '@components/InlineLoaderWrapper';
+import { OutlineDropdown } from '@components/Dropdown';
 
 export interface ILectureProps {
   match: any;
@@ -29,25 +31,54 @@ export interface ILectureProps {
   saveReview: IBindingCallback1<object>;
   isSaveReviewLoading: boolean;
   role: string;
+  quality: number;
+  setQuality: IBindingCallback1<number>;
 }
 
-function chooseSource(lecture: ILectures) {
-  return lecture.webLink ? lecture.webLink : lecture.urlOrigin;
+function chooseSource(lecture: ILectures, quality = 720) {
+  let url = '';
+  let isShow = true;
+
+  if (lecture.webLink) {
+    return { url: lecture.webLink, isShow: false };
+  }
+
+  switch (quality) {
+    case 1080: {
+      url = lecture.url1080;
+      if (url) break;
+    }
+    case 720: {
+      url = lecture.url720;
+      if (url) break;
+    }
+    case 480: {
+      url = lecture.url480;
+      if (url) break;
+    }
+    default: {
+      url = lecture.urlOrigin;
+      isShow = false;
+      break;
+    }
+  }
+  return { url, isShow };
 }
 
-function necessaryVideo(chosenVideoProps: string, responseData: ICourseData, incomingLectureId: string) {
+// eslint-disable-next-line max-len
+function necessaryVideo(chosenVideoProps: string, responseData: ICourseData, incomingLectureId: string, quality: number) {
   if (chosenVideoProps === '') {
     if (responseData.id === null) {
-      return '';
+      return { url: '', isShow: false };
     }
     // This return gives lecture that you have called
-    return chooseSource(responseData.lectures.filter(l => l.id === incomingLectureId)[0]);
+    return chooseSource(responseData.lectures.filter(l => l.id === incomingLectureId)[0], quality);
   }
   if (responseData.id !== null) {
     // This return gives chosen video
-    return chooseSource(responseData.lectures.filter(l => l.id === chosenVideoProps)[0]);
+    return chooseSource(responseData.lectures.filter(l => l.id === chosenVideoProps)[0], quality);
   }
-  return '';
+  return { url: '', isShow: false };
 }
 
 interface IPlayerProgress {
@@ -68,7 +99,9 @@ const LecturePage: React.FunctionComponent<ILectureProps> = ({
   saveWatchTime,
   saveReview,
   isSaveReviewLoading,
-  role
+  role,
+  quality,
+  setQuality
 }) => {
   const [playerProgress, setPlayerProgress] = useState<IPlayerProgress>(
     { playedSeconds: 0, loaded: 0, loadedSeconds: 0, played: 0 }
@@ -77,6 +110,8 @@ const LecturePage: React.FunctionComponent<ILectureProps> = ({
   const [isReviewOpen, setIsReviewOpen] = useState(false);
   const [isReviewed, setIsReviewed] = useState(false);
   const initialLectureId = match.params.lectureId;
+  const [result, setResult] = useState('');
+  const [isShowQuality, setIsShowQuality] = useState(false);
 
   const triggerSaveTime: any = useCallback(
     () => saveWatchTime({
@@ -106,7 +141,17 @@ const LecturePage: React.FunctionComponent<ILectureProps> = ({
   };
   useInterval(() => autoSave(), AUTOSAVE_MS);
 
-  const result = necessaryVideo(chosenVideoId, lecturesData, initialLectureId);
+  useEffect(() => {
+    const { url, isShow } = necessaryVideo(chosenVideoId, lecturesData, initialLectureId, quality);
+    setResult(url);
+    setIsShowQuality(isShow);
+  }, [chosenVideoId, lecturesData]);
+
+  useEffect(() => {
+    const { url, isShow } = necessaryVideo(chosenVideoId, lecturesData, initialLectureId, quality);
+    setResult(url);
+    setIsShowQuality(isShow);
+  }, [quality]);
 
   const handlePause = () => {
     setIsPlaying(false);
@@ -146,6 +191,10 @@ const LecturePage: React.FunctionComponent<ILectureProps> = ({
     setIsReviewOpen(false);
   };
 
+  const onQualityChange = data => {
+    setQuality(data);
+  };
+
   return (
     <div>
       <RatingModal onClose={closeReview} isOpen={isReviewOpen} submit={submitReview} isLoading={isSaveReviewLoading} />
@@ -163,6 +212,15 @@ const LecturePage: React.FunctionComponent<ILectureProps> = ({
             onPause={handlePause}
             onEnded={() => handleEnded()}
           />
+          {isShowQuality && (
+            <OutlineDropdown
+              className="button_quality"
+              placeholder="Quality"
+              value={quality}
+              onChange={(e, { value }) => onQualityChange(value)}
+              options={[{ text: 1080, value: 1080 }, { text: 720, value: 720 }, { text: 480, value: 480 }]}
+            />
+          )}
         </div>
         {isLecturesLoading ? (
           <div className="courseName">
@@ -197,14 +255,16 @@ const mapStateToProps = (state: IAppState) => ({
   isLecturesLoading: state.lecturePage.requests.dataRequest.loading,
   chosenVideoId: state.lecturePage.chosenVideo.chosenVideo,
   isSaveReviewLoading: state.coursePage.requests.saveReviewRequest.loading,
-  role: state.appRouter.user.role.name
+  role: state.appRouter.user.role.name,
+  quality: state.lecturePage.chosenVideo.quality
 });
 
 const mapDispatchToProps = {
   fetchCourseDto: fetchCourseDtoRoutine,
   setChosenVideo: chooseVideoRoutine,
   saveWatchTime: saveWatchTimeRoutine,
-  saveReview: saveCourseReviewRoutine
+  saveReview: saveCourseReviewRoutine,
+  setQuality: chooseVideoQualityRoutine.fulfill
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(LecturePage);

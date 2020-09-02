@@ -36,7 +36,7 @@ const AuthorPublicMenu: React.FunctionComponent<IAuthorPublicMenu> = ({
       </Menu.Item>
     </Menu>
     <Segment className={styles.authorMenuSegment}>
-      {authorMenuProps.activeItem === 'Courses' ? <CoursesList authorData={authorData} /> : <ArticlesList />}
+      {authorMenuProps.activeItem === 'Courses' ? <CoursesList authorData={authorData} /> : <ArticlesList authorData={authorData}/>}
     </Segment>
   </>
 );

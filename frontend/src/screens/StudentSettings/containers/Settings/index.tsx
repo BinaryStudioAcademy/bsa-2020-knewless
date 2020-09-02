@@ -40,18 +40,6 @@ import {
 import { ITag } from '../../models/ITag';
 import { TagSelector } from '@components/TagSelector';
 
-const tagSelectorStyles = {
-  maxWidth: '100%',
-  margin: '0',
-  padding: '0',
-  border: '0',
-  outline: 'none',
-  fontSize: '1.1em',
-  lineHeight: 'inherit',
-  background: 'none',
-  color: '#fff'
-};
-
 export interface IStudentSettingsProps {
   allTags: ITag[];
   studentSettings: IStudentSettings;
@@ -60,22 +48,6 @@ export interface IStudentSettingsProps {
   setUserRole: IBindingCallback1<RoleTypes>;
   resetSettingsMode: IBindingAction;
   fetchAllTags: IBindingAction;
-}
-
-function presentStudentTagsAssembler(allTags: ITag[], presentTags: string[]) {
-  const resultTags = [];
-
-  if (allTags === undefined || presentTags === undefined) return [];
-  if (presentTags[0] === undefined || allTags[0].id === undefined) return [];
-
-  for (let i = 0; i < presentTags.length; i += 1) {
-    for (let j = 0; j < allTags.length; j += 1) {
-      if (allTags[j].id === presentTags[i]) {
-        resultTags.push(allTags[j]);
-      }
-    }
-  }
-  return resultTags;
 }
 
 const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
@@ -92,6 +64,11 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
     fetchAllTags();
     return () => resetSettingsMode();
   }, []);
+
+  useEffect(() => {
+    setStoredTags(allTags);
+  }, [allTags]);
+
   const [firstName, setFirstName] = useState(settings.firstName);
   const [lastName, setLastName] = useState(settings.lastName);
   const [avatar, setAvatar] = useState(settings.avatar);
@@ -111,6 +88,18 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
   const [year, setYear] = useState(settings.year);
   const [storedTags, setStoredTags] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
+  const [isFirstNameValid, setIsFirstNameValid] = useState(true);
+  const [isLastNameValid, setIsLastNameValid] = useState(true);
+  const [isYearsOfExperienceValid, setIsYearsOfExperienceValid] = useState(true);
+  const [isEducationLvlValid, setIsEducationLvlValid] = useState(true);
+  const [isLvlWithinValid, setIsLvlWithinValid] = useState(true);
+  const [isLocationValid, setIsLocationValid] = useState(true);
+  const [isIndustryValid, setIsIndustryValid] = useState(true);
+  const [isRoleValid, setIsRoleValid] = useState(true);
+  const [isBiographyValid, setIsBiographyValid] = useState(true);
+  const [isJobValid, setIsJobValid] = useState(true);
+  const [isCompanyValid, setIsCompanyValid] = useState(true);
+  const [isWebsiteValid, setIsWebsiteValid] = useState(true);
 
   useEffect(() => {
     setAvatar(settings.avatar);
@@ -129,12 +118,8 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
     setEmployment(settings.employment || employmentOptions[0].value);
     setEducation(settings.education || '');
     setYear(settings.year || MIN_YEAR_OF_BIRTH);
+    setSelectedTags(settings.tags);
   }, [settings]);
-
-  useEffect(() => {
-    setStoredTags(allTags);
-    setSelectedTags(presentStudentTagsAssembler(allTags, settings.tags));
-  }, [allTags]);
 
   const handleUploadFile = file => {
     const thisFile: File = file;
@@ -143,24 +128,6 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
       setAvatar(URL.createObjectURL(thisFile));
     }
   };
-
-  const [isFirstNameValid, setIsFirstNameValid] = useState(true);
-  const [isLastNameValid, setIsLastNameValid] = useState(true);
-  const [isYearsOfExperienceValid, setIsYearsOfExperienceValid] = useState(true);
-  const [isEducationLvlValid, setIsEducationLvlValid] = useState(true);
-  const [isLvlWithinValid, setIsLvlWithinValid] = useState(true);
-  const [isLocationValid, setIsLocationValid] = useState(true);
-  const [isIndustryValid, setIsIndustryValid] = useState(true);
-  const [isRoleValid, setIsRoleValid] = useState(true);
-  const isRequiredFieldsValid = (): boolean => !!firstName && !!lastName && !!education && !!level && !!location
-    && !!industry && !!role && isFirstNameValid && isLastNameValid && isYearsOfExperienceValid && isEducationLvlValid
-    && isLvlWithinValid && isLocationValid && isIndustryValid && isRoleValid;
-
-  const [isBiographyValid, setIsBiographyValid] = useState(true);
-  const [isJobValid, setIsJobValid] = useState(true);
-  const [isCompanyValid, setIsCompanyValid] = useState(true);
-  const [isWebsiteValid, setIsWebsiteValid] = useState(true);
-  const isNonRequiredFieldsValid = (): boolean => isBiographyValid && isJobValid && isCompanyValid && isWebsiteValid;
 
   const isLastSettingsChanged = settings.avatar !== avatar
     || settings.firstName !== firstName
@@ -178,6 +145,15 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
     || settings.employment !== employment
     || settings.education !== education
     || settings.tags.length !== selectedTags.length;
+
+  const isRequiredFieldsValid = (): boolean => !!firstName && !!lastName && !!education && !!level && !!location
+    && !!industry && !!role && isFirstNameValid && isLastNameValid && isYearsOfExperienceValid && isEducationLvlValid
+    && isLvlWithinValid && isLocationValid && isIndustryValid && isRoleValid;
+
+  const isNonRequiredFieldsValid = (): boolean => isBiographyValid && isJobValid && isCompanyValid && isWebsiteValid;
+
+  const handleCancel = () => history.push('/');
+
   const handleSubmit = e => {
     e.preventDefault();
     if (isRequiredFieldsValid() && isNonRequiredFieldsValid()) {
@@ -201,14 +177,11 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
         education,
         year,
         uploadImage,
-        tags: selectedTags.map(t => t.id)
+        tags: selectedTags
       };
       setSettings(updatedSettings);
-      history.push('/');
+      handleCancel();
     }
-  };
-  const handleCancel = () => {
-    history.push('/');
   };
 
   const validateFirstName = (newName?: string) => {

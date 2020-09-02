@@ -32,8 +32,10 @@ public interface PathMapper {
     @Mapping(target = "courses", ignore = true)
     @Mapping(target = "tags", ignore = true)
     @Mapping(target = "duration", ignore = true)
+    @Mapping(target = "userId", ignore = true)
+    @Mapping(target = "authors", ignore = true)
     PathPageDto pathToPathPageDto(Path path);
-    
+
     @Mapping(target="authorId", expression = "java(path.getAuthor().getId())")
     @Mapping(target="author", expression = "java(path.getAuthor().getFullName())")
     @Mapping(target = "duration", expression = "java(PathMapper.getPathDuration(path))")

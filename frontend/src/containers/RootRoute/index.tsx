@@ -15,15 +15,13 @@ import { IBindingAction } from 'models/Callbacks';
 interface IRootRouteProps {
   user: IUser;
   isAuthorized: boolean;
+  exact: boolean;
+  path: string;
   isSettingsFilled: boolean;
 }
 
-const RootRoute: React.FunctionComponent<IRootRouteProps> = ({ 
-  isAuthorized, 
-  user, 
-  isSettingsFilled
-}) => {
-
+const RootRoute: React.FunctionComponent<IRootRouteProps> = props => {
+  const { isAuthorized, user, isSettingsFilled } = props;
   let currentComponent: React.FunctionComponent = () => null;
 
   if (user.id && window.location.pathname !== '/settings' && isSettingsFilled === false) {
@@ -42,11 +40,7 @@ const RootRoute: React.FunctionComponent<IRootRouteProps> = ({
   }
   
   return (
-    <PublicRoute
-      exact
-      path="/"
-      component={currentComponent}
-    />
+    <PublicRoute {...props} component={currentComponent} />
   );
 };
 

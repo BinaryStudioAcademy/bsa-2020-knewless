@@ -7,17 +7,20 @@ import com.knewless.core.path.model.Path;
 import com.knewless.core.user.model.User;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
+@Table(name = "tags")
 @Data
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
-@Table(name = "tags")
+@ToString(onlyExplicitlyIncluded = true)
 public class Tag extends BaseEntity {
     @Column(name = "name")
     @EqualsAndHashCode.Include
+    @ToString.Include
     private String name;
 
     @Column(name = "source")

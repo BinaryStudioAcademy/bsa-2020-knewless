@@ -20,6 +20,7 @@ import { ChartWrapper } from '@components/Charts/ChartWrapper';
 import CirclePackingChart from '@components/Charts/CirclePackingChart';
 import AddToFavouriteButton, { IFavourite } from '@components/AddToFavouritesButton/component/index';
 import { SourceType } from '@components/AddToFavouritesButton/helper/SourceType';
+import { getTagsNameWithCountFromCourses } from '@helpers/tag.helper';
 
 export interface IAuthorPublic {
   match: any;
@@ -68,8 +69,8 @@ const AuthorPublicPage: React.FunctionComponent<IAuthorPublic> = ({
   }
   const chart = {
     wrapperId: 'chart',
-    width: 250,
-    height: 120
+    width: 110,
+    height: 110
   };
   return (
     <div className={styles.page}>
@@ -149,7 +150,7 @@ const AuthorPublicPage: React.FunctionComponent<IAuthorPublic> = ({
                   <div className={`${styles.cardMainInfo} ${styles.cardTextField}`}>
                     <ChartWrapper width={chart.width} height={chart.height} id={chart.wrapperId}>
                       <CirclePackingChart
-                        data={authorData.courses}
+                        data={getTagsNameWithCountFromCourses(authorData.courses)}
                         width={chart.width}
                         height={chart.height}
                         wrapperId={chart.wrapperId}

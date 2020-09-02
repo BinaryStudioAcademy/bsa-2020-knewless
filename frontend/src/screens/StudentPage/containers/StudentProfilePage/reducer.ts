@@ -4,7 +4,7 @@ import { fetchGetStudentProfileRoutine } from 'screens/StudentPage/routines';
 
 const initProfile = {
   totalContentWatched: 0,
-  courses: undefined
+  courses: []
 };
 
 export const studentProfile = (state: IStudentProfile = initProfile, action: Routine<any>) => {

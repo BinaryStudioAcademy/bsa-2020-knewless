@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Redirect, Route, Switch } from 'react-router-dom';
-import LoaderWrapper from 'components/LoaderWrapper';
+import { Switch } from 'react-router-dom';
 import PublicRoute from 'components/PublicRoute';
 import Header from '@components/Header';
 import AddCourse from '@screens/AddCourse/containers/AddCoursePage';
 import AddPathPage from '@screens/AddPath/containers/AddPathPage';
+import AddArticlePage from '@screens/AddArticle/containers/AddArticlePage';
 import LoginPage from '@screens/Authentication/containers/LoginPage';
 import handler from '@components/OAuth2RedirectHandler/OAuth2RedirectHandler';
 import LecturePage from 'screens/LecturePage/containers/Lectures/index';
@@ -35,7 +35,9 @@ import FavouritesPage from '@screens/Favourites/containers/FavouritesPage';
 import SearchResultsPage from '@screens/SearchResultsPage/containers/SearchResultsPage';
 import HistoryPage from '@screens/History/containers/HistoryPage';
 import { Footer } from '@components/Footer';
-import styles from './styles.module.sass'
+import styles from './styles.module.sass';
+import { NotFoundPage } from '@screens/NotFound/container/NotFoundPage';
+import { InlineLoaderWrapper } from '@components/InlineLoaderWrapper';
 
 export interface IRoutingProps {
   isLoading: boolean;
@@ -77,50 +79,38 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({
     setIsHeaderShown(checkHeaderShown());
   });
 
+  if (isLoading) return <InlineLoaderWrapper loading centered />;
+
   return (
     <div className={styles.container}>
+      {isHeaderShown && <Header />}
       <Switch>
-        <Route>
-          {isHeaderShown && <Header />}
-          <SettingsRoute />
-          <RootRoute />
-          <PublicRoute exact path="/verifyemail/:confirmId" component={VerifyEmail} />
-          <PublicRoute exact path="/savepassword/:resetid" component={SavePassword} />
-          <PublicRoute exact path="/course/:courseId" component={CoursePage} />
-          <PublicRoute exact path="/path/:pathId" component={PathPage} />
-          <PublicRoute exact path="/login" component={LoginPage} />
-          <PublicRoute exact path="/reset" component={ForgotPassword} />
-          <PublicRoute exact path="/oauth/redirect" component={handler} />
-          <PublicRoute exact path="/register" component={RegisterPage} />
-          <PublicRoute exact path="/courses" component={CoursesPage} />
-          <PublicRoute exact path="/paths" component={PathsPage} />
-          <PublicRoute exact path="/search" component={SearchResultsPage} />
-          <PrivateRoute exact path="/author/:authorId" component={AuthorPublicPage} />
-          <PrivateRoute exact path="/favourites" component={FavouritesPage} />
-          <PrivateRoute exact path="/lecture/:lectureId" component={LecturePage} />
-          <PrivateRoute exact path="/add_path" roles={[RoleTypes.AUTHOR]} component={AddPathPage} />
-          <PrivateRoute exact path="/add_course" roles={[RoleTypes.AUTHOR]} component={AddCourse} />
-          <PrivateRoute exact path="/profile" roles={[RoleTypes.USER]} component={StudentProfile} />
-          <PrivateRoute exact path="/course/edit/:courseId" roles={[RoleTypes.AUTHOR]} component={AddCourse} />
-          <PrivateRoute exact path="/path/edit/:pathId" roles={[RoleTypes.AUTHOR]} component={AddPathPage} />
-          <PrivateRoute exact path="/history" roles={[RoleTypes.USER]} component={HistoryPage} />
-          {isHeaderShown && <Footer />}
-        </Route>
-        <div>
-          <LoaderWrapper loading={isLoading}>
-            <Switch>
-              {/* <PrivateRoute
-              exact
-              path="/private"
-              component={Private}
-            /> */}
-              <Route path="/*">
-                <Redirect to="/public" />
-              </Route>
-            </Switch>
-          </LoaderWrapper>
-        </div>
+        <RootRoute exact path="/" />
+        <SettingsRoute exact path="/settings" />
+        <PublicRoute exact path="/verifyemail/:confirmId" component={VerifyEmail} />
+        <PublicRoute exact path="/savepassword/:resetid" component={SavePassword} />
+        <PublicRoute exact path="/course/:courseId" component={CoursePage} />
+        <PublicRoute exact path="/path/:pathId" component={PathPage} />
+        <PublicRoute exact path="/login" component={LoginPage} />
+        <PublicRoute exact path="/reset" component={ForgotPassword} />
+        <PublicRoute exact path="/oauth/redirect" component={handler} />
+        <PublicRoute exact path="/register" component={RegisterPage} />
+        <PublicRoute exact path="/courses" component={CoursesPage} />
+        <PublicRoute exact path="/paths" component={PathsPage} />
+        <PublicRoute exact path="/search" component={SearchResultsPage} />
+        <PrivateRoute exact path="/add_article" roles={[RoleTypes.AUTHOR]} component={AddArticlePage} />
+        <PrivateRoute exact path="/author/:authorId" component={AuthorPublicPage} />
+        <PrivateRoute exact path="/favourites" component={FavouritesPage} />
+        <PrivateRoute exact path="/lecture/:lectureId" component={LecturePage} />
+        <PrivateRoute exact path="/add_path" roles={[RoleTypes.AUTHOR]} component={AddPathPage} />
+        <PrivateRoute exact path="/add_course" roles={[RoleTypes.AUTHOR]} component={AddCourse} />
+        <PrivateRoute exact path="/profile" roles={[RoleTypes.USER]} component={StudentProfile} />
+        <PrivateRoute exact path="/course/edit/:courseId" roles={[RoleTypes.AUTHOR]} component={AddCourse} />
+        <PrivateRoute exact path="/path/edit/:pathId" roles={[RoleTypes.AUTHOR]} component={AddPathPage} />
+        <PrivateRoute exact path="/history" roles={[RoleTypes.USER]} component={HistoryPage} />
+        <PublicRoute component={NotFoundPage} />
       </Switch>
+      {isHeaderShown && <Footer />}
       {connectToWebsocket()}
       {onOpen && (
         <LoginModal

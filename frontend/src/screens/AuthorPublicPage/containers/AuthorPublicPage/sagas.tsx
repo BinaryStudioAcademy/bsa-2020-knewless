@@ -8,6 +8,7 @@ import { fetchAuthorDataRoutine, followAuthorRoutine,
 function* getAuthorData(action: Routine<any>) {
   try {
     const response = yield call(publicAuthorPageService.getData, action.payload);
+    console.log(response);
     yield put(fetchAuthorDataRoutine.success(response));
   } catch (error) {
     yield put(fetchAuthorDataRoutine.failure(error?.message));

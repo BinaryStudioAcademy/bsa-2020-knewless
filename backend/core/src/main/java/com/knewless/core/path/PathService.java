@@ -8,7 +8,6 @@ import com.knewless.core.author.model.Author;
 import com.knewless.core.course.CourseMapper;
 import com.knewless.core.course.CourseRepository;
 import com.knewless.core.course.dto.CourseDetailsDto;
-import com.knewless.core.course.dto.CourseQueryResult;
 import com.knewless.core.course.dto.CourseWithMinutesDto;
 import com.knewless.core.currentUserCource.CurrentUserCourseRepository;
 import com.knewless.core.db.SourceType;
@@ -26,15 +25,11 @@ import com.knewless.core.tag.dto.TagDto;
 import com.knewless.core.user.UserService;
 import com.knewless.core.user.role.model.Role;
 import com.knewless.core.user.role.model.RoleType;
-import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.time.Duration;
-import java.util.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -93,7 +88,7 @@ public class PathService {
         List<AuthorMainInfoDto> authors = new ArrayList<>();
         List<CourseDetailsDto> courses = path.getCourses().stream().map(c -> {
             var course = CourseMapper.MAPPER.courseDetailsResultToCourseDetailsDto(courseRepository.getDetailCourseById(c.getId()));
-            List<String> tags = tagRepository.getTagsByCourse(c.getId());
+            List<String> tags = tagRepository.getTagsNamesByCourseId(c.getId());
             tags = tags.size() > 3 ? tags.subList(0, 3) : tags;
             course.setTags(tags);
             if (!authors.stream().map(AuthorMainInfoDto::getId).collect(Collectors.toList()).contains(course.getAuthorId())) {

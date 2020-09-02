@@ -2,6 +2,7 @@ import { IAuthorCourse } from './IAuthorCourse';
 import { IAuthorArticles } from './IAuthorArticles';
 
 export interface IAuthorData {
+    id: string;
     userId: string;
     avatar: string;
     firstName: string;
