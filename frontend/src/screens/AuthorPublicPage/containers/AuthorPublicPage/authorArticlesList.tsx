@@ -28,6 +28,7 @@ const ArticlesList: React.FunctionComponent<IAuthorCoursesList> = ({
             image={a.image}
             name={a.name}
             description={a.text}
+            className={styles.articlePreview}
           />
         </div>
       ))}

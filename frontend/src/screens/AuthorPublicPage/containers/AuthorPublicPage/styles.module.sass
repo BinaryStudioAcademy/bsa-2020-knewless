@@ -109,7 +109,6 @@ $side_padding: 80px
   font-size: 115%
   font-weight: lighter
 
-
 .authorNumberFollowers
   font-weight: bold
 
@@ -174,50 +173,6 @@ $side_padding: 80px
 .listCoursesArticlesWrapper
   grid-area: list
 
-  .authorMenu
-    height: 12% !important
-    margin: 0 !important
-    min-height: 0 !important
-    padding-left: 2%
-
-    .authorMenuButton
-      color: #676767
-      height: 100%
-      width: 12%
-      display: flex
-      justify-content: center
-      font-size: 140%
-      border: 0 !important
-      margin: 0 1em 0 0 !important
-      padding: 3% 0 0 0 !important
-      &:hover
-        background: none !important
-        span
-          color: #414040 !important
-
-  .authorMenuSegment
-    padding: 0 !important
-    background: #2A2B37 !important
-    border-radius: 0
-    margin-bottom: 5em
-
-    .coursePreviewWrapper
-      padding-bottom: 10px
-      margin-top: 10px
-      border-bottom: 2px solid #434558
-
-    .articlePreviewWrapper
-      width: 100%
-      height: 15vh
-      padding: 2.5% 0 2.5%
-      background: none !important
-      margin: 0 !important
-      border-radius: 0 !important
-      box-shadow: none !important
-      transform: none !important
-      border-bottom: 2px solid
-      border-bottom-color: #434558
-
 svg
   -webkit-filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.3))
   filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.25))
@@ -229,3 +184,87 @@ svg
   justify-content: left
   width: 40%
   height: 38px
+
+.menu
+  color: #fff
+  position: relative
+
+.menu__header
+  width: 100%
+  margin: 1rem 0
+
+.menu__options
+  display: grid
+  grid-template-columns: 7rem 7rem auto
+  grid-template-rows: 1fr 0.1rem
+  justify-items: center
+
+  p
+    font-size: 1.4em
+    font-weight: 600
+
+.menu__button
+  display: flex
+  padding: 0.2rem 0 0.7rem 0
+  cursor: pointer
+  background: transparent
+  outline: none
+  border: none
+
+  *
+    transition: all 0.3s ease-in-out
+
+.button_selected
+  p
+    color: #58C2F1
+
+.button_ordinary
+  p
+    color: #596C7E
+
+  &:hover
+    p
+      color: #58C2F1
+
+.separator
+  background: #596C7E
+  width: 100%
+
+.selected_separator
+  background: linear-gradient(83.47deg, #0084F8 9.02%, #FF8576 90.81%)
+  width: 100%
+
+.menu__content_container
+  position: relative
+  margin-bottom: 8vh
+  overflow-y: auto
+  background: #2A2B37 !important
+
+  .coursePreviewWrapper
+    padding-bottom: 10px
+    margin-top: 10px
+    border-bottom: 2px solid #434558
+
+    .coursePreview
+      background: #2a2b37
+
+      &:hover
+        background: #363741
+
+  .articlePreviewWrapper
+    width: 100%
+    height: 15vh
+    padding: 2.5% 0 2.5%
+    background: none !important
+    margin: 0 !important
+    border-radius: 0 !important
+    box-shadow: none !important
+    transform: none !important
+    border-bottom: 2px solid
+    border-bottom-color: #434558
+
+  .articlePreview
+    background: #2a2b37
+
+    &:hover
+      background: #363741
