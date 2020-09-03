@@ -40,6 +40,7 @@ const CoursesList: React.FC<IAuthorCoursesList> = ({ authorData, courses }) => (
             name={c.name}
             description={null}
             ratingCount={0}
+            className={styles.coursePreview}
           />
         </div>
       ))}
