@@ -18,14 +18,13 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
 
     //language=SpringDataQL
     String COURSE_SELECT = "SELECT new com.knewless.core.course.dto.CourseQueryResult(c.id, " +
-            "c.name, c.level, concat(c.author.firstName,' ' , c.author.lastName), " +
-            "c.author.id, category.name, c.image, " +
+            "c.name, c.level, concat(c.author.firstName,' ' , c.author.lastName), c.author.id, c.image, " +
             "(SELECT COALESCE(SUM(cl.duration), 0) FROM c.lectures as cl), " +
             "(SELECT COALESCE(SUM(cr.reaction), 0) " +
             "FROM c.reactions as cr), " +
-            "SIZE(c.reactions)) " +
-            "FROM Course c " +
-            "LEFT JOIN c.category category ";
+            "SIZE(c.reactions)" +
+            ") " +
+            "FROM Course c ";
 
     CourseToPlayerProjection findOneById(UUID courseId);
 
@@ -59,75 +58,58 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
     @Query(COURSE_SELECT)
     List<CourseQueryResult> getCourses(Pageable pageable);
 
-    @Query("SELECT new com.knewless.core.course.dto.CourseQueryResult(c.id, " +
-            "c.name, c.level, concat(c.author.firstName,' ' , c.author.lastName), c.author.id, category.name, " +
-            "c.image, " +
+    @Query("SELECT new com.knewless.core.course.dto.CourseQueryResult(c.id, c.name, c.level, " +
+            "concat(c.author.firstName,' ' , c.author.lastName), c.author.id, c.image, " +
             "(SELECT COALESCE(SUM(cl.duration), 0) FROM c.lectures as cl), " +
-            "(SELECT COALESCE(SUM(cr.reaction), 0) " +
-            "FROM c.reactions as cr), " +
-            "SIZE(c.reactions)) " +
+            "(SELECT COALESCE(SUM(cr.reaction), 0) FROM c.reactions as cr), " +
+            "SIZE(c.reactions)" +
+            ") " +
             "FROM Course c " +
-            "LEFT JOIN c.category category " +
             "WHERE c.id = :id")
     Optional<CourseQueryResult> findCourseById(UUID id);
 
     @SuppressWarnings("SpringDataRepositoryMethodReturnTypeInspection")
-    @Query("SELECT DISTINCT new com.knewless.core.course.dto.AuthorCourseQueryResult(c.id, " +
-            "c.name, c.level, concat(c.author.firstName,' ' , c.author.lastName), c.category.name, c.image, " +
+    @Query("SELECT DISTINCT new com.knewless.core.course.dto.AuthorCourseQueryResult(c.id, c.name, c.level, " +
+            "concat(c.author.firstName,' ' , c.author.lastName), c.image, " +
             "(SELECT COALESCE(SUM(cl.duration), 0) FROM c.lectures as cl), " +
-            "(SELECT COALESCE(SUM(cr.reaction), 0) " +
-            "FROM c.reactions as cr), " +
-            "SIZE(c.reactions), c.updatedAt) " +
-            "FROM Course as c LEFT JOIN c.category category " +
+            "(SELECT COALESCE(SUM(cr.reaction), 0) FROM c.reactions as cr), " +
+            "SIZE(c.reactions), c.updatedAt" +
+            ") " +
+            "FROM Course as c " +
             "WHERE c.author.id = :authorId " +
             "ORDER BY c.updatedAt DESC")
     List<AuthorCourseQueryResult> getLatestCoursesByAuthorId(@Param("authorId") UUID authorId);
 
     @Query("SELECT new com.knewless.core.course.dto.CourseDetailsQueryResult(" +
-            "c.id, c.name, c.level, " +
-            "c.author.id, concat(c.author.firstName,' ' , c.author.lastName), " +
-            "c.image, " +
+            "c.id, c.name, c.level, c.author.id, concat(c.author.firstName,' ' , c.author.lastName), c.image, " +
             "(SELECT COALESCE(SUM(cl.duration), 0) FROM c.lectures as cl), " +
             "c.description, " +
-            "( " +
-            "SELECT COALESCE(SUM(cr.reaction), 0) " +
-            "FROM c.reactions as cr " +
-            "), " +
-            "SIZE(c.reactions), " +
-            "size(c.lectures)) " +
+            "(SELECT COALESCE(SUM(cr.reaction), 0) FROM c.reactions as cr), " +
+            "SIZE(c.reactions), size(c.lectures)" +
+            ") " +
             "FROM CurrentUserCourse cc " +
             "LEFT JOIN cc.course as c " +
             "WHERE cc.user.id = :id")
     List<CourseDetailsQueryResult> getDetailCoursesByUserId(@Param("id") UUID id);
 
     @Query("SELECT new com.knewless.core.course.dto.CourseDetailsQueryResult(" +
-            "c.id, c.name, c.level, " +
-            "c.author.id, concat(c.author.firstName,' ' , c.author.lastName), " +
-            "c.image, " +
+            "c.id, c.name, c.level, c.author.id, concat(c.author.firstName,' ' , c.author.lastName), c.image, " +
             "(SELECT COALESCE(SUM(cl.duration), 0) FROM c.lectures as cl), " +
             "c.description, " +
-            "( " +
-            "SELECT COALESCE(SUM(cr.reaction), 0) " +
-            "FROM c.reactions as cr " +
-            "), " +
-            "SIZE(c.reactions), " +
-            "SIZE(c.lectures)) " +
+            "(SELECT COALESCE(SUM(cr.reaction), 0) FROM c.reactions as cr), " +
+            "SIZE(c.reactions), SIZE(c.lectures)" +
+            ") " +
             "FROM Course c " +
             "ORDER BY c.updatedAt DESC")
     List<CourseDetailsQueryResult> getDetailCourses(Pageable pageable);
 
     @Query("SELECT new com.knewless.core.course.dto.CourseDetailsQueryResult(" +
-            "c.id, c.name, c.level, " +
-            "c.author.id, concat(c.author.firstName,' ' , c.author.lastName), " +
-            "c.image, " +
+            "c.id, c.name, c.level, c.author.id, concat(c.author.firstName,' ' , c.author.lastName), c.image, " +
             "(SELECT COALESCE(SUM(cl.duration), 0) FROM c.lectures as cl), " +
             "c.description, " +
-            "( " +
-            "SELECT COALESCE(SUM(cr.reaction), 0) " +
-            "FROM c.reactions as cr " +
-            "), " +
-            "SIZE(c.reactions), " +
-            "SIZE(c.lectures)) " +
+            "(SELECT COALESCE(SUM(cr.reaction), 0) FROM c.reactions as cr), " +
+            "SIZE(c.reactions), SIZE(c.lectures)" +
+            ") " +
             "FROM Course c " +
             "LEFT JOIN c.lectures as l " +
             "LEFT JOIN l.tags as t " +
@@ -136,26 +118,19 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
     List<CourseDetailsQueryResult> getDetailCoursesByLectureTag(UUID tagId);
 
     @Query("SELECT new com.knewless.core.course.dto.CourseDetailsQueryResult(" +
-            "c.id, c.name, c.level, " +
-            "c.author.id, concat(c.author.firstName,' ' , c.author.lastName), " +
-            "c.image, " +
+            "c.id, c.name, c.level, c.author.id, concat(c.author.firstName,' ' , c.author.lastName), c.image, " +
             "(SELECT COALESCE(SUM(cl.duration), 0) FROM c.lectures as cl), " +
             "c.description, " +
-            "( " +
-            "SELECT COALESCE(SUM(cr.reaction), 0) " +
-            "FROM c.reactions as cr " +
-            "), " +
-            "SIZE(c.reactions), " +
-            "SIZE(c.lectures)) " +
+            "(SELECT COALESCE(SUM(cr.reaction), 0) FROM c.reactions as cr), " +
+            "SIZE(c.reactions), SIZE(c.lectures)" +
+            ") " +
             "FROM Course c " +
             "WHERE c.author.id = :authorId " +
             "ORDER BY c.updatedAt DESC")
     List<CourseDetailsQueryResult> getDetailCoursesByAuthorId(UUID authorId);
 
     @Query("SELECT new com.knewless.core.course.dto.CourseDetailsQueryResult(" +
-            "c.id, c.name, c.level, " +
-            "c.author.id, concat(c.author.firstName,' ' , c.author.lastName), " +
-            "c.image, " +
+            "c.id, c.name, c.level, c.author.id, concat(c.author.firstName,' ' , c.author.lastName), c.image, " +
             "(SELECT COALESCE(SUM(cl.duration), 0) FROM c.lectures as cl), " +
             "c.description, " +
             "( " +
@@ -164,10 +139,11 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
             "WHERE cr.reaction = 1" +
             "), " +
             "SIZE(c.reactions), " +
-            "SIZE(c.lectures)) " +
+            "SIZE(c.lectures)" +
+            ") " +
             "FROM Course c " +
             "WHERE c.id = :courseId ")
-    CourseDetailsQueryResult getDetailCourseById(UUID courseId);
+    Optional<CourseDetailsQueryResult> getDetailCourseById(UUID courseId);
 
     @Query("SELECT c FROM Course c " +
             "INNER JOIN Favorite f ON f.sourceId = c.id " +
@@ -175,4 +151,5 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
     List<Course> getFavouriteCoursesByUserId(@Param("userId") UUID userId, @Param("type") SourceType type);
 
     List<Course> findAllByAuthorId(UUID id);
+
 }

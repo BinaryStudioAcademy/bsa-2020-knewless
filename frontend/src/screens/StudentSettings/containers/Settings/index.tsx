@@ -65,10 +65,6 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
     return () => resetSettingsMode();
   }, []);
 
-  useEffect(() => {
-    setStoredTags(allTags);
-  }, [allTags]);
-
   const [firstName, setFirstName] = useState(settings.firstName);
   const [lastName, setLastName] = useState(settings.lastName);
   const [avatar, setAvatar] = useState(settings.avatar);
@@ -121,6 +117,10 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
     setSelectedTags(settings.tags);
   }, [settings]);
 
+  useEffect(() => {
+    setStoredTags(allTags.filter(t => !selectedTags.includes(t)));
+  }, [allTags]);
+
   const handleUploadFile = file => {
     const thisFile: File = file;
     if (thisFile && isImage(thisFile.name)) {
@@ -152,8 +152,6 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
 
   const isNonRequiredFieldsValid = (): boolean => isBiographyValid && isJobValid && isCompanyValid && isWebsiteValid;
 
-  const handleCancel = () => history.push('/');
-
   const handleSubmit = e => {
     e.preventDefault();
     if (isRequiredFieldsValid() && isNonRequiredFieldsValid()) {
@@ -180,7 +178,6 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
         tags: selectedTags
       };
       setSettings(updatedSettings);
-      handleCancel();
     }
   };
 
@@ -457,7 +454,7 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
         <Form.Group className={`${styles.formField} ${styles.formButtons}`}>
           <GrayOutlineButton
             className={styles.Btn}
-            onClick={() => handleCancel()}
+            onClick={() => history.push('/')}
             content="Cancel"
           />
           <GradientButton

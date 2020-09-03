@@ -1,10 +1,11 @@
 package com.knewless.core.course.dto;
 
-import com.knewless.core.category.dto.CategoryDto;
+import com.knewless.core.tag.dto.TagDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -16,7 +17,7 @@ public class CourseDto {
     private String level;
     private String author;
     private UUID authorId;
-    private CategoryDto category;
+    private List<TagDto> tags;
     private String imageSrc;
     private long duration;
     private int rating;

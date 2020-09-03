@@ -16,7 +16,6 @@ public class AuthorCourseQueryResult {
     private String name;
     private Level level;
     private String author;
-    private String category;
     private String imageSrc;
     private long duration;
     private long positiveReactions;

@@ -5,7 +5,6 @@ export interface IAuthorCourse {
   name: string;
   level: string;
   author: string;
-  category: string;
   tags: Tag[];
   imageSrc: string;
   duration: number;

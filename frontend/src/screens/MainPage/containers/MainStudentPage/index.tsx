@@ -20,11 +20,7 @@ import { IUser } from 'containers/AppRouter/models/IUser';
 import { CourseCardPlaceHolder } from '@components/placeholder/CourseCardPlaceHolder';
 import { PathCardPlaceHolder } from '@components/placeholder/PathCardPlaceHolder';
 import { history } from '@helpers/history.helper';
-import {
-  extractContinueCourseLoading,
-  extractPathsLoading,
-  extractRecommendedCoursesLoading, extractStudentLoading
-} from '@screens/MainPage/models/IMainStudentPageState';
+import { extractStudentLoading } from '@screens/MainPage/models/IMainStudentPageState';
 
 export interface IMainStudentPageProps {
   student: IStudent;
@@ -36,10 +32,7 @@ export interface IMainStudentPageProps {
   fetchRecommendedCourses: (id: string) => void;
   fetchPaths: IBindingAction;
   fetchStudent: IBindingAction;
-  continueCoursesLoading: boolean;
-  recommendedCoursesLoading: boolean;
   studentLoading: boolean;
-  pathsLoading: boolean;
   fetchAllGoals: IBindingAction;
   fetchCurrentGoalProgress: IBindingAction;
   continueCoursesLoaded: boolean;
@@ -47,7 +40,7 @@ export interface IMainStudentPageProps {
   pathsLoaded: boolean;
 }
 
-const MainStudentPage: React.FunctionComponent<IMainStudentPageProps> = ({
+const MainStudentPage: React.FC<IMainStudentPageProps> = ({
   student,
   user,
   continueCourses,
@@ -57,10 +50,7 @@ const MainStudentPage: React.FunctionComponent<IMainStudentPageProps> = ({
   fetchRecommendedCourses: getRecommendedCourses,
   fetchPaths: getPaths,
   fetchStudent: getStudent,
-  continueCoursesLoading,
-  recommendedCoursesLoading,
   studentLoading,
-  pathsLoading,
   fetchAllGoals,
   fetchCurrentGoalProgress,
   continueCoursesLoaded,
@@ -103,7 +93,6 @@ const MainStudentPage: React.FunctionComponent<IMainStudentPageProps> = ({
                     <div className={styles.course_card}>
                       <CourseCard
                         id={c.id}
-                        category={c.category}
                         name={c.name}
                         author={c.author}
                         authorId={c.authorId}
@@ -113,6 +102,7 @@ const MainStudentPage: React.FunctionComponent<IMainStudentPageProps> = ({
                         rating={c.rating}
                         hideButton
                         ratingCount={c.ratingCount}
+                        tags={c.tags}
                       />
                     </div>
                   )) : continueCoursesLoaded
@@ -134,7 +124,6 @@ const MainStudentPage: React.FunctionComponent<IMainStudentPageProps> = ({
                     <div className={styles.course_card}>
                       <CourseCard
                         id={c.id}
-                        category={c.category}
                         name={c.name}
                         author={c.author}
                         authorId={c.authorId}
@@ -143,6 +132,7 @@ const MainStudentPage: React.FunctionComponent<IMainStudentPageProps> = ({
                         level={c.level}
                         rating={c.rating}
                         ratingCount={c.ratingCount}
+                        tags={c.tags}
                       />
                     </div>
                   ))}
@@ -184,7 +174,15 @@ const MainStudentPage: React.FunctionComponent<IMainStudentPageProps> = ({
 };
 
 const mapStateToProps = (state: IAppState) => {
-  const { student, continueCourses, recommendedCourses, paths } = state.mainPage.mainPageData;
+  const {
+    student,
+    continueCourses,
+    recommendedCourses,
+    paths,
+    continueCoursesLoaded,
+    recommendedCoursesLoaded,
+    pathsLoaded
+  } = state.mainPage.mainPageData;
   const { user } = state.appRouter;
   return {
     student,
@@ -193,12 +191,9 @@ const mapStateToProps = (state: IAppState) => {
     recommendedCourses,
     paths,
     studentLoading: extractStudentLoading(state),
-    continueCoursesLoading: extractContinueCourseLoading(state),
-    recommendedCoursesLoading: extractRecommendedCoursesLoading(state),
-    pathsLoading: extractPathsLoading(state),
-    continueCoursesLoaded: state.mainPage.mainPageData.continueCoursesLoaded,
-    recommendedCoursesLoaded: state.mainPage.mainPageData.recommendedCoursesLoaded,
-    pathsLoaded: state.mainPage.mainPageData.pathsLoaded
+    continueCoursesLoaded,
+    recommendedCoursesLoaded,
+    pathsLoaded
   };
 };
 

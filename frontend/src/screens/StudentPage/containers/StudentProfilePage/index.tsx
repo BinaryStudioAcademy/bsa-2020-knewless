@@ -92,7 +92,6 @@ const StudentProfile: React.FC<IStudentProfileProps> = ({
                   <CurrentCourse
                     id={course.id}
                     author={course.author}
-                    category={course.category}
                     level={course.level}
                     name={course.name}
                     timeMinutes={course.timeSeconds}
@@ -114,7 +113,6 @@ const StudentProfile: React.FC<IStudentProfileProps> = ({
                 <CompletedCourse
                   id={course.id}
                   author={course.author}
-                  category={course.category}
                   level={course.level}
                   name={course.name}
                   timeMinutes={course.timeSeconds}

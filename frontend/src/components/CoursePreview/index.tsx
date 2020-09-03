@@ -92,7 +92,7 @@ export const CoursePreview: React.FC<ICoursePreviewProps> = ({
             </NavLink>
           </div>
           <div className={styles.started}>
-            <span className={styles.membersLabel}>started: </span>
+            <span className={styles.membersLabel}>students: </span>
             <span className={styles.membersText}>{members || 0}</span>
           </div>
         </div>

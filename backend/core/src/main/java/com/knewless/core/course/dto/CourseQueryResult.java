@@ -16,7 +16,6 @@ public class CourseQueryResult {
     private Level level;
     private String author;
     private UUID authorId;
-    private String category;
     private String imageSrc;
     private long duration;
     private long positiveReactions;

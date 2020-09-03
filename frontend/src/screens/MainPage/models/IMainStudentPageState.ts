@@ -15,11 +15,6 @@ export interface IMainStudentPageState {
   mainPageData: IMainPageData;
 }
 
-export const extractContinueCourseLoading = (state: IAppState) => state.mainPage.requests
-  .continueCoursesRequest.loading;
-export const extractRecommendedCoursesLoading = (state: IAppState) => state.mainPage.requests
-  .recommendedCoursesRequest.loading;
-export const extractPathsLoading = (state: IAppState) => state.mainPage.requests.pathsRequest.loading;
 export const extractGoalsLoading = (state: IAppState) => state.mainPage.requests.allGoalsRequest.loading;
 export const extractCurrentGoalLoading = (state: IAppState) => state.mainPage.requests
   .currentGoalProgressRequest.loading;
