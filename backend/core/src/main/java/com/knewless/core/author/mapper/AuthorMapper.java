@@ -1,5 +1,6 @@
 package com.knewless.core.author.mapper;
 
+import com.knewless.core.author.dto.AuthorInfoArticleDto;
 import com.knewless.core.author.dto.AuthorSettingsDto;
 import com.knewless.core.author.model.Author;
 import com.knewless.core.user.model.User;
@@ -39,6 +40,15 @@ public class AuthorMapper {
         result.setJob(author.getJob());
         result.setWebsite(author.getWebsite());
         result.setTwitter(author.getTwitter());
+        return result;
+    }
+    public static AuthorInfoArticleDto fromEntinyToArticleInfo(Author author){
+        AuthorInfoArticleDto result = new AuthorInfoArticleDto();
+        result.setId(author.getId());
+        result.setUserId(author.getUser().getId());
+        result.setName(author.getFullName());
+        result.setAvatar(author.getAvatar());
+        result.setBiography(author.getBiography());
         return result;
     }
 }

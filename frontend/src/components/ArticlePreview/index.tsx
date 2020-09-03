@@ -3,8 +3,9 @@ import { Icon, Label } from 'semantic-ui-react';
 import { NavLink } from 'react-router-dom';
 import styles from './styles.module.sass';
 import Ellipsis from 'react-ellipsis-pjs';
-import htmlToDraft from 'html-to-draftjs';
-import HTMLEllipsis from 'react-lines-ellipsis/lib/html'
+import HTMLEllipsis from 'react-lines-ellipsis/lib/html';
+import { timeFormat } from '@helpers/time.helper';
+import  readingTime from 'reading-time';
 
 export interface IArticlePreviewProps {
   id?: string;
@@ -21,7 +22,6 @@ export const ArticlePreview: React.FC<IArticlePreviewProps> = ({
   image, action, name, description,
   id, authorName, authorId, className
 }) => {
-  
   return (
     <div className={`${styles.container} ${className || ''}`}>
       <div className={styles.meta__image}>
@@ -52,6 +52,12 @@ export const ArticlePreview: React.FC<IArticlePreviewProps> = ({
               ellipsis='...'
               basedOn='letters'
             />
+          </div>
+        </div>
+        <div className={styles.bottom_flex}>
+          <div>
+            <span className={styles.title}>read:</span>
+            <span className={styles.number}>{timeFormat(Math.max(readingTime(description).time/1000,60))}</span>
           </div>
         </div>
       </div>

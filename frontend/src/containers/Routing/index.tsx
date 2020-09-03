@@ -38,7 +38,7 @@ import { Footer } from '@components/Footer';
 import styles from './styles.module.sass';
 import { NotFoundPage } from '@screens/NotFound/container/NotFoundPage';
 import { InlineLoaderWrapper } from '@components/InlineLoaderWrapper';
-
+import ArticlePage from '@screens/ArticlePage/containers/ArticlePage';
 export interface IRoutingProps {
   isLoading: boolean;
   isAuthorized: boolean;
@@ -96,35 +96,36 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({
 
   return (
     <div className={styles.container}>
-      {isHeaderShown && <Header />}
-      <Switch>
-        <RootRoute exact path="/" />
-        <SettingsRoute exact path="/settings" />
-        <PublicRoute exact path="/verifyemail/:confirmId" component={VerifyEmail} />
-        <PublicRoute exact path="/savepassword/:resetid" component={SavePassword} />
-        <PublicRoute exact path="/course/:courseId" component={CoursePage} />
-        <PublicRoute exact path="/path/:pathId" component={PathPage} />
-        <PublicRoute exact path="/login" component={LoginPage} />
-        <PublicRoute exact path="/reset" component={ForgotPassword} />
-        <PublicRoute exact path="/oauth/redirect" component={handler} />
-        <PublicRoute exact path="/register" component={RegisterPage} />
-        <PublicRoute exact path="/courses" component={CoursesPage} />
-        <PublicRoute exact path="/paths" component={PathsPage} />
-        <PublicRoute exact path="/search" component={SearchResultsPage} />
-        <PrivateRoute exact path="/add_article" roles={[RoleTypes.AUTHOR]} component={AddArticlePage} />
-        <PrivateRoute exact path="/author/:authorId" component={AuthorPublicPage} />
-        <PrivateRoute exact path="/favourites" component={FavouritesPage} />
-        <PrivateRoute exact path="/lecture/:lectureId" component={LecturePage} />
-        <PrivateRoute exact path="/add_path" roles={[RoleTypes.AUTHOR]} component={AddPathPage} />
-        <PrivateRoute exact path="/add_course" roles={[RoleTypes.AUTHOR]} component={AddCourse} />
-        <PrivateRoute exact path="/profile" roles={[RoleTypes.USER]} component={StudentProfile} />
-        <PrivateRoute exact path="/course/edit/:courseId" roles={[RoleTypes.AUTHOR]} component={AddCourse} />
-        <PrivateRoute exact path="/path/edit/:pathId" roles={[RoleTypes.AUTHOR]} component={AddPathPage} />
-        <PrivateRoute exact path="/history" roles={[RoleTypes.USER]} component={HistoryPage} />
-        <PublicRoute component={NotFoundPage} />
-      </Switch>
-      {isHeaderShown && <Footer />}
-      {connectToWebsocket()}
+    {isHeaderShown && <Header />}
+    <Switch>
+      <RootRoute exact path="/" />
+      <SettingsRoute exact path="/settings" />
+      <PublicRoute exact path="/verifyemail/:confirmId" component={VerifyEmail} />
+      <PublicRoute exact path="/savepassword/:resetid" component={SavePassword} />
+      <PublicRoute exact path="/course/:courseId" component={CoursePage} />
+      <PublicRoute exact path="/path/:pathId" component={PathPage} />
+      <PublicRoute exact path="/login" component={LoginPage} />
+      <PublicRoute exact path="/reset" component={ForgotPassword} />
+      <PublicRoute exact path="/oauth/redirect" component={handler} />
+      <PublicRoute exact path="/register" component={RegisterPage} />
+      <PublicRoute exact path="/courses" component={CoursesPage} />
+      <PublicRoute exact path="/paths" component={PathsPage} />
+      <PublicRoute exact path="/search" component={SearchResultsPage} />
+      <PrivateRoute exact path="/add_article" roles={[RoleTypes.AUTHOR]} component={AddArticlePage} />
+      <PrivateRoute exact path="/author/:authorId" component={AuthorPublicPage} />
+      <PrivateRoute exact path="/favourites" component={FavouritesPage} />
+      <PrivateRoute exact path="/lecture/:lectureId" component={LecturePage} />
+      <PrivateRoute exact path="/add_path" roles={[RoleTypes.AUTHOR]} component={AddPathPage} />
+      <PrivateRoute exact path="/add_course" roles={[RoleTypes.AUTHOR]} component={AddCourse} />
+      <PrivateRoute exact path="/profile" roles={[RoleTypes.USER]} component={StudentProfile} />
+      <PrivateRoute exact path="/course/edit/:courseId" roles={[RoleTypes.AUTHOR]} component={AddCourse} />
+      <PrivateRoute exact path="/path/edit/:pathId" roles={[RoleTypes.AUTHOR]} component={AddPathPage} />
+      <PrivateRoute exact path="/history" roles={[RoleTypes.USER]} component={HistoryPage} />
+      <PrivateRoute exact path="/article/:articleId" component={ArticlePage} />
+      <PublicRoute component={NotFoundPage} />
+    </Switch>
+    {isHeaderShown && <Footer />}
+    {connectToWebsocket()}
       {onOpen && (
         <LoginModal
           onOpen={onOpen}
