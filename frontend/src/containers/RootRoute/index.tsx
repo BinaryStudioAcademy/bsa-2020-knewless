@@ -7,28 +7,18 @@ import { IUser } from '../AppRouter/models/IUser';
 import { RoleTypes } from '../AppRouter/models/IRole';
 import MainAuthorPage from '@screens/AuthorMainPage/containers/MainPage';
 import MainStudentPage from '@screens/MainPage/containers/MainStudentPage';
-import { fetchGetAuthorSettingsRoutine } from '@screens/AuthorSettings/routines';
-import { fetchGetStudentSettingsRoutine } from '@screens/StudentSettings/routines';
-import { Redirect } from 'react-router-dom';
-import { IBindingAction } from 'models/Callbacks';
 
 interface IRootRouteProps {
   user: IUser;
   isAuthorized: boolean;
   exact: boolean;
   path: string;
-  isSettingsFilled: boolean;
 }
 
 const RootRoute: React.FunctionComponent<IRootRouteProps> = props => {
-  const { isAuthorized, user, isSettingsFilled } = props;
+  const { isAuthorized, user } = props;
   let currentComponent: React.FunctionComponent = () => null;
-
-  if (user.id && window.location.pathname !== '/settings' && isSettingsFilled === false) {
-    return (
-      <Redirect to='/settings'/>
-    );
-  }
+  
   if (!isAuthorized) {
     currentComponent = LandingPage;
   } else if (isAuthorized && user.role) {
@@ -45,12 +35,11 @@ const RootRoute: React.FunctionComponent<IRootRouteProps> = props => {
 };
 
 const mapStateToProps = (state: IAppState) => {
-  const { user, settingsFilled } = state.appRouter;
+  const { user } = state.appRouter;
   const { isAuthorized } = state.auth.auth;
   return {
     user,
-    isAuthorized,
-    isSettingsFilled: settingsFilled
+    isAuthorized
   };
 };
 

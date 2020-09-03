@@ -26,7 +26,7 @@ const UserElement = ({ user, authorId, isSettingsFilled }) => (
       hoverable
     >
       <Popup.Content>
-        <PopupMenu user={user} authorId={authorId} />
+        <PopupMenu isSettingsFilled={isSettingsFilled} user={user} authorId={authorId} />
       </Popup.Content>
     </Popup>
   </div>
