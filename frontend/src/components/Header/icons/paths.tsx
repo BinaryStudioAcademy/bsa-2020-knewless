@@ -17,6 +17,7 @@ const PathIcon = () => (
       fill="white"
     />
   </svg>
+  
 );
 
 export default PathIcon;
