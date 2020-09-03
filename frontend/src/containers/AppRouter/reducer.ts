@@ -1,17 +1,30 @@
 import { IAppRouterState } from './models/IAppRouterState';
 import { IUser } from './models/IUser';
 import { Routine } from 'redux-saga-routines';
-import { fetchUserRoutine, resetSettingsModeRoutine, setRoleLoadingRoutine, setSettingsModeRoutine } from './routines';
+import { fetchUserRoutine, resetSettingsModeRoutine, setRoleLoadingRoutine, setSettingsModeRoutine, checkSettingsRoutine } from './routines';
 
 const initialState: IAppRouterState = {
   user: { } as IUser,
   settingsMode: null,
   roleLoading: false,
-  userLoading: true
+  userLoading: true,
+  settingsFilled: undefined
 };
 
 export const appRouter = (state = initialState, action: Routine<any>) => {
   switch (action.type) {
+    case checkSettingsRoutine.SUCCESS: {
+      return {
+        ...state,
+        settingsFilled: action.payload
+      };
+    }
+    case checkSettingsRoutine.FAILURE: {
+      return {
+        ...state,
+        settingsFilled: false
+      };
+    }
     case fetchUserRoutine.SUCCESS: {
       return {
         ...state,

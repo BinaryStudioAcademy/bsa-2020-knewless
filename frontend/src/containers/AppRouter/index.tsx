@@ -6,8 +6,8 @@ import ConfirmEmailMessage from '@components/EmailConfirmation';
 import Routing from '../Routing';
 import { IAppState } from '@models/AppState';
 import { connect } from 'react-redux';
-import { fetchUserRoutine, setUserRoleRoutine } from './routines';
-import { IBindingAction, IBindingFunction } from '@models/Callbacks';
+import { fetchUserRoutine, setUserRoleRoutine, checkSettingsRoutine } from './routines';
+import { IBindingAction, IBindingFunction, IBindingCallback1 } from '@models/Callbacks';
 import { IUser } from './models/IUser';
 import { RoleTypes } from './models/IRole';
 import { ACCESS_TOKEN, REFRESH_TOKEN } from '@screens/Authentication/constants';
@@ -21,7 +21,9 @@ interface IAppRouterProps {
   isAuthorized: boolean;
   emailVerified: boolean;
   fetchUser: IBindingAction;
+  checkSettings: IBindingCallback1<string>;
   setSettingsMode: IBindingFunction<RoleTypes, void>;
+  isSettingsFilled: boolean
 }
 
 const AppRouter: React.FunctionComponent<IAppRouterProps> = ({
@@ -32,8 +34,11 @@ const AppRouter: React.FunctionComponent<IAppRouterProps> = ({
   setSettingsMode,
   roleLoading,
   emailVerified,
-  userLoading: loading
+  userLoading: loading,
+  checkSettings,
+  isSettingsFilled
 }) => {
+
   useEffect(() => {
     const unlisten = history.listen(() => {
       window.scrollTo(0, 0);
@@ -49,6 +54,13 @@ const AppRouter: React.FunctionComponent<IAppRouterProps> = ({
       fetchUser();
     }
   }, [isAuthorized, roleLoading]);
+  
+  useEffect(() => {
+    if (user?.role && isSettingsFilled === undefined) {
+      checkSettings(user?.role?.name);
+    }
+  }, [user?.role?.name]);
+
   return (
     <LoaderWrapper loading={localStorage.getItem(ACCESS_TOKEN) ? loading : false} >
       <Router history={history}>
@@ -69,7 +81,7 @@ const AppRouter: React.FunctionComponent<IAppRouterProps> = ({
 
 const mapStateToProps = (state: IAppState) => {
   const { isAuthorized } = state.auth.auth;
-  const { user, settingsMode, roleLoading, userLoading } = state.appRouter;
+  const { user, settingsMode, roleLoading, userLoading, settingsFilled } = state.appRouter;
   const { emailVerified } = user;
   return {
     user,
@@ -77,13 +89,15 @@ const mapStateToProps = (state: IAppState) => {
     isAuthorized,
     roleLoading,
     userLoading,
-    emailVerified
+    emailVerified,
+    isSettingsFilled: settingsFilled
   };
 };
 
 const mapDispatchToProps = {
   fetchUser: fetchUserRoutine,
-  setSettingsMode: setUserRoleRoutine
+  setSettingsMode: setUserRoleRoutine,
+  checkSettings: checkSettingsRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppRouter);

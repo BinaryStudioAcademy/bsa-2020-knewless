@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { IAppState } from '@models/AppState';
 import { connect } from 'react-redux';
 import PublicRoute from '@components/PublicRoute';
@@ -18,6 +18,7 @@ interface IRootRouteProps {
 const RootRoute: React.FunctionComponent<IRootRouteProps> = props => {
   const { isAuthorized, user } = props;
   let currentComponent: React.FunctionComponent = () => null;
+  
   if (!isAuthorized) {
     currentComponent = LandingPage;
   } else if (isAuthorized && user.role) {
@@ -27,6 +28,7 @@ const RootRoute: React.FunctionComponent<IRootRouteProps> = props => {
       currentComponent = MainStudentPage;
     }
   }
+  
   return (
     <PublicRoute {...props} component={currentComponent} />
   );

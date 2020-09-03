@@ -6,9 +6,9 @@ import Notifications from '@containers/Notifications';
 import PopupMenu from '../PopupMenu';
 import AvatarWithGradient from '@components/avatar/AvatarWithBackground';
 
-const UserElement = ({ user, authorId }) => (
+const UserElement = ({ user, authorId, isSettingsFilled }) => (
   <div className={styles.profileWrp}>
-    <NavLink exact to="/favourites">
+    <NavLink exact to={user.id && !isSettingsFilled ? "/settings" : "/favourites"}>
       <Label
         basic
         size="tiny"
@@ -26,7 +26,7 @@ const UserElement = ({ user, authorId }) => (
       hoverable
     >
       <Popup.Content>
-        <PopupMenu user={user} authorId={authorId} />
+        <PopupMenu isSettingsFilled={isSettingsFilled} user={user} authorId={authorId} />
       </Popup.Content>
     </Popup>
   </div>

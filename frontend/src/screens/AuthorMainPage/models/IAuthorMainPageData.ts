@@ -8,4 +8,5 @@ export interface IAuthorMainPageData {
   authorPaths: IPathCardProps[];
   pathsLoaded: boolean;
   coursesLoaded: boolean;
+  authorLoaded: boolean;
 }

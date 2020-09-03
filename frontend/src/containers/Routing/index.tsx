@@ -48,6 +48,7 @@ export interface IRoutingProps {
   loginUser: IBindingAction;
   setOpen: IBindingCallback1<string>;
   redirectTo: string;
+  isSettingsFilled: boolean;
 }
 
 const Routing: React.FunctionComponent<IRoutingProps> = ({
@@ -58,7 +59,8 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({
   onOpen,
   loginUser,
   setOpen,
-  redirectTo
+  redirectTo,
+  isSettingsFilled
 }) => {
   const checkHeaderShown = () => {
     const headerBlackList = ['/login', '/register', '/lecture/', '/reset', '/savepassword', '/verifyemail'];
@@ -80,6 +82,17 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({
   });
 
   if (isLoading) return <InlineLoaderWrapper loading centered />;
+
+  if (isAuthorized && window.location.pathname !== '/settings' && isSettingsFilled === false) {
+    history.push("/settings");
+    return (
+      <div className={styles.container}>
+        {isHeaderShown && <Header />}
+          <SettingsRoute exact path="/settings" />
+        {isHeaderShown && <Footer />}
+      </div>
+    );
+  }
 
   return (
     <div className={styles.container}>
@@ -127,13 +140,16 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({
   );
 };
 
-const mapStateToProps = (state: IAppState) => ({
+const mapStateToProps = (state: IAppState) => {
+  const { settingsFilled } = state.appRouter;
+  return {
   isAuthorized: state.auth.auth.isAuthorized,
   isLoginLoading: state.auth.requests.loginRequest.loading,
   isLoginFailure: state.auth.requests.loginRequest.error != null && !state.auth.requests.loginRequest.loading,
   onOpen: state.loginModal.open,
-  redirectTo: state.loginModal.redirectTo
-});
+  redirectTo: state.loginModal.redirectTo,
+  isSettingsFilled: settingsFilled
+}};
 
 const mapDispatchToProps = {
   loginUser: loginRoutine.trigger,

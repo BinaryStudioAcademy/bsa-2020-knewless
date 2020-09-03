@@ -10,9 +10,10 @@ import { RoleTypes } from '@containers/AppRouter/models/IRole';
 export interface IPopupMenuProps {
   user: IUser;
   authorId?: string;
+  isSettingsFilled: boolean;
 }
 
-const PopupMenu: React.FC<IPopupMenuProps> = ({ user, authorId }) => {
+const PopupMenu: React.FC<IPopupMenuProps> = ({ user, authorId, isSettingsFilled }) => {
   const handleOnClickProfile = () => {
     let profilePath;
     if (user.role.name === RoleTypes.USER) {
@@ -22,10 +23,10 @@ const PopupMenu: React.FC<IPopupMenuProps> = ({ user, authorId }) => {
     } else {
       profilePath = '/login';
     }
-    history.push(profilePath);
+    isSettingsFilled? history.push(profilePath) : history.push('/settings');
   };
   const handleOnClickHistory = () => {
-    history.push('/history');
+    isSettingsFilled? history.push('/history') : history.push('/settings');
   };
   const handleOnClickSettings = () => {
     history.push('/settings');

@@ -1,4 +1,4 @@
-import { Button } from 'semantic-ui-react';
+import { Button, Placeholder, PlaceholderLine } from 'semantic-ui-react';
 import React from 'react';
 import { IAuthor } from '../../models/IAuthor';
 import styles from './styles.module.sass';
@@ -6,10 +6,11 @@ import AvatarWithGradient from '@components/avatar/AvatarWithBackground';
 
 interface IAuthorInfoBlockProps {
   author: IAuthor;
+  isLoading: boolean;
 }
 
 const AuthorInfoBlock: React.FunctionComponent<IAuthorInfoBlockProps> = (
-  { author: { firstName = '', lastName = '', avatar, schoolInfo, followers = 0 } }
+  { author: { firstName = '', lastName = '', avatar, schoolInfo, followers = 0 }, isLoading }
 ) => {
   const handleSchoolCreation = e => {
     // handle
@@ -20,12 +21,18 @@ const AuthorInfoBlock: React.FunctionComponent<IAuthorInfoBlockProps> = (
       <div className={styles.container__centered}>
         <div className={styles.author_info}>
           <div className={styles.author_info__img_wrapper}>
-            <AvatarWithGradient imageSrc={avatar} animated={false} />
+            <AvatarWithGradient imageSrc={avatar} className={styles.avatar} animated={false} isLoading={isLoading} />
           </div>
-          <div className={styles.author_info_text}>
-            <span className={styles.author_info_text__title}>{`${firstName} ${lastName}`}</span>
-            <span className={styles.count}>{`${followers} Followers`}</span>
-          </div>
+            {isLoading ? (
+              <Placeholder className={styles.namePlaceholder}>
+                <PlaceholderLine />
+                <PlaceholderLine />
+              </Placeholder>
+            ) : (
+            <div className={styles.author_info_text}>
+              <span className={styles.author_info_text__title}>{`${firstName} ${lastName}`}</span>
+              <span className={styles.count}>{`${followers} Followers`}</span>
+            </div>)}
         </div>
         <div className={styles.school_container}>
           {isAuthorHasSchool ? (
