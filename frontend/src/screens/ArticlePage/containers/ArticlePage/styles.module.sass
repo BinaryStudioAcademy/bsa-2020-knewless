@@ -1,0 +1,303 @@
+@import "src/styles/common_variables"
+
+$width_btn: 115px
+$height_btn: 40px
+$title_container_height: 55px
+$container_width: 1400px
+$side_padding: 80px
+$indent_right: 3vw
+
+.main_container
+  padding-top: 0px
+  background: #121421
+  padding-bottom: 20px
+  display: flex
+  flex-direction: column
+.wrapperTitle 
+    margin-top: $header_height   
+    width: 100%
+    background: #2A2B37 !important
+#articleTitle
+    margin: auto
+    width: 100%
+    padding-top: 30px
+    padding-bottom: 20px
+    max-width: $container_width + ($side_padding * 2)
+    padding-left: $side_padding
+    padding-right: $side_padding
+    color: #ffff
+    font-family: Custom Open Sans
+    font-style: normal
+    font-weight: 600
+    font-size: 1.5em
+    line-height: 1.5em
+
+.wide_container
+  max-width: $container_width + ($side_padding * 2)
+  margin-left: auto
+  margin-right: auto
+  padding-left: $side_padding
+  padding-right: $side_padding
+  width: 100%
+
+.main_content
+  width: 100%
+  height: 100%
+  min-height: 60vh
+  flex-grow: 1
+  display: flex
+  flex-direction: column
+  margin-bottom: 5vh
+
+.form
+  &__container
+    display: flex
+    flex-direction: column
+
+  &__group
+    margin-bottom: 2em
+
+  &__form
+    flex-basis: 0
+    flex-grow: 1
+
+  &__label
+    display: block
+    margin-top: 0.5em
+    font-style: normal
+    font-weight: 600
+    color: #ffff
+    font-family: Custom Open Sans
+    font-size: 2em
+    line-height: 2em
+
+  &__name
+    padding-top: 50px
+    height: 100%
+    grid-column: 1
+    position: relative
+    align-self: center
+    $container: 1400px
+    $side_padding: 80px
+    max-width: ($container + $side_padding*2)/2
+    margin-left: auto
+    padding-left: $side_padding
+    padding-right: 30px
+    width: 100%
+    .author
+      font-size: 1.3em
+      color: #fff
+
+.wrapPreview
+  padding: 0
+  background: linear-gradient(70.06deg, #0084f8, #ff867688)
+  height: 300px
+  width: 100%
+
+.preview
+  width: 100%
+  height: 100%
+  display: grid
+  grid-auto-columns: 1fr 1fr
+  overflow: hidden
+
+.article_image
+  position: absolute
+  width: 100%
+  height: 100%
+  position: absolute
+  height: 100%
+  width: 100%
+  left: 0
+  top: 0
+  
+.article_image img
+  width: 100%
+  height: 100%
+  object-fit: cover
+  background: rgba(0, 0, 0, 0.5)
+
+#content_block
+    z-index: 100
+    margin-top: -100px
+    width: 98%
+    margin-left: auto
+    margin-right: auto
+    box-shadow: 0 0 10px rgba(0,0,0,0.5)
+    word-break: break-all
+    background: #ffff
+    min-height: 800px
+    padding: 70px 50px
+    text-overflow: ellipsis !important
+    word-break: break-all
+    word-wrap: break-word
+    &  * 
+      font-family: Custom Open Sans !important
+      font-size: 1.1em !important
+      line-height: 2em !important
+      color: black !important
+      text-overflow: ellipsis !important
+      word-break: break-all !important
+      word-wrap: break-word !important
+      white-space: pre-wrap !important
+      width: 100%
+      code 
+        font-family: Courier New, Courier, monospace !important
+        display: flex
+        background: #dbd9d9 !important
+        padding: 0.5em
+        width: 100%
+        text-align: justify
+.author_block
+   width: 98%
+   border-top: 3px solid #2A2B37
+   border-bottom: 3px solid #2A2B37
+   padding: 30px 0
+   margin-top: 50px
+   margin-right: auto
+   margin-left: auto
+   display: flex
+   flex-direction: column
+   align-items: center
+.articles_block
+   width: 98% !important
+   padding: 30px 0
+   margin-top: 20px
+   display: flex
+   flex-direction: column
+   align-items: start
+.content_row
+  margin: 5em 0
+
+.article_card
+  width: 32%
+  box-shadow: 0 30px 40px rgba(0, 0, 0, 0.1)   
+
+\:global(.DraftEditor-root)
+      height: auto !important
+      overflow: auto
+\:global(.ui.button).btn_save
+  margin-left: auto !important
+  width: $width_btn
+  height: $height_btn
+  font-family: 'Montserrat', sans-serif
+  font-style: normal
+  font-weight: bold
+  font-size: 1em
+  line-height: 1em
+  margin-right: 1.6em
+  align-items: center
+  color: #FFFFFF
+  background: #454849
+  border-radius: 3px
+  margin-top: 0
+
+\:global(.ui.button).button_release
+  border-radius: 3px
+  font-size: 1em
+  width: $width_btn
+  height: $height_btn
+
+.btn_cancel
+  width: $width_btn
+  height: $height_btn
+  margin-right: 50px !important
+
+\:global(.ui.button).button_release_disabled
+  border-radius: 3px
+  width: $width_btn
+  height: $height_btn
+  opacity: 0.5
+  cursor: default
+
+\:global(.ui.button).button_save_disabled
+  width: $width_btn
+  height: $height_btn
+  font-family: 'Montserrat', sans-serif
+  font-style: normal
+  font-weight: bold
+  font-size: 1em
+  line-height: 1em
+  margin-right: 1.6em
+  align-items: center
+  color: #FFFFFF
+  background: #454849
+  border-radius: 3px
+  opacity: 0.5
+  cursor: default !important
+
+.container
+  grid-column: 2
+  height: 100%
+  width: 100%
+  position: relative
+
+.back
+  height: 100%
+  width: 100%
+  background-color: rgba(42,43,55,.6)
+
+.image
+  position: absolute
+  height: 100%
+  width: 100%
+  left: 0
+  top: 0
+
+.imageUploader, 
+.imagePlaceholder
+  position: absolute
+  height: 100%
+  width: 100%
+  left: 0
+  top: 0
+  border-radius: 0px !important
+  display: flex !important
+  align-items: center !important
+  justify-content: center !important
+  transition: all 0.3s ease-in-out !important
+  background: none !important
+  padding: 10px !important
+  border: 3px dashed #9c9b9b !important
+  background:  rgba(94, 92, 92, 0.575) !important
+  color: #ffff
+  font-family: Custom Open Sans  !important
+  font-style: normal  !important
+  font-weight: 600  !important
+  font-size: 1.5em  !important
+  line-height: 1.5em  !important
+  .uploaderInfo
+    display: flex
+    flex-direction: column  
+    align-items: center
+    img
+     width: 60px
+
+.imagePlaceholder
+  opacity: 1
+
+.imageUploader
+  opacity: 0  
+  &:hover
+    background: rgba(94, 92, 92, 0.575) !important
+    opacity: 1
+    padding: 10px
+    border: 3px dashed #9c9b9b
+
+\:global(.ui.basic.label).warningLabel
+  width: 100%
+  background-color: #f7d0d0
+  z-index: 2
+  padding: 0
+  margin: -3px 0 0
+  text-align: center
+  font-size: 0.8em
+  font-weight: 700
+  line-height: 1.3em
+  border-radius: 0 0 5px 5px
+  color: black
+
+.no_bottom_rounding_field
+  input[type="text"], textarea
+    border-bottom-left-radius: 0 !important
+    border-bottom-right-radius: 0 !important

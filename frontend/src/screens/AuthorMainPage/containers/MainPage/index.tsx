@@ -26,6 +26,8 @@ export interface IMainAuthorPageProps {
   pathsLoading: boolean;
   pathsLoaded: boolean;
   coursesLoaded: boolean;
+  authorLoaded: boolean;
+  isSettingsFilled: boolean;
 }
 
 const MainAuthorPage: React.FunctionComponent<IMainAuthorPageProps> = ({
@@ -39,20 +41,22 @@ const MainAuthorPage: React.FunctionComponent<IMainAuthorPageProps> = ({
   coursesLoading,
   pathsLoading,
   pathsLoaded,
-  coursesLoaded
+  coursesLoaded,
+  authorLoaded,
+  isSettingsFilled
 }) => {
   useEffect(() => {
-    if (user.id) {
+    if (user.id && isSettingsFilled) {
       getAuthor();
     }
     if (author.id) {
       getAuthorCourses(author.id);
       getAuthorPaths(author.id);
     }
-  }, [user.id, author.id]);
+  }, [user.id, author.id, isSettingsFilled]);
   return (
     <div className={styles.main_page}>
-      <AuthorInfoBlock author={author} />
+      <AuthorInfoBlock author={author} isLoading={!authorLoaded}/>
       <div className={styles.content}>
         <div className={`${styles.wide_container} ${styles.content_row}`}>
           <AuthorCardsSegment
@@ -115,6 +119,7 @@ const MainAuthorPage: React.FunctionComponent<IMainAuthorPageProps> = ({
 
 const mapStateToProps = (state: IAppState) => {
   const { author, authorCourses, authorPaths } = state.authorMainPage.data;
+  const { settingsFilled } = state.appRouter;
   return {
     user: state.appRouter.user,
     author,
@@ -123,7 +128,9 @@ const mapStateToProps = (state: IAppState) => {
     coursesLoading: state.authorMainPage.requests.authorCoursesRequest.loading,
     pathsLoading: state.authorMainPage.requests.authorPathsRequest.loading,
     pathsLoaded: state.authorMainPage.data.pathsLoaded,
-    coursesLoaded: state.authorMainPage.data.coursesLoaded
+    coursesLoaded: state.authorMainPage.data.coursesLoaded,
+    authorLoaded: state.authorMainPage.data.authorLoaded,
+    isSettingsFilled: settingsFilled
   };
 };
 

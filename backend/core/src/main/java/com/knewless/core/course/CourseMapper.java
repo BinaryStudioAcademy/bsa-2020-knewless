@@ -19,6 +19,7 @@ public interface CourseMapper {
     @Mapping(target = "level", expression = "java(s.getLevel().name())")
     @Mapping(target = "rating", expression = "java(CourseMapper.calculateRating(s.getAllReactions(), s.getPositiveReactions()))")
     @Mapping(source = "allReactions", target = "ratingCount")
+    @Mapping(target = "reviewed", ignore = true)
     CourseDto courseQueryResultToCourseDto(CourseQueryResult s);
 
     @Mapping(source = "imageSrc", target = "image")
@@ -50,6 +51,8 @@ public interface CourseMapper {
 	@Mapping(target = "lectures", ignore = true)
 	@Mapping(target = "tags", ignore = true)
 	@Mapping(target = "review", ignore = true)
+	@Mapping(target = "ratingCount", ignore = true)
+	@Mapping(target = "progress", ignore = true)
 	CourseFullInfoDto courseToCourseFullInfoDto(Course course);
 
     @Mapping(target = "members", ignore = true)

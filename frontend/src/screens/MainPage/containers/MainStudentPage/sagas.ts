@@ -28,7 +28,7 @@ function* watchGetStudentCourses() {
 
 function* getRecommendedCourses({ payload }: AnyAction) {
   try {
-    const response = yield call(mainPageService.getRecommendedCourses, payload);
+    const response = yield call(mainPageService.getRecommendedCourses);
     yield put(fetchRecommendedCoursesRoutine.success(response));
   } catch (error) {
     yield put(fetchRecommendedCoursesRoutine.failure(error?.message));
@@ -41,7 +41,7 @@ function* watchGetRecommendedCourses() {
 
 function* getPaths() {
   try {
-    const response = yield call(mainPageService.getPaths);
+    const response = yield call(mainPageService.getRecommendedPaths);
     yield put(fetchPathsRoutine.success(response));
   } catch (error) {
     yield put(fetchPathsRoutine.failure(error?.message));

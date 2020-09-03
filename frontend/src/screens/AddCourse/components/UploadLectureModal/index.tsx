@@ -37,7 +37,7 @@ interface IUploadLectureModalProps {
   tags: ITag[];
 }
 
-export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProps> = ({
+export const UploadLectureModal: React.FC<IUploadLectureModalProps> = ({
   isOpen = false, openAction, saveLecture: save, tags
 }) => {
   const [description, setDescription] = useState('');
@@ -74,9 +74,8 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
   const [isLinkValid, setLinkValid] = useState(true);
   const [isLinkAccepted, setLinkAccepted] = useState(false);
 
-  const isSaveble = (isValidName && isValidDescription && duration > 0 && selectedTags.length < 6
-    && name.length > 1 && (description.length === 0 || description.length > 9)) 
-  && ((isValidFile && file) || isLinkAccepted);
+  const isReadyToSave = (isValidName && isValidDescription && duration > 0 && isValidTagsAmount)
+    && ((isValidFile && file) || isLinkAccepted);
 
   const validateName = (newName?: string) => {
     const lastChangesName = typeof newName === 'string' ? newName : name;
@@ -122,13 +121,15 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
     setLinkValid(true);
     setLinkAccepted(false);
     setSelectedTags([]);
+    setStoredTags(tags);
   };
 
   const handleSave = () => {
-    validateDescription();
     validateName();
+    validateDescription();
+    validateTagsAmount();
     setIsValidFile(file);
-    if (!isSaveble) return;
+    if (!isReadyToSave) return;
 
     setButtonLoading(true);
     if (addByLink) {
@@ -147,7 +148,7 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
         duration,
         tags: selectedTags
       });
-    };
+    }
     setButtonLoading(false);
     handleClose();
   };
@@ -157,13 +158,13 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
     setAddByLink(true);
     setLinkAccepted(false);
     setFile(null);
-  }
+  };
 
   const toggleWithFile = () => {
     setDuration(0);
     setAddByLink(false);
     setLink('');
-  }
+  };
 
   const playerRef = createRef<ReactPlayer>();
 
@@ -171,7 +172,7 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
     const valid = checkLink(link);
     setLinkValid(valid);
     setLinkAccepted(valid);
-  }
+  };
 
   function onTagAddition(tag) {
     setSelectedTags(prev => [...prev, tag]);
@@ -197,7 +198,7 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
       <ModalContent className={styles.modal__upload__content}>
         <div className={styles.iconrow}>
           <div className={styles.header}>Add new lecture</div>
-          {file ? (
+          {file && (
             <div className={styles.filecontainer}>
               <Label
                 basic
@@ -231,7 +232,7 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
                 />
               </div>
             </div>
-          ) : ''}
+          )}
         </div>
         <div className={styles.topRow}>
           <div className={styles.inputWrapper}>
@@ -251,8 +252,7 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
                 onBlur={() => validateName()}
                 inverted
               />
-              {!isValidName
-              && (
+              {!isValidName && (
                 <Label
                   basic
                   className={styles.warninglabel}
@@ -265,43 +265,45 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
           </div>
           {addByLink ? (
             <div className={styles.link_field}>
-                <Input
-                  fluid
-                  type="text"
-                  onClick={isLinkAccepted ? () => setLinkAccepted(false) : () => {}}
-                  icon={
+              <Input
+                fluid
+                type="text"
+                onClick={isLinkAccepted ? () => setLinkAccepted(false) : () => console.log('Link not accepted')}
+                icon={(
                   <Icon
-                    name={isLinkAccepted ? "pencil" : "delete"}
+                    name={isLinkAccepted ? 'pencil' : 'delete'}
                     link
                     color="grey"
-                    onClick={isLinkAccepted ? () => setLinkAccepted(false) : () => setLink("")} 
-                  />}
-                  error={!isLinkValid}
-                  value={isLinkAccepted ? cutLink(link) : link}
-                  className={isLinkAccepted ? styles.inactiveinput : styles.linkInput}
-                  onChange={isLinkAccepted ? () => {} : e => setLink(e.target.value)}
-                  inverted
-                />
-                {!isLinkAccepted && (
+                    onClick={isLinkAccepted ? () => setLinkAccepted(false) : () => setLink('')}
+                  />
+                )}
+                error={!isLinkValid}
+                value={isLinkAccepted ? cutLink(link) : link}
+                className={isLinkAccepted ? styles.inactiveinput : styles.linkInput}
+                onChange={isLinkAccepted ? () => console.log('Link accepted') : e => setLink(e.target.value)}
+                inverted
+              />
+              {!isLinkAccepted && (
                 <GrayOutlineButton onClick={() => submitLink()} className={styles.submit_link}>
                   Submit
-                </GrayOutlineButton>)}
+                </GrayOutlineButton>
+              )}
             </div>
           ) : (
-          <div className={styles.rightside}>
-            <GrayOutlineButton
-              className={isValidFile ? styles.upload_button : styles.upload_button_error}
-              as="label"
-            >
-              Upload
-              <input ref={inputRef} name="video/mp4" type="file" onChange={e => handleAddFile(e)} hidden />
-            </GrayOutlineButton>
-          </div>
+            <div className={styles.rightside}>
+              <GrayOutlineButton
+                className={isValidFile ? styles.upload_button : styles.upload_button_error}
+                as="label"
+              >
+                Upload
+                <input ref={inputRef} name="video/mp4" type="file" onChange={e => handleAddFile(e)} hidden />
+              </GrayOutlineButton>
+            </div>
           )}
         </div>
-        <div className={styles.link_row}> 
-          <div className={styles.toggle_element} onClick={() => {addByLink? toggleWithFile() : toggleWithLink()}}>
-            {!addByLink? "Or add via link" : "Or upload file"}
+        <div className={styles.link_row}>
+          <div className={styles.toggle_element} onClick={() => (addByLink ? toggleWithFile() : toggleWithLink())}>
+            {!addByLink ? 'Or add via link' : 'Or upload file'}
           </div>
         </div>
         <div className={styles.tags_selector}>
@@ -326,12 +328,13 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
             value={description}
             onBlur={() => validateDescription()}
           />
-          {warning.replace(/\s+/g, '').length > 0 && (<Label basic className={styles.warninglabel} promt="true">{warning}</Label>)}
+          {warning.replace(/\s+/g, '').length > 0
+          && (<Label basic className={styles.warninglabel} promt="true">{warning}</Label>)}
         </div>
         <GradientButton
           onClick={() => handleSave()}
           loading={buttonLoading}
-          className={isSaveble ? styles.save_button : styles.save_button_inactive}
+          className={isReadyToSave ? styles.save_button : styles.save_button_inactive}
         >
           Save
         </GradientButton>
@@ -349,10 +352,10 @@ export const UploadLectureModal: React.FunctionComponent<IUploadLectureModalProp
           width="0px"
           height="0px"
           className={styles.react_player}
-          onReady={()=>setDuration(playerRef.current.getDuration())}
-          onDuration={()=>setDuration(playerRef.current.getDuration())}
+          onReady={() => setDuration(playerRef.current.getDuration())}
+          onDuration={() => setDuration(playerRef.current.getDuration())}
           playing={false}
-          onError={()=>{}}
+          onError={error => console.log(error)}
           muted
         />
       </div>

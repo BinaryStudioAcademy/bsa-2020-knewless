@@ -71,6 +71,9 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
     setIsOverviewOpen(false);
   };
 
+  const isUser = role === RoleTypes.USER;
+  const isAuthor = role === RoleTypes.AUTHOR;
+
   return (
     <div className="content_row">
       <div className={`${styles.description} flex_item aligned_item`}>
@@ -109,13 +112,13 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
           <div className={styles.buttons_with_favourite}>
             <div className={styles.description__buttons}>
               <GradientButton
-                onClick={(progress && progress > 0 && role === RoleTypes.USER) || authorId === author?.id ? onResume : onStart}
+                onClick={(progress && progress > 0 && isUser) || authorId === author?.id ? onResume : onStart}
               >
-                {(progress && progress > 0 && role === RoleTypes.USER) || role === RoleTypes.AUTHOR ? 'Resume' : 'Start'}
+                { isAuthor ? 'Revision' : (progress && progress > 0 && isUser) ? 'Resume' : 'Start'}
               </GradientButton>
               <GrayOutlineButton onClick={() => setIsOverviewOpen(true)}>Course overview</GrayOutlineButton>
             </div>
-            {isAuthorized && role===RoleTypes.USER && (
+            {isAuthorized && isUser && (
               <div className={styles.button_favourite_wrp}>
                 <AddToFavouriteButton
                   isFavourite={favourite}

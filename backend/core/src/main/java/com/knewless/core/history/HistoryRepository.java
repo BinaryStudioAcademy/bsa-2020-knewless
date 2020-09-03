@@ -17,8 +17,8 @@ public interface HistoryRepository extends JpaRepository<History, UUID> {
 
     Optional<History> findByUser_IdAndLecture_Id(UUID userId, UUID lecture_id);
 
-    @Query("SELECT coalesce(sum(secondsWatched),0)  from History " +
-            " WHERE user.id= :userId AND lecture.course.id = :courseId ")
+    @Query("select coalesce(sum(secondsWatched), 0) from History " +
+            "where user.id = :userId and lecture.course.id = :courseId")
     long getProgressByUserAndCourse(UUID userId, UUID courseId);
 
     List<History> findAllByUserIdOrderByUpdatedAtDesc(UUID userId);

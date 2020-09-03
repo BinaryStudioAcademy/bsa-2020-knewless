@@ -13,10 +13,8 @@ interface ISettingsRouteProps {
   settingsMode: RoleTypes;
 }
 
-const SettingsRoute: React.FunctionComponent<ISettingsRouteProps> = ({
-  settingsMode,
-  user
-}) => {
+const SettingsRoute: React.FunctionComponent<ISettingsRouteProps> = props => {
+  const { settingsMode, user } = props;
   let renderComponent: React.FunctionComponent = () => null;
   if (settingsMode === RoleTypes.AUTHOR
     || user?.role?.name === RoleTypes[RoleTypes.AUTHOR]) {
@@ -27,8 +25,7 @@ const SettingsRoute: React.FunctionComponent<ISettingsRouteProps> = ({
   }
   return (
     <PrivateRoute
-      exact
-      path="/settings"
+      {...props}
       component={renderComponent}
     />
   );

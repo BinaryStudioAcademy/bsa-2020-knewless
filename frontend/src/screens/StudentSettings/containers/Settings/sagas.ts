@@ -4,6 +4,7 @@ import * as imageService from 'services/image.service';
 import { toastr } from 'react-redux-toastr';
 import { fetchUserRoutine } from 'containers/AppRouter/routines';
 import { fetchStudentRoutine } from '@screens/MainPage/routines';
+import { checkSettingsRoutine } from '@containers/AppRouter/routines';
 import * as settingsService from '../../services/settings.service';
 import { fetchGetStudentSettingsRoutine, fetchSetStudentSettingsRoutine, fetchAllTagsRoutine } from '../../routines';
 
@@ -30,6 +31,7 @@ function* setSettings(action: Routine<any>) {
       author.avatar = link;
     }
     const response = yield call(() => settingsService.setSettings(action.payload));
+    yield put(checkSettingsRoutine.success(true));
     yield put(fetchStudentRoutine.trigger());
     yield put(fetchUserRoutine.trigger());
     if (response !== null) {

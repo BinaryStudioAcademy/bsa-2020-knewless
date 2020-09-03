@@ -18,6 +18,7 @@ import { IPathsState } from '@screens/Paths/models/IPathsState';
 import { IFavouriteState } from '@screens/Favourites/models/IFavouriteState';
 import { ISearchPageState } from '@screens/SearchResultsPage/models/ISearchPageState';
 import { IHistoryState } from '@screens/History/models/IHistoryState';
+import { IArticleState } from '@screens/ArticlePage/models/ArticleState';
 
 export interface IAppState {
   toastr: any;
@@ -32,6 +33,7 @@ export interface IAppState {
   pathsPage: IPathsState;
   coursesPage: ICoursesState;
   search: ISearchState;
+  articlePage: IArticleState;
   coursePage: ICoursePageState;
   pathPage: IPathPageState;
   lecturePage: ILecturePageState;

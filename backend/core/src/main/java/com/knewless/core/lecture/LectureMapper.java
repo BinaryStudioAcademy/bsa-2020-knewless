@@ -12,6 +12,7 @@ public interface LectureMapper {
     LectureMapper MAPPER = Mappers.getMapper(LectureMapper.class);
 
     @Mapping(target = "timeSeconds", source = "duration")
+    @Mapping(target = "favourite", ignore = true)
     ShortLectureDto lectureToShortLectureDto(Lecture lecture);
 
     @Mapping(target="course", expression = "java(lecture.getCourse().getName())")

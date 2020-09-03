@@ -10,6 +10,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TempArticleDtt {
-    private String name;
     private UUID id;
+    private String name;
+    private String text;
+    private String image;
 }

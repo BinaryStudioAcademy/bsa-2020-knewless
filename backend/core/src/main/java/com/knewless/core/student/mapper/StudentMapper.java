@@ -1,7 +1,5 @@
 package com.knewless.core.student.mapper;
 
-import com.knewless.core.author.dto.AuthorSettingsDto;
-import com.knewless.core.author.model.Author;
 import com.knewless.core.student.dto.StudentMainInfoDto;
 import com.knewless.core.student.dto.StudentSettingsDto;
 import com.knewless.core.student.model.Student;

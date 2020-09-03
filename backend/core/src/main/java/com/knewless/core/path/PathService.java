@@ -9,6 +9,8 @@ import com.knewless.core.course.CourseMapper;
 import com.knewless.core.course.CourseRepository;
 import com.knewless.core.course.dto.CourseDetailsDto;
 import com.knewless.core.course.dto.CourseWithMinutesDto;
+import com.knewless.core.course.model.Course;
+import com.knewless.core.course.model.Level;
 import com.knewless.core.currentUserCource.CurrentUserCourseRepository;
 import com.knewless.core.db.SourceType;
 import com.knewless.core.elasticsearch.EsService;
@@ -18,23 +20,25 @@ import com.knewless.core.lecture.model.Lecture;
 import com.knewless.core.path.dto.*;
 import com.knewless.core.path.model.Path;
 import com.knewless.core.security.oauth.UserPrincipal;
+import com.knewless.core.student.StudentService;
 import com.knewless.core.subscription.SubscriptionService;
 import com.knewless.core.tag.TagMapper;
 import com.knewless.core.tag.TagRepository;
 import com.knewless.core.tag.dto.TagDto;
+import com.knewless.core.tag.model.Tag;
 import com.knewless.core.user.UserService;
 import com.knewless.core.user.role.model.Role;
 import com.knewless.core.user.role.model.RoleType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class PathService {
@@ -48,13 +52,14 @@ public class PathService {
     private final UserService userService;
     private final AuthorService authorService;
     private final CurrentUserCourseRepository currentUserCourseRepository;
+	private final StudentService studentService;
 
     @Autowired
     public PathService(PathRepository pathRepository, CourseRepository courseRepository,
                        TagRepository tagRepository, AuthorRepository authorRepository,
                        SubscriptionService subscriptionService, EsService esService,
                        UserService userService, AuthorService authorService,
-                       CurrentUserCourseRepository currentUserCourseRepository) {
+                       CurrentUserCourseRepository currentUserCourseRepository, StudentService studentService) {
         this.pathRepository = pathRepository;
         this.courseRepository = courseRepository;
         this.tagRepository = tagRepository;
@@ -64,6 +69,7 @@ public class PathService {
         this.userService = userService;
         this.currentUserCourseRepository = currentUserCourseRepository;
         this.authorService = authorService;
+        this.studentService = studentService;
     }
 
 
@@ -221,6 +227,48 @@ public class PathService {
 		//List<Path> paths = pathRepository.getFavouritePathsByUserId(userId, SourceType.PATH); line should be uncommented, when path could be added
 		List<FavouritePathResponseDto> result = new ArrayList<>();
 		paths.forEach(p -> result.add(PathMapper.MAPPER.pathToFavouritePathResponseDto(p)));
+		return result;
+	}
+
+	public List<PathDto> getAdditionalPaths(List<UUID> id, Pageable pageable) {
+		List<PathQueryResult> result;
+    	if (id.isEmpty()) {
+    		result = pathRepository.getAllPaths(pageable);
+		} else {
+    		result = pathRepository.getAdditionalPaths(id, pageable);
+		}
+    	return result.stream()
+				.map(PathMapper.MAPPER::pathQueryResultToPathDto)
+				.collect(Collectors.toList());
+	}
+
+	public List<PathDto> getRecommended(UUID userId) {
+    	List<UUID> tags = pathRepository.getPathsByUserId(userId).stream()
+				.map(path -> pathRepository.getTagsByPathId(path.getId()))
+				.flatMap(Collection::stream)
+				.map(Tag::getId)
+				.filter(Objects::nonNull)
+				.collect(Collectors.toList());
+		List<UUID> uuids = pathRepository.getPathsByUserId(userId).stream()
+				.map(PathQueryResult::getId)
+				.distinct()
+				.collect(Collectors.toList());
+		Level level = Level.valueOf(studentService.findByUserId(userId).getLevel().toUpperCase());
+
+		List<PathDto> result = pathRepository.getPathsByTagIds(tags).stream()
+				.filter(path -> !uuids.contains(path.getId()))
+				.filter(path -> pathRepository.findById(path.getId()).get().getCourses().stream()
+						.map(Course::getLevel)
+						.anyMatch(name -> name.equals(level)
+								|| (level.ordinal() != 2 && name.equals(Level.values()[level.ordinal()+1]))))
+				.limit(3)
+				.map(PathMapper.MAPPER::pathQueryResultToPathDto)
+				.collect(Collectors.toList());
+
+		if (result.size() < 3) {
+			result.addAll(getAdditionalPaths(uuids, PageRequest.of(0, result.isEmpty() ? 3 : 3 - result.size())));
+		}
+
 		return result;
 	}
 }

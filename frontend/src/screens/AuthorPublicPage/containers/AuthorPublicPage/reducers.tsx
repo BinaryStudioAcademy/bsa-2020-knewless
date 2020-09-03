@@ -7,6 +7,7 @@ import {
 import { IAuthorMenu } from 'screens/AuthorPublicPage/models/IAuthorMenu';
 
 const basicAuthorData = {
+  id: '',
   userId: '',
   avatar: '',
   firstName: '',
@@ -27,7 +28,9 @@ const basicAuthorData = {
   }],
   articles: [{
     id: '',
-    name: ''
+    name: '',
+    image: '',
+    text: ''
   }],
   favourite: false,
   printFollowButton: false

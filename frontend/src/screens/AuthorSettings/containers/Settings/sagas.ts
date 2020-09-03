@@ -1,6 +1,7 @@
 import { all, call, put, takeEvery } from 'redux-saga/effects';
 import * as settingsService from '../../services/settings.service';
 import { fetchGetAuthorSettingsRoutine, fetchSetAuthorSettingsRoutine } from '../../routines';
+import { checkSettingsRoutine } from '@containers/AppRouter/routines';
 import { Routine } from 'redux-saga-routines';
 import * as imageService from 'services/image.service';
 import { fetchUserRoutine } from 'containers/AppRouter/routines';
@@ -32,6 +33,7 @@ function* setSettings(action: Routine<any>) {
       author.avatar = link;
     }
     const response = yield call(() => settingsService.setSettings(action.payload));
+    yield put(checkSettingsRoutine.success(true));
     yield put(fetchAuthorRoutine.trigger());
     yield put(fetchUserRoutine.trigger());
     if (response !== null) {

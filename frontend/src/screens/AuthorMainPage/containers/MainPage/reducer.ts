@@ -10,7 +10,8 @@ const initialState: IAuthorMainPageData = {
   authorCourses: [] as ICourseCardProps[],
   authorPaths: [] as IPathCardProps[],
   pathsLoaded: false,
-  coursesLoaded: false
+  coursesLoaded: false,
+  authorLoaded: false
 };
 
 export const authorMainPageData = (state = initialState, action: Routine<any>) => {
@@ -18,13 +19,14 @@ export const authorMainPageData = (state = initialState, action: Routine<any>) =
     case fetchAuthorRoutine.SUCCESS:
       return {
         ...state,
-        author: action.payload
+        author: action.payload,
+        authorLoaded: true
       };
     case fetchAuthorCoursesRoutine.SUCCESS:
       return {
         ...state,
         authorCourses: [...action.payload],
-        coursesLoaded:true
+        coursesLoaded: true
       };
     case fetchAuthorPathsRoutine.SUCCESS:
       return {

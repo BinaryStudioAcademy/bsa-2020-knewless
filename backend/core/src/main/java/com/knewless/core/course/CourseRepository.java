@@ -3,6 +3,7 @@ package com.knewless.core.course;
 import com.knewless.core.course.dto.*;
 import com.knewless.core.course.model.Course;
 import com.knewless.core.db.SourceType;
+import com.knewless.core.tag.model.Tag;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -10,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 public interface CourseRepository extends JpaRepository<Course, UUID> {
@@ -34,6 +36,21 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
     @SuppressWarnings("SpringDataRepositoryMethodReturnTypeInspection")
     @Query(COURSE_SELECT + "WHERE c.id = :id")
     Optional<CourseQueryResult> getCourseById(@Param("id") UUID id);
+
+    @Query("SELECT new com.knewless.core.course.dto.CourseQueryResult(c.id, " +
+            "c.name, c.level, concat(c.author.firstName,' ' , c.author.lastName), " +
+            "c.author.id, category.name, c.image, " +
+            "(SELECT COALESCE(SUM(cl.duration), 0) FROM c.lectures as cl), " +
+            "(SELECT COALESCE(SUM(cr.reaction), 0) " +
+            "FROM c.reactions as cr), " +
+            "SIZE(c.reactions)) " +
+            "FROM Course c left join c.lectures l left join l.tags t " +
+            "LEFT JOIN c.category category " +
+            "WHERE c.id NOT IN :id OR t.id NOT IN :tags")
+    List<CourseQueryResult> getRecommendedCourses(@Param("id") List<UUID> id, @Param("tags") List<UUID> tags);
+
+    @Query(COURSE_SELECT + "WHERE c.id NOT IN :id")
+    List<CourseQueryResult> getAdditionalCourses(@Param("id") List<UUID> id, Pageable pageable);
 
     @SuppressWarnings("SpringDataRepositoryMethodReturnTypeInspection")
     @Query(COURSE_SELECT + "where c.author.id = :authorId")

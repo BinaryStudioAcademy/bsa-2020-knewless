@@ -40,6 +40,7 @@ interface ICoursePageProps {
   changeFavourite: IBindingCallback1<IFavourite>;
   changeFavouriteLecture: IBindingCallback1<IFavourite>;
   role: string;
+  isSettingsFilled: boolean;
 }
 
 const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
@@ -56,7 +57,8 @@ const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
   submitReview,
   changeFavouriteLecture,
   fetchAuthor,
-  role
+  role,
+  isSettingsFilled
 }) => {
   const { courseId } = useParams();
   const [isOpen, setIsOpen] = useState(false);
@@ -77,10 +79,10 @@ const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
   }, []);
 
   useEffect(() => {
-      if (courseId && role === 'AUTHOR') {
+      if (isSettingsFilled && courseId && role === 'AUTHOR') {
         fetchAuthor();
       }
-  }, []);
+  }, [isSettingsFilled]);
   
   const handleOnStartCourse = () => {
     startCourse(course.id);
@@ -154,6 +156,7 @@ const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
 const mapStateToProps = (state: IAppState) => {
   const { course, author } = state.coursePage.courseData;
   const { favourite } = course;
+  const { settingsFilled } = state.appRouter;
   const { isAuthorized } = state.auth.auth;
   return {
     course,
@@ -161,7 +164,8 @@ const mapStateToProps = (state: IAppState) => {
     loading: state.coursePage.requests.dataRequest.loading,
     role: state.appRouter.user?.role?.name,
     isAuthorized,
-    favourite
+    favourite,
+    isSettingsFilled: settingsFilled
   };
 };
 
