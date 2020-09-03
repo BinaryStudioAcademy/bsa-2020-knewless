@@ -225,7 +225,7 @@ public class CourseService {
                 .collect(Collectors.toUnmodifiableList());
         studentCourse.setTags(courseTags);
         long duration = studentCourse.getTimeSeconds();
-        long progress = ((watchHistoryService.getProgress(id, userId) * 100) / studentCourse.getTimeSeconds());
+        long progress = ((watchHistoryService.getProgress(userId, id) * 100) / studentCourse.getTimeSeconds());
         studentCourse.setProgress((int) (progress > 100 ? 100 : progress));
         return studentCourse;
     }
