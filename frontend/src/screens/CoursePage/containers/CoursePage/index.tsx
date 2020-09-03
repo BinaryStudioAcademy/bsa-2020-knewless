@@ -82,7 +82,7 @@ const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
       if (isSettingsFilled && courseId && role === 'AUTHOR') {
         fetchAuthor();
       }
-  }, []);
+  }, [isSettingsFilled]);
   
   const handleOnStartCourse = () => {
     startCourse(course.id);
