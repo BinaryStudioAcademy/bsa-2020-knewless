@@ -8,6 +8,7 @@ import com.knewless.core.validation.SingleMessageResponse;
 import com.knewless.core.validation.ValidationMessageCreator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
@@ -132,5 +133,14 @@ public class CourseController {
                                        @RequestBody RatingCourseRequestDto rating,
                                        @PathVariable("id") UUID id) {
         return ResponseEntity.ok(courseService.setRating(user.getId(), rating.getRating(), id));
+    }
+
+    @GetMapping("/recommended")
+    public List<CourseDto> getRecommendation(@CurrentUser UserPrincipal user) {
+        if (user == null) {
+            return courseService.getCourses(PageRequest.of(0, 3));
+        } else {
+            return courseService.getRecommendedCourses(user.getId(), Pageable.unpaged());
+        }
     }
 }

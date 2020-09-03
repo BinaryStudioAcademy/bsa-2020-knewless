@@ -9,6 +9,7 @@ import com.knewless.core.course.courseReaction.model.CourseReaction;
 import com.knewless.core.course.dto.*;
 import com.knewless.core.course.model.Course;
 import com.knewless.core.course.model.Level;
+import com.knewless.core.currentUserCource.dto.CurrentUserCourseDto;
 import com.knewless.core.db.SourceType;
 import com.knewless.core.currentUserCource.CurrentUserCourseRepository;
 import com.knewless.core.elasticsearch.EsService;
@@ -22,24 +23,33 @@ import com.knewless.core.lecture.homework.HomeworkRepository;
 import com.knewless.core.lecture.homework.model.Homework;
 import com.knewless.core.lecture.mapper.LectureProjectionMapper;
 import com.knewless.core.lecture.model.Lecture;
+import com.knewless.core.path.dto.PathQueryResult;
 import com.knewless.core.security.oauth.UserPrincipal;
+import com.knewless.core.student.StudentRepository;
+import com.knewless.core.student.StudentService;
+import com.knewless.core.student.model.Student;
 import com.knewless.core.subscription.SubscriptionService;
 import com.knewless.core.tag.TagRepository;
 import com.knewless.core.tag.TagService;
 import com.knewless.core.tag.dto.TagDto;
+import com.knewless.core.tag.model.Tag;
 import com.knewless.core.user.UserService;
 import com.knewless.core.user.model.User;
 import com.knewless.core.user.role.model.Role;
 import com.knewless.core.lecture.dto.ShortLectureDto;
 import com.knewless.core.user.role.model.RoleType;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.util.BiConsumer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 @Service
@@ -58,6 +68,7 @@ public class CourseService {
     private final EsService esService;
     private final CurrentUserCourseRepository currentUserCourseRepository;
     private final WatchHistoryService watchHistoryService;
+    private final StudentRepository studentRepository;
 
     @Autowired
     private FavoriteService favoriteService;
@@ -71,7 +82,8 @@ public class CourseService {
                          TagRepository tagRepository, UserService userService,
                          AuthorService authorService, SubscriptionService subscriptionService,
                          TagService tagService, EsService esService, CourseReactionRepository reactionRepository,
-                         CurrentUserCourseRepository currentUserCourseRepository, WatchHistoryService watchHistoryService) {
+                         CurrentUserCourseRepository currentUserCourseRepository, WatchHistoryService watchHistoryService,
+                         StudentRepository studentRepository) {
         this.courseRepository = courseRepository;
         this.lectureRepository = lectureRepository;
         this.authorRepository = authorRepository;
@@ -85,6 +97,7 @@ public class CourseService {
         this.reactionRepository = reactionRepository;
         this.currentUserCourseRepository = currentUserCourseRepository;
         this.watchHistoryService = watchHistoryService;
+        this.studentRepository = studentRepository;
     }
 
     public CreateCourseResponseDto createCourse(CreateCourseRequestDto request, UUID userId) {
@@ -198,8 +211,45 @@ public class CourseService {
                 .collect(Collectors.toList());
     }
 
+    public List<CourseDto> getAdditionalCourses(List<UUID> id, Pageable pageable) {
+        List<CourseQueryResult> result;
+        if (id.isEmpty()) {
+            result = courseRepository.getCourses(pageable);
+        } else {
+            result = courseRepository.getAdditionalCourses(id, pageable);
+        }
+        return result.stream()
+                .map(CourseMapper.MAPPER::courseQueryResultToCourseDto)
+                .collect(Collectors.toList());
+    }
+
     public List<CourseDto> getRecommendedCourses(UUID id, Pageable pageable) {
-        return getCourses(pageable);
+        List<UUID> uuids = currentUserCourseRepository.getLearningCoursesId(id);
+        List<UUID> tags = uuids.stream()
+                .map(tagRepository::getTagsByCourseId)
+                .flatMap(Collection::stream)
+                .filter(Objects::nonNull)
+                .map(Tag::getId)
+                .distinct()
+                .collect(Collectors.toList());
+        int level = Level.valueOf(studentRepository.findByUserId(id).get().getLevel().toUpperCase()).ordinal();
+
+        Comparator<CourseQueryResult> ratingComparator = Comparator.comparingLong(c -> c.getAllReactions() > 0 ? c.getPositiveReactions() / c.getAllReactions() : 0);
+        Comparator<CourseQueryResult> countComparator = Comparator.comparingInt(CourseQueryResult::getAllReactions);
+
+        List<CourseDto> result = courseRepository.getRecommendedCourses(uuids, tags).stream()
+                .filter(c -> c.getLevel().ordinal() == level || (level != 2 && c.getLevel().ordinal() == level + 1))
+                .sorted(ratingComparator)
+                .sorted(countComparator)
+                .map(CourseMapper.MAPPER::courseQueryResultToCourseDto)
+                .limit(3)
+                .collect(Collectors.toList());
+
+        if (result.size() < 3) {
+            result.addAll(getAdditionalCourses(uuids, PageRequest.of(0, result.isEmpty() ? 3 : 3 - result.size())));
+        }
+
+        return result;
     }
 
     public CourseDto getCourseById(UUID id) {

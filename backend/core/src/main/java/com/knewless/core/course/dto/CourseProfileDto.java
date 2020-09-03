@@ -18,4 +18,5 @@ public class CourseProfileDto {
     private String image;
     private int rating;
     private int progress;
+    private int allReactions;
 }

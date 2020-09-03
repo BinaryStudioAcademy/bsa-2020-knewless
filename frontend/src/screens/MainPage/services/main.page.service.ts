@@ -9,9 +9,18 @@ export async function getContinueCourses(id: string) {
   return response.json();
 }
 
-export async function getRecommendedCourses(id: string) {
+export async function getRecommendedCourses() {
   const response = await callApi({
-    endpoint: `/api/course/recommended/${id}`,
+    endpoint: '/api/course/recommended/',
+    type: 'GET'
+  });
+
+  return response.json();
+}
+
+export async function getRecommendedPaths() {
+  const response = await callApi({
+    endpoint: '/api/paths/recommended/',
     type: 'GET'
   });
 
