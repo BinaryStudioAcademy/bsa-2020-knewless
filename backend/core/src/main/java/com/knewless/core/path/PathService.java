@@ -217,8 +217,7 @@ public class PathService {
 	}
 
 	public List<FavouritePathResponseDto> getFavouritePathsByUser(UUID userId){
-		List<Path> paths = pathRepository.findTop10ByAuthorIsNotNull();
-		//List<Path> paths = pathRepository.getFavouritePathsByUserId(userId, SourceType.PATH); line should be uncommented, when path could be added
+		List<Path> paths = pathRepository.getFavouritePathsByUserId(userId, SourceType.PATH);
 		List<FavouritePathResponseDto> result = new ArrayList<>();
 		paths.forEach(p -> result.add(PathMapper.MAPPER.pathToFavouritePathResponseDto(p)));
 		return result;

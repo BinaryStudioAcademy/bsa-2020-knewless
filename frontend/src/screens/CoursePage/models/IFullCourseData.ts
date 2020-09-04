@@ -9,6 +9,7 @@ export interface IFullCourseData {
   description: string;
   level: string;
   image: string;
+  releasedDate: Date;
   author: IAuthorData;
   duration: number;
   rating: number;

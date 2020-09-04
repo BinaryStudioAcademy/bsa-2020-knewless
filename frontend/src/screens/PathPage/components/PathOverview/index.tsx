@@ -4,6 +4,9 @@ import { IPath } from '@screens/PathPage/models/IPath';
 import { Label, Icon } from 'semantic-ui-react';
 import { useHistory } from 'react-router-dom';
 import { RoleTypes } from '@containers/AppRouter/models/IRole';
+import { IBindingCallback1 } from '@models/Callbacks';
+import AddToFavouriteButton, { IFavourite } from '@components/AddToFavouritesButton/component';
+import { SourceType } from '@components/AddToFavouritesButton/helper/SourceType';
 
 interface IPathOverviewProps {
   path: IPath;
@@ -11,9 +14,11 @@ interface IPathOverviewProps {
   role: string;
   pathId: string;
   userId: string;
+  changeFavourite: IBindingCallback1<IFavourite>;
+  favourite: boolean;
 }
 const PathOverview: React.FunctionComponent<IPathOverviewProps> = ({ isAuthorized,
-  path, role, pathId, userId }) => {
+  path, role, pathId, userId, changeFavourite, favourite }) => {
   const history = useHistory();
   return (
     <div className={styles.content}>
@@ -51,6 +56,16 @@ const PathOverview: React.FunctionComponent<IPathOverviewProps> = ({ isAuthorize
             }
           </p>
         </div>
+        {isAuthorized && role === 'USER' && (
+          <div className={styles.button_favourite_wrp}>
+            <AddToFavouriteButton
+              isFavourite={favourite}
+              changeFavourite={changeFavourite}
+              id={pathId}
+              type={SourceType.PATH}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

@@ -41,6 +41,7 @@ import { levelOptions } from '@models/LevelsEnum';
 import { IFullCourseData } from '@screens/CoursePage/models/IFullCourseData';
 import { IUpdateCourse } from '@screens/AddCourse/models/IUpdateCourse';
 import { ITag } from '@screens/AddPath/models/domain';
+import { fetchAuthorRoutine } from '@screens/AuthorMainPage/routines/index';
 import OverviewModal from '@components/OverviewModal';
 import { IRole } from '@containers/AppRouter/models/IRole';
 
@@ -57,6 +58,7 @@ interface IAddCourseProps {
   updateCourse: IBindingCallback1<IUpdateCourse>;
   fetchCourse: IBindingCallback1<string>;
   clearCourse: IBindingAction;
+  fetchAuthor: IBindingAction;
   authorName: string;
   authorId: string;
   loadingEditCourse: boolean;
@@ -82,7 +84,8 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
   loadingEditCourse,
   isAuthorized,
   saveloading,
-  role
+  role,
+  fetchAuthor
 }) => {
   const { courseId } = useParams();
   const [selectedLectures, setSelectedLectures] = useState(Array<ILecture>());
@@ -104,6 +107,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
   const [overview, setOverview] = useState('');
   const [isShowPreview, setIsShowPreview] = useState(false);
   const [isValidOverview, setIsValidOverview] = useState(true);
+  const [isReleased, setIsReleased] = useState(undefined);
 
   useEffect(() => {
     if (lectures.length === 0 && !isLecturesLoaded) {
@@ -115,14 +119,19 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
   }, [lectures, getLectures]);
 
   useEffect(() => {
-    if (history.location.pathname.startsWith('/course/edit') && !editCourse) {
+    if (history.location.pathname.startsWith('/course/edit') && (!editCourse || editCourse.id !== courseId)) {
       setIsEdit(true);
       fetchCourse(courseId);
     }
   }, [history.location.pathname]);
 
   useEffect(() => {
-    if (editCourse) {
+    if (!authorId) fetchAuthor();
+    setAuthor(authorName);
+  },[authorName]);
+
+  useEffect(() => {
+    if (editCourse && history.location.pathname.startsWith('/course/edit')) {
       setSelectedLectures([...editCourse.lectures]);
       setCourseName(editCourse.name);
       setPreviewImage(editCourse.image);
@@ -131,6 +140,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
       setAuthor(`${editCourse?.author.firstName} ${editCourse?.author.lastName}`);
       setRating(editCourse.rating);
       setOverview(editCourse.overview);
+      setIsReleased(editCourse.releasedDate !== null);
       if (editCourse?.tags && editCourse.tags?.length > 0) {
         setCourseTags(editCourse.tags.slice(0, 3).map(t => t.name));
       }
@@ -182,6 +192,9 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
   const isRequiredFieldsValid = !!courseName && isValidName && isValidDescription && !!level && isValidLevel
     && isValidImage && !!overview && isValidOverview;
   const isReleseble = isRequiredFieldsValid && selectedLectures.length > 0;
+
+  const isSaveble = !!courseName && isValidName && isValidDescription && isValidLevel
+  && isValidImage && isValidOverview;
 
   const handleUploadFile = file => {
     const thisFile: File = file;
@@ -388,11 +401,12 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
                     />
                     <Button
                       content="Save"
-                      className={isEdit && isReleseble ? styles.button_save : styles.button_save_disabled}
+                      className={isSaveble ? styles.button_save : styles.button_save_disabled}
                       onClick={() => handleSave(false)}
-                      disabled={isEdit && !isReleseble}
+                      loading={saveloading}
+                      disabled={!isSaveble}
                     />
-                    {!isEdit && (
+                    {(!isEdit || (isEdit && !isReleased)) && (
                     <GradientButton
                       disabled={!isReleseble}
                       className={isReleseble ? styles.button_release : styles.button_release_disabled}
@@ -472,7 +486,8 @@ const mapDispatchToProps = {
   fetchCourse: fetchEditCourseRoutine,
   updateCourse: updateCourseRoutine,
   clearCourse: clearCourseRoutine,
-  saveCourse: saveCourseRoutine
+  saveCourse: saveCourseRoutine,
+  fetchAuthor: fetchAuthorRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddCourse);

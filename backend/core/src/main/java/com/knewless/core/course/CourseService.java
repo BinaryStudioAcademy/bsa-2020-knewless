@@ -91,15 +91,13 @@ public class CourseService {
         Author author = authorRepository.findByUserId(userId).orElseThrow(
                 () -> new ResourceNotFoundException("Author", "userId", userId)
         );
-        List<Lecture> allLectures = lectureRepository.getLecturesByUserId(userId);
-        List<UUID> idLecturesToSave = request.getLectures();
-        allLectures.removeIf(l -> !idLecturesToSave.contains(l.getId()));
+        List<Lecture> savedLectures = lectureRepository.findAllById(request.getLectures());
         List<Lecture> thisLectures = new ArrayList<>();
         List<Homework> homeworks = new ArrayList<>();
-        Course course = Course.builder().level(Level.valueOf(request.getLevel())).author(author)
-                .name(request.getName()).description(request.getDescription()).image(request.getImage())
+        Course course = Course.builder().level(request.getLevel() == "" ? null : Level.valueOf(request.getLevel()))
+                .author(author).name(request.getName()).description(request.getDescription()).image(request.getImage())
                 .overview(request.getOverview()).build();
-        for (Lecture l : allLectures) {
+        for (Lecture l : savedLectures) {
             Lecture lec;
             if (l.getCourse() == null) {
                 lec = l;
@@ -155,15 +153,45 @@ public class CourseService {
 
         course.setName(request.getName());
         course.setImage(request.getImage());
-        course.setLevel(Level.valueOf(request.getLevel()));
+        course.setLevel((request.getLevel()==null ||request.getLevel() == "") ? null : Level.valueOf(request.getLevel()));
         course.setDescription(request.getDescription());
 
-        List<Lecture> lectures = lectureRepository.findAllById(request.getLectures());
-        course.setLectures(lectures);
+        List<Lecture> savedLectures = lectureRepository.findAllById(request.getLectures());
+        List<Lecture> thisLectures = new ArrayList<>();
+        List<Homework> homeworks = new ArrayList<>();
 
+        for (Lecture l : savedLectures) {
+            Lecture lec;
+            if (l.getCourse() == null || l.getCourse().equals(course)) {
+                lec = l;
+            } else {
+                lec = Lecture.builder().name(l.getName())
+                        .course(course)
+                        .webLink(l.getWebLink())
+                        .urlOrigin(l.getUrlOrigin())
+                        .url1080(l.getUrl1080())
+                        .url720(l.getUrl720())
+                        .url480(l.getUrl480())
+                        .description(l.getDescription())
+                        .duration(l.getDuration()).build();
+            }
+            if (l.getHomework() != null) {
+                Homework homework = new Homework(l.getHomework().getDescription(), lec);
+                homeworks.add(homework);
+            }
+            thisLectures.add(lec);
+        }
+        course.setLectures(thisLectures);
+        homeworkRepository.saveAll(homeworks);
+        thisLectures.forEach(l -> {
+            Optional<Homework> ophw = homeworks.stream().filter(h -> h.getLecture().getId().equals(l.getId())).findFirst();
+            ophw.ifPresent(l::setHomework);
+        });
         if (request.getIsReleased()) {
             course.setReleasedDate(new Date());
         }
+
+        lectureRepository.saveAll(thisLectures);
         Course updatedCourse = courseRepository.save(course);
 
         CompletableFuture.runAsync(() -> esService.update(EsDataType.COURSE, updatedCourse));
@@ -174,7 +202,10 @@ public class CourseService {
     }
 
     public CourseToPlayerDto getCourseByLectureId(UUID lectureId, UUID userId) {
+        var author = authorService.getAuthorInfoByUserId(userId);
         var courseProjection = courseRepository.findOneById(UUID.fromString(courseRepository.findByLectureId(lectureId).getId()));
+        Course checkCourse = courseRepository.getOne(UUID.fromString(courseProjection.getId()));
+        if (checkCourse.getReleasedDate() == null && (author == null || !author.getId().equals(checkCourse.getAuthor().getId()))) return null;
         CourseToPlayerDto course = new CourseToPlayerDto();
         course.setId(courseProjection.getId());
         course.setName(courseProjection.getName());
