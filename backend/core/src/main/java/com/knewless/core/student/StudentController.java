@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/student")
@@ -65,8 +66,9 @@ public class StudentController {
 	}
 
 	@GetMapping("/info")
-	public Optional<StudentMainInfoDto> getStudentData(@CurrentUser UserPrincipal userPrincipal) {
-		return studentService.getStudentByUserId(userPrincipal.getId());
+	public Optional<StudentMainInfoDto> getStudentData(@CurrentUser UserPrincipal userPrincipal,
+													   @RequestParam(required = false, name = "userId") String userId) {
+		return studentService.getStudentByUserId(userId == null ? userPrincipal.getId() : UUID.fromString(userId));
 	}
 
 	@PostMapping("goal")

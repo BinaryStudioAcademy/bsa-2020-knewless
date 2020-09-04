@@ -1,9 +1,10 @@
 import { NotificationType } from '../enums/NotificationType';
 import { NotificationBody } from './NotificationBody';
+import { CourseMessageBody } from './CourseMessageBody';
 
 export interface INotificationDTO {
     receiverId: string,
-    body: NotificationBody,
+    body: NotificationBody | CourseMessageBody,
     type: NotificationType,
     payloadType?: PayloadType
 }

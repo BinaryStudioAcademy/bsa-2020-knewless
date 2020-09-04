@@ -1,5 +1,10 @@
 package com.knewless.core.course;
 
+import com.knewless.core.course.courseComment.CourseCommentMapper;
+import com.knewless.core.course.courseComment.CourseCommentService;
+import com.knewless.core.course.courseComment.dto.CourseCommentDto;
+import com.knewless.core.course.courseComment.CourseCommentMapper;
+import com.knewless.core.course.courseComment.dto.CourseCommentDto;
 import com.knewless.core.course.dto.*;
 import com.knewless.core.exception.custom.ResourceNotFoundException;
 import com.knewless.core.security.oauth.UserPrincipal;
@@ -16,16 +21,19 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/course")
 public class CourseController {
 
     private final CourseService courseService;
+    private final CourseCommentService courseCommentService;
 
     @Autowired
-    public CourseController(CourseService courseService) {
+    public CourseController(CourseService courseService, CourseCommentService courseCommentService) {
         this.courseService = courseService;
+        this.courseCommentService = courseCommentService;
     }
 
     @GetMapping("/recommended/{id}")
@@ -142,5 +150,13 @@ public class CourseController {
         } else {
             return courseService.getRecommendedCourses(user.getId(), Pageable.unpaged());
         }
+    }
+    
+    @GetMapping("/{courseId}/comments")
+    public List<CourseCommentDto> getCommentsByCourse(@PathVariable("courseId") UUID courseId,
+                                                      @RequestParam(defaultValue = "0") int page,
+                                                      @RequestParam(defaultValue = "2") int size) {
+        return courseCommentService.getCourseComments(courseId, PageRequest.of(page, size)).stream()
+                .map(CourseCommentMapper.MAPPER::commentToDto).collect(Collectors.toList());
     }
 }

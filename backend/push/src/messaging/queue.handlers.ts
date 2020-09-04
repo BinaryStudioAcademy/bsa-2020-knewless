@@ -1,6 +1,6 @@
 import { socketService } from '../websockets/socket.service';
-import { NotificationType } from '../data/enums/NotificationType';
-import { INotificationDTO } from '../data/dtos/NotificationDTO';
+import { NotificationType } from '../data/notifications/enums/NotificationType';
+import { INotificationDTO } from '../data/notifications/dtos/NotificationDTO';
 
 export function pushQueueHandler(msg: string) {
   let data: INotificationDTO;
@@ -20,6 +20,15 @@ export function pushQueueHandler(msg: string) {
       break;
     case NotificationType.PERSONAL:
       socketService.pushToClientById(data.receiverId, data.body);
+      break;
+    case NotificationType.COURSE:
+      socketService.pushToDiscussionParticipants(`course:${data.receiverId}`, data.body as any);
+      break;
+    case NotificationType.LECTURE:
+      socketService.pushToDiscussionParticipants(`lecture:${data.receiverId}`, data.body as any);
+      break;
+    case NotificationType.PATH:
+      socketService.pushToDiscussionParticipants(`path:${data.receiverId}`, data.body as any);
       break;
     default:
       console.error('something was wrong ' + data.type + NotificationType.PERSONAL);

@@ -15,7 +15,7 @@ export interface IPathDetails {
   tags: ITag[];
   imageTag: ITag;
   duration: number;
-  author: IAuthorShort
+  author: IAuthorShort;
 }
 
 export interface IAuthorShort {

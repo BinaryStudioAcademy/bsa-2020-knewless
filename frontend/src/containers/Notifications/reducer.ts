@@ -1,5 +1,5 @@
 import {
-  addNotificationRoutine, fetchUnreadNotificationsRoutine,
+  receiveNotificationRoutine, fetchUnreadNotificationsRoutine,
   readNotificationRoutine, deleteNotificationRoutine,
   deleteAllNotificationsRoutine, readAllNotificationsRoutine, getAllNotificationsRoutine, viewLessNotificationsRoutine
 } from './routines';
@@ -15,7 +15,7 @@ const initialState = {
 
 export default function (state = initialState, action) {
   switch (action.type) {
-    case addNotificationRoutine.TRIGGER: {
+    case receiveNotificationRoutine.TRIGGER: {
       const { notification } = action.payload;
       if (state.notifications[0]?.read) {
         state.notifications.shift();

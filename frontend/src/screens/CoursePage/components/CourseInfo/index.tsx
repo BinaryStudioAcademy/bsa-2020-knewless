@@ -8,7 +8,7 @@ import moment from 'moment';
 import { ITagData } from '@screens/CoursePage/models/ITagData';
 import { IBindingCallback1, IBindingAction } from '@models/Callbacks';
 import { timeFormat } from '@helpers/time.helper';
-import { IFavourite } from '@components/AddToFavouritesButton/component/index';
+import { IFavourite } from '@components/AddToFavouritesButton/component';
 import GrayOutlineButton from '@components/buttons/GrayOutlineButton';
 
 interface ICourseInfoProps {
@@ -27,6 +27,9 @@ interface ICourseInfoProps {
   ratingCount: number;
   role: string;
   changeFavouriteLecture: IBindingCallback1<IFavourite>;
+  courseId: string;
+  authorUserId: string;
+  yourId: string;
 }
 
 const CourseInfo: React.FunctionComponent<ICourseInfoProps> = ({
@@ -44,7 +47,10 @@ const CourseInfo: React.FunctionComponent<ICourseInfoProps> = ({
   ratingCount,
   startCourse,
   role,
-  changeFavouriteLecture
+  changeFavouriteLecture,
+  courseId,
+  authorUserId,
+  yourId
 }) => (
   <div className="content_row">
     <div className={`${styles.info} flex_item aligned_item`}>
@@ -68,7 +74,12 @@ const CourseInfo: React.FunctionComponent<ICourseInfoProps> = ({
           {(isAuthorized && role !== 'AUTHOR' && !review)
           && (
             <div className={styles.button_review_block}>
-              <GrayOutlineButton className={styles.button_review} onClick={openReviewModal}>ADD REVIEW</GrayOutlineButton>
+              <GrayOutlineButton
+                className={styles.button_review}
+                onClick={openReviewModal}
+              >
+                ADD REVIEW
+              </GrayOutlineButton>
             </div>
           )}
           {(isAuthorized && role !== 'AUTHOR' && review)
@@ -98,6 +109,9 @@ const CourseInfo: React.FunctionComponent<ICourseInfoProps> = ({
         startCourse={startCourse}
         lectures={lectures}
         courseDescription={courseDescription}
+        courseId={courseId}
+        authorId={authorUserId}
+        yourId={yourId}
       />
     </div>
   </div>

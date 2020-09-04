@@ -2,7 +2,7 @@ package com.knewless.core.messaging.kafka;
 
 import com.knewless.core.messaging.Message;
 import com.knewless.core.messaging.emailMessage.EmailMessage;
-import com.knewless.core.messaging.userMessage.UserMessage;
+import com.knewless.core.messaging.userMessage.NotificationsMessage;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -42,7 +42,7 @@ public class KafkaProducerConfig {
     }
 
     @Bean
-    public KafkaTemplate<String, UserMessage> notificationsTemplate() {
+    public KafkaTemplate<String, NotificationsMessage> notificationsTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
 

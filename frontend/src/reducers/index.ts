@@ -21,12 +21,16 @@ import resetpassword from '../screens/ResetPassword/reducers';
 import savepassword from '../screens/SavePassword/reducers';
 import pathPage from '../screens/PathPage/reducers';
 import pathsPage from '../screens/Paths/reducers';
-import { loginModal } from '../containers/LoginModal/reducer';
+import { loginModal } from '@containers/LoginModal/reducer';
 import favourites from '../screens/Favourites/reducers';
 import searchPage from '@screens/SearchResultsPage/reducers';
 import historyPage from '@screens/History/reducers';
 import addArticlePage from '../screens/AddArticle/reducers';
 import articlePage from '../screens/ArticlePage/reducers';
+import courseDiscussion from '@containers/discussions/CourseDiscussion/rootReducer';
+import lectureDiscussion from '@containers/discussions/LectureDiscussion/rootReducer';
+import websocket from '@containers/WebsocketConnector/rootReducer';
+import userOverview from '@containers/UserOverview/rootReducer';
 
 export default combineReducers({
   toastr,
@@ -56,5 +60,9 @@ export default combineReducers({
   searchPage,
   historyPage,
   addArticlePage,
-  articlePage
+  articlePage,
+  courseDiscussion,
+  lectureDiscussion,
+  websocket,
+  userOverview
 });

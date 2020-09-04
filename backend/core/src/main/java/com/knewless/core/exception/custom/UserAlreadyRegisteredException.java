@@ -1,4 +1,4 @@
-package com.knewless.core.exception;
+package com.knewless.core.exception.custom;
 
 public class UserAlreadyRegisteredException extends RuntimeException {
 

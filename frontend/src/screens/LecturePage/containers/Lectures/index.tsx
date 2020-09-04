@@ -245,7 +245,11 @@ const LecturePage: React.FunctionComponent<ILectureProps> = ({
               </Link>
             </div>
             <div className="lecturesList">
-              <LecturesMenu role={role} setChosenVideo={handleChooseVideo} playerProgress={playerProgress.playedSeconds} />
+              <LecturesMenu
+                role={role}
+                setChosenVideo={handleChooseVideo}
+                playerProgress={playerProgress.playedSeconds}
+              />
             </div>
           </>
         )}

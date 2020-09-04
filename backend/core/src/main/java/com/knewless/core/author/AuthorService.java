@@ -103,7 +103,7 @@ public class AuthorService {
                 : 0;
         final var schoolBriefInfo = SchoolInfoMapper.from(authorSchool, schoolMembersCount);
         final var authorFollowersCount = this.authorRepository.getNumberOfSubscriptions(author.getId()).orElse(0);
-        return AuthorInfoMapper.fromEntities(author, authorFollowersCount, schoolBriefInfo);
+        return AuthorInfoMapper.fromEntities(author, authorFollowersCount, schoolBriefInfo, userId);
     }
 
     public AuthorPublicDto getAuthorPublicDto(UUID authorId, UserPrincipal userPrincipal) throws NotFoundException {

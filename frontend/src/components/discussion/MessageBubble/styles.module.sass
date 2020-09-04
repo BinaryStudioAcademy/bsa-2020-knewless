@@ -1,0 +1,56 @@
+.message__container
+  display: flex
+  flex-direction: column
+  padding: 1em
+  margin: 1em
+  //background: #22272B
+
+.message__header
+  display: flex
+  flex-direction: row
+  align-items: center
+
+.message__nick
+  &, &_you
+    font-weight: bold
+    cursor: default
+    margin-right: 0.3em
+
+  &_you
+    padding: 0.1em
+    background: #FF8576
+    border-radius: 0.27em
+    color: black
+
+.message__date
+  color: #ababab
+  margin-left: 0.3em
+  font-size: 0.9em
+  font-weight: lighter
+
+.message__text
+  margin-top: 0.5em
+  word-break: break-word
+
+.author_icon
+  font-size: 0.7em !important
+  color: #FF8576
+  border-radius: 0.3em
+  margin: 0 0.2em !important
+
+#popup
+  background: #323940
+  border: none
+  animation: show-up 0.3s ease
+  user-select: none
+
+  &:before
+    background: #22272B
+    border: none !important
+
+@keyframes show-up
+  0%
+    opacity: 0
+
+  100%
+    opacity: 1

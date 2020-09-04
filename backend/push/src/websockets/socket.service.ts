@@ -1,6 +1,8 @@
 import { Service } from 'typedi';
-import { PayloadType } from '../data/dtos/NotificationDTO';
-import { isValid, getUserIdFromToken } from '../auth/auth';
+import { PayloadType } from '../data/notifications/dtos/NotificationDTO';
+import { getUserIdFromToken } from '../auth/auth';
+import { handleToken } from './handshake.handlers';
+import { CourseMessageBody } from '../data/notifications/dtos/CourseMessageBody';
 
 @Service()
 export class SocketService {
@@ -11,21 +13,19 @@ export class SocketService {
     create(server: any) {
         this.socketIo = require('socket.io');
         this.io = this.socketIo(server);
-        
+
         this.io.use((socket: any, next: any) => {
-            const token = socket.handshake.query.token;
-            const { valid, error } = isValid(token);
-            if (valid) {
-                return next();
-            }
-            console.log(`While connecting user with token: ${token} an error was caught: ${error}`);
-            return next(error);
+            const { token } = socket.handshake.query;
+            if (token && token !== 'null') return handleToken(token, next);
+            next();
         });
 
         this.io.on("connection", (socket: any) => {
             const token = socket.handshake.query.token;
-            const { id } = getUserIdFromToken(token);
-            this.addUser(id, socket.id);
+            if (token && token != 'null') {
+                const { id } = getUserIdFromToken(token);
+                this.addUser(id, socket.id)
+            }
 
             socket.on("disconnect", async () => {
                 this.deleteUser(socket.id);
@@ -40,7 +40,7 @@ export class SocketService {
         this.io.on('error', () => console.log('Some error'));
     }
 
-    addUser(userId: string, socketId: string){
+    addUser(userId: string, socketId: string) {
         if (userId) {
             if (this.connectedUsers[userId]) {
                 this.connectedUsers[userId] = this.connectedUsers[userId].concat([
@@ -79,7 +79,7 @@ export class SocketService {
         const sendData = (socketName: string, payload: any) =>
             socketIds.forEach(id => this.io.to(`${id}`).emit(socketName, payload));
 
-        switch(payloadType) {
+        switch (payloadType) {
             case PayloadType.UpdateUser:
                 sendData('updateUserData', payload);
                 break;
@@ -89,8 +89,9 @@ export class SocketService {
         }
     }
 
-    pushToClientByRoomName = (roomName: string, payload: any) => {
-        this.io.to(roomName).emit('notification', payload)
+    pushToDiscussionParticipants(roomName: string, body: CourseMessageBody) {
+        console.log(`sending to [${roomName}]: ${body}`)
+        this.io.emit(roomName, body);
     }
 }
 

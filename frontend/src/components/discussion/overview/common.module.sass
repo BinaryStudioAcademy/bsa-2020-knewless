@@ -1,0 +1,34 @@
+$avatar_size: 4em
+
+.avatar_size
+  width: $avatar_size !important
+  height: $avatar_size !important
+  max-width: $avatar_size !important
+  max-height: $avatar_size !important
+
+.header
+  display: flex
+  flex-direction: row
+  gap: 1em
+  align-items: center
+
+.info
+  display: flex
+  flex-direction: column
+
+.fullname
+  &, &_hoverable
+    font-weight: bold
+    font-family: "Custom Open Sans", sans-serif
+    color: white
+
+  &_hoverable
+    &:hover
+      text-underline: white
+      color: white
+      text-decoration: underline
+
+.meta
+  font-size: 0.9em
+  font-weight: lighter
+  color: #b7b7be

@@ -1,0 +1,28 @@
+@import '../common.module'
+
+.school_container
+  position: relative
+  padding-top: 2em
+  display: flex
+  flex-direction: column
+  overflow: hidden
+
+.school_image
+  position: absolute
+  width: 100%
+  height: 100%
+  object-fit: cover
+
+.school_name
+  &, &_hoverable
+    color: white
+    font-family: "Custom Open Sans", sans-serif
+    font-weight: bold
+  &_hoverable
+    &:hover
+      text-underline: white
+      color: white
+      text-decoration: underline
+
+.elevated
+  z-index: 1

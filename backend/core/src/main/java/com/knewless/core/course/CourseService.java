@@ -259,9 +259,7 @@ public class CourseService {
         );
         final var studentCourse = CourseMapper.MAPPER.courseQueryToCourseProfileDto(course);
         studentCourse.setTags(mapTagsToTagDtos(this.tagRepository.getTagsByCourseId(course.getId())));
-        long duration = studentCourse.getTimeSeconds();
-        long progress = ((watchHistoryService.getProgress(userId, id) * 100) / studentCourse.getTimeSeconds());
-        studentCourse.setProgress((int) (progress > 100 ? 100 : progress));
+        studentCourse.setProgress(watchHistoryService.getProgressByCourse(userId, id));
         return studentCourse;
     }
 
@@ -288,7 +286,7 @@ public class CourseService {
 
         if (userId != null) {
             reactionRepository.findByCourseIdAndUserId(id, userId).ifPresent(userRating -> course.setReview(userRating.getReaction()));
-            course.setProgress(watchHistoryService.getProgress(userId, id));
+            course.setProgress(watchHistoryService.getProgressByCourse(userId, id));
         }
 
         course.setRatingCount(reactionRepository.countByCourseId(id));

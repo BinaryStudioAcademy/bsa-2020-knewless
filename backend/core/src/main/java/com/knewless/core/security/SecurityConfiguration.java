@@ -98,7 +98,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .and()
                 .authorizeRequests()
                     .antMatchers("/").permitAll()
-                    .antMatchers(HttpMethod.GET, "/course", "/course/**/info", "/course/all", "/course/lecture/tag/**").permitAll()
+                    .antMatchers(HttpMethod.GET, "/course", "/course/**/info", "/course/all", "/course/lecture/tag/**", "/course/**/comments").permitAll()
                     .antMatchers(HttpMethod.GET, "/tags").permitAll()
                     .antMatchers(HttpMethod.GET, "/paths", "/es/search/**", "/paths/**", "/paths/tag/**").permitAll()
                     .antMatchers(HttpMethod.POST, "/es/search/advanced").permitAll()

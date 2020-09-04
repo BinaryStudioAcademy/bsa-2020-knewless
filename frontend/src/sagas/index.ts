@@ -25,6 +25,11 @@ import searchPageSagas from '@screens/SearchResultsPage/sagas';
 import historyPageSagas from '@screens/History/sagas';
 import addArticleSagas from '@screens/AddArticle/sagas';
 import articlePageSagas from '@screens/ArticlePage/sagas';
+import courseDiscussionSagas from '@containers/discussions/CourseDiscussion/sagas';
+import lectureDiscussionSagas from '@containers/discussions/LectureDiscussion/sagas';
+import websocketSagas from '@containers/WebsocketConnector/sagas';
+import userOverviewSagas from '@containers/UserOverview/sagas';
+
 export default function* rootSaga() {
   yield all([
     homeSagas(),
@@ -52,6 +57,10 @@ export default function* rootSaga() {
     historyPageSagas(),
     favouriteSagas(),
     addArticleSagas(),
-    articlePageSagas()
+    articlePageSagas(),
+    courseDiscussionSagas(),
+    lectureDiscussionSagas(),
+    websocketSagas(),
+    userOverviewSagas()
   ]);
 }

@@ -5,8 +5,9 @@ import { ReactComponent as InfoIcon } from '../../icons/info.svg';
 import styles from './styles.module.sass';
 import { LectureCard } from '@screens/AddCourse/components/LectureCard';
 import { ILectureData } from '@screens/CoursePage/models/ILectureData';
-import { IBindingCallback1, IBindingAction } from '@models/Callbacks';
-import { IFavourite } from '@components/AddToFavouritesButton/component/index';
+import { IBindingAction, IBindingCallback1 } from '@models/Callbacks';
+import { IFavourite } from '@components/AddToFavouritesButton/component';
+import CourseDiscussion from '@containers/discussions/CourseDiscussion';
 
 interface ICourseMenuProps {
   lectures: ILectureData[];
@@ -16,6 +17,9 @@ interface ICourseMenuProps {
   openLoginModal: IBindingCallback1<string>;
   changeFavouriteLecture: IBindingCallback1<IFavourite>;
   role: string;
+  courseId: string;
+  authorId: string;
+  yourId: string;
 }
 
 const CourseMenu: React.FunctionComponent<ICourseMenuProps> = ({
@@ -25,13 +29,16 @@ const CourseMenu: React.FunctionComponent<ICourseMenuProps> = ({
   startCourse,
   openLoginModal,
   changeFavouriteLecture,
-  role
+  role,
+  courseId,
+  authorId,
+  yourId
 }) => {
   const [selected, setSelected] = useState(0);
-  const onClickLecture =(e, id) => {
+  const onClickLecture = (e, id) => {
     if (!isAuthorized) openLoginModal(`/lecture/${id}`);
     else {
-      if(e.target.tagName === "I" || e.target.tagName === "A") return;
+      if (e.target.tagName === 'I' || e.target.tagName === 'A') return;
       startCourse();
       window.open(`/lecture/${id}`);
     }
@@ -89,7 +96,7 @@ const CourseMenu: React.FunctionComponent<ICourseMenuProps> = ({
               <button
                 type="button"
                 className={styles.lecture}
-                onClick={(e) => onClickLecture(e, lec.id)}
+                onClick={e => onClickLecture(e, lec.id)}
               >
                 <LectureCard
                   role={role}
@@ -100,7 +107,7 @@ const CourseMenu: React.FunctionComponent<ICourseMenuProps> = ({
                   description={lec.description}
                   favourite={lec.favourite}
                   id={lec.id}
-                  changefavourite={isAuthorized? changeFavouriteLecture : undefined}
+                  changefavourite={isAuthorized ? changeFavouriteLecture : undefined}
                   /* eslint-disable-next-line @typescript-eslint/no-empty-function */
                   onClick={() => {}}
                 />
@@ -109,7 +116,7 @@ const CourseMenu: React.FunctionComponent<ICourseMenuProps> = ({
           </div>
         )}
         {selected === 2 && (
-          <p>Nothing here yet...</p>
+          <CourseDiscussion courseId={courseId} authorId={authorId} yourId={yourId} />
         )}
       </div>
     </div>

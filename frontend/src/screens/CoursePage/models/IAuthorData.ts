@@ -9,4 +9,5 @@ export interface IAuthorData {
     name: string;
   };
   followers: number;
+  userId?: string;
 }
