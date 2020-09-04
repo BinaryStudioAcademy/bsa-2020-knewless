@@ -52,8 +52,8 @@ export const CourseCard: React.FC<ICourseCardProps> = ({
         <span className={styles.level_text}>{level}</span>
       </CardMeta>
       <div className={styles.rating_block}>
-        <p>{`( ${ratingCount} )`}</p>
         <StyledRating rating={rating} disabled />
+        <p>{`( ${ratingCount} )`}</p>
       </div>
       {
           !hideButton
