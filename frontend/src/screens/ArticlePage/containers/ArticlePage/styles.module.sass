@@ -8,29 +8,28 @@ $side_padding: 80px
 $indent_right: 3vw
 
 .main_container
-  padding-top: 0px
+  padding-top: 0
   background: #121421
-  padding-bottom: 20px
+  padding-bottom: 3em
   display: flex
   flex-direction: column
-.wrapperTitle 
-    margin-top: $header_height   
-    width: 100%
-    background: #2A2B37 !important
+
+.wrapperTitle
+  margin-top: $header_height
+  width: 100%
+  background: #2A2B37 !important
+
 #articleTitle
-    margin: auto
-    width: 100%
-    padding-top: 30px
-    padding-bottom: 20px
-    max-width: $container_width + ($side_padding * 2)
-    padding-left: $side_padding
-    padding-right: $side_padding
-    color: #ffff
-    font-family: Custom Open Sans
-    font-style: normal
-    font-weight: 600
-    font-size: 1.5em
-    line-height: 1.5em
+  margin: auto
+  width: 100%
+  max-width: $container_width + ($side_padding * 2)
+  padding: 30px $side_padding 20px
+  color: #ffff
+  font-family: Custom Open Sans, sans-serif
+  font-style: normal
+  font-weight: 600
+  font-size: 1.5em
+  line-height: 1.5em
 
 .wide_container
   max-width: $container_width + ($side_padding * 2)
@@ -43,11 +42,9 @@ $indent_right: 3vw
 .main_content
   width: 100%
   height: 100%
-  min-height: 60vh
   flex-grow: 1
   display: flex
   flex-direction: column
-  margin-bottom: 5vh
 
 .form
   &__container
@@ -67,7 +64,7 @@ $indent_right: 3vw
     font-style: normal
     font-weight: 600
     color: #ffff
-    font-family: Custom Open Sans
+    font-family: Custom Open Sans, sans-serif
     font-size: 2em
     line-height: 2em
 
@@ -84,6 +81,7 @@ $indent_right: 3vw
     padding-left: $side_padding
     padding-right: 30px
     width: 100%
+
     .author
       font-size: 1.3em
       color: #fff
@@ -105,12 +103,9 @@ $indent_right: 3vw
   position: absolute
   width: 100%
   height: 100%
-  position: absolute
-  height: 100%
-  width: 100%
   left: 0
   top: 0
-  
+
 .article_image img
   width: 100%
   height: 100%
@@ -118,63 +113,64 @@ $indent_right: 3vw
   background: rgba(0, 0, 0, 0.5)
 
 #content_block
-    z-index: 100
-    margin-top: -100px
-    width: 98%
-    margin-left: auto
-    margin-right: auto
-    box-shadow: 0 0 10px rgba(0,0,0,0.5)
-    word-break: break-all
-    background: #ffff
-    min-height: 800px
-    padding: 70px 50px
+  z-index: 100
+  margin-top: -100px
+  width: 98%
+  margin-left: auto
+  margin-right: auto
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5)
+  word-break: break-all
+  background: #ffff
+  min-height: 800px
+  padding: 5em 3em
+  text-overflow: ellipsis !important
+  word-wrap: break-word
+
+  & *
+    font-family: Custom Open Sans, sans-serif !important
+    font-size: 1.1em !important
+    line-height: 2em !important
+    color: black !important
     text-overflow: ellipsis !important
-    word-break: break-all
-    word-wrap: break-word
-    &  * 
-      font-family: Custom Open Sans !important
-      font-size: 1.1em !important
-      line-height: 2em !important
-      color: black !important
-      text-overflow: ellipsis !important
-      word-break: break-all !important
-      word-wrap: break-word !important
-      white-space: pre-wrap !important
-      code 
-        font-family: Courier New, Courier, monospace !important
-        display: flex
-        background: #dbd9d9 !important
-        padding: 0.5em
-        width: 100%
-        text-align: justify
+    word-break: break-all !important
+    word-wrap: break-word !important
+    white-space: pre-wrap !important
+
+    code
+      font-family: Courier New, Courier, monospace !important
+      display: flex
+      background: #dbd9d9 !important
+      padding: 0.5em
+      width: 100%
+      text-align: justify
+
 .author_block
-   width: 98%
-   border-top: 3px solid #2A2B37
-   border-bottom: 3px solid #2A2B37
-   padding: 30px 0
-   margin-top: 50px
-   margin-right: auto
-   margin-left: auto
-   display: flex
-   flex-direction: column
-   align-items: center
+  width: 98%
+  border-top: 3px solid #2A2B37
+  border-bottom: 3px solid #2A2B37
+  margin: 3em auto 0
+  display: flex
+  flex-direction: column
+  align-items: center
+
 .articles_block
-   width: 98% !important
-   padding: 30px 0
-   margin-top: 20px
-   display: flex
-   flex-direction: column
-   align-items: start
+  width: 98% !important
+  margin-top: 2em
+  display: flex
+  flex-direction: column
+  align-items: start
+
 .content_row
-  margin: 5em 0
+  margin: 1em 0
 
 .article_card
   width: 32%
-  box-shadow: 0 30px 40px rgba(0, 0, 0, 0.1)   
+  box-shadow: 0 30px 40px rgba(0, 0, 0, 0.1)
 
 \:global(.DraftEditor-root)
-      height: auto !important
-      overflow: auto
+  height: auto !important
+  overflow: auto
+
 \:global(.ui.button).btn_save
   margin-left: auto !important
   width: $width_btn
@@ -234,7 +230,7 @@ $indent_right: 3vw
 .back
   height: 100%
   width: 100%
-  background-color: rgba(42,43,55,.6)
+  background-color: rgba(42, 43, 55, .6)
 
 .image
   position: absolute
@@ -243,14 +239,13 @@ $indent_right: 3vw
   left: 0
   top: 0
 
-.imageUploader, 
-.imagePlaceholder
+.imageUploader, .imagePlaceholder
   position: absolute
   height: 100%
   width: 100%
   left: 0
   top: 0
-  border-radius: 0px !important
+  border-radius: 0 !important
   display: flex !important
   align-items: center !important
   justify-content: center !important
@@ -258,25 +253,28 @@ $indent_right: 3vw
   background: none !important
   padding: 10px !important
   border: 3px dashed #9c9b9b !important
-  background:  rgba(94, 92, 92, 0.575) !important
+  background: rgba(94, 92, 92, 0.575) !important
   color: #ffff
-  font-family: Custom Open Sans  !important
-  font-style: normal  !important
-  font-weight: 600  !important
-  font-size: 1.5em  !important
-  line-height: 1.5em  !important
+  font-family: Custom Open Sans, sans-serif !important
+  font-style: normal !important
+  font-weight: 600 !important
+  font-size: 1.5em !important
+  line-height: 1.5em !important
+
   .uploaderInfo
     display: flex
-    flex-direction: column  
+    flex-direction: column
     align-items: center
+
     img
-     width: 60px
+      width: 60px
 
 .imagePlaceholder
   opacity: 1
 
 .imageUploader
-  opacity: 0  
+  opacity: 0
+
   &:hover
     background: rgba(94, 92, 92, 0.575) !important
     opacity: 1

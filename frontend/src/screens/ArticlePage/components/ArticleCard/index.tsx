@@ -35,9 +35,10 @@ export const ArticleCard: React.FunctionComponent<IArticleCardProps> = ({
           <a href={`/article/${id}`} className={styles.link}><span>{name}</span></a>
         </CardHeader>
         <CardMeta className={styles.meta_info}>
-          <span>Read: {timeFormat(duration)}</span>
+          <span className={styles.duration}>{timeFormat(duration)}</span>
+          <span className={styles.label}> read</span>
         </CardMeta>
-         {
+        {
           !hideButton
           && (
             <GradientButton

@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import upload from '@images/file-upload.png';
 import { GradientButton } from '@components/buttons/GradientButton';
 import GrayOutlineButton from '@components/buttons/GrayOutlineButton';
-import { useHistory } from 'react-router-dom';
+import { history } from '@helpers/history.helper';
 import { IBindingCallback1 } from '@models/Callbacks';
 import { Editor } from 'react-draft-wysiwyg';
 import draftToHtml from 'draftjs-to-html';
@@ -30,33 +30,35 @@ export interface IAddArticleProps {
 export const AddArticlePage: React.FC<IAddArticleProps> = ({
   saveArticle
 }) => {
-  const history = useHistory();
   const [name, setName] = useState('');
   const [image, setImage] = useState('');
   const [content, setContent] = useState(undefined);
   const [isArticleNameValid, setIsArticleNameValid] = useState(true);
   const [uploadImage, setUploadImage] = useState(null);
+
   function validateArticleName(newName?: string) {
     const lastChangesName = typeof newName === 'string' ? newName : name;
     setIsArticleNameValid(!!lastChangesName && isValidArticleName(lastChangesName));
   }
   const isRequiredFieldsValid = !!name && isArticleNameValid;
-  const isReadyToRelease = isRequiredFieldsValid && uploadImage && content!==undefined;
+  const isReadyToRelease = isRequiredFieldsValid && uploadImage && content !== undefined;
+
   const handleSaveArticle = () => {
-    if (!isReadyToRelease) return; 
+    if (!isReadyToRelease) return;
     const article: IArticle = {
-      name: name,
+      name,
       image: '',
       text: draftToHtml(convertToRaw(content.getCurrentContent())),
-      uploadImage: uploadImage
+      uploadImage
     };
     saveArticle(article);
-    history.push("/");
-  }
+    history.push('/');
+  };
 
   const handleCancel = () => {
-    history.push("/");
-  }
+    history.push('/');
+  };
+
   const handleUploadFile = file => {
     const thisFile: File = file;
     if (thisFile && isImage(thisFile.name)) {
@@ -64,6 +66,7 @@ export const AddArticlePage: React.FC<IAddArticleProps> = ({
       setImage(URL.createObjectURL(thisFile));
     }
   };
+  const editorOptions = ['inline', 'embedded', 'emoji', 'image', 'blockType', 'list', 'textAlign', 'link', 'history'];
   return (
     <>
       <div className={styles.wrapperTitle}>
@@ -106,10 +109,10 @@ export const AddArticlePage: React.FC<IAddArticleProps> = ({
                   </div>
                   <Button as="label" className={image ? styles.imageUploader : styles.imagePlaceholder}>
                     <div className={styles.uploaderInfo}>
-                      <img src={upload} alt="Upload"/>
-                       Upload image here 
+                      <img src={upload} alt="Upload" />
+                      Upload image here
                     </div>
-                   <input name="image" type="file" onChange={e => handleUploadFile(e.target.files[0])} hidden />
+                    <input name="image" type="file" onChange={e => handleUploadFile(e.target.files[0])} hidden />
                   </Button>
                 </div>
               </div>
@@ -123,7 +126,7 @@ export const AddArticlePage: React.FC<IAddArticleProps> = ({
                   toolbarClassName={styles.form__toolbar}
                   wrapperClassName={styles.form__wrapEditor}
                   editorClassName={styles.form__editor}
-                  toolbar={{ options: ['inline', 'embedded', 'emoji', 'image', 'blockType', 'list', 'textAlign', 'link', 'history'] }}
+                  toolbar={{ options: editorOptions }}
                   editorState={content}
                   onEditorStateChange={setContent}
                 />

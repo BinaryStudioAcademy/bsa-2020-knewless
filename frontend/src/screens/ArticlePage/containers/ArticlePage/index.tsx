@@ -6,14 +6,16 @@ import {
 } from '../../routines';
 import { IAppState } from '@models/AppState';
 import { connect } from 'react-redux';
-import { useHistory, useParams, NavLink } from 'react-router-dom';
+import { useParams, NavLink } from 'react-router-dom';
 import { IBindingCallback1 } from '@models/Callbacks';
 import ReactHtmlParser from 'react-html-parser';
 import { ArticleCard } from '../../components/ArticleCard';
 import { CardsSegment } from '@components/CardsSegment';
 import AuthorCard from '../../components/AuthorCard';
 import { ArticleCardPlaceHolder } from '@components/placeholder/ArticleCardPlaceHolder';
-import  readingTime from 'reading-time';
+import readingTime from 'reading-time';
+import { history } from '@helpers/history.helper';
+
 export interface IArticleProps {
   article: IArticle;
   getArticle: IBindingCallback1<string>;
@@ -24,7 +26,6 @@ export interface IArticleProps {
 export const ArticlePage: React.FC<IArticleProps> = ({
   getArticle, article, loading
 }) => {
-  const history = useHistory();
   const { articleId } = useParams();
 
   useEffect(() => {
@@ -32,8 +33,9 @@ export const ArticlePage: React.FC<IArticleProps> = ({
       getArticle(articleId);
     }
   }, [articleId]);
- 
+
   if (loading) return null;
+
   return (
     <>
       <div className={styles.wrapperTitle}>
@@ -53,7 +55,6 @@ export const ArticlePage: React.FC<IArticleProps> = ({
                   </NavLink>
                 </div>
               </div>
-
               <div className={styles.container}>
                 <div className={styles.back}>
                   <div className={styles.article_image}>
