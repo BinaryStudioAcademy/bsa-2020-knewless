@@ -1,6 +1,6 @@
 import { Routine } from 'redux-saga-routines';
 import { fetchPathDataRoutine } from '@screens/PathPage/routines';
-import { IPathPageData }  from '@screens/PathPage/models/IPathPageData';
+import { IPathPageData } from '@screens/PathPage/models/IPathPageData';
 
 const initialState = {
   path: {} as IPathPageData

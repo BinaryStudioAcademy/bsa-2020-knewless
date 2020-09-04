@@ -38,13 +38,12 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
 
     @Query("SELECT new com.knewless.core.course.dto.CourseQueryResult(c.id, " +
             "c.name, c.level, concat(c.author.firstName,' ' , c.author.lastName), " +
-            "c.author.id, category.name, c.image, " +
+            "c.author.id, c.image, " +
             "(SELECT COALESCE(SUM(cl.duration), 0) FROM c.lectures as cl), " +
             "(SELECT COALESCE(SUM(cr.reaction), 0) " +
             "FROM c.reactions as cr), " +
             "SIZE(c.reactions)) " +
             "FROM Course c left join c.lectures l left join l.tags t " +
-            "LEFT JOIN c.category category " +
             "WHERE c.id NOT IN :id OR t.id NOT IN :tags")
     List<CourseQueryResult> getRecommendedCourses(@Param("id") List<UUID> id, @Param("tags") List<UUID> tags);
 

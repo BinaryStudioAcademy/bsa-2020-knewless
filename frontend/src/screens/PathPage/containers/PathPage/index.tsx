@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Redirect } from 'react-router-dom';
 import PathOverview from '@screens/PathPage/components/PathOverview';
 import PathMenu from '@screens/PathPage/components/PathMenu';
 import { IAppState } from '@models/AppState';
@@ -17,9 +17,12 @@ interface IPathPageProps {
   isAuthorized: boolean;
   role: string;
   userId: string;
+  error: string;
 }
 
-const PathPage: React.FC<IPathPageProps> = ({ fetchData, path, loading, isAuthorized, role, userId }) => {
+const PathPage: React.FC<IPathPageProps> = ({
+  fetchData, path, loading, isAuthorized, role, userId, error
+}) => {
   const { pathId } = useParams();
 
   useEffect(() => {
@@ -34,6 +37,9 @@ const PathPage: React.FC<IPathPageProps> = ({ fetchData, path, loading, isAuthor
       </div>
     );
   }
+
+  if (error) return <Redirect to="/404" />;
+
   return (
     <div className={styles.content}>
       <PathOverview isAuthorized={isAuthorized} path={path} pathId={pathId} role={role} userId={userId} />
@@ -47,6 +53,7 @@ const mapStateToProps = (state: IAppState) => {
   return {
     path,
     loading: state.pathPage.requests.dataRequest.loading,
+    error: state.pathPage.requests.dataRequest.error,
     userId: state.appRouter.user.id,
     role: state.appRouter.user.role?.name,
     isAuthorized
