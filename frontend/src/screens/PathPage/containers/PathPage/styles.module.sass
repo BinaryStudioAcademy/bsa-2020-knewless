@@ -3,13 +3,19 @@
 
 .content
   padding-top: $header_height
-  background-color: #121421
-  display: flex
-  flex-direction: column
-  max-width: $container_width + ($side_padding * 2)
   padding-left: $side_padding
   padding-right: $side_padding
-  flex: 1
+  background-color: #121421
+  $container_width: 1400px
+  $side_padding: 80px
+  max-width: $container_width + ($side_padding * 2)
+  margin-left: auto
+  margin-right: auto
+  display: flex
+  flex-direction: column
+  min-height: 80vh
+  margin-bottom: $last_margin
+
   *
     word-break: break-word
 
@@ -20,10 +26,3 @@
   background: #2A2B37
   padding: 4em 0
   color: white
-
-.wide_container
-  max-width: $container_width + ($side_padding * 2)
-  margin-left: auto
-  margin-right: auto
-  padding-left: $side_padding
-  padding-right: $side_padding

@@ -41,9 +41,11 @@ const PathPage: React.FC<IPathPageProps> = ({
   if (error) return <Redirect to="/404" />;
 
   return (
-    <div className={styles.content}>
-      <PathOverview isAuthorized={isAuthorized} path={path} pathId={pathId} role={role} userId={userId} />
-      <PathMenu path={path} />
+    <div>
+      <div className={styles.content}>
+        <PathOverview isAuthorized={isAuthorized} path={path} pathId={pathId} role={role} userId={userId} />
+        <PathMenu path={path} />
+      </div>
     </div>
   );
 };
