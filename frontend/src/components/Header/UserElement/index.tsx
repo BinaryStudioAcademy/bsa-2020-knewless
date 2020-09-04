@@ -7,7 +7,7 @@ import PopupMenu from '../PopupMenu';
 import PopupAddMenu from '../PopupAddMenu';
 import AvatarWithGradient from '@components/avatar/AvatarWithBackground';
 
-const UserElement = ({ user, authorId, isSettingsFilled }) => {
+const UserElement = ({ user, authorId, isSettingsFilled, setNoAuthorized }) => {
   const [IsOpen, setIsOpen] = useState(false);
   const handleOnClose = () => {
     setIsOpen(false);
@@ -58,7 +58,7 @@ const UserElement = ({ user, authorId, isSettingsFilled }) => {
       hoverable
     >
       <Popup.Content>
-        <PopupMenu isSettingsFilled={isSettingsFilled} user={user} authorId={authorId} />
+        <PopupMenu setNoAuthorized={setNoAuthorized} isSettingsFilled={isSettingsFilled} user={user} authorId={authorId} />
       </Popup.Content>
     </Popup>
   </div>
