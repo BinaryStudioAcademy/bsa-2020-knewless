@@ -167,7 +167,6 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
     return (
       <CourseCard
         author={course.author}
-        category={course.category}
         level={course.level}
         name={course.name}
         timeMinutes={course.timeSeconds}

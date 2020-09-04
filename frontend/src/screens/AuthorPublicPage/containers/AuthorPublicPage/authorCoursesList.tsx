@@ -11,13 +11,6 @@ export interface IAuthorCoursesList {
   courses: IAuthorCourse[];
 }
 
-function secondsToTime(mins: any): string { // have to be fixed with moment.js
-  const hours = Math.floor(mins / 60);
-  const divisorForMinutes = mins % 60;
-  const minutes = Math.floor(divisorForMinutes);
-  return `${hours}h ${minutes}m`;
-}
-
 const CoursesList: React.FC<IAuthorCoursesList> = ({ authorData, courses }) => (
   <>
     {(!courses || courses?.length < 1)
@@ -40,7 +33,7 @@ const CoursesList: React.FC<IAuthorCoursesList> = ({ authorData, courses }) => (
             name={c.name}
             description={null}
             ratingCount={0}
-            className={styles.coursePreview}
+            className={styles.preview}
           />
         </div>
       ))}

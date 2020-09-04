@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
 import ReactPlayer from 'react-player/lazy';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { ICourseData } from '@screens/LecturePage/models/ICourseData';
 import { IBindingCallback1 } from 'models/Callbacks';
 import {
@@ -33,6 +33,7 @@ export interface ILectureProps {
   role: string;
   quality: number;
   setQuality: IBindingCallback1<number>;
+  loadingError: string;
 }
 
 function chooseSource(lecture: ILectures, quality = 720) {
@@ -101,7 +102,8 @@ const LecturePage: React.FunctionComponent<ILectureProps> = ({
   isSaveReviewLoading,
   role,
   quality,
-  setQuality
+  setQuality,
+  loadingError
 }) => {
   const [playerProgress, setPlayerProgress] = useState<IPlayerProgress>(
     { playedSeconds: 0, loaded: 0, loadedSeconds: 0, played: 0 }
@@ -195,6 +197,8 @@ const LecturePage: React.FunctionComponent<ILectureProps> = ({
     setQuality(data);
   };
 
+  if (loadingError) return <Redirect to="/404" />;
+
   return (
     <div>
       <RatingModal onClose={closeReview} isOpen={isReviewOpen} submit={submitReview} isLoading={isSaveReviewLoading} />
@@ -253,6 +257,7 @@ const LecturePage: React.FunctionComponent<ILectureProps> = ({
 const mapStateToProps = (state: IAppState) => ({
   lecturesData: state.lecturePage.lectureDto,
   isLecturesLoading: state.lecturePage.requests.dataRequest.loading,
+  loadingError: state.lecturePage.requests.dataRequest.error,
   chosenVideoId: state.lecturePage.chosenVideo.chosenVideo,
   isSaveReviewLoading: state.coursePage.requests.saveReviewRequest.loading,
   role: state.appRouter.user.role.name,

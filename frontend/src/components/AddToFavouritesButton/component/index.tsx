@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styles from './styles.module.sass';
 import { SourceType } from '../helper/SourceType';
 import { IBindingCallback1 } from 'models/Callbacks';
@@ -28,38 +28,46 @@ const AddToFavouriteButton: React.FunctionComponent<IAddToFavouriteButtonProps> 
     });
   };
 
-  if (type === SourceType.LECTURE) return (
-    <Label
-      basic
-      as="a"
-      size="small"
-      className={styles.toolBarIcon}
-      onClick={() => handleChange()}
-    >
-      <Icon
-        name={isFavourite? "heart" : "heart outline"}
-        size="large"
-        className={isFavourite? styles.pushed : styles.notpushed}
-        inverted
-      />
-    </Label>
-  );
+  if (type === SourceType.LECTURE) {
+    return (
+      <Label
+        basic
+        as="a"
+        size="small"
+        className={styles.toolBarIcon}
+        onClick={() => handleChange()}
+      >
+        <Icon
+          name={isFavourite ? 'heart' : 'heart outline'}
+          size="large"
+          className={isFavourite ? styles.pushed : styles.notpushed}
+          inverted
+        />
+      </Label>
+    );
+  }
 
   return (
-      <div className={styles.wrapper}>
-        {isFavourite && (
-          <GradientButton className={styles.favouriteButton} onClick={() => handleChange()}>
-            <div className={styles.unfollow}>
-              <div className={styles.textButtonFavourite}>
-                My Favourite
-              </div>
-            </div>
-          </GradientButton>)}
-        {!isFavourite && (
-          <GrayOutlineButton className={styles.addbutton} onClick={() => handleChange()}>add to favourites</GrayOutlineButton>
-        )}
-      </div>
-  )
-}
+    <div className={styles.wrapper}>
+      {isFavourite && (
+      <GradientButton className={styles.favouriteButton} onClick={() => handleChange()}>
+        <div className={styles.unfollow}>
+          <div className={styles.textButtonFavourite}>
+            My Favourite
+          </div>
+        </div>
+      </GradientButton>
+      )}
+      {!isFavourite && (
+        <GrayOutlineButton
+          className={styles.addbutton}
+          onClick={() => handleChange()}
+        >
+          add to favourites
+        </GrayOutlineButton>
+      )}
+    </div>
+  );
+};
 
 export default AddToFavouriteButton;

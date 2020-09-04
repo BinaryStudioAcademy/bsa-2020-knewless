@@ -3,10 +3,8 @@ import { IBindingAction, IBindingCallback1 } from '@models/Callbacks';
 import { connect } from 'react-redux';
 import { IAppState } from '@models/AppState';
 import { InlineLoaderWrapper } from '@components/InlineLoaderWrapper';
-import { ITag } from '@screens/Courses/models/ITag';
-
 import styles from './styles.module.sass';
-import { IRole } from '@containers/AppRouter/models/IRole';
+import { IRole, RoleTypes } from '@containers/AppRouter/models/IRole';
 import { IPathCardProps } from '@components/PathCard';
 import {
   fetchPathsRoutine,
@@ -17,11 +15,12 @@ import {
 } from '@screens/Paths/routines';
 import { MyPaths } from '@screens/Paths/components/MyPaths';
 import { AllPaths } from '@screens/Paths/components/AllPaths';
+import { ITagData } from '@screens/CoursePage/models/ITagData';
 
 export interface IPathsPageProps {
   paths: IPathCardProps[];
   myPaths: IPathCardProps[];
-  tags: ITag[];
+  tags: ITagData[];
   role?: IRole;
   fetchData: IBindingAction;
   fetchAllAuthorPaths: IBindingAction;
@@ -66,30 +65,28 @@ const PathsPage: React.FC<IPathsPageProps> = ({
 
   return (
     <div className={styles.courses_content}>
-      {loadingData
-        ? <InlineLoaderWrapper loading={loadingData} centered />
-        : (
-          <>
-            {role && (
-              <MyPaths
-                myPaths={myPaths}
-                loading={loadingData}
-                role={role.name}
-              />
-            )}
-            {!role || role.name !== 'AUTHOR' ? (
-              <AllPaths
-                paths={paths}
-                tags={tags}
-                fetchData={fetchAllPaths}
-                fetchPathsByTag={fetchPathsByTag}
-                loadingData={loadingData}
-                loadingAllPaths={loadingAllPaths}
-                loadingPathsByTag={loadingPathsByTag}
-              />
-            ) : null}
-          </>
-        )}
+      {!loadingData && !loadingAllPaths && !loadingPathsByTag ? (
+        <>
+          {role && (
+            <MyPaths
+              myPaths={myPaths}
+              loading={loadingData}
+              role={role.name}
+            />
+          )}
+          {(!role || role.name !== RoleTypes.AUTHOR) && (
+            <AllPaths
+              paths={paths}
+              tags={tags as any}
+              fetchData={fetchAllPaths}
+              fetchPathsByTag={fetchPathsByTag}
+              loadingData={loadingData}
+              loadingAllPaths={loadingAllPaths}
+              loadingPathsByTag={loadingPathsByTag}
+            />
+          )}
+        </>
+      ) : (<InlineLoaderWrapper loading centered />)}
     </div>
   );
 };

@@ -11,4 +11,5 @@ public class ArticleDto {
     private String text;
     private String image;
     private UUID authorId;
+    private String authorName;
 }

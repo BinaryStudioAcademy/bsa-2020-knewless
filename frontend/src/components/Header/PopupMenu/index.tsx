@@ -1,4 +1,5 @@
 import React from 'react';
+import {Redirect} from 'react-router-dom';
 import { List } from 'semantic-ui-react';
 import styles from './styles.module.sass';
 import { history } from '@helpers/history.helper';
@@ -6,14 +7,16 @@ import { ACCESS_TOKEN, REFRESH_TOKEN } from 'screens/Authentication/constants';
 import { IUser } from '@containers/AppRouter/models/IUser';
 import MiddleEllipsis from 'react-middle-ellipsis';
 import { RoleTypes } from '@containers/AppRouter/models/IRole';
+import { IBindingAction } from '@models/Callbacks';
 
 export interface IPopupMenuProps {
   user: IUser;
   authorId?: string;
   isSettingsFilled: boolean;
+  setNoAuthorized: IBindingAction;
 }
 
-const PopupMenu: React.FC<IPopupMenuProps> = ({ user, authorId, isSettingsFilled }) => {
+const PopupMenu: React.FC<IPopupMenuProps> = ({ user, authorId, isSettingsFilled, setNoAuthorized }) => {
   const handleOnClickProfile = () => {
     let profilePath;
     if (user.role.name === RoleTypes.USER) {
@@ -23,7 +26,7 @@ const PopupMenu: React.FC<IPopupMenuProps> = ({ user, authorId, isSettingsFilled
     } else {
       profilePath = '/login';
     }
-    isSettingsFilled? history.push(profilePath) : history.push('/settings');
+    isSettingsFilled ? history.push(profilePath) : history.push('/settings');
   };
   const handleOnClickHistory = () => {
     isSettingsFilled? history.push('/history') : history.push('/settings');
@@ -34,8 +37,8 @@ const PopupMenu: React.FC<IPopupMenuProps> = ({ user, authorId, isSettingsFilled
   const handleOnClickSignOut = () => {
     localStorage.removeItem(ACCESS_TOKEN);
     localStorage.removeItem(REFRESH_TOKEN);
+    setNoAuthorized();
     history.push('/');
-    history.go();
   };
 
   return (

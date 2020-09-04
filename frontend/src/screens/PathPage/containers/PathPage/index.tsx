@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Redirect } from 'react-router-dom';
 import PathOverview from '@screens/PathPage/components/PathOverview';
 import PathMenu from '@screens/PathPage/components/PathMenu';
 import { IAppState } from '@models/AppState';
@@ -22,6 +22,7 @@ interface IPathPageProps {
   checkFavourite: IBindingCallback1<IFavourite>;
   changeFavourite: IBindingCallback1<IFavourite>;
   favourite: boolean;
+  error: string;
 }
 
 const PathPage: React.FC<IPathPageProps> = ({ 
@@ -33,7 +34,8 @@ const PathPage: React.FC<IPathPageProps> = ({
   userId,
   checkFavourite,
   changeFavourite,
-  favourite
+  favourite,
+  error
 }) => {
   const { pathId } = useParams();
 
@@ -60,6 +62,9 @@ const PathPage: React.FC<IPathPageProps> = ({
       </div>
     );
   }
+
+  if (error) return <Redirect to="/404" />;
+
   return (
     <div className={styles.content}>
       <PathOverview 
@@ -81,6 +86,7 @@ const mapStateToProps = (state: IAppState) => {
   return {
     path,
     loading: state.pathPage.requests.dataRequest.loading,
+    error: state.pathPage.requests.dataRequest.error,
     userId: state.appRouter.user.id,
     role: state.appRouter.user.role?.name,
     isAuthorized,

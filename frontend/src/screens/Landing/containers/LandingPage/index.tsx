@@ -12,20 +12,14 @@ import { IAppState } from '@models/AppState';
 import { fetchDataRoutine } from 'screens/Landing/routines';
 import { CardsSegment } from '@components/CardsSegment';
 import { history } from '@helpers/history.helper';
-import { loginRoutine } from '@screens/Home/routines';
-import { CourseCardPlaceHolder } from '@components/placeholder/CourseCardPlaceHolder/index';
-import { PathCardPlaceHolder } from '@components/placeholder/PathCardPlaceHolder/index';
+import { CourseCardPlaceHolder } from '@components/placeholder/CourseCardPlaceHolder';
+import { PathCardPlaceHolder } from '@components/placeholder/PathCardPlaceHolder';
 
-// eslint-disable-next-line
 export interface ILandingProps {
   courses: ICourseCardProps[];
   paths: IPathCardProps[];
   navigations: INavigationSectionProps[];
   fetchData: IBindingAction;
-  loginUser: IBindingAction;
-  isLoginLoading: boolean;
-  isAuthorized: boolean;
-  isLoginFailure: boolean;
   loading: boolean;
 }
 
@@ -34,14 +28,9 @@ export const LandingPage: React.FunctionComponent<ILandingProps> = ({
   paths,
   navigations,
   fetchData: triggerFetchData,
-  loginUser,
-  isLoginLoading,
-  isAuthorized,
-  isLoginFailure,
   loading
 }) => {
   const [playerRunning, setPlayerRunning] = useState(true);
-  const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
   const playerRef = createRef<HTMLVideoElement>();
 
@@ -68,10 +57,6 @@ export const LandingPage: React.FunctionComponent<ILandingProps> = ({
   const onSearchFieldChange = data => {
     setQuery(data);
   };
-
-  function handleClickToViewModal() {
-    setOpen(prev => !prev);
-  }
 
   return (
     <div className={styles.main_container}>
@@ -120,13 +105,14 @@ export const LandingPage: React.FunctionComponent<ILandingProps> = ({
             onViewAllClick={() => history.push('/courses')}
             loading={false}
           >
-            {loading && [1,2,3].map( x => <CourseCardPlaceHolder key={x} dependencyName="landing" hideButton={false}/>)}
+            {loading && [1, 2, 3].map(x => (
+              <CourseCardPlaceHolder key={x} dependencyName="landing" hideButton={false} />
+            ))}
             {!loading && courses.map(c => (
               <div key={c.id} className={styles.course_card}>
                 <CourseCard
                   id={c.id}
                   name={c.name}
-                  category={c.category}
                   author={c.author}
                   duration={c.duration}
                   imageSrc={c.imageSrc}
@@ -144,7 +130,7 @@ export const LandingPage: React.FunctionComponent<ILandingProps> = ({
             onViewAllClick={() => history.push('/paths')}
             loading={false}
           >
-            {loading && [1,2,3].map( x => <PathCardPlaceHolder key={x} className={styles.path_card}/>)}
+            {loading && [1, 2, 3].map(x => <PathCardPlaceHolder key={x} className={styles.path_card} />)}
             {!loading && paths.map(p => (
               <div key={p.id} className={styles.path_card}>
                 <PathCard
@@ -175,16 +161,12 @@ const mapStateToProps = (state: IAppState) => {
     navigations,
     paths,
     courses,
-    isAuthorized: state.auth.auth.isAuthorized,
-    isLoginLoading: state.auth.requests.loginRequest.loading,
-    isLoginFailure: state.auth.requests.loginRequest.error != null && !state.auth.requests.loginRequest.loading,
     loading: state.landing.requests.dataRequest.loading
   });
 };
 
 const mapDispatchToProps = {
-  fetchData: fetchDataRoutine,
-  loginUser: loginRoutine.trigger
+  fetchData: fetchDataRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(LandingPage);

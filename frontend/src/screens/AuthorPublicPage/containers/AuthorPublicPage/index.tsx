@@ -57,7 +57,7 @@ const AuthorPublicPage: React.FunctionComponent<IAuthorPublic> = ({
   const handleOnClickUnfollow = () => {
     unfollowAuthor(match.params.authorId);
   };
-  const isSelfPublicPage = user.id === authorData.userId;
+
   if (loading) {
     return (
       <div className={styles.page}>
@@ -67,11 +67,16 @@ const AuthorPublicPage: React.FunctionComponent<IAuthorPublic> = ({
       </div>
     );
   }
+
   const chart = {
     wrapperId: 'chart',
     width: 110,
     height: 110
   };
+
+  const isSelfPublicPage = user.id === authorData.userId;
+  const isUser = user.role?.name === 'USER';
+
   return (
     <div className={styles.page}>
       <div className={styles.wideContainer}>
@@ -94,32 +99,27 @@ const AuthorPublicPage: React.FunctionComponent<IAuthorPublic> = ({
                 </Link>
               </div>
             )}
-            {!isSelfPublicPage && user.role?.name !== 'AUTHOR' && user && authorData.printFollowButton && (
-              <div className={styles.buttonsFollowLikeAuthor}>
-                <GradientButton className={styles.authorFollowButton} onClick={handleOnClickFollow}>
-                  <div className={styles.textButtonFollow}>Follow</div>
-                </GradientButton>
-              </div>
-            )}
-            {!isSelfPublicPage && user.role?.name !== 'AUTHOR' && user && !authorData.printFollowButton && (
-              <div className={styles.buttonsFollowLikeAuthor}>
-                <GradientButton className={styles.authorFollowButton} onClick={handleOnClickUnfollow}>
-                  <div className={styles.unfollow}>
-                    <div className={styles.textButtonUnfollow}>
-                      Following
+            {isUser && !isSelfPublicPage && (
+              <div className={styles.author_action_buttons}>
+                {authorData.printFollowButton ? (
+                  <GradientButton className={styles.authorFollowButton} onClick={handleOnClickFollow}>
+                    <div className={styles.textButtonFollow}>Follow</div>
+                  </GradientButton>
+                ) : (
+                  <GradientButton className={styles.authorFollowButton} onClick={handleOnClickUnfollow}>
+                    <div className={styles.unfollow}>
+                      <div className={styles.textButtonUnfollow}>Following</div>
                     </div>
-                  </div>
-                </GradientButton>
-              </div>
-            )}
-            {user.role?.name !== 'AUTHOR' && user && !isSelfPublicPage && (
-              <div className={styles.button_favourite_wrp}>
-                <AddToFavouriteButton
-                  id={match.params.authorId}
-                  type={SourceType.AUTHOR}
-                  changeFavourite={changeFavourite}
-                  isFavourite={favourite}
-                />
+                  </GradientButton>
+                )}
+                <div className={styles.button_favourite_wrp}>
+                  <AddToFavouriteButton
+                    id={match.params.authorId}
+                    type={SourceType.AUTHOR}
+                    changeFavourite={changeFavourite}
+                    isFavourite={favourite}
+                  />
+                </div>
               </div>
             )}
             <div className={styles.subscribersNumber}>

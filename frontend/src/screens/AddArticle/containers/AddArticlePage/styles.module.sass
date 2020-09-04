@@ -151,8 +151,23 @@ $indent_right: 3vw
     border-radius: 3px
     margin-bottom: 20px
     &  * 
+      font-family: Custom Open Sans !important
+      text-overflow: ellipsis !important
+      word-break: break-all
+      word-wrap: break-word
+      white-space: pre-wrap
+      font-size: 1em !important
+      line-height: 1.7em !important
       color: black !important
-      background: white !important
+      code 
+        font-family: Courier New, Courier, monospace !important
+        display: flex
+        background: #dbd9d9
+        padding: 0.5em
+        width: 100%
+        text-align: justify
+    .rdw-dropdown-selectedtext 
+      font-size: 0.6em !important
     & input 
       border: 1px solid #c3bfbf !important
     .DraftEditor-root

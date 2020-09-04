@@ -1,7 +1,7 @@
 import { Routine } from 'redux-saga-routines';
 import { IFullCourseData } from '@screens/CoursePage/models/IFullCourseData';
 import { fetchCourseDataRoutine, changeFavouriteCourseStateRoutine, checkFavouriteCourseStateRoutine,
-   changeFavouriteLectureStateRoutine, fetchAuthorInfoRoutine } from '@screens/CoursePage/routines';
+  changeFavouriteLectureStateRoutine, fetchAuthorInfoRoutine } from '@screens/CoursePage/routines';
 import { saveCourseReviewRoutine } from '@screens/LecturePage/routines';
 
 const initialState = {
@@ -39,11 +39,11 @@ export const courseData = (state = initialState, action: Routine<any>) => {
       const { course } = state;
       const { lectures } = course;
       const { favourite, id } = action.payload;
-      const mapper = (lecture) => {
+      const mapper = lecture => {
         if (lecture.id !== id) return lecture;
         lecture.favourite = favourite;
         return lecture;
-      }
+      };
       const updated = lectures.map(l => mapper(l));
       return {
         ...state,

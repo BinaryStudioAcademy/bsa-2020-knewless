@@ -11,6 +11,7 @@ import com.knewless.core.student.dto.StudentMainInfoDto;
 import com.knewless.core.student.dto.StudentProfileDto;
 import com.knewless.core.student.dto.StudentSettingsDto;
 import com.knewless.core.student.mapper.StudentMapper;
+import com.knewless.core.student.model.Student;
 import com.knewless.core.tag.TagRepository;
 import com.knewless.core.tag.dto.TagDto;
 import com.knewless.core.tag.model.Tag;
@@ -142,5 +143,9 @@ public class StudentService {
                 .goalExpires(goalExpires)
                 .percentsDone(percentsDone)
                 .build());
+	}
+
+	public Student findByUserId(UUID userId) {
+		return studentRepository.findByUserId(userId).orElseThrow(() -> new ResourceNotFoundException("Student", "user id", userId));
 	}
 }

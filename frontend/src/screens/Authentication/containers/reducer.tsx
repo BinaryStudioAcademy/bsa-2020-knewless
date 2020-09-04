@@ -1,5 +1,5 @@
 import { Routine } from 'redux-saga-routines';
-import { loginRoutine, registerRoutine } from '../../Home/routines';
+import { loginRoutine, registerRoutine, setNoAuthorizedRoutine } from '../../Home/routines';
 import { IDataAuth } from '../models/IDataAuth';
 
 const initialState: IDataAuth = {
@@ -14,6 +14,11 @@ export const authReducer = (state: IDataAuth = initialState, action: Routine<any
         ...state,
         isAuthorized: true
       };
+    case setNoAuthorizedRoutine.TRIGGER:
+      return {
+        ...state,
+        isAuthorized: false
+      }
 
     default:
       return state;

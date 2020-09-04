@@ -13,9 +13,10 @@ import java.util.UUID;
 
 @Repository
 public interface ArticleRepository extends JpaRepository<Article, UUID> {
+    @Query("select a from Article a where a.author.id = :authorId order by a.createdAt desc " )
     List<Article> getArticlesByAuthorId(UUID authorId);
 
     @Query("select new com.knewless.core.author.dto.AuthorArticlesDto(a.id, a.name, a.text, a.image) " +
-            "from Article a where a.author.id = :authorId")
+            "from Article a where a.author.id = :authorId order by a.createdAt desc " )
     List<AuthorArticlesDto> getArticleDtoByAuthorId(@Param("authorId") UUID authorId);
 }

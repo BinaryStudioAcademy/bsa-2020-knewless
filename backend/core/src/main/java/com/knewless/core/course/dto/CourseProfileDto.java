@@ -10,7 +10,6 @@ import java.util.UUID;
 public class CourseProfileDto {
     private UUID id;
     private String name;
-    private String category;
     private String author;
     private List<TagDto> tags;
     private int timeSeconds;
@@ -18,4 +17,5 @@ public class CourseProfileDto {
     private String image;
     private int rating;
     private int progress;
+    private int allReactions;
 }

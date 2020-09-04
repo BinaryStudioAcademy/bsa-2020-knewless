@@ -1,0 +1,71 @@
+.meta_info
+  display: flex
+  flex-direction: row
+  color: #CBCFD4 !important
+  gap: 1em
+
+  span
+    margin-right: 1em
+
+\:global(.ui.basic.button).btn_category
+  font-size: 0.8rem !important
+  color: #FF8576 !important
+  padding: 0 !important
+  text-transform: uppercase
+
+  &:focus
+    background: none !important
+
+  &:hover
+    background: none !important
+    box-shadow: #FF8576
+
+.course_card
+  margin: 0 !important
+  height: 100%
+  width: 100% !important
+  border-radius: 0 !important
+  background: #2B2A36 !important
+  box-shadow: none !important
+
+.card_image
+  img
+    height: 15rem!important
+    object-fit: cover
+
+.inner_wrapper
+  padding: 2em 2em 0 !important
+  display: flex
+  flex-direction: column
+  align-items: flex-start
+  gap: 2em
+
+.title
+  font-size: 1.5em !important
+  font-weight: normal !important
+  color: white !important
+  flex-grow: 1
+
+  a
+    color: white !important
+
+.btn_more
+  width: 100%
+  padding-top: 1.5em !important
+  padding-bottom: 1.5em !important
+  border-radius: 0 !important
+
+.btn_more_arrow
+  background: none !important
+  font-size: 1.5em !important
+  font-weight: 100 !important
+
+\:global(.ui[class*="right labeled"].icon.button).btn_more
+  padding-right: 1.5em !important
+
+
+.link
+  cursor: pointer
+
+  &:hover
+    text-decoration: underline

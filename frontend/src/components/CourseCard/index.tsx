@@ -1,20 +1,15 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
-import { Button, Card, CardContent, CardHeader, CardMeta, Icon, Image } from 'semantic-ui-react';
+import { history } from '@helpers/history.helper';
+import { Card, CardContent, CardHeader, CardMeta, Icon, Image } from 'semantic-ui-react';
 import styles from './styles.module.sass';
 import GradientButton from '../buttons/GradientButton';
 import { StyledRating } from '../StyledRating';
 import defaultCourseImage from 'assets/images/default_course_image.jpg';
 import { timeFormat } from '@helpers/time.helper';
-
-export interface ICardCategory {
-  name: string;
-  onClick: () => void;
-}
+import { Tag } from '@components/TagSelector';
 
 export interface ICourseCardProps {
   id?: string;
-  category: ICardCategory;
   imageSrc: string;
   name: string;
   author: string;
@@ -24,11 +19,11 @@ export interface ICourseCardProps {
   rating: number;
   hideButton?: boolean;
   ratingCount: number;
+  tags?: Tag[];
 }
 
-export const CourseCard: React.FunctionComponent<ICourseCardProps> = ({
+export const CourseCard: React.FC<ICourseCardProps> = ({
   id,
-  category,
   imageSrc,
   name,
   author,
@@ -37,27 +32,30 @@ export const CourseCard: React.FunctionComponent<ICourseCardProps> = ({
   level,
   rating,
   hideButton,
-  ratingCount
-}) => {
-  const history = useHistory();
-  return (
-    <Card className={styles.course_card}>
-      <Image src={imageSrc || defaultCourseImage} wrapped ui={false} className={styles.card_image} />
-      <CardContent className={styles.inner_wrapper}>
-        <Button basic onClick={category.onClick} className={styles.btn_category}>{category.name}</Button>
-        <CardHeader className={styles.title}>
-          <a href={`/course/${id}`} className={styles.link}><span>{name}</span></a>
-        </CardHeader>
-        <CardMeta className={styles.meta_info}>
-          {authorId ? <span><a href={`/author/${authorId}`}>{author}</a></span> : <span>{author}</span>}
-          <span>{timeFormat(duration)}</span>
-          <span>{level}</span>
-        </CardMeta>
-        <div className={styles.rating_block}>
-          <StyledRating rating={rating} disabled />
-          <p>{`( ${ratingCount} )`}</p>
-        </div>
-        {
+  ratingCount,
+  tags
+}) => (
+  <Card className={styles.course_card}>
+    <Image src={imageSrc || defaultCourseImage} wrapped ui={false} className={styles.card_image} />
+    <div className={styles.block_top}>
+      <div className={styles.tags}>
+        {tags && tags.slice(0, 3).map(t => <span>{t.name}</span>)}
+      </div>
+    </div>
+    <CardContent className={styles.inner_wrapper}>
+      <CardHeader className={styles.title}>
+        <a href={`/course/${id}`} className={styles.link}><span>{name}</span></a>
+      </CardHeader>
+      <CardMeta className={styles.meta_info}>
+        {authorId ? <span><a href={`/author/${authorId}`}>{author}</a></span> : <span>{author}</span>}
+        <span className={styles.duration}>{timeFormat(duration)}</span>
+        <span className={styles.level_text}>{level}</span>
+      </CardMeta>
+      <div className={styles.rating_block}>
+        <StyledRating rating={rating} disabled />
+        <p>{`( ${ratingCount} )`}</p>
+      </div>
+      {
           !hideButton
           && (
             <GradientButton
@@ -71,7 +69,6 @@ export const CourseCard: React.FunctionComponent<ICourseCardProps> = ({
             </GradientButton>
           )
         }
-      </CardContent>
-    </Card>
-  );
-};
+    </CardContent>
+  </Card>
+);

@@ -8,7 +8,6 @@ import java.util.UUID;
 public class CourseWithMinutesDto {
     private UUID id;
     private String name;
-    private String category;
     private String author;
     private int timeSeconds;
     private String level;

@@ -39,7 +39,7 @@ services:
     env_file:
       - ../.env/elastic.env
     volumes:
-      - esdata:/elasticsearch/data
+      - esdata:/usr/share/elasticsearch/data
     ports:
       - 9200:9200
 

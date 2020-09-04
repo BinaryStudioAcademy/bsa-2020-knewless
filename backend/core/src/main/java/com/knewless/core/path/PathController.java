@@ -107,4 +107,8 @@ public class PathController {
         return ResponseEntity.ok(pathService.update(currentUserId, requestDto));
     }
 
+    @GetMapping("/recommended")
+    public List<PathDto> getRecommended(@CurrentUser UserPrincipal user) {
+        return pathService.getRecommended(user.getId());
+    }
 }

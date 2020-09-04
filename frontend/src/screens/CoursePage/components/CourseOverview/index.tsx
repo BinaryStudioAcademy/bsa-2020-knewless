@@ -74,6 +74,15 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
   const isUser = role === RoleTypes.USER;
   const isAuthor = role === RoleTypes.AUTHOR;
 
+  const generateLecturesPageLinkTitle = () => {
+    if (isUser && progress && progress > 0) {
+      return 'Resume';
+    }
+    if (isAuthor) {
+      return 'Revision';
+    }
+    return 'Start';
+  };
   return (
     <div className="content_row">
       <div className={`${styles.description} flex_item aligned_item`}>
@@ -114,7 +123,7 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
               <GradientButton
                 onClick={(progress && progress > 0 && isUser) || authorId === author?.id ? onResume : onStart}
               >
-                {(progress && progress > 0 && isUser) || isAuthor ? 'Revision' : 'Start'}
+                {generateLecturesPageLinkTitle()}
               </GradientButton>
               <GrayOutlineButton onClick={() => setIsOverviewOpen(true)}>Course overview</GrayOutlineButton>
             </div>

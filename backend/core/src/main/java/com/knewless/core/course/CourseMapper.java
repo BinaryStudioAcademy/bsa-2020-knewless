@@ -15,7 +15,6 @@ public interface CourseMapper {
               (int) Math.floor(((float) positiveReactions / allReactions)+0.5);
     }
 
-    @Mapping(source = "category", target = "category.name")
     @Mapping(target = "level", expression = "java(s.getLevel() == null? null : s.getLevel().name())")
     @Mapping(target = "rating", expression = "java(CourseMapper.calculateRating(s.getAllReactions(), s.getPositiveReactions()))")
     @Mapping(source = "allReactions", target = "ratingCount")
@@ -36,7 +35,6 @@ public interface CourseMapper {
     @Mapping(target = "rating", expression = "java(CourseMapper.calculateRating(s.getAllReactions(), s.getPositiveReactions()))")
     CourseProfileDto courseQueryToCourseProfileDto(CourseQueryResult s);
 
-    @Mapping(source = "category", target = "category.name")
     @Mapping(target = "rating", ignore = true)
     @Mapping(target = "tags", ignore = true)
     AuthorCourseDto authorCourseQueryResultToAuthorCourseDto(AuthorCourseQueryResult courseQueryResult);

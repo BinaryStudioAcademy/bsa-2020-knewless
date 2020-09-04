@@ -3,7 +3,6 @@ import  * as pathService from '@screens/PathPage/services/path.service';
 import { fetchPathDataRoutine, changeFavouritePathStateRoutine, checkFavouritePathStateRoutine } from '@screens/PathPage/routines';
 import * as courseService from '@screens/CoursePage/services/course.service';
 import { AnyAction } from 'redux';
-import { history } from '@helpers/history.helper';
 import { Routine } from 'redux-saga-routines';
 
 function* getPathData({ payload }: AnyAction) {
@@ -11,8 +10,7 @@ function* getPathData({ payload }: AnyAction) {
     const response = yield call(pathService.getPathData, payload);
     yield put(fetchPathDataRoutine.success(response));
   } catch (error) {
-    history.push('/');
-    yield put(fetchPathDataRoutine.failure(error?.message));
+    yield put(fetchPathDataRoutine.failure(error?.message || error));
   }
 }
 

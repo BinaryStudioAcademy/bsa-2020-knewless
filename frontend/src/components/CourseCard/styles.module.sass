@@ -4,21 +4,32 @@
   color: #CBCFD4 !important
   gap: 1em
 
+  a
+    color: #8c8c8c
+    font-style: italic
+
+    &:hover
+      text-decoration: underline
+
   span
     margin-right: 1em
 
-\:global(.ui.basic.button).btn_category
-  font-size: 0.8rem !important
-  color: #FF8576 !important
-  padding: 0 !important
-  text-transform: uppercase
+.block_top
+  padding: 1em 2em 0
+  margin-top: 12px
+  display: flex
+  justify-content: space-between
+  align-items: center
+  flex-direction: row
 
-  &:focus
-    background: none !important
-
-  &:hover
-    background: none !important
-    box-shadow: #FF8576
+.tags
+  margin: auto 0
+  justify-content: center
+  span
+    margin-right: 8px
+    text-transform: uppercase
+    color: #FF8576
+    font-size: 1em
 
 .course_card
   margin: 0 !important
@@ -34,7 +45,7 @@
     object-fit: cover
 
 .inner_wrapper
-  padding: 2em 2em 0 !important
+  padding: 1em 2em 0 !important
   display: flex
   flex-direction: column
   align-items: flex-start
@@ -48,6 +59,14 @@
 
   a
     color: white !important
+
+.level_text
+  color: #FF8576
+  font-size: 1em
+  text-transform: uppercase
+
+.duration
+  color: #FF8576
 
 .btn_more
   width: 100%

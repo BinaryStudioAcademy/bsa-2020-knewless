@@ -18,7 +18,6 @@ public class PublicAuthorCoursesDto {
     private String name;
     private Level level;
     private String author;
-    private String category;
     private List<TagDto> tags;
     private String imageSrc;
     private long duration;

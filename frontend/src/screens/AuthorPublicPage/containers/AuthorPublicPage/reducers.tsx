@@ -21,7 +21,6 @@ const basicAuthorData = {
     name: '',
     level: '',
     author: '',
-    category: '',
     tags: [],
     imageSrc: '',
     duration: 0

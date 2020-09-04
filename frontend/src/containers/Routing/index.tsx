@@ -38,6 +38,7 @@ import { Footer } from '@components/Footer';
 import styles from './styles.module.sass';
 import { NotFoundPage } from '@screens/NotFound/container/NotFoundPage';
 import { InlineLoaderWrapper } from '@components/InlineLoaderWrapper';
+import ArticlePage from '@screens/ArticlePage/containers/ArticlePage';
 
 export interface IRoutingProps {
   isLoading: boolean;
@@ -84,11 +85,11 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({
   if (isLoading) return <InlineLoaderWrapper loading centered />;
 
   if (isAuthorized && window.location.pathname !== '/settings' && isSettingsFilled === false) {
-    history.push("/settings");
+    history.push('/settings');
     return (
       <div className={styles.container}>
         {isHeaderShown && <Header />}
-          <SettingsRoute exact path="/settings" />
+        <SettingsRoute exact path="/settings" />
         {isHeaderShown && <Footer />}
       </div>
     );
@@ -121,6 +122,8 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({
         <PrivateRoute exact path="/course/edit/:courseId" roles={[RoleTypes.AUTHOR]} component={AddCourse} />
         <PrivateRoute exact path="/path/edit/:pathId" roles={[RoleTypes.AUTHOR]} component={AddPathPage} />
         <PrivateRoute exact path="/history" roles={[RoleTypes.USER]} component={HistoryPage} />
+        <PrivateRoute exact path="/article/:articleId" component={ArticlePage} />
+        <PublicRoute path="/404" component={NotFoundPage} />
         <PublicRoute component={NotFoundPage} />
       </Switch>
       {isHeaderShown && <Footer />}
@@ -143,13 +146,14 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({
 const mapStateToProps = (state: IAppState) => {
   const { settingsFilled } = state.appRouter;
   return {
-  isAuthorized: state.auth.auth.isAuthorized,
-  isLoginLoading: state.auth.requests.loginRequest.loading,
-  isLoginFailure: state.auth.requests.loginRequest.error != null && !state.auth.requests.loginRequest.loading,
-  onOpen: state.loginModal.open,
-  redirectTo: state.loginModal.redirectTo,
-  isSettingsFilled: settingsFilled
-}};
+    isAuthorized: state.auth.auth.isAuthorized,
+    isLoginLoading: state.auth.requests.loginRequest.loading,
+    isLoginFailure: state.auth.requests.loginRequest.error != null && !state.auth.requests.loginRequest.loading,
+    onOpen: state.loginModal.open,
+    redirectTo: state.loginModal.redirectTo,
+    isSettingsFilled: settingsFilled
+  };
+};
 
 const mapDispatchToProps = {
   loginUser: loginRoutine.trigger,

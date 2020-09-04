@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Redirect } from 'react-router-dom';
 import styles from './styles.module.sass';
 import '../../styles/common.sass';
 import CourseOverview from '../../components/CourseOverview';
@@ -41,6 +41,7 @@ interface ICoursePageProps {
   changeFavouriteLecture: IBindingCallback1<IFavourite>;
   role: string;
   isSettingsFilled: boolean;
+  error: string;
 }
 
 const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
@@ -58,7 +59,8 @@ const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
   changeFavouriteLecture,
   fetchAuthor,
   role,
-  isSettingsFilled
+  isSettingsFilled,
+  error
 }) => {
   const { courseId } = useParams();
   const [isOpen, setIsOpen] = useState(false);
@@ -79,11 +81,11 @@ const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
   }, []);
 
   useEffect(() => {
-      if (isSettingsFilled && courseId && role === 'AUTHOR') {
-        fetchAuthor();
-      }
+    if (isSettingsFilled && courseId && role === 'AUTHOR') {
+      fetchAuthor();
+    }
   }, [isSettingsFilled]);
-  
+
   const handleOnStartCourse = () => {
     startCourse(course.id);
   };
@@ -102,6 +104,8 @@ const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
   };
 
   if (loading) return null;
+  if (error) return <Redirect to="/404" />;
+
   return (
     <div>
       <RatingModal onClose={closeReview} isOpen={isOpen} submit={saveReview} isLoading={false} />
@@ -162,6 +166,7 @@ const mapStateToProps = (state: IAppState) => {
     course,
     author,
     loading: state.coursePage.requests.dataRequest.loading,
+    error: state.coursePage.requests.dataRequest.error,
     role: state.appRouter.user?.role?.name,
     isAuthorized,
     favourite,

@@ -9,15 +9,18 @@ import { connect } from 'react-redux';
 import { IUser } from '@containers/AppRouter/models/IUser';
 import SearchHeader from '@screens/Search/containers/SearchHeader/index';
 import LogoWithText from '@components/LogoWithText';
+import { setNoAuthorizedRoutine } from '@screens/Home/routines';
+import { IBindingAction } from '@models/Callbacks';
 
 interface IHeaderProps {
   currentUser: IUser;
   isAuthorized: boolean;
   authorId?: string;
   isSettingsFilled: boolean;
+  setNoAuthorized: IBindingAction;
 }
 
-const Header = ({ currentUser, isAuthorized, authorId, isSettingsFilled }: IHeaderProps) => {
+const Header = ({ currentUser, isAuthorized, authorId, isSettingsFilled, setNoAuthorized }: IHeaderProps) => {
   const [searchStyle, setSearchStyle] = useState(styles.searchHidden);
   const location = useLocation();
   const hidingSearch = useCallback(() => {
@@ -98,7 +101,7 @@ const Header = ({ currentUser, isAuthorized, authorId, isSettingsFilled }: IHead
           <SearchHeader className={location.pathname === '/search' ? styles.searchHidden : searchStyle} />
         </div>
         <div className={styles.right_side}>
-          {isAuthorized ? <UserElement user={currentUser} authorId={authorId} isSettingsFilled={isSettingsFilled}/>
+          {isAuthorized ? <UserElement setNoAuthorized={setNoAuthorized} user={currentUser} authorId={authorId} isSettingsFilled={isSettingsFilled}/>
             : <LoginRegister />}
         </div>
       </div>
@@ -117,4 +120,8 @@ const mapStateToProps = (state: any) => {
   };
 };
 
-export default connect(mapStateToProps)(Header);
+const mapDispatchToProps = {
+  setNoAuthorized: setNoAuthorizedRoutine
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

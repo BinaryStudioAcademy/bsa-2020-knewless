@@ -4,9 +4,9 @@ import { minutesToDuration } from '@components/PathCard/helper';
 import { Label } from 'semantic-ui-react';
 import { StyledRating } from '@components/StyledRating';
 import { timeFormat } from '@helpers/time.helper';
+import { DEFAULT_PREVIEW_IMG } from '@helpers/placeholder.helper';
 
 export interface ICourseCardProps {
-  category: string;
   author: string;
   timeMinutes: number;
   level: string;
@@ -20,8 +20,7 @@ export interface ICourseCardProps {
 }
 
 export const CourseCard: React.FC<ICourseCardProps> = ({
-  category, author, timeMinutes, level, name, previewSrc,
-  isSelectedIcon = true, onClick, rating
+  author, timeMinutes, level, name, previewSrc, isSelectedIcon = true, onClick, rating
 }) => {
   const calcDuration = useCallback(() => minutesToDuration(timeMinutes), [timeMinutes]);
   const { timeUnit, duration } = calcDuration();
@@ -31,13 +30,12 @@ export const CourseCard: React.FC<ICourseCardProps> = ({
         <div className={styles.image_cover} />
         <img
           className={styles.image_preview}
-          src={previewSrc || 'https://i.imgur.com/LFR6UaK.jpg'}
+          src={previewSrc || DEFAULT_PREVIEW_IMG}
           alt="Lecture preview"
         />
       </div>
       <div className={styles.dependency__container}>
         <span className={styles.dependency__name} title={name}>{name}</span>
-        <span className={styles.dependency__category}>{category}</span>
         <div className={styles.dependency__meta_container}>
           <div className={styles.dependency__meta__info_row}>
             <span className={styles.dependency__meta__author}>{author}</span>
