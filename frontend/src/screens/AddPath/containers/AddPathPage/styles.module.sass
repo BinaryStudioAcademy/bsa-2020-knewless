@@ -46,7 +46,6 @@ $title_container_height: 55px
   &__container
     display: flex
     flex-direction: row
-    //background: aquamarine
     grid-template-columns: 1fr 1fr
     grid-gap: 2em
 
@@ -110,7 +109,6 @@ $title_container_height: 55px
     grid-area: 1 / 2 / 5
     max-height: 75vh
     overflow-y: hidden
-    //height: 90%
     flex-basis: 0
     flex-grow: 1
 
@@ -118,7 +116,8 @@ $title_container_height: 55px
   span
     color: #2A2B37
 
-\:global(.ui.button).btn_save
+\:global(.ui.button).btn_save,
+\:global(.ui.button).button_save_edit
   margin-left: auto !important
   width: $width_btn
   height: $height_btn
@@ -130,9 +129,13 @@ $title_container_height: 55px
   margin-right: 1.6em
   align-items: center
   color: #FFFFFF
-  background: #454849
+  background: #20649b
   border-radius: 3px
   margin-top: 0
+
+  &:hover
+    transition-duration: 0.7s
+    background: #0c395e
 
 \:global(.ui.button).button_release
   border-radius: 3px
@@ -143,29 +146,6 @@ $title_container_height: 55px
 .btn_cancel
   width: $width_btn
   height: $height_btn
-
-\:global(.ui.button).button_release_disabled
-  border-radius: 3px
-  width: $width_btn
-  height: $height_btn
-  opacity: 0.5
-  cursor: default
-
-\:global(.ui.button).button_save_disabled
-  width: $width_btn
-  height: $height_btn
-  font-family: 'Montserrat', sans-serif
-  font-style: normal
-  font-weight: bold
-  font-size: 1em
-  line-height: 1em
-  margin-right: 1.6em
-  align-items: center
-  color: #FFFFFF
-  background: #454849
-  border-radius: 3px
-  opacity: 0.5
-  cursor: default !important
 
 \:global(.ui.button).button_save_edit
   margin-right: 0

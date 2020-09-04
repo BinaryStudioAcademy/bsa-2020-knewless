@@ -24,7 +24,7 @@ import { GradientButton } from '@components/buttons/GradientButton';
 import GrayOutlineButton from '@components/buttons/GrayOutlineButton';
 import { PathPreview } from '../../components/PathPreview';
 import ConfirmationModal from '@components/ConfirmationModal';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { IBindingAction, IBindingCallback1 } from '@models/Callbacks';
 import {
   DESCRIPTION_MESSAGE,
@@ -33,6 +33,7 @@ import {
   PATH_NAME_MESSAGE
 } from '@helpers/validation.helper';
 import { fetchAuthorRoutine } from '@screens/AuthorMainPage/routines';
+import { history } from '@helpers/history.helper';
 
 export interface ISavePathProps {
   courses: ICourse[];
@@ -54,7 +55,6 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
   courses, tags, tagsLoading, coursesLoading, pathUploading, triggerFetchCourses,
   triggerFetchTags, triggerSavePath, fetchEditPath, editPath, updatePath, editPathLoading, fetchAuthorData
 }) => {
-  const history = useHistory();
   const { pathId } = useParams();
   const tagsRef = createRef();
   const [selectedCourses, setSelectedCourses] = useState([]);
@@ -69,7 +69,17 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
   const [isConfirming, setIsConfirming] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
 
+  const clearFields = () => {
+    setPathName('');
+    setPathDescription('');
+    setPathImageTag(undefined);
+    setSelectedTags([]);
+    setSelectedCourses([]);
+  };
   useEffect(() => {
+    if (history.location.pathname.startsWith('/add_path')) {
+      clearFields();
+    }
     if (history.location.pathname.startsWith('/path/edit') && !editPath) {
       setIsEdit(true);
       fetchEditPath(pathId);
@@ -97,7 +107,7 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
   }, [courses]);
 
   useEffect(() => {
-    setStoredTags(tags);
+    setStoredTags(tags.filter(tag => !selectedTags.find(t => t.id === tag.id)));
   }, [tags]);
 
   function validatePathName(newName?: string) {
@@ -113,7 +123,7 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
   const isReadyToRelease = isRequiredFieldsValid && selectedCourses.length > 0;
 
   function handleSavePath(isRelease: boolean) {
-    if (isRelease && !isReadyToRelease) return;
+    if ((isRelease || isEdit) && !isReadyToRelease) return;
     const path: IPath = {
       name: pathName,
       description: pathDescription,
@@ -121,15 +131,11 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
       tags: selectedTags,
       imageTag: pathImageTag
     };
-    if (isEdit) {
-      updatePath({ id: pathId, ...path });
-    } else {
+    if (!isEdit) {
       triggerSavePath(path);
+    } else {
+      updatePath({ id: pathId, ...path });
     }
-  }
-
-  function handleCancel() {
-    // todo: implement
   }
 
   function onTagAddition(tag) {
@@ -187,6 +193,11 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
   const forwardAddCourse = () => {
     setIsConfirming(false);
     history.push('/add_course');
+  };
+
+  const handleCancelClick = () => {
+    clearFields();
+    history.goBack();
   };
 
   return (
@@ -292,12 +303,12 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
                       <div className={styles.form__button_row}>
                         <GrayOutlineButton
                           content="Cancel"
-                          onClick={handleCancel}
+                          onClick={handleCancelClick}
                           className={styles.btn_cancel}
                         />
                         <Button
-                          disabled={!isReadyToRelease}
-                          className={!isEdit ? styles.btn_save : `${styles.btn_save} ${styles.button_save_edit}`}
+                          disabled={!isEdit}
+                          className={!isEdit ? styles.btn_save : styles.button_save_edit}
                           content="Save"
                           onClick={() => handleSavePath(false)}
                         />
