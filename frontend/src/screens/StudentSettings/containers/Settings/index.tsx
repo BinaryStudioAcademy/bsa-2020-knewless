@@ -118,7 +118,7 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
   }, [settings]);
 
   useEffect(() => {
-    setStoredTags(allTags.filter(t => !selectedTags.includes(t)));
+    setStoredTags(allTags.filter(tag => !selectedTags.find(t => t.id === tag.id)));
   }, [allTags]);
 
   const handleUploadFile = file => {
@@ -127,6 +127,11 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
       setUploadImage(thisFile);
       setAvatar(URL.createObjectURL(thisFile));
     }
+  };
+
+  const isTagsChanged = () => {
+    const initTagsNames = settings.tags.map(tag => tag.name);
+    return selectedTags.filter(selected => !initTagsNames.includes(selected.name)).length > 0;
   };
 
   const isLastSettingsChanged = settings.avatar !== avatar
@@ -144,7 +149,7 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
     || settings.role !== role
     || settings.employment !== employment
     || settings.education !== education
-    || settings.tags.length !== selectedTags.length;
+    || isTagsChanged;
 
   const isRequiredFieldsValid = (): boolean => !!firstName && !!lastName && !!education && !!level && !!location
     && !!industry && !!role && isFirstNameValid && isLastNameValid && isYearsOfExperienceValid && isEducationLvlValid
