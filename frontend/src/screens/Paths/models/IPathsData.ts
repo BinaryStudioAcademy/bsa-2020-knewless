@@ -1,8 +1,8 @@
-import { ITag } from '@screens/Courses/models/ITag';
 import { IPathCardProps } from '@components/PathCard';
+import { ITagData } from '@screens/CoursePage/models/ITagData';
 
 export interface IPathsData {
   paths: IPathCardProps[];
   myPaths: IPathCardProps[];
-  tags: ITag[];
+  tags: ITagData[];
 }
