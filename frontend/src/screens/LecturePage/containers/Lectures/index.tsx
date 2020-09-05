@@ -19,6 +19,7 @@ import './styles.sass';
 import RatingModal from '@components/RatingModal';
 import { InlineLoaderWrapper } from '@components/InlineLoaderWrapper';
 import { OutlineDropdown } from '@components/Dropdown';
+import { history } from '@helpers/history.helper';
 
 export interface ILectureProps {
   match: any;
@@ -136,6 +137,10 @@ const LecturePage: React.FunctionComponent<ILectureProps> = ({
     saveWatchTime({ watchTime: 0, fraction: 0, lectureId: initialLectureId });
     return () => saveCallback.current();
   }, []);
+
+  useEffect(() => {
+    if (chosenVideoId) history.push(`/lecture/${chosenVideoId}`);
+  }, [chosenVideoId]);
 
   const autoSave = () => {
     if (isPlaying) {
