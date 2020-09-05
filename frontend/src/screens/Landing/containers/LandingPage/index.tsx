@@ -148,7 +148,7 @@ export const LandingPage: React.FunctionComponent<ILandingProps> = ({
       <div className={styles.navigation_layer}>
         <div className={styles.wide_container}>
           {loading ? <Loader active inline="centered" />
-            : <BottomNavigation navigations={navigations} />}
+            : <BottomNavigation courses={courses} paths={paths} />}
         </div>
       </div>
     </div>

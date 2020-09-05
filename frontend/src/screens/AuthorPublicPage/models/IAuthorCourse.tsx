@@ -8,4 +8,7 @@ export interface IAuthorCourse {
   tags: Tag[];
   imageSrc: string;
   duration: number;
+  positiveReactions: number;
+  allReactions: number;
+  lectures: number;
 }

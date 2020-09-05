@@ -25,6 +25,7 @@ import com.knewless.core.lecture.mapper.LectureProjectionMapper;
 import com.knewless.core.lecture.model.Lecture;
 import com.knewless.core.security.oauth.UserPrincipal;
 import com.knewless.core.student.StudentRepository;
+import com.knewless.core.student.model.Student;
 import com.knewless.core.subscription.SubscriptionService;
 import com.knewless.core.tag.TagRepository;
 import com.knewless.core.tag.TagService;
@@ -43,6 +44,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class CourseService {
@@ -218,16 +220,18 @@ public class CourseService {
 
     public List<CourseDto> getRecommendedCourses(UUID id, Pageable pageable) {
         List<UUID> uuids = currentUserCourseRepository.getLearningCoursesId(id);
-        List<UUID> tags = uuids.stream()
-                .map(tagRepository::getTagsByCourseId)
-                .flatMap(Collection::stream)
+        Student student = studentRepository.findByUserId(id).get();
+        List<UUID> tags = Stream.concat(
+                    uuids.stream().map(tagRepository::getTagsByCourseId).flatMap(Collection::stream),
+                    student.getUser().getTags().stream()
+                )
                 .filter(Objects::nonNull)
                 .map(Tag::getId)
                 .distinct()
                 .collect(Collectors.toList());
-        int level = Level.valueOf(studentRepository.findByUserId(id).get().getLevel().toUpperCase()).ordinal();
+        int level = Level.valueOf(student.getLevel().toUpperCase()).ordinal();
 
-        Comparator<CourseQueryResult> ratingComparator = Comparator.comparingLong(c -> c.getAllReactions() > 0 ? c.getPositiveReactions() / c.getAllReactions() : 0);
+        Comparator<CourseQueryResult> ratingComparator = Comparator.comparingLong(c -> c.getAllReactions() > 0 ? Math.round(1.0 * c.getPositiveReactions() / c.getAllReactions()) : 0);
         Comparator<CourseQueryResult> countComparator = Comparator.comparingInt(CourseQueryResult::getAllReactions);
 
         List<CourseDto> result = courseRepository.getRecommendedCourses(uuids, tags).stream()
@@ -235,14 +239,14 @@ public class CourseService {
                 .sorted(ratingComparator)
                 .sorted(countComparator)
                 .map(CourseMapper.MAPPER::courseQueryResultToCourseDto)
-                .limit(3)
                 .collect(Collectors.toList());
 
         if (result.size() < 3) {
             result.addAll(getAdditionalCourses(uuids, PageRequest.of(0, result.isEmpty() ? 3 : 3 - result.size())));
         }
-
-        return result;
+        return result.stream()
+                .sorted(Comparator.comparingInt(CourseDto::getRating).reversed())
+                .collect(Collectors.toList());
     }
 
     public CourseDto getCourseById(UUID id) {
@@ -403,5 +407,11 @@ public class CourseService {
         course.setTags(tags);
         course.setMembers(this.currentUserCourseRepository.getMembersByCourse(course.getId()));
         return course;
+    }
+
+    public List<CourseDto> getPopularCourses(Pageable pageable) {
+        return courseRepository.getPopularCourses(pageable).stream()
+                .map(this::getCourseById)
+                .collect(Collectors.toList());
     }
 }

@@ -151,12 +151,18 @@ public class CourseController {
             return courseService.getRecommendedCourses(user.getId(), Pageable.unpaged());
         }
     }
-    
+
     @GetMapping("/{courseId}/comments")
     public List<CourseCommentDto> getCommentsByCourse(@PathVariable("courseId") UUID courseId,
                                                       @RequestParam(defaultValue = "0") int page,
                                                       @RequestParam(defaultValue = "2") int size) {
         return courseCommentService.getCourseComments(courseId, PageRequest.of(page, size)).stream()
                 .map(CourseCommentMapper.MAPPER::commentToDto).collect(Collectors.toList());
+    }
+
+    @GetMapping("/popular")
+    public List<CourseDto> getPopularCourses(@RequestParam(defaultValue = "3") int size,
+                                             @RequestParam(defaultValue = "0") int page) {
+        return courseService.getPopularCourses(PageRequest.of(page, size));
     }
 }

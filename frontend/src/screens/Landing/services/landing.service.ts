@@ -19,7 +19,16 @@ async function pathsRequest() {
   return response.json();
 }
 
-export const getPopularCourses = async () => coursesRequest();
+async function popularCoursesRequest() {
+  const response = await callApi({
+    endpoint: '/api/course/popular',
+    type: 'GET',
+    queryParams: { page: 0, size: 3 }
+  });
+  return response.json();
+}
+
+export const getPopularCourses = async () => popularCoursesRequest();
 export const getPaths = async () => pathsRequest();
 
 function mockNavigations() {
