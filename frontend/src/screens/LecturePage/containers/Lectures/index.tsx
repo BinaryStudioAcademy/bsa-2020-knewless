@@ -114,6 +114,7 @@ const LecturePage: React.FunctionComponent<ILectureProps> = ({
   const initialLectureId = match.params.lectureId;
   const [result, setResult] = useState('');
   const [isShowQuality, setIsShowQuality] = useState(false);
+  const [currentVideoDuration, setCurrentVideoDuration] = useState<number>(0);
 
   const triggerSaveTime: any = useCallback(
     () => saveWatchTime({
@@ -165,10 +166,10 @@ const LecturePage: React.FunctionComponent<ILectureProps> = ({
     if (prev + 1 !== lecturesData.lectures.length) {
       const nextId = lecturesData.lectures[prev + 1].id;
       setChosenVideo({ chosenVideo: nextId });
-      triggerSaveTime();
     } else if (role !== 'AUTHOR' && !lecturesData.reviewed && !isReviewed) {
       setIsReviewOpen(true);
     }
+    saveWatchTime({ watchTime: currentVideoDuration, fraction: 1, lectureId: chosenVideoId });
   };
 
   const handleChooseVideo = useCallback(chosenVideo => {
@@ -214,7 +215,8 @@ const LecturePage: React.FunctionComponent<ILectureProps> = ({
             onProgress={setPlayerProgress}
             onPlay={() => setIsPlaying(true)}
             onPause={handlePause}
-            onEnded={() => handleEnded()}
+            onEnded={handleEnded}
+            onDuration={setCurrentVideoDuration}
           />
           {isShowQuality && (
             <OutlineDropdown
