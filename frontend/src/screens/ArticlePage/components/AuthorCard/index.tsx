@@ -2,7 +2,7 @@ import React from 'react';
 import Ellipsis from 'react-ellipsis-pjs';
 import styles from './styles.module.sass';
 import { NavLink } from 'react-router-dom';
-import { DEFAULT_AVATAR_IMG } from '@helpers/placeholder.helper';
+import noAvatar from '@images/no_avatar.jpg';
 
 interface IAuthorCardProps {
   name: string;
@@ -18,7 +18,7 @@ const AuthorCard: React.FC<IAuthorCardProps> = ({
   id
 }) => (
   <div className={styles.card}>
-    <img src={image || DEFAULT_AVATAR_IMG} className={styles.author__image} alt="Author" />
+    <img src={image || noAvatar} className={styles.author__image} alt="Author" />
     <div className={styles.wrapName}>
       <div className={styles.written}>
         WRITTEN BY

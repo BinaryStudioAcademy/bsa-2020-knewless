@@ -123,7 +123,7 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
   const isReadyToRelease = isRequiredFieldsValid && selectedCourses.length > 0;
 
   function handleSavePath(isRelease: boolean) {
-    if ((isRelease || isEdit) && !isReadyToRelease) return;
+    if (isRelease && !isReadyToRelease) return;
     const path: IPath = {
       name: pathName,
       description: pathDescription,
@@ -307,7 +307,6 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
                           className={styles.btn_cancel}
                         />
                         <Button
-                          disabled={!isEdit}
                           className={!isEdit ? styles.btn_save : styles.button_save_edit}
                           content="Save"
                           onClick={() => handleSavePath(false)}

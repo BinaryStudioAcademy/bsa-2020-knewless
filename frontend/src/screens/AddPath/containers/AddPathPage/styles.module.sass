@@ -143,6 +143,32 @@ $title_container_height: 55px
   width: $width_btn
   height: $height_btn
 
+\:global(.ui.button).button_release_disabled
+  border-radius: 3px
+  margin-right: 0
+  margin-left: 1em
+  width: $width_btn
+  height: $height_btn
+  opacity: 0.5
+  cursor: default
+
+\:global(.ui.button).button_save_disabled
+  width: $width_btn
+  height: $height_btn
+  font-family: 'Montserrat', sans-serif
+  font-style: normal
+  font-weight: bold
+  font-size: 1em
+  line-height: 1em
+  margin-left: 1em
+  margin-right: 0
+  align-items: center
+  color: #FFFFFF
+  background: #454849
+  border-radius: 3px
+  opacity: 0.5
+  cursor: default !important
+
 .btn_cancel
   width: $width_btn
   height: $height_btn

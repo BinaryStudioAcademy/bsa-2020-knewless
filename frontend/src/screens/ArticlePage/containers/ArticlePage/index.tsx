@@ -6,7 +6,7 @@ import {
 } from '../../routines';
 import { IAppState } from '@models/AppState';
 import { connect } from 'react-redux';
-import { useParams, NavLink } from 'react-router-dom';
+import { useParams, NavLink, Redirect } from 'react-router-dom';
 import { IBindingCallback1 } from '@models/Callbacks';
 import ReactHtmlParser from 'react-html-parser';
 import { ArticleCard } from '../../components/ArticleCard';
@@ -21,10 +21,11 @@ export interface IArticleProps {
   getArticle: IBindingCallback1<string>;
   isAuthorized: boolean;
   loading: boolean;
+  error: string;
 }
 
 export const ArticlePage: React.FC<IArticleProps> = ({
-  getArticle, article, loading
+  getArticle, article, loading, error
 }) => {
   const { articleId } = useParams();
 
@@ -35,6 +36,7 @@ export const ArticlePage: React.FC<IArticleProps> = ({
   }, [articleId]);
 
   if (loading) return null;
+  if (error) return <Redirect to="/404" />;
 
   return (
     <>
@@ -107,13 +109,14 @@ export const ArticlePage: React.FC<IArticleProps> = ({
 };
 
 const mapStateToProps = (state: IAppState) => {
-  const { loading } = state.articlePage.requests.fetchArticleRequest;
+  const { loading, error } = state.articlePage.requests.fetchArticleRequest;
   const { article } = state.articlePage.articleData;
   const { isAuthorized } = state.auth.auth;
   return {
     article,
     isAuthorized,
-    loading
+    loading,
+    error
   };
 };
 

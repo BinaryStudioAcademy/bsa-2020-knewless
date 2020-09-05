@@ -1,6 +1,7 @@
 import React from 'react';
 import Ellipsis from 'react-ellipsis-pjs';
 import styles from './styles.module.sass';
+import noAvatar from '@images/no_avatar.jpg';
 
 interface IAuthorCardProps {
   name: string;
@@ -14,7 +15,7 @@ const AuthorCard: React.FC<IAuthorCardProps> = ({
   imageSrc
 }) => (
   <div className={styles.card}>
-    <img src={imageSrc} className={styles.author__image} alt="Author" />
+    <img src={imageSrc || noAvatar} className={styles.author__image} alt="Author" />
     <div className={styles.name}>
       {name}
     </div>
