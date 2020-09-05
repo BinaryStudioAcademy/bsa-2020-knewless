@@ -1,7 +1,7 @@
 import { Routine } from 'redux-saga-routines';
 import { IPathsData } from '@screens/Paths/models/IPathsData';
 import {
-  fetchPathsRoutine,
+  fetchPathsAndTagsRoutine,
   fetchPathsByTagRoutine,
   fetchAllTagsRoutine,
   fetchAllPathsRoutine,
@@ -10,7 +10,7 @@ import {
 
 export const data = (state: IPathsData = { paths: [], myPaths: [], tags: [] }, action: Routine<any>) => {
   switch (action.type) {
-    case fetchPathsRoutine.SUCCESS:
+    case fetchPathsAndTagsRoutine.SUCCESS:
       return {
         ...state,
         ...action.payload

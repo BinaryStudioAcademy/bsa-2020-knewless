@@ -1,26 +1,32 @@
 import { all, call, put, takeEvery } from 'redux-saga/effects';
-import { fetchPathsRoutine, fetchPathsByTagRoutine, fetchAllPathsRoutine, fetchAllAuthorPathsRoutine, fetchAllTagsRoutine } from '../../routines';
+import {
+  fetchPathsAndTagsRoutine,
+  fetchPathsByTagRoutine,
+  fetchAllPathsRoutine,
+  fetchAllAuthorPathsRoutine,
+  fetchAllTagsRoutine
+} from '../../routines';
 import * as pathsService from '../../services/paths.service';
 import { Routine } from 'redux-saga-routines';
 
-function* getPaths() {
+function* getPathsAndTags() {
   try {
     const paths = yield call(pathsService.getAllPathsRequest);
     const myPaths = yield call(pathsService.getAllStudentPathsRequest);
     const tags = yield call(pathsService.getTags);
 
-    yield put(fetchPathsRoutine.success({
+    yield put(fetchPathsAndTagsRoutine.success({
       tags,
       paths,
       myPaths
     }));
   } catch (error) {
-    yield put(fetchPathsRoutine.failure(error?.message));
+    yield put(fetchPathsAndTagsRoutine.failure(error?.message));
   }
 }
 
-function* watchGetPathsRequest() {
-  yield takeEvery(fetchPathsRoutine.TRIGGER, getPaths);
+function* watchGetPathsAndTagsRequest() {
+  yield takeEvery(fetchPathsAndTagsRoutine.TRIGGER, getPathsAndTags);
 }
 
 function* getPathsByTag(action: Routine<any>) {
@@ -89,7 +95,7 @@ function* watchGetAllAuthorPathsRequest() {
 
 export default function* pathsPageContainerSagas() {
   yield all([
-    watchGetPathsRequest(),
+    watchGetPathsAndTagsRequest(),
     watchGetPathsByTagRequest(),
     watchGetAllPathsRequest(),
     watchGetAllAuthorPathsRequest(),
