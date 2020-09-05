@@ -1,6 +1,7 @@
 import React, { RefObject } from 'react';
 import styles from './styles.module.sass';
 import { timeFormat } from '@helpers/time.helper';
+import { Link } from 'react-router-dom';
 
 export interface IPathCardProps {
   id?: string;
@@ -33,7 +34,7 @@ export const PathCard: React.FunctionComponent<IPathCardProps> = (
         ref={imageRef}
       />
       <div className={styles.title}>
-        {id ? <a href={`/path/${id}`} className={styles.link}>{name}</a>
+        {id ? <Link to={`/path/${id}`} className={styles.link}>{name}</Link>
           : <span>{name}</span>}
       </div>
       <div className={styles.meta}>

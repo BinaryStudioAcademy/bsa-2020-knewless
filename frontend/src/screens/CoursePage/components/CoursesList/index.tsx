@@ -4,6 +4,7 @@ import '../../styles/common.sass';
 import { IAuthorCourseData } from '@screens/CoursePage/models/IAuthorCourseData';
 import defaultCourseImage from 'assets/images/default_course_image.jpg';
 import { ListPlaceholder } from '@components/placeholder/ListPlaceholder';
+import { Link } from 'react-router-dom';
 
 interface ICoursesListProps {
   courses: IAuthorCourseData[];
@@ -26,9 +27,9 @@ const CoursesList: React.FunctionComponent<ICoursesListProps> = ({
                 <p className={styles.course__level}>{c.level}</p>
                 {
                   c.id ? (
-                    <a href={`/course/${c.id}`} className={styles.link}>
+                    <Link to={`/course/${c.id}`} className={styles.link}>
                       <p className={styles.course__name}>{c.name}</p>
-                    </a>
+                    </Link>
                   ) : <p className={styles.course__name}>{c.name}</p>
                 }
                 <div className={styles.course__separator} />

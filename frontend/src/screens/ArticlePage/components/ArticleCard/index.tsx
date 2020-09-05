@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardMeta, Icon, Image } from 'semantic-ui-react';
 import styles from './styles.module.sass';
 import GradientButton from '@components/buttons/GradientButton';
@@ -32,7 +32,7 @@ export const ArticleCard: React.FunctionComponent<IArticleCardProps> = ({
       <Image src={imageSrc || defaultCourseImage} wrapped ui={false} className={styles.card_image} />
       <CardContent className={styles.inner_wrapper}>
         <CardHeader className={styles.title}>
-          <a href={`/article/${id}`} className={styles.link}><span>{name}</span></a>
+          <Link to={`/article/${id}`} className={styles.link}><span>{name}</span></Link>
         </CardHeader>
         <CardMeta className={styles.meta_info}>
           <span className={styles.duration}>{timeFormat(duration)}</span>

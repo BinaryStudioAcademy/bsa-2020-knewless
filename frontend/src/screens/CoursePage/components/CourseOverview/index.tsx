@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import styles from './styles.module.sass';
 import { StyledRating } from 'components/StyledRating';
 import GradientButton from 'components/buttons/GradientButton';
@@ -113,7 +113,7 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
               {'By '}
               {
                 isAuthorized
-                  ? <a href={`/author/${authorId}`}>{authorName}</a>
+                  ? <Link to={`/author/${authorId}`}>{authorName}</Link>
                   : <span>{authorName}</span>
               }
             </p>
