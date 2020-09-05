@@ -2,6 +2,7 @@ import React from 'react';
 import { Button } from 'semantic-ui-react';
 import { InlineLoaderWrapper } from '@components/InlineLoaderWrapper';
 import styles from './styles.module.sass';
+import GrayOutlineButton from '@components/buttons/GrayOutlineButton';
 
 export interface IAuthorCardsSegment {
   title: string;
@@ -27,16 +28,12 @@ export const AuthorCardsSegment: React.FunctionComponent<IAuthorCardsSegment> = 
         View all &gt;
       </Button>
       {onCreateClick && (
-        <Button
-          as="a"
+        <GrayOutlineButton
           onClick={onCreateClick}
-          basic
-          compact
-          id={styles.borderless_btn}
           className={styles.btn_right}
         >
           Create new
-        </Button>
+        </GrayOutlineButton>
       )}
     </div>
     <div className={styles.cards_layout}>
