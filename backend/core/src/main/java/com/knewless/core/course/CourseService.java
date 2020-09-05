@@ -164,7 +164,8 @@ public class CourseService {
         course.setImage(request.getImage());
         course.setLevel(Level.valueOf(request.getLevel()));
         course.setDescription(request.getDescription());
-
+        course.setOverview(request.getOverview());
+        
         List<Lecture> lectures = lectureRepository.findAllById(request.getLectures());
         course.setLectures(lectures);
 

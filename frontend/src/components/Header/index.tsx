@@ -46,14 +46,14 @@ const Header = ({ currentUser, isAuthorized, authorId, isSettingsFilled, setNoAu
     <div className={styles.headerWrp}>
       <div className={styles.customHeader}>
         <div className={styles.left_side}>
-          <NavLink exact to={isSettingsFilled ? "/" : "/settings"}>
+          <NavLink exact to={isSettingsFilled ? '/' : '/settings'}>
             <LogoWithText />
           </NavLink>
         </div>
         <div className={styles.middle}>
           <div className={styles.icons}>
             <div className={styles.column}>
-              <NavLink exact to={isAuthorized && !isSettingsFilled ? "/settings" : "/"}>
+              <NavLink exact to={isAuthorized && !isSettingsFilled ? '/settings' : '/'}>
                 <Label
                   basic
                   size="tiny"
@@ -68,7 +68,7 @@ const Header = ({ currentUser, isAuthorized, authorId, isSettingsFilled, setNoAu
               </NavLink>
             </div>
             <div className={styles.column}>
-              <NavLink exact to={isAuthorized && !isSettingsFilled ? "/settings" : "/courses"}>
+              <NavLink exact to={isAuthorized && !isSettingsFilled ? '/settings' : '/courses'}>
                 <Label
                   basic
                   size="tiny"
@@ -83,7 +83,7 @@ const Header = ({ currentUser, isAuthorized, authorId, isSettingsFilled, setNoAu
               </NavLink>
             </div>
             <div className={styles.column}>
-              <NavLink exact to={isAuthorized && !isSettingsFilled ? "/settings" : "/paths"}>
+              <NavLink exact to={isAuthorized && !isSettingsFilled ? '/settings' : '/paths'}>
                 <Label
                   basic
                   size="tiny"
@@ -101,7 +101,7 @@ const Header = ({ currentUser, isAuthorized, authorId, isSettingsFilled, setNoAu
           <SearchHeader className={location.pathname === '/search' ? styles.searchHidden : searchStyle} />
         </div>
         <div className={styles.right_side}>
-          {isAuthorized ? <UserElement setNoAuthorized={setNoAuthorized} user={currentUser} authorId={authorId} isSettingsFilled={isSettingsFilled}/>
+          {isAuthorized ? <UserElement setNoAuthorized={setNoAuthorized} user={currentUser} authorId={authorId} isSettingsFilled={isSettingsFilled} />
             : <LoginRegister />}
         </div>
       </div>
