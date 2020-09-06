@@ -109,8 +109,11 @@ public class CourseService {
             if (l.getCourse() == null) {
                 lec = l;
             } else {
+                var lectureTags =
+                        tagRepository.findAllById(l.getTags().stream().map(t->t.getId()).collect(Collectors.toList()));
                 lec = Lecture.builder().name(l.getName())
                         .webLink(l.getWebLink())
+                        .tags(new HashSet<>(lectureTags))
                         .urlOrigin(l.getUrlOrigin())
                         .url1080(l.getUrl1080())
                         .url720(l.getUrl720())
@@ -176,8 +179,11 @@ public class CourseService {
             if (l.getCourse() == null || l.getCourse().equals(course)) {
                 lec = l;
             } else {
+                var lectureTags =
+                        tagRepository.findAllById(l.getTags().stream().map(t->t.getId()).collect(Collectors.toList()));
                 lec = Lecture.builder().name(l.getName())
                         .course(course)
+                        .tags(new HashSet<>(lectureTags))
                         .webLink(l.getWebLink())
                         .urlOrigin(l.getUrlOrigin())
                         .url1080(l.getUrl1080())
@@ -405,7 +411,7 @@ public class CourseService {
             courseWithRating.setTags(mapTagsToTagDtos(this.tagRepository.getTagsByCourseId(id)));
 
             reactionRepository.findByCourseIdAndUserId(id, user.getId()).ifPresent(userRating -> course.setReview(userRating.getReaction()));
-            course.setProgress(watchHistoryService.getProgress(user.getId(), id));
+            course.setProgress(watchHistoryService.getProgressByCourse(user.getId(), id));
             course.setRatingCount(reactionRepository.countByCourseId(id));
             course.setRating(courseWithRating.getRating());
             course.setDuration(courseWithRating.getDuration());

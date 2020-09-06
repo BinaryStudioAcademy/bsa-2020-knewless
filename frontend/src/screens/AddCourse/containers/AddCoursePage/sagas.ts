@@ -64,8 +64,7 @@ function* updateCourse(action: Routine<any>) {
     yield put(updateCourseRoutine.success(response));
     toastr.success('Saved successfully!');
     courseService.forwardCourses();
-    const updated = yield call(courseService.getCourseById, action.payload.id);
-    yield put(fetchEditCourseRoutine.success(updated));
+    yield put(fetchEditCourseRoutine.success(undefined));
   } catch (error) {
     yield put(updateCourseRoutine.failure(error?.message));
   }

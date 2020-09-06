@@ -16,7 +16,7 @@ import {
 import { IAppState } from '@models/AppState';
 import { extractCourses, extractTags, extractEditPath } from '../../models/AddPathData';
 import { connect } from 'react-redux';
-import { areCoursesLoading, areTagsLoading, isPathUploading, isEditPathLoading } from '../../models/AddPathState';
+import { areCoursesLoading, areTagsLoading, isPathUploading, isEditPathLoading, isEditPathUploading } from '../../models/AddPathState';
 import { InlineLoaderWrapper } from '@components/InlineLoaderWrapper';
 import noImage from '@images/no_image.png';
 import { TagSelector } from '@components/TagSelector';
@@ -49,12 +49,13 @@ export interface ISavePathProps {
   fetchEditPath: IBindingCallback1<string>;
   updatePath: IBindingCallback1<IPath>;
   editPathLoading: boolean;
+  editPathUploading: boolean;
   fetchAuthorData: IBindingAction;
 }
 
 export const AddPathPage: React.FC<ISavePathProps> = ({
   courses, tags, tagsLoading, coursesLoading, pathUploading, triggerFetchCourses,
-  triggerFetchTags, triggerSavePath, fetchEditPath, editPath, updatePath, editPathLoading, fetchAuthorData
+  triggerFetchTags, triggerSavePath, fetchEditPath, editPath, updatePath, editPathLoading, fetchAuthorData, editPathUploading
 }) => {
   const history = useHistory();
   const location = useLocation();
@@ -97,6 +98,12 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
       setPathImageTag(editPath.imageTag);
       setSelectedTags(editPath.tags);
       setSelectedCourses(editPath.courses);
+      const updatedCourses = [...courses];
+      const filteredCourses = updatedCourses.filter(c => !selectedCourses.map(s => s.id).includes(c.id));
+      setStoredCourses(filteredCourses);
+      const updatedTags = [...tags];
+      const filteredTags = updatedTags.filter(t => !selectedTags.map(s => s.id).includes(t.id));
+      setStoredTags(filteredTags);
     }
   }, [location.pathname]);
 
@@ -113,6 +120,12 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
       setPathImageTag(editPath.imageTag);
       setSelectedTags(editPath.tags);
       setSelectedCourses(editPath.courses);
+      const updatedCourses = [...courses];
+      const filteredCourses = updatedCourses.filter(c => !selectedCourses.map(s => s.id).includes(c.id));
+      setStoredCourses(filteredCourses);
+      const updatedTags = [...tags];
+      const filteredTags = updatedTags.filter(t => !selectedTags.map(s => s.id).includes(t.id));
+      setStoredTags(filteredTags);
     }
   }, [editPath]);
 
@@ -147,15 +160,13 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
 
   const isRequiredFieldsValid = !!pathName && isPathNameValid && isDescriptionValid;
   const isReadyToRelease = isRequiredFieldsValid && selectedCourses.length > 0;
-  const isReadyToSave = (!isReleased && pathName && isPathNameValid) || (isEdit && isReadyToRelease);
-  console.log(isReleased);
-  console.log(!!pathName);
-  console.log(isPathNameValid);
+  const isReadyToSave = (!isReleased && !!pathName && isPathNameValid && isDescriptionValid) || (isEdit && isReadyToRelease);
 
   function handleSavePath(isRelease: boolean) {
+    if (!isChanged && !isRelease) return;
     if (isRelease && !isReadyToRelease) return;
     if (!isReadyToSave) return;
-    if (isRelease && !pathImageTag) {
+    if ((isReleased || isRelease) && !pathImageTag) {
       toastr.error('Failed to save. Please select tag image.');
       return;
     }
@@ -187,7 +198,7 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
   function onTagDeletion(i) {
     setIsChanged(true);
     const deletedTag = selectedTags[i];
-    if (deletedTag === pathImageTag) {
+    if (deletedTag.id === pathImageTag.id) {
       setPathImageTag(undefined);
     }
     if (deletedTag !== undefined) {
@@ -230,7 +241,7 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
       />
     );
   };
-
+  
   const countOverallDuration = useCallback(
     () => selectedCourses.map(c => c.timeSeconds).reduce((a, b) => a + b, 0), [selectedCourses]
   );
@@ -351,8 +362,8 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
                         <div className={styles.buttonSaveGroup}>
                           <Button
                             disabled={!isReadyToSave || !isChanged}
-                            className={isReadyToSave ? styles.btn_save : styles.button_save_disabled}
-                            loading={(!isEdit && pathUploading) || (isEdit && editPathLoading)}
+                            className={styles.btn_save}
+                            loading={(!isEdit && pathUploading) || (isEdit && editPathUploading)}
                             content="Save"
                             onClick={() => handleSavePath(false)}
                           />
@@ -361,7 +372,7 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
                             disabled={!isReadyToRelease}
                             className={isReadyToRelease ? styles.button_release : styles.button_release_disabled}
                             onClick={() => handleSavePath(true)}
-                            loading={(!isEdit && pathUploading) || (isEdit && editPathLoading)}
+                            loading={(!isEdit && pathUploading) || (isEdit && editPathUploading)}
                             content="Release"
                           />)}
                         </div>
@@ -408,7 +419,8 @@ const mapStateToProps = (state: IAppState) => ({
   coursesLoading: areCoursesLoading(state),
   pathUploading: isPathUploading(state),
   editPath: extractEditPath(state),
-  editPathLoading: isEditPathLoading(state)
+  editPathLoading: isEditPathLoading(state),
+  editPathUploading: isEditPathUploading(state)
 });
 
 const mapDispatchToProps = {

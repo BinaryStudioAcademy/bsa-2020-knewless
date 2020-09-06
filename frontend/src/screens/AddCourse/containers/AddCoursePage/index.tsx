@@ -178,7 +178,13 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
       getLectures();
     }
     const updated = [...lectures.sort(compareName)];
-    const filtered = updated.filter(l => !selectedLectures.map(s => s.id).includes(l.id));
+    const filtered = updated.filter(l => !selectedLectures.map(s => s.id).includes(l.id))
+      .filter(l => {
+        if (!l.timeSeconds) return true;
+        if (!editCourse) return true;
+        return !(selectedLectures.map(s => s.id).includes(l.id) 
+        || selectedLectures.map(s => s.urlOrigin).includes(l.urlOrigin));
+      });
     setPool(filtered);
   }, [lectures, getLectures]);
 
@@ -251,7 +257,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
     && isValidImage && !!overview && isValidOverview;
   const isReleseble = isRequiredFieldsValid && selectedLectures.length > 0;
 
-  const isSaveble = (!isReleased && courseName && isValidName && isValidDescription && isValidLevel
+  const isSaveble = (!isReleased && !!courseName && isValidName && isValidDescription && isValidLevel
     && isValidImage && isValidOverview) || (isEdit && isReleseble);
 
   const handleUploadFile = file => {
@@ -277,6 +283,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
   }, [pool, selectedLectures]);
 
   const handleSave = (isRelease: boolean) => {
+    if (!isChanged && !isRelease) return;
     if (isRelease && !isReleseble) return;
     if (!isSaveble) return;
     const course = {
@@ -299,7 +306,12 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
   const handleUpdateLectures = () => {
     getLectures();
     const updated = [...lectures.sort(compareName)];
-    const filtered = updated.filter(l => !selectedLectures.map(s => s.id).includes(l.id));
+    const filtered = updated.filter(l => !selectedLectures.map(s => s.id).includes(l.id))
+      .filter(l => {
+        if (!editCourse) return true;
+        return !(selectedLectures.map(s => s.id).includes(l.id) 
+        || selectedLectures.map(s => s.urlOrigin).includes(l.urlOrigin));
+      });
     setPool(filtered);
   };
 
@@ -468,7 +480,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
                     />
                     <Button
                       content="Save"
-                      className={isSaveble ? styles.button_save : styles.button_save_disabled}
+                      className={styles.button_save}
                       onClick={() => handleSave(false)}
                       loading={saveloading}
                       disabled={!isSaveble || !isChanged}
