@@ -38,7 +38,6 @@ const PopupMenu: React.FC<IPopupMenuProps> = ({ user, authorId, isSettingsFilled
     localStorage.removeItem(ACCESS_TOKEN);
     localStorage.removeItem(REFRESH_TOKEN);
     setNoAuthorized();
-    history.push('/');
   };
 
   return (

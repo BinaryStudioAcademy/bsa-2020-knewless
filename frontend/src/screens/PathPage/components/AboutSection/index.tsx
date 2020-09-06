@@ -9,11 +9,11 @@ export interface IAboutSectionProps {
 
 const AboutSection: React.FC<IAboutSectionProps> = ({ path }) => (
   <div className={styles.content}>
-    <div className={`${styles.flex_item} ${styles.description}`}>
+    <div className={styles.description}>
       <h1>Description</h1>
       {path?.description ? <p>{path.description}</p> : <p className={styles.no_description}>No description.</p>}
     </div>
-    <div className={styles.flex_item}>
+    <div>
       <h1>Authors</h1>
       <div className={styles.authors}>
         {path.authors?.map(a => (

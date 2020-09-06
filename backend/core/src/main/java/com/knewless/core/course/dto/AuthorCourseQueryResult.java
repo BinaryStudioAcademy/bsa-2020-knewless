@@ -21,4 +21,5 @@ public class AuthorCourseQueryResult {
     private long positiveReactions;
     private int allReactions;
     private Date updatedAt;
+    private int lectures;
 }

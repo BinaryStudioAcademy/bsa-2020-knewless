@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardMeta, Image } from 'semantic-ui-react';
 import styles from './styles.module.sass';
+import { Link } from 'react-router-dom';
 
 export interface IAuthorCourseCardProps {
   id?: string;
@@ -18,7 +19,7 @@ export const AuthorCourseCard: React.FC<IAuthorCourseCardProps> = ({ id, imageSr
     />
     <CardContent className={styles.inner_wrapper}>
       <CardHeader className={styles.title}>
-        {id ? <span><a href={`/course/${id}`}>{name}</a></span> : <span>{name}</span>}
+        {id ? <span><Link to={`/course/${id}`}>{name}</Link></span> : <span>{name}</span>}
       </CardHeader>
       <CardMeta className={styles.meta_info} />
     </CardContent>

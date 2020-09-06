@@ -28,6 +28,7 @@ import {
 import { IFilters } from '@screens/SearchResultsPage/components/model';
 import { Tag } from '@components/TagSelector';
 import { history } from '@helpers/history.helper';
+import { InputWithEnter } from '@components/InputWithEnter';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface ISearchResultPageProps {
@@ -38,8 +39,6 @@ export interface ISearchResultPageProps {
   fetchedTags: Tag[];
   triggerTagsFetch: () => void;
 }
-
-const ENTER_CHAR_CODE = 13;
 
 export const SearchResultsPage: React.FC<ISearchResultPageProps> = (
   { results, total, isFetching, triggerSearch, fetchedTags, triggerTagsFetch }
@@ -137,11 +136,9 @@ export const SearchResultsPage: React.FC<ISearchResultPageProps> = (
     setVisualFilters(prev => ({ ...prev, s: selectedSortOptionValue }));
   }, [selectedSortOptionValue]);
 
-  function handleEnterPress(ev) {
-    if (ev.charCode === ENTER_CHAR_CODE) {
-      setQuery(inputValue);
-      handleSearchTrigger(inputValue);
-    }
+  function handleEnterPress() {
+    setQuery(inputValue);
+    handleSearchTrigger(inputValue);
   }
 
   return (
@@ -150,7 +147,7 @@ export const SearchResultsPage: React.FC<ISearchResultPageProps> = (
         <div className={`${filtersExpanded ? styles.filters_background_expanded : styles.filters_background}`}>
           <div className={styles.wide_container} style={{ height: '100%' }}>
             <div className={styles.filters_container}>
-              <Input
+              <InputWithEnter
                 ref={searchInputRef}
                 fluid
                 icon="search"
@@ -158,7 +155,7 @@ export const SearchResultsPage: React.FC<ISearchResultPageProps> = (
                 onChange={(_, { value }) => setInputValue(value)}
                 value={inputValue}
                 placeholder="What do you want to find?"
-                onKeyPress={handleEnterPress}
+                onEnter={handleEnterPress}
               />
               <OutlineDropdown
                 className={styles.control}

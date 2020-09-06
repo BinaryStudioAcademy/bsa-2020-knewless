@@ -18,7 +18,7 @@ const Avatar: React.FC<IAvatarProps> = (
   return (
     <>
       {isLoading ? (
-        <Placeholder className={`${styles.rounded} ${styles.placeholder} ${className}`} inverted>
+        <Placeholder className={`${styles.rounded} ${styles.placeholder} ${className || ''}`} inverted>
           <PlaceholderImage />
         </Placeholder>
       ) : (
@@ -26,7 +26,7 @@ const Avatar: React.FC<IAvatarProps> = (
           {(imageSrc || !noPlaceholder) && (
             <img
               {...props}
-              className={`${round && styles.rounded} ${className} ${styles.avatar}`}
+              className={`${round && styles.rounded} ${className || ''} ${styles.avatar}`}
               src={imageSrc || noAvatar}
               alt={alt || 'Avatar logo'}
             />

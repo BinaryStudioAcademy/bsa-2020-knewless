@@ -7,7 +7,7 @@ import styles from './styles.module.sass';
 import { IRole, RoleTypes } from '@containers/AppRouter/models/IRole';
 import { IPathCardProps } from '@components/PathCard';
 import {
-  fetchPathsRoutine,
+  fetchPathsAndTagsRoutine,
   fetchPathsByTagRoutine,
   fetchAllPathsRoutine,
   fetchAllTagsRoutine,
@@ -16,20 +16,27 @@ import {
 import { MyPaths } from '@screens/Paths/components/MyPaths';
 import { AllPaths } from '@screens/Paths/components/AllPaths';
 import { ITagData } from '@screens/CoursePage/models/ITagData';
+import {
+  extractAllPathsLoading, extractAllTagsLoading, extractAuthorPathsLoading,
+  extractPathsAndTagsLoading,
+  extractPathsByTagsLoading
+} from '@screens/Paths/models/IPathsState';
 
 export interface IPathsPageProps {
   paths: IPathCardProps[];
   myPaths: IPathCardProps[];
   tags: ITagData[];
   role?: IRole;
-  fetchData: IBindingAction;
-  fetchAllAuthorPaths: IBindingAction;
+  fetchPathsAndTags: IBindingAction;
+  fetchAuthorPaths: IBindingAction;
   fetchAllPaths: IBindingAction;
   fetchTags: IBindingAction;
   fetchPathsByTag: IBindingCallback1<string>;
-  loadingData: boolean;
-  loadingAllPaths: boolean;
-  loadingPathsByTag: boolean;
+  pathsAndTagsLoading: boolean;
+  allPathsLoading: boolean;
+  pathsByTagsLoading: boolean;
+  authorPathsLoading: boolean;
+  allTagsLoading: boolean;
 }
 
 const PathsPage: React.FC<IPathsPageProps> = ({
@@ -37,14 +44,15 @@ const PathsPage: React.FC<IPathsPageProps> = ({
   myPaths,
   tags,
   role,
-  fetchData,
-  fetchAllAuthorPaths,
+  fetchPathsAndTags,
+  fetchAuthorPaths,
   fetchAllPaths,
   fetchTags,
   fetchPathsByTag,
-  loadingData,
-  loadingAllPaths,
-  loadingPathsByTag
+  pathsAndTagsLoading,
+  allPathsLoading,
+  pathsByTagsLoading,
+  allTagsLoading
 }) => {
   useEffect(() => {
     switch (role?.name) {
@@ -54,23 +62,23 @@ const PathsPage: React.FC<IPathsPageProps> = ({
         break;
       }
       case 'AUTHOR': {
-        fetchAllAuthorPaths();
+        fetchAuthorPaths();
         break;
       }
       default: {
-        fetchData();
+        fetchPathsAndTags();
       }
     }
   }, []);
 
   return (
     <div className={styles.courses_content}>
-      {!loadingData && !loadingAllPaths && !loadingPathsByTag ? (
+      {!pathsAndTagsLoading ? (
         <>
           {role && (
             <MyPaths
               myPaths={myPaths}
-              loading={loadingData}
+              loading={pathsAndTagsLoading}
               role={role.name}
             />
           )}
@@ -80,9 +88,10 @@ const PathsPage: React.FC<IPathsPageProps> = ({
               tags={tags as any}
               fetchData={fetchAllPaths}
               fetchPathsByTag={fetchPathsByTag}
-              loadingData={loadingData}
-              loadingAllPaths={loadingAllPaths}
-              loadingPathsByTag={loadingPathsByTag}
+              loadingData={pathsAndTagsLoading}
+              loadingAllPaths={allPathsLoading}
+              loadingPathsByTag={pathsByTagsLoading}
+              loadingTags={allTagsLoading}
             />
           )}
         </>
@@ -95,18 +104,20 @@ const mapStateToProps = (state: IAppState) => ({
   paths: state.pathsPage.data.paths,
   myPaths: state.pathsPage.data.myPaths,
   tags: state.pathsPage.data.tags,
-  loadingData: state.pathsPage.requests.dataRequest.loading,
-  loadingAllPaths: state.pathsPage.requests.allPathsRequest.loading,
-  loadingPathsByTag: state.pathsPage.requests.pathsByTagRequest.loading,
+  pathsAndTagsLoading: extractPathsAndTagsLoading(state),
+  allPathsLoading: extractAllPathsLoading(state),
+  pathsByTagsLoading: extractPathsByTagsLoading(state),
+  authorPathsLoading: extractAuthorPathsLoading(state),
+  allTagsLoading: extractAllTagsLoading(state),
   role: state.appRouter.user.role
 });
 
 const mapDispatchToProps = {
-  fetchData: fetchPathsRoutine,
+  fetchPathsAndTags: fetchPathsAndTagsRoutine,
   fetchPathsByTag: fetchPathsByTagRoutine,
   fetchAllPaths: fetchAllPathsRoutine,
   fetchTags: fetchAllTagsRoutine,
-  fetchAllAuthorPaths: fetchAllAuthorPathsRoutine
+  fetchAuthorPaths: fetchAllAuthorPathsRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PathsPage);

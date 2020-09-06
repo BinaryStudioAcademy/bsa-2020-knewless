@@ -20,6 +20,7 @@ import com.knewless.core.path.dto.*;
 import com.knewless.core.path.model.Path;
 import com.knewless.core.security.oauth.UserPrincipal;
 import com.knewless.core.student.StudentService;
+import com.knewless.core.student.model.Student;
 import com.knewless.core.subscription.SubscriptionService;
 import com.knewless.core.tag.TagMapper;
 import com.knewless.core.tag.TagRepository;
@@ -37,6 +38,7 @@ import javax.transaction.Transactional;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class PathService {
@@ -260,20 +262,26 @@ public class PathService {
 	}
 
 	public List<PathDto> getRecommended(UUID userId) {
-    	var tags = pathRepository.getPathsByUserId(userId).stream()
-				.map(path -> pathRepository.getTagsByPathId(path.getId()))
-				.flatMap(Collection::stream)
-				.map(Tag::getId)
-				.filter(Objects::nonNull)
-				.collect(Collectors.toList());
-        var uuids = pathRepository.getPathsByUserId(userId).stream()
+        Student student = studentService.findByUserId(userId);
+
+        List<UUID> tags = Stream.concat(
+                    pathRepository.getPathsByUserId(userId).stream().map(path -> pathRepository.getTagsByPathId(path.getId())).flatMap(Collection::stream),
+                    student.getUser().getTags().stream()
+                )
+                .filter(Objects::nonNull)
+                .map(Tag::getId)
+                .distinct()
+                .collect(Collectors.toList());
+
+        var userPathsIds = pathRepository.getPathsByUserId(userId).stream()
 				.map(PathQueryResult::getId)
 				.distinct()
 				.collect(Collectors.toList());
-        var level = Level.valueOf(studentService.findByUserId(userId).getLevel().toUpperCase());
+
+        var level = Level.valueOf(student.getLevel().toUpperCase());
 
         var result = pathRepository.getPathsByTagIds(tags).stream()
-				.filter(path -> !uuids.contains(path.getId()))
+				.filter(path -> !userPathsIds.contains(path.getId()))
 				.filter(path -> pathRepository.findById(path.getId()).get().getCourses().stream()
 						.map(Course::getLevel)
 						.anyMatch(name -> name.equals(level)
@@ -283,7 +291,7 @@ public class PathService {
 				.collect(Collectors.toList());
 
 		if (result.size() < 3) {
-			result.addAll(getAdditionalPaths(uuids, PageRequest.of(0, result.isEmpty() ? 3 : 3 - result.size())));
+			result.addAll(getAdditionalPaths(userPathsIds, PageRequest.of(0, result.isEmpty() ? 3 : 3 - result.size())));
 		}
 
 		return result;

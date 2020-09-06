@@ -11,8 +11,8 @@ import { IUser } from 'containers/AppRouter/models/IUser';
 import { IBindingAction } from 'models/Callbacks';
 import { history } from '@helpers/history.helper';
 import styles from './styles.module.sass';
-import { CourseCardPlaceHolder } from '@components/placeholder/CourseCardPlaceHolder/index';
-import { PathCardPlaceHolder } from '@components/placeholder/PathCardPlaceHolder/index';
+import { CourseCardPlaceHolder } from '@components/placeholder/CourseCardPlaceHolder';
+import { PathCardPlaceHolder } from '@components/placeholder/PathCardPlaceHolder';
 
 export interface IMainAuthorPageProps {
   author: IAuthor;
@@ -38,8 +38,6 @@ const MainAuthorPage: React.FunctionComponent<IMainAuthorPageProps> = ({
   fetchAuthor: getAuthor,
   fetchAuthorCourses: getAuthorCourses,
   fetchAuthorPaths: getAuthorPaths,
-  coursesLoading,
-  pathsLoading,
   pathsLoaded,
   coursesLoaded,
   authorLoaded,
@@ -56,7 +54,7 @@ const MainAuthorPage: React.FunctionComponent<IMainAuthorPageProps> = ({
   }, [user.id, author.id, isSettingsFilled]);
   return (
     <div className={styles.main_page}>
-      <AuthorInfoBlock author={author} isLoading={!authorLoaded}/>
+      <AuthorInfoBlock author={author} isLoading={!authorLoaded} />
       <div className={styles.content}>
         <div className={`${styles.wide_container} ${styles.content_row}`}>
           <AuthorCardsSegment
@@ -65,20 +63,21 @@ const MainAuthorPage: React.FunctionComponent<IMainAuthorPageProps> = ({
             onViewAllClick={() => history.push('/courses')}
             loading={false}
           >
-            {!coursesLoaded ? 
-              [1,2,3].map( x => <CourseCardPlaceHolder key={x} dependencyName="author" hideButton={true}/>) :
-              (<>
-                {(authorCourses && authorCourses.length > 0) ? authorCourses.slice(0, 3).map(c => (
-                  <div className={styles.course_card} key={c.id}>
-                    <AuthorCourseCard
-                      id={c.id}
-                      name={c.name}
-                      imageSrc={c.imageSrc}
-                    />
-                  </div>
-                )) : coursesLoaded && authorCourses.length === 0 &&
-                <div className={styles.no_courses}><p>You have no courses yet.</p></div>}
-              </>
+            {!coursesLoaded
+              ? [1, 2, 3].map(x => <CourseCardPlaceHolder key={x} dependencyName="author" hideButton />)
+              : (
+                <>
+                  {(authorCourses && authorCourses.length > 0) ? authorCourses.slice(0, 3).map(c => (
+                    <div className={styles.course_card} key={c.id}>
+                      <AuthorCourseCard
+                        id={c.id}
+                        name={c.name}
+                        imageSrc={c.imageSrc}
+                      />
+                    </div>
+                  )) : coursesLoaded && authorCourses.length === 0
+                && <div className={styles.no_courses}><p>You have no courses yet.</p></div>}
+                </>
               )}
           </AuthorCardsSegment>
         </div>
@@ -89,12 +88,12 @@ const MainAuthorPage: React.FunctionComponent<IMainAuthorPageProps> = ({
             onViewAllClick={() => history.push('/paths')}
             loading={false}
           >
-            {!pathsLoaded ?
-              [1,2,3].map( x => (
+            {!pathsLoaded
+              ? [1, 2, 3].map(x => (
                 <div className={styles.path_card} key={x}>
-                  <PathCardPlaceHolder key={x}/>
-                </div>)
-                ) : (
+                  <PathCardPlaceHolder key={x} />
+                </div>
+              )) : (
                 <>
                   {(authorPaths && authorPaths.length > 0) ? authorPaths.slice(0, 3).map(p => (
                     <div className={styles.path_card} key={p.id}>
@@ -106,8 +105,8 @@ const MainAuthorPage: React.FunctionComponent<IMainAuthorPageProps> = ({
                         duration={p.duration}
                       />
                     </div>
-                  )) : pathsLoaded && authorPaths.length === 0 &&
-                   <div className={styles.no_courses}><p>You have no paths yet.</p></div>}
+                  )) : pathsLoaded && authorPaths.length === 0
+                   && <div className={styles.no_courses}><p>You have no paths yet.</p></div>}
                 </>
               )}
           </AuthorCardsSegment>

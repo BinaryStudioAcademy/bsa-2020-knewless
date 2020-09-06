@@ -1,38 +1,43 @@
-import React, { useState, useEffect } from 'react';
-import io from 'socket.io-client';
+import React, { useEffect } from 'react';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
 import { INotification } from '../Notifications/model/INotification';
 import { connect } from 'react-redux';
-import { addNotificationRoutine } from '../Notifications/routines';
+import { receiveNotificationRoutine } from '../Notifications/routines';
+import { IAppState } from '@models/AppState';
 
 interface IWebSocketNotificationsProps {
-  token: string;
+  connection: any;
   newNotification: ({ notification: INotification }) => void;
 }
 
 const WebSocketNotifications: React.FC<IWebSocketNotificationsProps> = ({
-  token,
+  connection,
   newNotification: notify
 }) => {
-  const [socket] = useState(io({ query: { token } }));
-
   useEffect(() => {
-    socket.on('notification', (message: INotification) => {
-      NotificationManager.info(message.text);
-      notify({ notification: message });
-    });
-    //  diconnect and delete from pool at logout
+    if (connection) {
+      connection.on('notification', (message: INotification) => {
+        NotificationManager.info(message.text);
+        notify({ notification: message });
+      });
+    }
     return () => {
-      socket.close();
+      if (connection) {
+        connection.removeAllListeners('notification');
+      }
     };
-  });
+  }, [connection]);
 
   return <NotificationContainer />;
 };
 
 const mapDispatchToProps = {
-  newNotification: addNotificationRoutine
+  newNotification: receiveNotificationRoutine
 };
 
-export default connect(null, mapDispatchToProps)(WebSocketNotifications);
+const mapStateToProps = (state: IAppState) => ({
+  connection: state.websocket.websocketData.connection
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(WebSocketNotifications);

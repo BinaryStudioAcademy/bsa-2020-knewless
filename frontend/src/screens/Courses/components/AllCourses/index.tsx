@@ -40,7 +40,7 @@ export const AllCourses: React.FC<IAllCourses> = (
           </div>
         </div>
       </div>
-      <div className={`${styles.wide_container} ${styles.content_row}`} style={{ minHeight: '150px' }}>
+      <div className={`${styles.wide_container} ${styles.content_row}`} style={{ minHeight: '21em' }}>
         <InlineLoaderWrapper loading={loadingCourses} centered>
           <div className={styles.courses_container}>
             { courses.length !== 0 ? (

@@ -1,5 +1,6 @@
 package com.knewless.core.exception.handling;
 
+import com.knewless.core.exception.custom.ResourceNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,7 +30,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 		return new ResponseEntity<>(apiError, apiError.getStatus());
 	}
 
-	@ExceptionHandler({NoSuchElementException.class, EntityNotFoundException.class})
+	@ExceptionHandler({NoSuchElementException.class, EntityNotFoundException.class, ResourceNotFoundException.class})
 	protected ResponseEntity<Object> handleEntityNotFound(Exception ex) {
 		return responseEntity(errorFactory.create(HttpStatus.NOT_FOUND, ex.getMessage(), ex));
 	}

@@ -19,6 +19,9 @@ import { IFavouriteState } from '@screens/Favourites/models/IFavouriteState';
 import { ISearchPageState } from '@screens/SearchResultsPage/models/ISearchPageState';
 import { IHistoryState } from '@screens/History/models/IHistoryState';
 import { IArticleState } from '@screens/ArticlePage/models/ArticleState';
+import { IDiscussionState } from '@containers/discussions/common/models/State';
+import { IWebsocketConnectorState } from '@containers/WebsocketConnector/model';
+import { IUserOverviewState } from '@containers/UserOverview/model';
 
 export interface IAppState {
   toastr: any;
@@ -43,4 +46,8 @@ export interface IAppState {
   favourites: IFavouriteState;
   searchPage: ISearchPageState;
   historyPage: IHistoryState;
+  courseDiscussion: IDiscussionState;
+  lectureDiscussion: IDiscussionState;
+  websocket: IWebsocketConnectorState;
+  userOverview: IUserOverviewState;
 }

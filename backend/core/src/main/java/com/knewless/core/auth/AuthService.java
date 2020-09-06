@@ -5,7 +5,7 @@ import com.knewless.core.auth.Dto.ValidateResetLinkResponseDto;
 import com.knewless.core.auth.Dto.VerifyEmailResponseDto;
 import com.knewless.core.emailservice.Dto.TemporaryDto;
 import com.knewless.core.emailservice.EmailService;
-import com.knewless.core.exception.UserAlreadyRegisteredException;
+import com.knewless.core.exception.custom.UserAlreadyRegisteredException;
 import com.knewless.core.security.model.AuthResponse;
 import com.knewless.core.security.model.LoginRequest;
 import com.knewless.core.security.model.RefreshTokenResponse;
@@ -23,7 +23,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -108,7 +107,7 @@ public class AuthService {
 
     public SavePasswordDtoResponse savePassword(UUID resetId, String password) {
         var result = emailService.isResetValid(resetId);
-        if (result.isValidLink()==false) {
+        if (!result.isValidLink()) {
             return  SavePasswordDtoResponse.builder().comment("Reset link have been expired").isSuccessfull(false).build();
         } else {
             UUID userId = emailService.resets.stream().filter(r->r.getId().equals(resetId)).findFirst().orElseThrow().getUserId();

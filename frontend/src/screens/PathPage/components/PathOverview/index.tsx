@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './styles.module.sass';
 import { IPath } from '@screens/PathPage/models/IPath';
 import { Label, Icon } from 'semantic-ui-react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import { RoleTypes } from '@containers/AppRouter/models/IRole';
 import { IBindingCallback1 } from '@models/Callbacks';
 import AddToFavouriteButton, { IFavourite } from '@components/AddToFavouritesButton/component';
@@ -51,7 +51,11 @@ const PathOverview: React.FunctionComponent<IPathOverviewProps> = ({ isAuthorize
             {'By '}
             {
               isAuthorized
-                ? <a href={`/author/${path.author?.id}`}>{`${path.author?.firstName} ${path.author?.lastName}`}</a>
+                ? (
+                  <Link to={`/author/${path.author?.id}`}>
+                    {`${path.author?.firstName} ${path.author?.lastName}`}
+                  </Link>
+                )
                 : <span>{`${path.author?.firstName} ${path.author?.lastName}`}</span>
             }
           </p>

@@ -17,10 +17,12 @@ export interface IAllPaths {
   loadingData: boolean;
   loadingAllPaths: boolean;
   loadingPathsByTag: boolean;
+  loadingTags: boolean;
 }
 
 export const AllPaths: React.FC<IAllPaths> = ({
-  paths, tags, fetchData, fetchPathsByTag, loadingData, loadingAllPaths, loadingPathsByTag
+  paths, tags, fetchData, fetchPathsByTag, loadingData,
+  loadingAllPaths, loadingPathsByTag, loadingTags
 }) => {
   function handleFetch(id: string) {
     if (id) {
@@ -35,14 +37,14 @@ export const AllPaths: React.FC<IAllPaths> = ({
       <div id="all_courses" className={`${styles.wide_container} ${styles.content_row}`}>
         <h3 className={`${styles.title}`}>Paths</h3>
         <div className={styles.courses_title}>
-          <TagTabSelector fetchData={id => handleFetch(id)} loading={loadingPathsByTag || loadingData} tags={tags} />
+          <TagTabSelector fetchData={id => handleFetch(id)} loading={loadingTags} tags={tags} />
           <div className={styles.filter}>
             <Input size="mini" icon="search" fluid placeholder="Filter..." />
           </div>
         </div>
       </div>
-      <div className={`${styles.wide_container} ${styles.content_row}`} style={{ minHeight: '150px' }}>
-        <InlineLoaderWrapper loading={loadingAllPaths || loadingPathsByTag} centered>
+      <div className={`${styles.wide_container} ${styles.content_row}`} style={{ minHeight: '21em' }}>
+        <InlineLoaderWrapper loading={loadingAllPaths || loadingPathsByTag || loadingData} centered>
           <div className={styles.courses_container}>
             {paths.length > 0 ? (
               paths.map(p => (

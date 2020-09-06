@@ -34,6 +34,7 @@ import {
   PATH_NAME_MESSAGE
 } from '@helpers/validation.helper';
 import { fetchAuthorRoutine } from '@screens/AuthorMainPage/routines';
+import { history } from '@helpers/history.helper';
 
 export interface ISavePathProps {
   courses: ICourse[];
@@ -86,7 +87,7 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
     setIsConfirming(false);
     setIsChanged(false);
   }
-
+  
   useEffect(() => {
     if (location.pathname === "/add_path") setDefault();
     if (isEdit && editPath) {
@@ -166,10 +167,10 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
       tags: selectedTags,
       imageTag: pathImageTag
     };
-    if (isEdit) {
-      updatePath({ id: pathId, ...path });
-    } else {
+    if (!isEdit) {
       triggerSavePath(path);
+    } else {
+      updatePath({ id: pathId, ...path });
     }
   }
 

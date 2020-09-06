@@ -62,11 +62,16 @@ export const UploadLectureModal: React.FC<IUploadLectureModalProps> = ({
   }, [history.location.pathname]);
 
   useEffect(() => {
-    setStoredTags(tags);
+    setStoredTags(tags.filter(tag => !selectedTags.find(t => t.id === tag.id)));
   }, [tags]);
 
+  const validateTagsAmount = (currentTags?: any[]) => {
+    const lastChangesTags = currentTags || selectedTags;
+    setIsValidTagsAmount(lastChangesTags.length > 0 && lastChangesTags.length < 6);
+  };
+
   useEffect(() => {
-    setIsValidTagsAmount(selectedTags.length < 6);
+    validateTagsAmount();
   }, [selectedTags]);
 
   const [addByLink, setAddByLink] = useState(false);
@@ -84,10 +89,6 @@ export const UploadLectureModal: React.FC<IUploadLectureModalProps> = ({
 
   const validateDescription = (newName?: string) => {
     setIsValidDescription(isValidLectureDescription(typeof newName === 'string' ? newName : description));
-  };
-
-  const validateTagsAmount = () => {
-    setIsValidTagsAmount(selectedTags.length < 6);
   };
 
   const handleAddFile = e => {
@@ -127,7 +128,7 @@ export const UploadLectureModal: React.FC<IUploadLectureModalProps> = ({
   const handleSave = () => {
     validateName();
     validateDescription();
-    validateTagsAmount();
+    validateTagsAmount(selectedTags);
     setIsValidFile(file);
     if (!isReadyToSave) return;
 

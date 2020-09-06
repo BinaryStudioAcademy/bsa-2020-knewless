@@ -9,6 +9,7 @@ $title_container_height: 55px
   background: #121421
   display: flex
   flex-direction: column
+  flex-grow: 1
 
 .title
   &_container
@@ -46,7 +47,6 @@ $title_container_height: 55px
   &__container
     display: flex
     flex-direction: row
-    //background: aquamarine
     grid-template-columns: 1fr 1fr
     grid-gap: 2em
 
@@ -110,7 +110,6 @@ $title_container_height: 55px
     grid-area: 1 / 2 / 5
     max-height: 75vh
     overflow-y: hidden
-    //height: 90%
     flex-basis: 0
     flex-grow: 1
 
@@ -118,7 +117,8 @@ $title_container_height: 55px
   span
     color: #2A2B37
 
-\:global(.ui.button).btn_save
+\:global(.ui.button).btn_save,
+\:global(.ui.button).button_save_edit
   margin-left: auto !important
   width: $width_btn
   height: $height_btn
@@ -133,6 +133,9 @@ $title_container_height: 55px
   background: #20649b
   border-radius: 3px
   margin-top: 0
+  &:hover
+    transition-duration: 0.7s
+    background: #0c395e
 
 .buttonSaveGroup
   width: inherit
@@ -144,10 +147,6 @@ $title_container_height: 55px
   border-radius: 3px
   font-size: 1em
   margin-left: 1.6em
-  width: $width_btn
-  height: $height_btn
-
-.btn_cancel
   width: $width_btn
   height: $height_btn
 
@@ -174,6 +173,10 @@ $title_container_height: 55px
   border-radius: 3px
   opacity: 0.5
   cursor: default !important
+
+.btn_cancel
+  width: $width_btn
+  height: $height_btn
 
 \:global(.ui.button).button_save_edit
   margin-right: 0

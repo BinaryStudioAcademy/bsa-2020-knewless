@@ -12,7 +12,6 @@ import SettingsRoute from 'containers/SettingsRoute';
 import RegisterPage from '@screens/Authentication/containers/RegisterPage';
 import AuthorPublicPage from '@screens/AuthorPublicPage/containers/AuthorPublicPage';
 import StudentProfile from 'screens/StudentPage/containers/StudentProfilePage';
-import { ACCESS_TOKEN } from '@screens/Authentication/constants';
 import RootRoute from '../RootRoute';
 import PrivateRoute from '../PrivateRoute';
 import WebSocketNotifications from 'containers/WebSocketNotifications';
@@ -39,6 +38,7 @@ import styles from './styles.module.sass';
 import { NotFoundPage } from '@screens/NotFound/container/NotFoundPage';
 import { InlineLoaderWrapper } from '@components/InlineLoaderWrapper';
 import ArticlePage from '@screens/ArticlePage/containers/ArticlePage';
+import WebsocketConnector from '@containers/WebsocketConnector';
 
 export interface IRoutingProps {
   isLoading: boolean;
@@ -69,14 +69,6 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({
     return headerBlackList.every(item => !history.location.pathname.startsWith(item));
   };
   const [isHeaderShown, setIsHeaderShown] = useState(checkHeaderShown());
-
-  const connectToWebsocket = () => {
-    const token = localStorage.getItem(ACCESS_TOKEN);
-    if (token) {
-      return (<WebSocketNotifications token={token} />);
-    }
-    return '';
-  };
 
   history.listen(() => {
     setIsHeaderShown(checkHeaderShown());
@@ -127,7 +119,8 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({
         <PublicRoute component={NotFoundPage} />
       </Switch>
       {isHeaderShown && <Footer />}
-      {connectToWebsocket()}
+      <WebsocketConnector />
+      <WebSocketNotifications />
       {onOpen && (
         <LoginModal
           onOpen={onOpen}

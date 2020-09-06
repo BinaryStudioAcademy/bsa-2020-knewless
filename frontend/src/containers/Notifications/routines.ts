@@ -1,6 +1,6 @@
 import { createRoutine } from 'redux-saga-routines';
 
-export const addNotificationRoutine = createRoutine('ADD_NOTIFICATION');
+export const receiveNotificationRoutine = createRoutine('RECEIVE_NOTIFICATION');
 export const fetchUnreadNotificationsRoutine = createRoutine('FETCH_UNREAD_NOTIFICATIONS');
 export const readNotificationRoutine = createRoutine('READ_NOTIFICATION');
 export const readAllNotificationsRoutine = createRoutine('READ_ALL_NOTIFICATIONS');

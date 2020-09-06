@@ -2,6 +2,7 @@ import { IAppRouterState } from './models/IAppRouterState';
 import { IUser } from './models/IUser';
 import { Routine } from 'redux-saga-routines';
 import { fetchUserRoutine, resetSettingsModeRoutine, setRoleLoadingRoutine, setSettingsModeRoutine, checkSettingsRoutine } from './routines';
+import { setNoAuthorizedRoutine } from '@screens/Home/routines';
 
 const initialState: IAppRouterState = {
   user: { } as IUser,
@@ -55,6 +56,12 @@ export const appRouter = (state = initialState, action: Routine<any>) => {
       return {
         ...state,
         roleLoading: true
+      };
+    }
+    case setNoAuthorizedRoutine.TRIGGER: {
+      return {
+        ...state,
+        user: {}
       };
     }
     default: {

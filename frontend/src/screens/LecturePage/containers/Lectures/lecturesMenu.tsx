@@ -8,6 +8,7 @@ import { setMenuActiveItemRoutine } from '../../routines';
 import LecturesList from './lecturesList';
 
 import './styles.sass';
+import LectureDiscussion from '@containers/discussions/LectureDiscussion';
 
 export interface ILecturesMenuProps {
   menuProps: ILecturesMenu;
@@ -15,10 +16,13 @@ export interface ILecturesMenuProps {
   setChosenVideo: Function;
   playerProgress: number;
   role: string;
+  lectureId: string;
+  authorId: string;
+  userId: string;
 }
 
 const LecturesMenu: React.FunctionComponent<ILecturesMenuProps> = ({
-  menuProps, setMenu, setChosenVideo, playerProgress, role
+  menuProps, setMenu, setChosenVideo, playerProgress, role, lectureId, authorId, userId
 }) => (
   <div style={{ height: '100%' }}>
     <Menu className="lecturesMenu" pointing secondary widths="2">
@@ -36,13 +40,17 @@ const LecturesMenu: React.FunctionComponent<ILecturesMenuProps> = ({
     </Menu>
     <Segment className="segmentStyle">
       {menuProps.lecturesMenuActiveItem === 'Lectures'
-        ? <LecturesList role={role} setChosenVideo={setChosenVideo} playerProgress={playerProgress} /> : 'Discussions' }
+        ? (<LecturesList role={role} setChosenVideo={setChosenVideo} playerProgress={playerProgress} />)
+        : (<LectureDiscussion lectureId={lectureId} yourId={userId} authorId={authorId} />) }
     </Segment>
   </div>
 );
 
 const mapStateToProps = (state: any) => ({
-  menuProps: state.lecturePage.lectureMenu
+  menuProps: state.lecturePage.lectureMenu,
+  lectureId: state.lecturePage.chosenVideo.chosenVideo,
+  authorId: state.lecturePage.lectureDto.author.id,
+  userId: state.appRouter.user.id
 });
 
 const mapDispatchToProps = {

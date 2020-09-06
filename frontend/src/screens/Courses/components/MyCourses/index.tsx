@@ -6,6 +6,7 @@ import styles from '../../containers/CoursesPage/styles.module.sass';
 import { ICourseItem } from '@screens/Courses/models/ICourseItem';
 import { RowPlaceholder } from '@components/placeholder/RowPlaceholder';
 import { history } from '@helpers/history.helper';
+import GrayOutlineButton from '@components/buttons/GrayOutlineButton';
 
 export interface IMyCourses {
   continueCourses: ICourseItem[];
@@ -50,9 +51,12 @@ export const MyCourses: React.FC<IMyCourses> = ({
         onClick={handleClick}
       >
         <div className={styles.title_container}>
-          <h3 className={`${styles.title} ${styles.wide_container}`}>
-            My Courses
-            <Icon name="dropdown" />
+          <h3 className={`${styles.title} ${styles.wide_container} ${styles.my_courses_accordion}`}>
+            <div>
+              My Courses
+              <Icon name="dropdown" />
+            </div>
+            {isAuthor && <GrayOutlineButton content="Create course" onClick={handleCreateCourseClick} />}
           </h3>
         </div>
       </Accordion.Title>

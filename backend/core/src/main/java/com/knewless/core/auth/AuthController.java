@@ -3,7 +3,7 @@ package com.knewless.core.auth;
 import com.knewless.core.auth.Dto.SavePasswordDtoRequest;
 import com.knewless.core.auth.Dto.SavePasswordDtoResponse;
 import com.knewless.core.auth.Dto.VerifyEmailResponseDto;
-import com.knewless.core.exception.UserAlreadyRegisteredException;
+import com.knewless.core.exception.custom.UserAlreadyRegisteredException;
 import com.knewless.core.security.model.LoginRequest;
 import com.knewless.core.security.model.SignUpRequest;
 import com.knewless.core.validation.SingleMessageResponse;

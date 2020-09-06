@@ -131,7 +131,8 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
 
   const isTagsChanged = () => {
     const initTagsNames = settings.tags.map(tag => tag.name);
-    return selectedTags.filter(selected => !initTagsNames.includes(selected.name)).length > 0;
+    return settings.tags.length !== selectedTags.length
+      || selectedTags.filter(selected => !initTagsNames.includes(selected.name)).length > 0;
   };
 
   const isLastSettingsChanged = settings.avatar !== avatar
@@ -149,7 +150,7 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
     || settings.role !== role
     || settings.employment !== employment
     || settings.education !== education
-    || isTagsChanged;
+    || isTagsChanged();
 
   const isRequiredFieldsValid = (): boolean => !!firstName && !!lastName && !!education && !!level && !!location
     && !!industry && !!role && isFirstNameValid && isLastNameValid && isYearsOfExperienceValid && isEducationLvlValid

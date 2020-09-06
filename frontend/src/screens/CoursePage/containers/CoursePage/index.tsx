@@ -42,6 +42,7 @@ interface ICoursePageProps {
   role: string;
   isSettingsFilled: boolean;
   error: string;
+  yourId: string;
 }
 
 const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
@@ -60,7 +61,8 @@ const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
   fetchAuthor,
   role,
   isSettingsFilled,
-  error
+  error,
+  yourId
 }) => {
   const { courseId } = useParams();
   const [isOpen, setIsOpen] = useState(false);
@@ -130,6 +132,8 @@ const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
         />
         <div className="separator" />
         <CourseInfo
+          authorUserId={course?.author?.userId}
+          courseId={course.id}
           changeFavouriteLecture={changeFavouriteLecture}
           isAuthorized={isAuthorized}
           startCourse={handleOnStartCourse}
@@ -145,6 +149,7 @@ const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
           ratingCount={course.ratingCount}
           openReviewModal={openViewModal}
           role={role}
+          yourId={yourId}
         />
         <div className="separator" />
         <AuthorInfo
@@ -168,6 +173,7 @@ const mapStateToProps = (state: IAppState) => {
     loading: state.coursePage.requests.dataRequest.loading,
     error: state.coursePage.requests.dataRequest.error,
     role: state.appRouter.user?.role?.name,
+    yourId: state.appRouter.user?.id,
     isAuthorized,
     favourite,
     isSettingsFilled: settingsFilled

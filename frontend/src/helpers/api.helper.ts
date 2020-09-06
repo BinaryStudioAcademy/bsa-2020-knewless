@@ -1,5 +1,4 @@
 import * as queryString from 'query-string';
-import { toastr } from 'react-redux-toastr';
 import { IFetchArgsData } from 'models/IFetchArgsData';
 import { IFetchArgs } from 'models/IFetchArgs';
 import { ACCESS_TOKEN, REFRESH_TOKEN } from 'screens/Authentication/constants';
@@ -70,7 +69,6 @@ const throwIfResponseFailed = async (res: Response) => {
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error(`An error occurred: ${err}`);
-      toastr.error('Error!', err);
     }
     throw parsedException;
   }

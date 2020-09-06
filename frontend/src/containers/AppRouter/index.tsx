@@ -23,7 +23,7 @@ interface IAppRouterProps {
   fetchUser: IBindingAction;
   checkSettings: IBindingCallback1<string>;
   setSettingsMode: IBindingFunction<RoleTypes, void>;
-  isSettingsFilled: boolean
+  isSettingsFilled: boolean;
 }
 
 const AppRouter: React.FunctionComponent<IAppRouterProps> = ({
@@ -38,7 +38,6 @@ const AppRouter: React.FunctionComponent<IAppRouterProps> = ({
   checkSettings,
   isSettingsFilled
 }) => {
-
   useEffect(() => {
     const unlisten = history.listen(() => {
       window.scrollTo(0, 0);
@@ -54,7 +53,7 @@ const AppRouter: React.FunctionComponent<IAppRouterProps> = ({
       fetchUser();
     }
   }, [isAuthorized, roleLoading]);
-  
+
   useEffect(() => {
     if (user?.role && isSettingsFilled === undefined) {
       checkSettings(user?.role?.name);
@@ -62,7 +61,7 @@ const AppRouter: React.FunctionComponent<IAppRouterProps> = ({
   }, [user?.role?.name]);
 
   return (
-    <LoaderWrapper loading={localStorage.getItem(ACCESS_TOKEN) ? loading : false} >
+    <LoaderWrapper loading={localStorage.getItem(ACCESS_TOKEN) ? loading : false}>
       <Router history={history}>
         {
           (user.id && !emailVerified

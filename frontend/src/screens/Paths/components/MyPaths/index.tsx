@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Accordion, Icon } from 'semantic-ui-react';
-
 import styles from '../../containers/PathsPage/styles.module.sass';
 import { IPathCardProps, PathCard } from '@components/PathCard';
 import { RoleTypes } from '@containers/AppRouter/models/IRole';
 import { RowPlaceholder } from '@components/placeholder/RowPlaceholder';
 import { history } from '@helpers/history.helper';
+import GrayOutlineButton from '@components/buttons/GrayOutlineButton';
 
 export interface IMyPaths {
   myPaths: IPathCardProps[];
@@ -48,9 +48,12 @@ export const MyPaths: React.FC<IMyPaths> = ({
         onClick={handleClick}
       >
         <div className={styles.title_container}>
-          <h3 className={`${styles.title} ${styles.wide_container}`}>
-            My Paths
-            <Icon name="dropdown" />
+          <h3 className={`${styles.title} ${styles.wide_container} ${styles.my_paths_accordion}`}>
+            <div>
+              My Paths
+              <Icon name="dropdown" />
+            </div>
+            {isAuthor && <GrayOutlineButton content="Create path" onClick={handleCreatePathClick} />}
           </h3>
         </div>
       </Accordion.Title>

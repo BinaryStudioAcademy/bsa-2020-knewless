@@ -165,6 +165,14 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
     }
   }, [location.pathname]);
 
+  const clearFields = () => {
+    setCourseName('');
+    setDescription('');
+    setLevel('');
+    setCourseTags([]);
+    setSelectedLectures([]);
+  };
+
   useEffect(() => {
     if (lectures.length === 0 && !isLecturesLoaded) {
       getLectures();
@@ -288,10 +296,6 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
     }
   };
 
-  const handleCancel = () => {
-    history.push('/');
-  };
-
   const handleUpdateLectures = () => {
     getLectures();
     const updated = [...lectures.sort(compareName)];
@@ -301,6 +305,11 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
 
   const onOverviewClose = () => {
     setIsShowPreview(false);
+  };
+
+  const handleCancelClick = () => {
+    clearFields();
+    history.goBack();
   };
 
   return (
@@ -447,7 +456,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
                 <div className={styles.buttonGroup}>
                   <GrayOutlineButton
                     className={styles.buttonCancel}
-                    onClick={() => handleCancel()}
+                    onClick={handleCancelClick}
                     content="Cancel"
                   />
                   <div className={styles.buttonSaveGroup}>
@@ -532,7 +541,8 @@ const mapStateToProps = (state: IAppState) => {
     lectures,
     isLecturesLoaded,
     loading: state.addcourse.requests.dataRequest.loading,
-    saveloading: state.addcourse.requests.saveCourseRequest.loading || state.addcourse.requests.savingEditedCourseRequest.loading,
+    saveloading: state.addcourse.requests.saveCourseRequest.loading
+      || state.addcourse.requests.savingEditedCourseRequest.loading,
     isAuthorized,
     role: appRouter.user.role
   };

@@ -19,6 +19,7 @@ import './styles.sass';
 import RatingModal from '@components/RatingModal';
 import { InlineLoaderWrapper } from '@components/InlineLoaderWrapper';
 import { OutlineDropdown } from '@components/Dropdown';
+import { history } from '@helpers/history.helper';
 
 export interface ILectureProps {
   match: any;
@@ -114,6 +115,7 @@ const LecturePage: React.FunctionComponent<ILectureProps> = ({
   const initialLectureId = match.params.lectureId;
   const [result, setResult] = useState('');
   const [isShowQuality, setIsShowQuality] = useState(false);
+  const [currentVideoDuration, setCurrentVideoDuration] = useState<number>(0);
 
   const triggerSaveTime: any = useCallback(
     () => saveWatchTime({
@@ -135,6 +137,10 @@ const LecturePage: React.FunctionComponent<ILectureProps> = ({
     saveWatchTime({ watchTime: 0, fraction: 0, lectureId: initialLectureId });
     return () => saveCallback.current();
   }, []);
+
+  useEffect(() => {
+    if (chosenVideoId) history.push(`/lecture/${chosenVideoId}`);
+  }, [chosenVideoId]);
 
   const autoSave = () => {
     if (isPlaying) {
@@ -165,10 +171,10 @@ const LecturePage: React.FunctionComponent<ILectureProps> = ({
     if (prev + 1 !== lecturesData.lectures.length) {
       const nextId = lecturesData.lectures[prev + 1].id;
       setChosenVideo({ chosenVideo: nextId });
-      triggerSaveTime();
     } else if (role !== 'AUTHOR' && !lecturesData.reviewed && !isReviewed) {
       setIsReviewOpen(true);
     }
+    saveWatchTime({ watchTime: currentVideoDuration, fraction: 1, lectureId: chosenVideoId });
   };
 
   const handleChooseVideo = useCallback(chosenVideo => {
@@ -214,7 +220,8 @@ const LecturePage: React.FunctionComponent<ILectureProps> = ({
             onProgress={setPlayerProgress}
             onPlay={() => setIsPlaying(true)}
             onPause={handlePause}
-            onEnded={() => handleEnded()}
+            onEnded={handleEnded}
+            onDuration={setCurrentVideoDuration}
           />
           {isShowQuality && (
             <OutlineDropdown
@@ -245,7 +252,11 @@ const LecturePage: React.FunctionComponent<ILectureProps> = ({
               </Link>
             </div>
             <div className="lecturesList">
-              <LecturesMenu role={role} setChosenVideo={handleChooseVideo} playerProgress={playerProgress.playedSeconds} />
+              <LecturesMenu
+                role={role}
+                setChosenVideo={handleChooseVideo}
+                playerProgress={playerProgress.playedSeconds}
+              />
             </div>
           </>
         )}

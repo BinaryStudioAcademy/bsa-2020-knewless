@@ -24,4 +24,5 @@ public class AuthorCourseWithTagsDto {
     private long positiveReactions;
     private int allReactions;
     private Date updatedAt;
+    private int lectures;
 }

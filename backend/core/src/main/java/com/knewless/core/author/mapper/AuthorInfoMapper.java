@@ -6,13 +6,15 @@ import com.knewless.core.school.dto.SchoolBriefInfoDto;
 import com.knewless.core.user.role.model.RoleType;
 
 import java.util.Optional;
+import java.util.UUID;
 
 public interface AuthorInfoMapper {
 
     static AuthorBriefInfoDto fromEntities(Author author, Integer followersCount,
-                                           Optional<SchoolBriefInfoDto> schoolBriefInfo) {
+                                           Optional<SchoolBriefInfoDto> schoolBriefInfo, UUID userId) {
         final var briefInfoDto = new AuthorBriefInfoDto();
         briefInfoDto.setId(author.getId());
+        briefInfoDto.setUserId(userId);
         briefInfoDto.setFirstName(author.getFirstName());
         briefInfoDto.setLastName(author.getLastName());
         briefInfoDto.setAvatar(author.getAvatar());

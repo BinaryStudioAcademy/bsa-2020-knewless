@@ -5,7 +5,7 @@ import com.knewless.core.author.model.Author;
 import com.knewless.core.db.SourceType;
 import com.knewless.core.exception.custom.ResourceNotFoundException;
 import com.knewless.core.messaging.MessageSender;
-import com.knewless.core.messaging.userMessage.UserMessage;
+import com.knewless.core.messaging.userMessage.NotificationsMessage;
 import com.knewless.core.messaging.userMessage.UserMessageType;
 import com.knewless.core.notification.NotificationService;
 import com.knewless.core.notification.dto.NotificationDto;
@@ -67,11 +67,11 @@ public class SubscriptionService {
                         .build();
                 Author author = authorRepository.findOneById(subscription.getSourceId()).orElseThrow();
                 notificationService.createNotification(build, author.getUser().getId());
-                UserMessage userMessage = new UserMessage();
-                userMessage.setReceiverId(author.getUser().getId().toString());
-                userMessage.setBody(build);
-                userMessage.setType(UserMessageType.PERSONAL);
-                messageSender.sendToUser(userMessage);
+                NotificationsMessage notificationsMessage = new NotificationsMessage();
+                notificationsMessage.setReceiverId(author.getUser().getId().toString());
+                notificationsMessage.setBody(build);
+                notificationsMessage.setType(UserMessageType.PERSONAL);
+                messageSender.notifyUser(notificationsMessage);
             }
 
         }
@@ -104,11 +104,11 @@ public class SubscriptionService {
         var subscribers = subscriptionRepository.findAllBySource(subscriberId, subscriberType);
         for (UUID subscriber : subscribers) {
             notificationService.createNotification(build, subscriber);
-            UserMessage userMessage = new UserMessage();
-            userMessage.setReceiverId(subscriber.toString());
-            userMessage.setBody(build);
-            userMessage.setType(UserMessageType.PERSONAL);
-            messageSender.sendToUser(userMessage);
+            NotificationsMessage notificationsMessage = new NotificationsMessage();
+            notificationsMessage.setReceiverId(subscriber.toString());
+            notificationsMessage.setBody(build);
+            notificationsMessage.setType(UserMessageType.PERSONAL);
+            messageSender.notifyUser(notificationsMessage);
         }
     }
 

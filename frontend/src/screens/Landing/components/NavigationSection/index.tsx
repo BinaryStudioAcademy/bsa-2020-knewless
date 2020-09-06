@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './styles.module.sass';
 import { Icon, SemanticICONS } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 
 export interface INavLink {
   id?: string;
@@ -22,10 +23,10 @@ export const NavigationSection: React.FunctionComponent<INavigationSectionProps>
     <div className={`${styles.link_list} ${styles.section}`}>
       {links.map(link => (
         <div key={link.id} className={styles.link_line}>
-          <a href={link.url}>
+          <Link to={link.url}>
             { link.icon && <Icon name={link.icon} className={styles.icon} /> }
             {link.text}
-          </a>
+          </Link>
         </div>
       ))}
     </div>

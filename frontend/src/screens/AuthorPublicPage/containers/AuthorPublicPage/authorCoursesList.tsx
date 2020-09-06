@@ -23,16 +23,16 @@ const CoursesList: React.FC<IAuthorCoursesList> = ({ authorData, courses }) => (
             authorName={`${authorData.firstName} ${authorData.lastName}`}
             authorId={authorData.id}
             tags={c.tags.map(tag => tag.name)}
-            rating={0}
+            rating={Math.round(c.positiveReactions / c.allReactions)}
             image={c.imageSrc}
-            lecturesNumber={0}
+            lecturesNumber={c.lectures}
             durationMinutes={c.duration}
             level={c.level}
             flag={null}
             action={null}
             name={c.name}
             description={null}
-            ratingCount={0}
+            ratingCount={c.allReactions}
             className={styles.preview}
           />
         </div>

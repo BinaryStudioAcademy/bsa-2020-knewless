@@ -23,7 +23,10 @@ const basicAuthorData = {
     author: '',
     tags: [],
     imageSrc: '',
-    duration: 0
+    duration: 0,
+    lectures: 0,
+    positiveReactions: 0,
+    allReactions: 0
   }],
   articles: [{
     id: '',

@@ -24,12 +24,14 @@ export const reducerCreator = (actionTypesFromDomains: string[]) => (
     case 'TRIGGER':
       return {
         ...state,
-        loading: true
+        loading: true,
+        error: undefined
       };
     case 'SUCCESS':
       return {
         ...state,
-        loading: false
+        loading: false,
+        error: undefined
       };
     case 'FAILURE':
       return {

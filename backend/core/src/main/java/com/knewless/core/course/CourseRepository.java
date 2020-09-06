@@ -75,7 +75,7 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
             "concat(c.author.firstName,' ' , c.author.lastName), c.image, " +
             "(SELECT COALESCE(SUM(cl.duration), 0) FROM c.lectures as cl), " +
             "(SELECT COALESCE(SUM(cr.reaction), 0) FROM c.reactions as cr), " +
-            "SIZE(c.reactions), c.updatedAt" +
+            "SIZE(c.reactions), c.updatedAt, SIZE(c.lectures) " +
             ") " +
             "FROM Course as c " +
             "WHERE c.author.id = :authorId AND c.releasedDate IS NOT NULL " +
@@ -157,4 +157,9 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
 
     List<Course> findAllByAuthorId(UUID id);
 
+    @Query("SELECT c.id " +
+            "FROM Course c JOIN c.reactions cr " +
+            "GROUP BY c.id " +
+            "ORDER BY (SUM(cr.reaction) / SIZE(c.reactions)) DESC, SIZE(c.reactions) DESC ")
+    List<UUID> getPopularCourses(Pageable pageable);
 }

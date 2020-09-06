@@ -7,6 +7,7 @@ import { StyledRating } from '../StyledRating';
 import defaultCourseImage from 'assets/images/default_course_image.jpg';
 import { timeFormat } from '@helpers/time.helper';
 import { Tag } from '@components/TagSelector';
+import { Link } from 'react-router-dom';
 
 export interface ICourseCardProps {
   id?: string;
@@ -44,10 +45,10 @@ export const CourseCard: React.FC<ICourseCardProps> = ({
     </div>
     <CardContent className={styles.inner_wrapper}>
       <CardHeader className={styles.title}>
-        <a href={`/course/${id}`} className={styles.link}><span>{name}</span></a>
+        <Link to={`/course/${id}`} className={styles.link}><span>{name}</span></Link>
       </CardHeader>
       <CardMeta className={styles.meta_info}>
-        {authorId ? <span><a href={`/author/${authorId}`}>{author}</a></span> : <span>{author}</span>}
+        {authorId ? <span><Link to={`/author/${authorId}`}>{author}</Link></span> : <span>{author}</span>}
         <span className={styles.duration}>{timeFormat(duration)}</span>
         <span className={styles.level_text}>{level}</span>
       </CardMeta>

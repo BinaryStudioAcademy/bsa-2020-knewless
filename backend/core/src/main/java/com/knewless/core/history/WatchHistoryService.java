@@ -10,6 +10,7 @@ import com.knewless.core.tag.model.Tag;
 import com.knewless.core.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,6 +26,8 @@ public class WatchHistoryService {
     private final UserRepository userRepository;
     private final TagRepository tagRepository;
     private final DailyProgressService dailyProgressService;
+    @Value("${app.watch_history.progress_completed_threshold}")
+    private double PROGRESS_COMPLETED_THRESHOLD;
 
     @Autowired
     public WatchHistoryService(HistoryRepository historyRepository,
@@ -42,14 +45,33 @@ public class WatchHistoryService {
 	public long getTotalViewSeconds(UUID userId) {
 		return historyRepository.getTotalViewSecondsByUserId(userId);
 	}
-
-    public long getProgress(UUID userId, UUID courseId) {
-        return historyRepository.getProgressByUserAndCourse(userId, courseId);
+    
+    /**
+     * @return value between 0 and 100 - percent of completion
+     */
+    public int getProgressByCourse(UUID userId, UUID courseId) {
+        long lectureNum = lectureRepository.countAllByCourse_Id(courseId);
+        long historiesNum = historyRepository.countAllByUserAndCourse(userId, courseId);
+        float avgProgress = historyRepository.getAverageProgressByLectures(userId, courseId);
+        float fracture = (historiesNum * avgProgress) / lectureNum;
+        if (fracture >= PROGRESS_COMPLETED_THRESHOLD) {
+            fracture = 1;
+        }
+        return (int) (fracture * 100);
     }
+    
+    /**
+     * @return value between 0 and 100 - percent of completion
+     */
     public int getProgressByLecture(UUID userId, UUID lectureId) {
         var history = historyRepository.findByUser_IdAndLecture_Id(userId, lectureId);
-        return history.map(value -> value.getSecondsWatched() * 100 / value.getLecture().getDuration()).orElse(0);
-    
+        return history.map(h -> {
+            if (h.getFractionWatched() >= PROGRESS_COMPLETED_THRESHOLD) {
+                return 100;
+            } else {
+                return (int) h.getFractionWatched() * 100;
+            }
+        }).orElse(0);
     }
 
 	public long getViewedSeconds(UUID userId, UUID lectureId) {

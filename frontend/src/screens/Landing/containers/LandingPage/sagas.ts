@@ -7,11 +7,9 @@ function* getData() {
   try {
     const coursesResp = yield call(landingService.getPopularCourses);
     const pathsResp = yield call(landingService.getPaths);
-    const navigationsResp = yield call(landingService.getNavigations);
     yield put(fetchDataRoutine.success({
       courses: coursesResp,
-      paths: pathsResp,
-      navigations: navigationsResp
+      paths: pathsResp
     }));
   } catch (error) {
     yield put(fetchDataRoutine.failure(error?.message));

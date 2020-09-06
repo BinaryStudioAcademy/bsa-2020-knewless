@@ -18,8 +18,7 @@ export const authReducer = (state: IDataAuth = initialState, action: Routine<any
       return {
         ...state,
         isAuthorized: false
-      }
-
+      };
     default:
       return state;
   }
