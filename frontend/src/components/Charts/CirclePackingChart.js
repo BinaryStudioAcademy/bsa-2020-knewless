@@ -3,17 +3,22 @@ import * as d3 from 'd3';
 
 const CirclePackingChart = D3blackbox((anchor, props, state) => {
   const { width, height, data, wrapperId, styles } = props;
+
   if (data === undefined || data === null) return;
+
   const MAX_CIRCLES_AMOUNT = 14;
   if (data.length > MAX_CIRCLES_AMOUNT) {
     data.length = MAX_CIRCLES_AMOUNT;
   }
+
+  const maxValue = Math.max(...data.map(d => d.value), 0);
+
   const svg = d3.select(anchor.current);
   svg.datum(data);
 
   const size = d3.scaleLinear()
-    .domain([0, 12])
-    .range([0, 80]);
+    .domain([0, maxValue])
+    .range([0, maxValue * 7]);
 
   const Tooltip = d3.select(`#${wrapperId}`)
     .append('div')

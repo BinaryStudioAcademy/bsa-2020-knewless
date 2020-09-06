@@ -28,8 +28,8 @@ $side_padding: 80px
 .authorAvatarWrapper
   grid-area: avatar
   display: flex
-  align-items: flex-start
-  justify-content: left
+  align-items: center
+  justify-content: flex-start
   height: 100%
   padding: 1em 1em 0 0
 
@@ -47,7 +47,7 @@ $side_padding: 80px
   justify-content: flex-start
   padding-bottom: 1.7%
   padding-top: 5%
-  font-size: 200%
+  font-size: 1.5vw
   font-weight: lighter
 
 .authorKnewlessStatic
@@ -63,8 +63,8 @@ $side_padding: 80px
 .subscribersNumber
   display: flex
   align-items: center
-  padding-top: 2.5%
-  font-size: 115%
+  padding-top: .5em
+  font-size: 1.1vw
   font-weight: lighter
 
 .authorNumberFollowers
@@ -74,6 +74,7 @@ $side_padding: 80px
   padding-top: 7%
   word-break: break-word
   padding-right: 15%
+  font-size: 0.9vw
 
 .cardsAuthorPublicPageWrapper
   grid-area: cards
@@ -104,6 +105,8 @@ $side_padding: 80px
       display: grid
       grid-template-rows: 75% 25%
       grid-template-areas: " mainPart " " bottomPart "
+      justify-content: center
+      align-items: center
 
       .cardMainInfo
         grid-area: mainPart
@@ -115,16 +118,16 @@ $side_padding: 80px
         justify-content: center
 
       .cardTextField
-        padding-top: .1em
+        padding-top: .3em
         height: 100%
-        font-size: 7vw
+        font-size: 5vw
         text-align: center
 
       .cardBottomText
         grid-area: bottomPart
         height: 100%
         padding-top: .1em
-        font-size: 1.8vw
+        font-size: 1.3vw
 
 .listCoursesArticlesWrapper
   grid-area: list
@@ -180,12 +183,12 @@ svg
 
 .menu__options
   display: grid
-  grid-template-columns: 7rem 7rem auto
+  grid-template-columns: 6vw 7vw auto
   grid-template-rows: 1fr 0.1rem
   justify-items: center
 
   p
-    font-size: 1.4em
+    font-size: 1.3vw
     font-weight: 600
 
 .menu__button
@@ -227,6 +230,7 @@ svg
 
   .coursePreviewWrapper, .articlePreviewWrapper
     border-bottom: 2px solid #434558
+
     .preview
       background: #2a2b37
 

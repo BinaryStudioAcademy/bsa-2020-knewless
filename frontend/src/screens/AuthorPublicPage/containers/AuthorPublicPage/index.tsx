@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { IBindingCallback1 } from 'models/Callbacks';
 import {
   fetchAuthorDataRoutine,
@@ -33,9 +33,10 @@ export interface IAuthorPublic {
   checkFavourite: IBindingCallback1<IFavourite>;
   changeFavourite: IBindingCallback1<IFavourite>;
   favourite: boolean;
+  loadingError: string;
 }
 
-const AuthorPublicPage: React.FunctionComponent<IAuthorPublic> = ({
+const AuthorPublicPage: React.FC<IAuthorPublic> = ({
   match,
   fetchAuthorData,
   authorData,
@@ -45,12 +46,14 @@ const AuthorPublicPage: React.FunctionComponent<IAuthorPublic> = ({
   loading = true,
   changeFavourite,
   checkFavourite,
-  favourite
+  favourite,
+  loadingError
 }) => {
   useEffect(() => {
     fetchAuthorData(match.params.authorId);
     checkFavourite({ id: match.params.authorId, type: SourceType.AUTHOR });
   }, [checkFavourite]);
+
   const handleOnClickFollow = () => {
     followAuthor(match.params.authorId);
   };
@@ -70,12 +73,16 @@ const AuthorPublicPage: React.FunctionComponent<IAuthorPublic> = ({
 
   const chart = {
     wrapperId: 'chart',
-    width: 110,
-    height: 110
+    width: 120,
+    height: 120
   };
 
   const isSelfPublicPage = user.id === authorData.userId;
   const isUser = user.role?.name === 'USER';
+
+  if (loadingError) return <Redirect to="/404" />;
+
+  const authorCoursesTags = getTagsNameWithCountFromCourses(authorData.courses);
 
   return (
     <div className={styles.page}>
@@ -148,14 +155,16 @@ const AuthorPublicPage: React.FunctionComponent<IAuthorPublic> = ({
               <div className={styles.cardSchoolLinkWrapper}>
                 <div className={styles.cardStyleAuthorPublic}>
                   <div className={`${styles.cardMainInfo} ${styles.cardTextField}`}>
-                    <ChartWrapper width={chart.width} height={chart.height} id={chart.wrapperId}>
-                      <CirclePackingChart
-                        data={getTagsNameWithCountFromCourses(authorData.courses)}
-                        width={chart.width}
-                        height={chart.height}
-                        wrapperId={chart.wrapperId}
-                      />
-                    </ChartWrapper>
+                    {authorCoursesTags.length > 0 ? (
+                      <ChartWrapper width={chart.width} height={chart.height} id={chart.wrapperId}>
+                        <CirclePackingChart
+                          data={authorCoursesTags}
+                          width={chart.width}
+                          height={chart.height}
+                          wrapperId={chart.wrapperId}
+                        />
+                      </ChartWrapper>
+                    ) : 0}
                   </div>
                   <div className={styles.cardBottomText}>
                     Topics
@@ -187,6 +196,7 @@ const mapStateToProps = (state: any) => ({
   authorData: state.authorPublicData.authorData,
   user: state.appRouter.user,
   loading: state.authorPublicData.requests.dataRequest.loading,
+  loadingError: state.authorPublicData.requests.dataRequest.error,
   favourite: state.authorPublicData.authorData?.favourite
 });
 

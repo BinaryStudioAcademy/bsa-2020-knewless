@@ -51,12 +51,14 @@ const StudentProfile: React.FC<IStudentProfileProps> = ({
 
   const chart = {
     wrapperId: 'chart',
-    width: 130,
-    height: 130,
+    width: 110,
+    height: 110,
     styles: {
       circlesColor: '#fff'
     }
   };
+
+  const studentCoursesTags = getTagsNameWithCountFromCourses(profile.courses);
 
   return (
     <div className={styles.profile}>
@@ -68,18 +70,20 @@ const StudentProfile: React.FC<IStudentProfileProps> = ({
           <div className={styles.clock}>
             <ViewTotalTime totalTime={profile.totalContentWatched} />
           </div>
-          <div className={styles.chart}>
-            <ChartWrapper width={chart.width} height={chart.height} id={chart.wrapperId}>
-              <CirclePackingChart
-                data={getTagsNameWithCountFromCourses(profile.courses)}
-                width={chart.width}
-                height={chart.height}
-                wrapperId={chart.wrapperId}
-                styles={chart.styles}
-              />
-            </ChartWrapper>
-            <div className={styles.chartLabel}>Topics</div>
-          </div>
+          {studentCoursesTags.length > 0 && (
+            <div className={styles.chart}>
+              <ChartWrapper width={chart.width} height={chart.height} id={chart.wrapperId}>
+                <CirclePackingChart
+                  data={studentCoursesTags}
+                  width={chart.width}
+                  height={chart.height}
+                  wrapperId={chart.wrapperId}
+                  styles={chart.styles}
+                />
+              </ChartWrapper>
+              <div className={styles.chartLabel}>Topics</div>
+            </div>
+          )}
         </div>
       </div>
       <div className={styles.detailsProfile}>
