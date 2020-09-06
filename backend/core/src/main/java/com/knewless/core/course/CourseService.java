@@ -98,21 +98,22 @@ public class CourseService {
         Author author = authorRepository.findByUserId(userId).orElseThrow(
                 () -> new ResourceNotFoundException("Author", "userId", userId)
         );
-        List<Lecture> allLectures = lectureRepository.getLecturesByUserId(userId);
-        List<UUID> idLecturesToSave = request.getLectures();
-        allLectures.removeIf(l -> !idLecturesToSave.contains(l.getId()));
+        List<Lecture> savedLectures = lectureRepository.findAllById(request.getLectures());
         List<Lecture> thisLectures = new ArrayList<>();
         List<Homework> homeworks = new ArrayList<>();
-        Course course = Course.builder().level(Level.valueOf(request.getLevel())).author(author)
-                .name(request.getName()).description(request.getDescription()).image(request.getImage())
+        Course course = Course.builder().level(request.getLevel() == "" ? null : Level.valueOf(request.getLevel()))
+                .author(author).name(request.getName()).description(request.getDescription()).image(request.getImage())
                 .overview(request.getOverview()).build();
-        for (Lecture l : allLectures) {
+        for (Lecture l : savedLectures) {
             Lecture lec;
             if (l.getCourse() == null) {
                 lec = l;
             } else {
+                var lectureTags =
+                        tagRepository.findAllById(l.getTags().stream().map(t->t.getId()).collect(Collectors.toList()));
                 lec = Lecture.builder().name(l.getName())
                         .webLink(l.getWebLink())
+                        .tags(new HashSet<>(lectureTags))
                         .urlOrigin(l.getUrlOrigin())
                         .url1080(l.getUrl1080())
                         .url720(l.getUrl720())
@@ -139,10 +140,13 @@ public class CourseService {
         List<Lecture> lectures = lectureRepository.saveAll(thisLectures);
 
         savedCourse.setLectures(lectures);
-        CompletableFuture.runAsync(() -> esService.put(EsDataType.COURSE, savedCourse));
 
-        String message = author.getFirstName() + " " + author.getLastName() + " added new course.";
-        subscriptionService.notifySubscribers(author.getId(), SourceType.AUTHOR, course.getId(), SourceType.COURSE, message);
+        if (request.getIsReleased()) {
+            CompletableFuture.runAsync(() -> esService.put(EsDataType.COURSE, savedCourse));
+            String message = author.getFirstName() + " " + author.getLastName() + " added new course.";
+            subscriptionService.notifySubscribers(author.getId(), SourceType.AUTHOR, course.getId(), SourceType.COURSE, message);
+        }
+
         return new CreateCourseResponseDto(course.getId(), true);
     }
 
@@ -162,21 +166,60 @@ public class CourseService {
 
         course.setName(request.getName());
         course.setImage(request.getImage());
-        course.setLevel(Level.valueOf(request.getLevel()));
+        course.setLevel((request.getLevel()==null || request.getLevel() == "") ? null : Level.valueOf(request.getLevel()));
         course.setDescription(request.getDescription());
         course.setOverview(request.getOverview());
-        
-        List<Lecture> lectures = lectureRepository.findAllById(request.getLectures());
-        course.setLectures(lectures);
 
+        List<Lecture> savedLectures = lectureRepository.findAllById(request.getLectures());
+        List<Lecture> thisLectures = new ArrayList<>();
+        List<Homework> homeworks = new ArrayList<>();
+
+        for (Lecture l : savedLectures) {
+            Lecture lec;
+            if (l.getCourse() == null || l.getCourse().equals(course)) {
+                lec = l;
+            } else {
+                var lectureTags =
+                        tagRepository.findAllById(l.getTags().stream().map(t->t.getId()).collect(Collectors.toList()));
+                lec = Lecture.builder().name(l.getName())
+                        .course(course)
+                        .tags(new HashSet<>(lectureTags))
+                        .webLink(l.getWebLink())
+                        .urlOrigin(l.getUrlOrigin())
+                        .url1080(l.getUrl1080())
+                        .url720(l.getUrl720())
+                        .url480(l.getUrl480())
+                        .description(l.getDescription())
+                        .duration(l.getDuration()).build();
+            }
+            if (l.getHomework() != null) {
+                Homework homework = new Homework(l.getHomework().getDescription(), lec);
+                homeworks.add(homework);
+            }
+            thisLectures.add(lec);
+        }
+
+        course.setLectures(thisLectures);
+        homeworkRepository.saveAll(homeworks);
+        thisLectures.forEach(l -> {
+            Optional<Homework> ophw = homeworks.stream().filter(h -> h.getLecture().getId().equals(l.getId())).findFirst();
+            ophw.ifPresent(l::setHomework);
+        });
         if (request.getIsReleased()) {
             course.setReleasedDate(new Date());
         }
+
+        lectureRepository.saveAll(thisLectures);
         Course updatedCourse = courseRepository.save(course);
 
         CompletableFuture.runAsync(() -> esService.update(EsDataType.COURSE, updatedCourse));
 
-        String message = author.getFirstName() + " " + author.getLastName() + " updated course: " + updatedCourse.getName();
+        String message;
+        if (request.getIsReleased()) {
+            message = author.getFirstName() + " " + author.getLastName() + " added new course.";
+        } else {
+            message = author.getFirstName() + " " + author.getLastName() + " updated course: " + updatedCourse.getName();
+        }
         subscriptionService.notifySubscribers(author.getId(), SourceType.AUTHOR, course.getId(), SourceType.COURSE, message);
         return new CreateCourseResponseDto(updatedCourse.getId(), true);
     }
@@ -288,7 +331,6 @@ public class CourseService {
         );
         var course = CourseMapper.MAPPER.courseToCourseFullInfoDto(courseEntity);
         var courseWithRating = getCourseById(id);
-
         if (userId != null) {
             reactionRepository.findByCourseIdAndUserId(id, userId).ifPresent(userRating -> course.setReview(userRating.getReaction()));
             course.setProgress(watchHistoryService.getProgressByCourse(userId, id));
@@ -334,27 +376,60 @@ public class CourseService {
                 .collect(Collectors.toUnmodifiableList());
     }
 
+    // all courses with drafts
     public List<CourseDetailsDto> getAllAuthorCourses(UserPrincipal user) {
         Role role = userService.getUserRole(user.getEmail());
         if (role.getName() != RoleType.AUTHOR) {
             return List.of();
         }
         Author author = authorRepository.findByUserId(user.getId()).orElseThrow();
-
-        return courseRepository.getDetailCoursesByAuthorId(author.getId()).stream()
+        List<CourseDetailsDto> result = courseRepository.getDetailCoursesByAuthorId(author.getId()).stream()
                 .map(this::mapCourseDetailsQueryResultToDto)
-                .collect(Collectors.toUnmodifiableList());
+                .collect(Collectors.toList());
+        Collections.sort(result,
+                (c1, c2) -> (int) ((c2.getReleasedDate() == null ? Integer.MAX_VALUE : c2.getReleasedDate().getTime())
+                        - (c1.getReleasedDate() == null ? Integer.MAX_VALUE : c1.getReleasedDate().getTime())));
+        return result;
     }
 
+    //course with draft
     public CourseFullInfoDto getEditCourseById(UserPrincipal user, UUID id) {
         Author author = authorRepository.findByUserId(user.getId()).orElseThrow(
                 () -> new ResourceNotFoundException("Author", "userId", user.getId())
         );
-        CourseFullInfoDto course = getAllCourseInfoById(id, user.getId());
 
-        String courseAuthorId = course.getAuthor().getId().toString();
-        String authorId = author.getId().toString();
-        if (!authorId.equals(courseAuthorId)) {
+        Course courseEntity = courseRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Course", "id", id)
+        );
+
+        var course = CourseMapper.MAPPER.courseToCourseFullInfoDto(courseEntity);
+
+        if (user.getId() != null && courseEntity.getReleasedDate() != null) {
+            var courseWithRating = CourseMapper.MAPPER.courseQueryResultToCourseDto(
+                    courseRepository.getCourseByIdToEdit(id).orElseThrow(() -> new ResourceNotFoundException("Course", "id", id))
+            );
+            courseWithRating.setTags(mapTagsToTagDtos(this.tagRepository.getTagsByCourseId(id)));
+
+            reactionRepository.findByCourseIdAndUserId(id, user.getId()).ifPresent(userRating -> course.setReview(userRating.getReaction()));
+            course.setProgress(watchHistoryService.getProgressByCourse(user.getId(), id));
+            course.setRatingCount(reactionRepository.countByCourseId(id));
+            course.setRating(courseWithRating.getRating());
+            course.setDuration(courseWithRating.getDuration());
+        }
+
+
+        List<ShortLectureDto> lectures = courseEntity.getLectures()
+                .stream()
+                .map(LectureMapper.MAPPER::lectureToShortLectureDto)
+                .collect(Collectors.toList());
+
+        course.setLectures(lectures);
+
+        course.setAuthor(AuthorMapper.MAPPER.authorBriefInfoToMainInfoDto(
+                authorService.getAuthorInfoByUserId(courseEntity.getAuthor().getUser().getId())
+        ));
+
+        if (!author.getId().equals(courseEntity.getAuthor().getId())) {
             throw new ResourceNotFoundException("Author", "userId", user.getId());
         }
         return course;

@@ -9,6 +9,7 @@ export interface IAddPathState {
     fetchCoursesRequest: IRequestState;
     savePathRequest: IRequestState;
     fetchEditPathRequest: IRequestState;
+    updatePathRequest: IRequestState;
   };
   data: IAddPathData;
 }
@@ -17,3 +18,4 @@ export const areTagsLoading = (state: IAppState) => state.addPathPage.requests.f
 export const areCoursesLoading = (state: IAppState) => state.addPathPage.requests.fetchCoursesRequest.loading;
 export const isPathUploading = (state: IAppState) => state.addPathPage.requests.savePathRequest.loading;
 export const isEditPathLoading = (state: IAppState) => state.addPathPage.requests.fetchEditPathRequest.loading;
+export const isEditPathUploading = (state: IAppState) => state.addPathPage.requests.updatePathRequest.loading;

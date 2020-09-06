@@ -82,6 +82,8 @@ export const MyCourses: React.FC<IMyCourses> = ({
                   description={c.description}
                   members={c?.members}
                   ratingCount={c.ratingCount}
+                  role={role}
+                  isReleased={c.releasedDate !== null}
                 />
               ))}
             </div>

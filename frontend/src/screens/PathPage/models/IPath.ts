@@ -10,4 +10,5 @@ export interface IPath {
   author: IAuthor;
   authors: IAuthor[];
   userId: string;
+  favourite: boolean;
 }

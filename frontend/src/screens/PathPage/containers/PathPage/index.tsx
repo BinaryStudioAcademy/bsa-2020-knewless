@@ -8,7 +8,9 @@ import { InlineLoaderWrapper } from '@components/InlineLoaderWrapper';
 import styles from './styles.module.sass';
 import { IBindingCallback1 } from '@models/Callbacks';
 import { IPath } from '@screens/PathPage/models/IPath';
-import { fetchPathDataRoutine } from '@screens/PathPage/routines';
+import { fetchPathDataRoutine, changeFavouritePathStateRoutine, checkFavouritePathStateRoutine } from '@screens/PathPage/routines';
+import { IFavourite } from '@components/AddToFavouritesButton/component';
+import { SourceType } from '@components/AddToFavouritesButton/helper/SourceType';
 
 interface IPathPageProps {
   fetchData: IBindingCallback1<string>;
@@ -17,11 +19,23 @@ interface IPathPageProps {
   isAuthorized: boolean;
   role: string;
   userId: string;
+  checkFavourite: IBindingCallback1<IFavourite>;
+  changeFavourite: IBindingCallback1<IFavourite>;
+  favourite: boolean;
   error: string;
 }
 
-const PathPage: React.FC<IPathPageProps> = ({
-  fetchData, path, loading, isAuthorized, role, userId, error
+const PathPage: React.FC<IPathPageProps> = ({ 
+  fetchData,
+  path,
+  loading,
+  isAuthorized,
+  role,
+  userId,
+  checkFavourite,
+  changeFavourite,
+  favourite,
+  error
 }) => {
   const { pathId } = useParams();
 
@@ -30,6 +44,17 @@ const PathPage: React.FC<IPathPageProps> = ({
       fetchData(pathId);
     }
   }, [pathId]);
+
+  
+  useEffect(() => {
+    if (pathId && role === "USER") {
+      checkFavourite({
+        id: pathId,
+        type: SourceType.PATH
+      });
+    }
+  }, [pathId]);
+
   if (loading) {
     return (
       <div className={`${styles.content} ${styles.content__loading}`}>
@@ -41,11 +66,17 @@ const PathPage: React.FC<IPathPageProps> = ({
   if (error) return <Redirect to="/404" />;
 
   return (
-    <div>
-      <div className={styles.content}>
-        <PathOverview isAuthorized={isAuthorized} path={path} pathId={pathId} role={role} userId={userId} />
-        <PathMenu path={path} />
-      </div>
+    <div className={styles.content}>
+      <PathOverview 
+        favourite={favourite}
+        changeFavourite={changeFavourite}
+        isAuthorized={isAuthorized}
+        path={path}
+        pathId={pathId}
+        role={role}
+        userId={userId}
+      />
+      <PathMenu path={path} />
     </div>
   );
 };
@@ -58,12 +89,15 @@ const mapStateToProps = (state: IAppState) => {
     error: state.pathPage.requests.dataRequest.error,
     userId: state.appRouter.user.id,
     role: state.appRouter.user.role?.name,
-    isAuthorized
+    isAuthorized,
+    favourite: path.favourite
   };
 };
 
 const mapDispatchToProps = {
-  fetchData: fetchPathDataRoutine
+  fetchData: fetchPathDataRoutine,
+  checkFavourite: checkFavouritePathStateRoutine,
+  changeFavourite: changeFavouritePathStateRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PathPage);

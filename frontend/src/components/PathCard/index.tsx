@@ -1,7 +1,9 @@
 import React, { RefObject } from 'react';
 import styles from './styles.module.sass';
 import { timeFormat } from '@helpers/time.helper';
-import { Link } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
+import noImage from '@images/no_image.png';
+import { Label } from 'semantic-ui-react';
 
 export interface IPathCardProps {
   id?: string;
@@ -12,6 +14,8 @@ export interface IPathCardProps {
   imageRef?: RefObject<HTMLImageElement>;
   clickableImage?: boolean;
   className?: string;
+  released?: boolean;
+  role?: string;
 }
 
 export const PathCard: React.FunctionComponent<IPathCardProps> = (
@@ -22,19 +26,36 @@ export const PathCard: React.FunctionComponent<IPathCardProps> = (
     duration,
     imageRef,
     clickableImage = false,
-    className
+    className,
+    released,
+    role
   }
-) => (
+) => {
+  const location = useLocation();
+  return (
   <div className={className || ''}>
     <div className={styles.container}>
+      {location.pathname === "/paths" && role === "AUTHOR" && !released &&
+      (<NavLink exact to={`/path/edit/${id}`}>
+        <Label
+          as="a"
+          basic
+          className={styles.ribbon_label}
+        >
+          Draft
+        </Label>
+      </NavLink>)}
       <img
-        src={logoSrc}
+        src={logoSrc || noImage}
         className={`${styles.logo} ${clickableImage && styles.clickable}`}
         alt="Path logo"
         ref={imageRef}
       />
       <div className={styles.title}>
-        {id ? <Link to={`/path/${id}`} className={styles.link}>{name}</Link>
+        {id ? (
+        <NavLink exact to={released === false ? `/path/edit/${id}` : `/path/${id}`}>
+          <span className={styles.link}>{name}</span>
+        </NavLink>)
           : <span>{name}</span>}
       </div>
       <div className={styles.meta}>
@@ -49,3 +70,4 @@ export const PathCard: React.FunctionComponent<IPathCardProps> = (
     </div>
   </div>
 );
+}

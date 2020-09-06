@@ -34,4 +34,6 @@ public class PathUpdateRequestDto {
 
     @NotNull
     private UUID imageTag;
+
+    private Boolean isReleased = false;
 }

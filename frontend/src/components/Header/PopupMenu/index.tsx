@@ -26,7 +26,7 @@ const PopupMenu: React.FC<IPopupMenuProps> = ({ user, authorId, isSettingsFilled
     } else {
       profilePath = '/login';
     }
-    isSettingsFilled? history.push(profilePath) : history.push('/settings');
+    isSettingsFilled ? history.push(profilePath) : history.push('/settings');
   };
   const handleOnClickHistory = () => {
     isSettingsFilled? history.push('/history') : history.push('/settings');

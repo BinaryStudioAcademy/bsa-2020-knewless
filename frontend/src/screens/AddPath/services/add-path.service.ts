@@ -30,7 +30,8 @@ export async function updatePath(path: IPath) {
       description: path.description,
       tags: path.tags.map(t => t.id),
       courses: path.courses.map(c => c.id),
-      imageTag: path.imageTag?.id
+      imageTag: path.imageTag?.id,
+      isReleased: path.isReleased
     }
   });
 
@@ -55,7 +56,8 @@ export async function uploadPath(path: IPath) {
       description: path.description,
       tags: path.tags.map(t => t.id),
       courses: path.courses.map(c => c.id),
-      imageTag: path.imageTag?.id
+      imageTag: path.imageTag?.id,
+      isReleased: path.isReleased
     }
   });
   return response.json();
@@ -63,4 +65,8 @@ export async function uploadPath(path: IPath) {
 
 export function forwardHome() {
   history.push('/');
+}
+
+export function forwardPaths() {
+  history.push('/paths');
 }

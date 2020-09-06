@@ -5,6 +5,7 @@ export interface ICourseItem {
   authorName: string;
   level: string;
   imageSrc: string;
+  releasedDate: Date;
   duration: number;
   description: string;
   lectures: number;

@@ -15,7 +15,7 @@ public interface CourseMapper {
               (int) Math.floor(((float) positiveReactions / allReactions)+0.5);
     }
 
-    @Mapping(target = "level", expression = "java(s.getLevel().name())")
+    @Mapping(target = "level", expression = "java(s.getLevel() == null? null : s.getLevel().name())")
     @Mapping(target = "rating", expression = "java(CourseMapper.calculateRating(s.getAllReactions(), s.getPositiveReactions()))")
     @Mapping(source = "allReactions", target = "ratingCount")
     @Mapping(target = "reviewed", ignore = true)

@@ -1,6 +1,7 @@
 $previewheight: 15em
 
 .container
+  position: relative
   background: #2A2B37
   display: flex
   align-items: center
@@ -188,3 +189,30 @@ $previewheight: 15em
     margin-right: 5px
     font-size: 11px
     color: #FF8576
+
+\:global(.ui.basic.label).ribbon_label
+  position: absolute
+  top: 0
+  left: 0
+  color: black
+  height: 2em
+  width: 3.5em
+  background-color: grey
+  border-radius: 0
+  border-bottom-right-radius: 4px 
+  padding: auto
+  padding: 5px
+  border: none
+  &:hover
+    position: absolute
+    height: 2em
+    width: 3.5em
+    top: 0
+    left: 0
+    border: none
+    background-color: grey
+    opacity: 1
+    color: black
+    border-radius: 0
+    border-bottom-right-radius: 4px
+    padding: 5px

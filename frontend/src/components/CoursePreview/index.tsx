@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Icon, Label } from 'semantic-ui-react';
 import { StyledRating } from '@components/StyledRating';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import styles from './styles.module.sass';
 import { timeFormat } from '@helpers/time.helper';
 import Ellipsis from 'react-ellipsis-pjs';
@@ -23,13 +23,16 @@ export interface ICoursePreviewProps {
   action?: (any) => void;
   className?: string;
   ratingCount: number;
+  role?: string;
+  isReleased?: boolean;
 }
 
 export const CoursePreview: React.FC<ICoursePreviewProps> = ({
   image, lecturesNumber, durationMinutes, level, flag, action, name, description,
   id, authorName, authorId, tags, rating, className, members,
-  ratingCount
+  ratingCount, role, isReleased
 }) => {
+  const location = useLocation();
   const optionalIcon = (isSelected: boolean) => {
     switch (isSelected) {
       case true:
@@ -53,6 +56,16 @@ export const CoursePreview: React.FC<ICoursePreviewProps> = ({
 
   return (
     <div className={`${styles.container} ${className || ''}`}>
+      {location.pathname === "/courses" && role === "AUTHOR" && !isReleased &&
+        (<NavLink exact to={`/course/edit/${id}`}>
+          <Label
+            as="a"
+            basic
+            className={styles.ribbon_label}
+          >
+            Draft
+          </Label>
+        </NavLink>)}
       <div className={styles.meta__image}>
         {flag !== undefined ? <img src={image} alt="" className={styles.inactive_avatar} />
           : (
@@ -85,7 +98,7 @@ export const CoursePreview: React.FC<ICoursePreviewProps> = ({
         </div>
         <div className={styles.title_container}>
           <div className={styles.course_name}>
-            <NavLink exact to={`/course/${id}`}>
+            <NavLink exact to={isReleased === false ? `/course/edit/${id}` : `/course/${id}`}>
               <div className={styles.nameText}>
                 <Ellipsis text={name} lines={2} />
               </div>
@@ -99,7 +112,7 @@ export const CoursePreview: React.FC<ICoursePreviewProps> = ({
         <div className={styles.author}>
           <NavLink exact to={`/author/${authorId}`}>
             <span>
-              <i>{`by ${authorName}`}</i>
+              {authorId && <i>{`by ${authorName}`}</i>}
             </span>
           </NavLink>
         </div>

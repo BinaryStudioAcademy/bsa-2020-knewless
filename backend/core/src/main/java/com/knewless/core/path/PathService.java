@@ -90,6 +90,7 @@ public class PathService {
         var path = this.pathRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Path", "pathId", id)
         );
+        if (path.getReleasedDate() == null) throw new ResourceNotFoundException("Path", "pathId", id);
         var pathPageDto = PathMapper.MAPPER.pathToPathPageDto(path);
         var authors = new ArrayList<AuthorMainInfoDto>();
         var courses = path.getCourses().stream()
@@ -140,19 +141,21 @@ public class PathService {
         var path = new Path();
         var courses = this.courseRepository.findAllById(request.getCourses());
         var tags = this.tagRepository.findAllById(request.getTags());
+        var author = this.authorRepository.findByUserId(userId).orElseThrow();
         path.setName(request.getName());
         path.setDescription(request.getDescription());
-        path.setImageTag(this.tagRepository.getOne(request.getImageTag()));
-        path.setAuthor(this.authorRepository.findByUserId(userId).orElseThrow());
+        path.setImageTag(request.getImageTag() == null? null : this.tagRepository.getOne(request.getImageTag()));
+        path.setAuthor(author);
+        if (request.getIsReleased()) path.setReleasedDate(new Date());
         path.setTags(tags);
         path.setCourses(courses);
         var savedPath = this.pathRepository.save(path);
         var result = savedPath.getId();
-        var author = this.authorRepository.findByUserId(userId).orElseThrow();
-        var message = author.getFirstName() + " " + author.getLastName() + " added new path.";
-        this.subscriptionService.notifySubscribers(author.getId(), SourceType.AUTHOR, result, SourceType.PATH, message);
-
-        CompletableFuture.runAsync(() -> esService.put(EsDataType.PATH, savedPath));
+        if (request.getIsReleased()) {
+            var message = author.getFirstName() + " " + author.getLastName() + " added new path.";
+            this.subscriptionService.notifySubscribers(author.getId(), SourceType.AUTHOR, result, SourceType.PATH, message);
+            CompletableFuture.runAsync(() -> esService.put(EsDataType.PATH, savedPath));
+        }
         return result;
     }
 
@@ -161,19 +164,21 @@ public class PathService {
         var path = this.pathRepository.getOne(request.getId());
         var courses = this.courseRepository.findAllById(request.getCourses());
         var tags = this.tagRepository.findAllById(request.getTags());
+        var author = this.authorRepository.findByUserId(userId).orElseThrow();
         path.setName(request.getName());
         path.setDescription(request.getDescription());
-        path.setImageTag(this.tagRepository.getOne(request.getImageTag()));
-        path.setAuthor(this.authorRepository.findByUserId(userId).orElseThrow());
+        path.setImageTag(request.getImageTag() == null? null : this.tagRepository.getOne(request.getImageTag()));
+        path.setAuthor(author);
         path.setTags(tags);
         path.setCourses(courses);
+        if (request.getIsReleased()) path.setReleasedDate(new Date());
         var savedPath = this.pathRepository.save(path);
         var result = savedPath.getId();
-        var author = this.authorRepository.findByUserId(userId).orElseThrow();
-        var message = author.getFirstName() + " " + author.getLastName() + " updated path: " + path.getName();
-        this.subscriptionService.notifySubscribers(author.getId(), SourceType.AUTHOR, result, SourceType.PATH, message);
-
-        CompletableFuture.runAsync(() -> esService.update(EsDataType.PATH, savedPath));
+        if (request.getIsReleased()) {
+            var message = author.getFirstName() + " " + author.getLastName() + " updated path: " + path.getName();
+            this.subscriptionService.notifySubscribers(author.getId(), SourceType.AUTHOR, result, SourceType.PATH, message);
+            CompletableFuture.runAsync(() -> esService.update(EsDataType.PATH, savedPath));
+        }
         return result;
     }
 
@@ -183,14 +188,18 @@ public class PathService {
                 .collect(Collectors.toList());
     }
 
-    public List<PathDto> getAuthorPathsByUser(UserPrincipal userPrincipal) {
+    //paths with drafts
+    public List<PathWithDraftsDto> getAuthorPathsByUser(UserPrincipal userPrincipal) {
         Role role = userService.getUserRole(userPrincipal.getEmail());
         if (role.getName() != RoleType.AUTHOR) {
             return List.of();
         }
         var author = this.authorRepository.findByUserId(userPrincipal.getId()).orElseThrow();
-        return this.pathRepository.getAllPathsByAuthorId(author.getId()).stream()
-                .map(PathMapper.MAPPER::pathQueryResultToPathDto)
+        var paths1 = this.pathRepository.findAllByAuthor_Id(author.getId());
+        return this.pathRepository.findAllByAuthor_Id(author.getId()).stream()
+                .sorted((p1, p2) -> (int) ((p2.getReleasedDate() == null ? Integer.MAX_VALUE : p2.getReleasedDate().getTime())
+                        - (p1.getReleasedDate() == null ? Integer.MAX_VALUE : p1.getReleasedDate().getTime())))
+                .map(PathMapper.MAPPER::pathToPathWithDraftsDto)
                 .collect(Collectors.toList());
     }
 
@@ -200,6 +209,7 @@ public class PathService {
                 .collect(Collectors.toList());
     }
 
+    //path with drafts
     public PathDetailsDto getPathById(UserPrincipal user, UUID id) {
         var author = this.authorRepository.findByUserId(user.getId()).orElseThrow(
                 () -> new ResourceNotFoundException("Author", "userId", user.getId())
@@ -233,10 +243,9 @@ public class PathService {
     }
 
     public List<FavouritePathResponseDto> getFavouritePathsByUser(UUID userId) {
-        var paths = this.pathRepository.findTop10ByAuthorIsNotNull();
-        //List<Path> paths = this.pathRepository.getFavouritePathsByUserId(userId, SourceType.PATH); line should be uncommented, when path could be added
-        var result = new ArrayList<FavouritePathResponseDto>();
-        paths.forEach(p -> result.add(PathMapper.MAPPER.pathToFavouritePathResponseDto(p)));
+		List<Path> paths = pathRepository.getFavouritePathsByUserId(userId, SourceType.PATH);
+		List<FavouritePathResponseDto> result = new ArrayList<>();
+		paths.forEach(p -> result.add(PathMapper.MAPPER.pathToFavouritePathResponseDto(p)));
         return result;
     }
 

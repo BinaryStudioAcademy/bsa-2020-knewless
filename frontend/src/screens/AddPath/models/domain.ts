@@ -1,6 +1,7 @@
 export interface IPath {
   id?: string;
   name: string;
+  isReleased: boolean;
   courses: ICourse[];
   description: string;
   tags: ITag[];
@@ -16,6 +17,7 @@ export interface IPathDetails {
   imageTag: ITag;
   duration: number;
   author: IAuthorShort;
+  releasedDate: Date;
 }
 
 export interface IAuthorShort {

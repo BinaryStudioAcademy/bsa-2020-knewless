@@ -106,7 +106,7 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({
         <PublicRoute exact path="/search" component={SearchResultsPage} />
         <PrivateRoute exact path="/add_article" roles={[RoleTypes.AUTHOR]} component={AddArticlePage} />
         <PrivateRoute exact path="/author/:authorId" component={AuthorPublicPage} />
-        <PrivateRoute exact path="/favourites" component={FavouritesPage} />
+        <PrivateRoute exact path="/favourites" roles={[RoleTypes.USER]} component={FavouritesPage} />
         <PrivateRoute exact path="/lecture/:lectureId" component={LecturePage} />
         <PrivateRoute exact path="/add_path" roles={[RoleTypes.AUTHOR]} component={AddPathPage} />
         <PrivateRoute exact path="/add_course" roles={[RoleTypes.AUTHOR]} component={AddCourse} />

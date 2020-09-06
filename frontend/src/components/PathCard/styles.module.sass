@@ -1,4 +1,5 @@
 .container
+  position: relative
   background: #2B2A36
   display: grid
   grid-template-columns: 5em 1fr
@@ -61,3 +62,30 @@
   cursor: pointer
   &:hover
     text-decoration: underline
+
+\:global(.ui.basic.label).ribbon_label
+  position: absolute
+  top: 0
+  left: 0
+  color: black
+  height: 2em
+  width: 3.5em
+  background-color: grey
+  border-radius: 0
+  border-bottom-right-radius: 4px 
+  padding: auto
+  padding: 5px
+  border: none
+  &:hover
+    position: absolute
+    height: 2em
+    width: 3.5em
+    top: 0
+    left: 0
+    border: none
+    background-color: grey
+    opacity: 1
+    color: black
+    border-radius: 0
+    border-bottom-right-radius: 4px
+    padding: 5px
