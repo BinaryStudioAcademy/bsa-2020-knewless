@@ -75,7 +75,7 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
             "concat(c.author.firstName,' ' , c.author.lastName), c.image, " +
             "(SELECT COALESCE(SUM(cl.duration), 0) FROM c.lectures as cl), " +
             "(SELECT COALESCE(SUM(cr.reaction), 0) FROM c.reactions as cr), " +
-            "SIZE(c.reactions), c.updatedAt, SIZE(c.lectures) " +
+            "SIZE(c.reactions), c.updatedAt, SIZE(c.lectures), c.description " +
             ") " +
             "FROM Course as c " +
             "WHERE c.author.id = :authorId AND c.releasedDate IS NOT NULL " +
