@@ -9,6 +9,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -23,6 +24,9 @@ public class Path extends BaseEntity {
 
     @Column(name = "description")
     private String description;
+
+    @Column(name = "released_date")
+    private Date releasedDate;
 
     @ManyToMany(cascade = {CascadeType.REFRESH, CascadeType.PERSIST})
     @JoinTable(name = "path_tag",

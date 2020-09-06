@@ -66,6 +66,8 @@ export const MyPaths: React.FC<IMyPaths> = ({
                   logoSrc={p.logoSrc}
                   courses={p.courses}
                   duration={p.duration}
+                  role={role}
+                  released={p.released}
                 />
               ))}
             </div>

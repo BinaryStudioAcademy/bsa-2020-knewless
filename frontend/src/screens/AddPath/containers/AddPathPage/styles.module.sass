@@ -127,16 +127,23 @@ $title_container_height: 55px
   font-weight: bold
   font-size: 1em
   line-height: 1em
-  margin-right: 1.6em
+  margin-right: 0em
   align-items: center
   color: #FFFFFF
-  background: #454849
+  background: #20649b
   border-radius: 3px
   margin-top: 0
+
+.buttonSaveGroup
+  width: inherit
+  display: flex
+  justify-content: flex-end
+  flex-direction: row
 
 \:global(.ui.button).button_release
   border-radius: 3px
   font-size: 1em
+  margin-left: 1.6em
   width: $width_btn
   height: $height_btn
 
@@ -146,6 +153,7 @@ $title_container_height: 55px
 
 \:global(.ui.button).button_release_disabled
   border-radius: 3px
+  margin-left: 1.6em
   width: $width_btn
   height: $height_btn
   opacity: 0.5
@@ -159,7 +167,7 @@ $title_container_height: 55px
   font-weight: bold
   font-size: 1em
   line-height: 1em
-  margin-right: 1.6em
+  margin-right: 0em
   align-items: center
   color: #FFFFFF
   background: #454849

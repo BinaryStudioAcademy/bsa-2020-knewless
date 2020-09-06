@@ -19,6 +19,12 @@ public interface PathMapper {
     @Mapping(target = "logoSrc", source = "image")
     PathDto pathQueryResultToPathDto(PathQueryResult pathQueryResult);
 
+    @Mapping(target = "courses", expression = "java(path.getCourses().size())")
+    @Mapping(target = "logoSrc", expression = "java(path.getImageTag() == null ? null : path.getImageTag().getSource())")
+    @Mapping(target = "duration", expression = "java(PathMapper.getPathDuration(path))")
+    @Mapping(target = "released", expression = "java(path.getReleasedDate() != null)")
+    PathWithDraftsDto pathToPathWithDraftsDto(Path path);
+
     @Mapping(source = "seconds", target = "duration")
     @Mapping(target = "logoSrc", source = "image")
     AuthorPathDto authorPathQueryResultToAuthorPathDto(AuthorPathQueryResult pathQueryResult);

@@ -135,10 +135,13 @@ public class CourseService {
         List<Lecture> lectures = lectureRepository.saveAll(thisLectures);
 
         savedCourse.setLectures(lectures);
-        CompletableFuture.runAsync(() -> esService.put(EsDataType.COURSE, savedCourse));
 
-        String message = author.getFirstName() + " " + author.getLastName() + " added new course.";
-        subscriptionService.notifySubscribers(author.getId(), SourceType.AUTHOR, course.getId(), SourceType.COURSE, message);
+        if (request.getIsReleased()) {
+            CompletableFuture.runAsync(() -> esService.put(EsDataType.COURSE, savedCourse));
+            String message = author.getFirstName() + " " + author.getLastName() + " added new course.";
+            subscriptionService.notifySubscribers(author.getId(), SourceType.AUTHOR, course.getId(), SourceType.COURSE, message);
+        }
+
         return new CreateCourseResponseDto(course.getId(), true);
     }
 
@@ -158,8 +161,9 @@ public class CourseService {
 
         course.setName(request.getName());
         course.setImage(request.getImage());
-        course.setLevel((request.getLevel()==null ||request.getLevel() == "") ? null : Level.valueOf(request.getLevel()));
+        course.setLevel((request.getLevel()==null || request.getLevel() == "") ? null : Level.valueOf(request.getLevel()));
         course.setDescription(request.getDescription());
+        course.setOverview(request.getOverview());
 
         List<Lecture> savedLectures = lectureRepository.findAllById(request.getLectures());
         List<Lecture> thisLectures = new ArrayList<>();
@@ -186,6 +190,7 @@ public class CourseService {
             }
             thisLectures.add(lec);
         }
+
         course.setLectures(thisLectures);
         homeworkRepository.saveAll(homeworks);
         thisLectures.forEach(l -> {
@@ -201,16 +206,18 @@ public class CourseService {
 
         CompletableFuture.runAsync(() -> esService.update(EsDataType.COURSE, updatedCourse));
 
-        String message = author.getFirstName() + " " + author.getLastName() + " updated course: " + updatedCourse.getName();
+        String message;
+        if (request.getIsReleased()) {
+            message = author.getFirstName() + " " + author.getLastName() + " added new course.";
+        } else {
+            message = author.getFirstName() + " " + author.getLastName() + " updated course: " + updatedCourse.getName();
+        }
         subscriptionService.notifySubscribers(author.getId(), SourceType.AUTHOR, course.getId(), SourceType.COURSE, message);
         return new CreateCourseResponseDto(updatedCourse.getId(), true);
     }
 
     public CourseToPlayerDto getCourseByLectureId(UUID lectureId, UUID userId) {
-        var author = authorService.getAuthorInfoByUserId(userId);
         var courseProjection = courseRepository.findOneById(UUID.fromString(courseRepository.findByLectureId(lectureId).getId()));
-        Course checkCourse = courseRepository.getOne(UUID.fromString(courseProjection.getId()));
-        if (checkCourse.getReleasedDate() == null && (author == null || !author.getId().equals(checkCourse.getAuthor().getId()))) return null;
         CourseToPlayerDto course = new CourseToPlayerDto();
         course.setId(courseProjection.getId());
         course.setName(courseProjection.getName());
@@ -316,7 +323,6 @@ public class CourseService {
         );
         var course = CourseMapper.MAPPER.courseToCourseFullInfoDto(courseEntity);
         var courseWithRating = getCourseById(id);
-
         if (userId != null) {
             reactionRepository.findByCourseIdAndUserId(id, userId).ifPresent(userRating -> course.setReview(userRating.getReaction()));
             course.setProgress(watchHistoryService.getProgress(userId, id));
@@ -362,27 +368,60 @@ public class CourseService {
                 .collect(Collectors.toUnmodifiableList());
     }
 
+    // all courses with drafts
     public List<CourseDetailsDto> getAllAuthorCourses(UserPrincipal user) {
         Role role = userService.getUserRole(user.getEmail());
         if (role.getName() != RoleType.AUTHOR) {
             return List.of();
         }
         Author author = authorRepository.findByUserId(user.getId()).orElseThrow();
-
-        return courseRepository.getDetailCoursesByAuthorId(author.getId()).stream()
+        List<CourseDetailsDto> result = courseRepository.getDetailCoursesByAuthorId(author.getId()).stream()
                 .map(this::mapCourseDetailsQueryResultToDto)
-                .collect(Collectors.toUnmodifiableList());
+                .collect(Collectors.toList());
+        Collections.sort(result,
+                (c1, c2) -> (int) ((c2.getReleasedDate() == null ? Integer.MAX_VALUE : c2.getReleasedDate().getTime())
+                        - (c1.getReleasedDate() == null ? Integer.MAX_VALUE : c1.getReleasedDate().getTime())));
+        return result;
     }
 
+    //course with draft
     public CourseFullInfoDto getEditCourseById(UserPrincipal user, UUID id) {
         Author author = authorRepository.findByUserId(user.getId()).orElseThrow(
                 () -> new ResourceNotFoundException("Author", "userId", user.getId())
         );
-        CourseFullInfoDto course = getAllCourseInfoById(id, user.getId());
 
-        String courseAuthorId = course.getAuthor().getId().toString();
-        String authorId = author.getId().toString();
-        if (!authorId.equals(courseAuthorId)) {
+        Course courseEntity = courseRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Course", "id", id)
+        );
+
+        var course = CourseMapper.MAPPER.courseToCourseFullInfoDto(courseEntity);
+
+        if (user.getId() != null && courseEntity.getReleasedDate() != null) {
+            var courseWithRating = CourseMapper.MAPPER.courseQueryResultToCourseDto(
+                    courseRepository.getCourseByIdToEdit(id).orElseThrow(() -> new ResourceNotFoundException("Course", "id", id))
+            );
+            courseWithRating.setTags(mapTagsToTagDtos(this.tagRepository.getTagsByCourseId(id)));
+
+            reactionRepository.findByCourseIdAndUserId(id, user.getId()).ifPresent(userRating -> course.setReview(userRating.getReaction()));
+            course.setProgress(watchHistoryService.getProgress(user.getId(), id));
+            course.setRatingCount(reactionRepository.countByCourseId(id));
+            course.setRating(courseWithRating.getRating());
+            course.setDuration(courseWithRating.getDuration());
+        }
+
+
+        List<ShortLectureDto> lectures = courseEntity.getLectures()
+                .stream()
+                .map(LectureMapper.MAPPER::lectureToShortLectureDto)
+                .collect(Collectors.toList());
+
+        course.setLectures(lectures);
+
+        course.setAuthor(AuthorMapper.MAPPER.authorBriefInfoToMainInfoDto(
+                authorService.getAuthorInfoByUserId(courseEntity.getAuthor().getUser().getId())
+        ));
+
+        if (!author.getId().equals(courseEntity.getAuthor().getId())) {
             throw new ResourceNotFoundException("Author", "userId", user.getId());
         }
         return course;

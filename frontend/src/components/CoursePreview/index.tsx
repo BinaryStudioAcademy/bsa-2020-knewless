@@ -56,7 +56,16 @@ export const CoursePreview: React.FC<ICoursePreviewProps> = ({
 
   return (
     <div className={`${styles.container} ${className || ''}`}>
-      {location.pathname === "/courses" && role === "AUTHOR" && <Label as="a" basic className={styles.ribbon_label}>Draft</Label>}
+      {location.pathname === "/courses" && role === "AUTHOR" && !isReleased &&
+        (<NavLink exact to={`/course/edit/${id}`}>
+          <Label
+            as="a"
+            basic
+            className={styles.ribbon_label}
+          >
+            Draft
+          </Label>
+        </NavLink>)}
       <div className={styles.meta__image}>
         {flag !== undefined ? <img src={image} alt="" className={styles.inactive_avatar} />
           : (
@@ -89,7 +98,7 @@ export const CoursePreview: React.FC<ICoursePreviewProps> = ({
         </div>
         <div className={styles.title_container}>
           <div className={styles.course_name}>
-            <NavLink exact to={`/course/${id}`}>
+            <NavLink exact to={isReleased === false ? `/course/edit/${id}` : `/course/${id}`}>
               <div className={styles.nameText}>
                 <Ellipsis text={name} lines={2} />
               </div>

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
 import java.util.UUID;
 
 @Data
@@ -17,6 +18,7 @@ public class CourseDetailsQueryResult {
     private UUID authorId;
     private String authorName;
     private String imageSrc;
+    private Date releasedDate;
     private long duration;
     private String description;
     private long positiveReactions;

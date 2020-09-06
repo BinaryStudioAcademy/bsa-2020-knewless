@@ -41,8 +41,12 @@ public class CourseController {
     }
 
     @GetMapping("/{id}/info")
-    private CourseFullInfoDto getAllCourseInfoById(@PathVariable("id") UUID id, @CurrentUser UserPrincipal user) {
-        return courseService.getAllCourseInfoById(id, user == null ? null : user.getId());
+    private ResponseEntity<?> getAllCourseInfoById(@PathVariable("id") UUID id, @CurrentUser UserPrincipal user) {
+        try {
+            return ResponseEntity.ok(courseService.getAllCourseInfoById(id, user == null ? null : user.getId()));
+        } catch (ResourceNotFoundException ex) {
+            return ResponseEntity.badRequest().body(new SingleMessageResponse(ex.getMessage()));
+        }
     }
 
     @GetMapping("/{id}/edit")
@@ -124,7 +128,7 @@ public class CourseController {
     }
 
     @GetMapping("/author/user")
-    public List<CourseDetailsDto> getAllCoursesByLectureTag(@CurrentUser UserPrincipal userPrincipal) {
+    public List<CourseDetailsDto> getAllCoursesByAuthor(@CurrentUser UserPrincipal userPrincipal) {
         return courseService.getAllAuthorCourses(userPrincipal);
     }
 

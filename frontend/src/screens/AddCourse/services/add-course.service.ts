@@ -65,6 +65,10 @@ export function forwardHome() {
   history.push('/');
 }
 
+export function forwardCourses() {
+  history.push('/courses');
+}
+
 export const saveLectureWithUrl = async lecture => {
   const response = await callApi({
     type: 'POST',

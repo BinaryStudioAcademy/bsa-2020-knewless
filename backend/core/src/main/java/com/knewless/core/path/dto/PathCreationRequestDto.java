@@ -31,4 +31,6 @@ public class PathCreationRequestDto {
     @NotNull
     private UUID imageTag;
 
+    private Boolean isReleased = false;
+
 }

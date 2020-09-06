@@ -54,7 +54,7 @@ function* updatePath(action: Routine<any>) {
     const response = yield call(addPageService.updatePath, action.payload);
     yield put(updatePathRoutine.success(response));
     toastr.success('Saved successfully!');
-    addPageService.forwardHome();
+    addPageService.forwardPaths();
   } catch (error) {
     yield put(updatePathRoutine.failure(error?.message));
     // todo: change error to a proper one
@@ -71,7 +71,7 @@ function* savePath({ payload }: AnyAction) {
     const response = yield call(addPageService.uploadPath, payload);
     yield put(savePathRoutine.success(response));
     toastr.success('Saved successfully!');
-    addPageService.forwardHome();
+    addPageService.forwardPaths();
   } catch (error) {
     yield put(savePathRoutine.failure(error?.message));
     // todo: change error to a proper one

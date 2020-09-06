@@ -57,7 +57,7 @@ public class PathController {
     }
 
     @GetMapping("/author")
-    private List<PathDto> getAuthorPathsByUser(@CurrentUser UserPrincipal userPrincipal) {
+    private List<PathWithDraftsDto> getAuthorPathsByUser(@CurrentUser UserPrincipal userPrincipal) {
         return pathService.getAuthorPathsByUser(userPrincipal);
     }
 
