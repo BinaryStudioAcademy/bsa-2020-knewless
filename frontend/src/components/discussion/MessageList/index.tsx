@@ -16,7 +16,7 @@ export const MessageList: React.FC<IMessageListProps> = ({
   <div className={styles.container}>
     <InlineLoaderWrapper loading={loading} centered>
       {messages.length === 0 ? (
-        <ListPlaceholder title="No commentaries here yet" />
+        <ListPlaceholder title="No comments here yet" />
       ) : (
         messages.map(m => (<MessageBubble key={m.id} message={m} authorId={authorId} yourId={yourId} />))
       )}

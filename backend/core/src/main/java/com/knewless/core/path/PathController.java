@@ -36,6 +36,11 @@ public class PathController {
         return pathService.getPaths(PageRequest.of(page, size));
     }
 
+    @GetMapping("/all")
+    private List<PathDto> getAllPaths() {
+        return pathService.getAllPaths();
+    }
+
     @GetMapping("/author-latest/{authorId}")
     private ResponseEntity<List<AuthorPathDto>> getAuthorLatestPaths(@PathVariable UUID authorId) {
         return ResponseEntity.ok(pathService.getLatestPathsByAuthorId(authorId));

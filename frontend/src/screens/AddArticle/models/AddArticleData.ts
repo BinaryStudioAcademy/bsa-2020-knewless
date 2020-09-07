@@ -1,5 +1,4 @@
-import { IArticle  } from './domain';
-import { IAppState } from '@models/AppState';
+import { IArticle } from './domain';
 
 export interface IAddArticleData {
   article: IArticle;

@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './styles.module.sass';
 import { IArticle } from '../../models/domain';
 import { Button, Input, Label } from 'semantic-ui-react';
 import {
-  saveArticleRoutine
+  saveArticleRoutine,
+  fetchArticleEditRoutine
 } from '../../routines';
 import { IAppState } from '@models/AppState';
 import { connect } from 'react-redux';
@@ -14,40 +15,72 @@ import { history } from '@helpers/history.helper';
 import { IBindingCallback1 } from '@models/Callbacks';
 import { Editor } from 'react-draft-wysiwyg';
 import draftToHtml from 'draftjs-to-html';
-import { convertToRaw } from 'draft-js';
+import {EditorState, convertToRaw, ContentState  } from 'draft-js';
+import htmlToDraft from 'html-to-draftjs';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { isImage } from '@screens/AddCourse/services/helper.service';
 import {
   isValidArticleName,
   ARTICLE_NAME_MESSAGE
 } from '@helpers/validation.helper';
-
+import { useParams, useLocation } from 'react-router-dom';
 export interface IAddArticleProps {
   saveArticle: IBindingCallback1<IArticle>;
+  fetchArticle: IBindingCallback1<string>;
   isAuthorized: boolean;
+  article: IArticle;
 }
 
 export const AddArticlePage: React.FC<IAddArticleProps> = ({
-  saveArticle
+  saveArticle , article , fetchArticle
 }) => {
+  const location = useLocation();
+  const { articleId } = useParams();  
+  const isEdit = location.pathname.startsWith('/article/edit');
   const [name, setName] = useState('');
   const [image, setImage] = useState('');
   const [content, setContent] = useState(undefined);
   const [isArticleNameValid, setIsArticleNameValid] = useState(true);
   const [uploadImage, setUploadImage] = useState(null);
+  const setDefault = () => {
+    setName('');
+    setImage('');
+    setContent(undefined);
+    setIsArticleNameValid(true);
+    setUploadImage(null);
+  };
 
+  useEffect(() => {
+    if (location.pathname === "/add_article") setDefault();
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (articleId){
+    fetchArticle(articleId);
+    }
+  }, [articleId]);
+  useEffect(()=>{
+    setName(article?.name);
+    setImage(article?.image);
+    if(article?.text){
+    setContent(EditorState.createWithContent(ContentState.createFromBlockArray(htmlToDraft(article?.text).contentBlocks)));    
+    }
+  },[article])
+
+ 
   function validateArticleName(newName?: string) {
     const lastChangesName = typeof newName === 'string' ? newName : name;
     setIsArticleNameValid(!!lastChangesName && isValidArticleName(lastChangesName));
   }
   const isRequiredFieldsValid = !!name && isArticleNameValid;
-  const isReadyToRelease = isRequiredFieldsValid && uploadImage && content !== undefined;
+  const isReadyToRelease = isRequiredFieldsValid && (uploadImage ||image )&& content !== undefined;
 
   const handleSaveArticle = () => {
     if (!isReadyToRelease) return;
     const article: IArticle = {
+      id: articleId ,
       name,
-      image: '',
+      image: uploadImage ? '' : image,
       text: draftToHtml(convertToRaw(content.getCurrentContent())),
       uploadImage
     };
@@ -155,14 +188,17 @@ export const AddArticlePage: React.FC<IAddArticleProps> = ({
 };
 
 const mapStateToProps = (state: IAppState) => {
+  const {article} = state.addArticlePage.data;
   const { isAuthorized } = state.auth.auth;
   return {
-    isAuthorized
+    isAuthorized,
+    article
   };
 };
 
 const mapDispatchToProps = {
-  saveArticle: saveArticleRoutine
+  saveArticle: saveArticleRoutine,
+  fetchArticle: fetchArticleEditRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddArticlePage);
