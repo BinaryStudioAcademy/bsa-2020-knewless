@@ -19,7 +19,6 @@ import com.knewless.core.favorite.FavoriteService;
 import com.knewless.core.history.WatchHistoryService;
 import com.knewless.core.lecture.LectureMapper;
 import com.knewless.core.lecture.LectureRepository;
-import com.knewless.core.lecture.LectureService;
 import com.knewless.core.lecture.dto.ShortLectureDto;
 import com.knewless.core.lecture.homework.HomeworkRepository;
 import com.knewless.core.lecture.homework.model.Homework;
@@ -44,7 +43,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -147,7 +145,7 @@ public class CourseService {
         savedCourse.setLectures(lectures);
 
         if (request.getIsReleased()) {
-            CompletableFuture.runAsync(() -> esService.put(EsDataType.COURSE, savedCourse));
+            esService.put(EsDataType.COURSE, savedCourse);
             String message = author.getFirstName() + " " + author.getLastName() + " added new course.";
             subscriptionService.notifySubscribers(author.getId(), SourceType.AUTHOR, course.getId(), SourceType.COURSE, message);
         }
@@ -217,7 +215,7 @@ public class CourseService {
         lectureRepository.saveAll(thisLectures);
         Course updatedCourse = courseRepository.save(course);
 
-        CompletableFuture.runAsync(() -> esService.update(EsDataType.COURSE, updatedCourse));
+        esService.update(EsDataType.COURSE, updatedCourse);
 
         String message;
         if (request.getIsReleased()) {
@@ -454,7 +452,7 @@ public class CourseService {
 
         reactionRepository.save(reaction);
 
-        CompletableFuture.runAsync(() -> esService.updateCourseRating(courseId, getCourseById(courseId).getRating()));
+        esService.updateCourseRating(courseId, getCourseById(courseId).getRating());
 
         return getCourseRating(courseId);
     }
