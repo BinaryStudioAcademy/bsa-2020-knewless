@@ -8,6 +8,7 @@ import { ILectureData } from '@screens/CoursePage/models/ILectureData';
 import { IBindingAction, IBindingCallback1 } from '@models/Callbacks';
 import { IFavourite } from '@components/AddToFavouritesButton/component';
 import CourseDiscussion from '@containers/discussions/CourseDiscussion';
+import UploadLectureModal from '@screens/AddCourse/containers/UploadLectureModal';
 
 interface ICourseMenuProps {
   lectures: ILectureData[];
@@ -93,12 +94,8 @@ const CourseMenu: React.FunctionComponent<ICourseMenuProps> = ({
         {selected === 1 && (
           <div className={styles.lectures}>
             {lectures.map(lec => (
-              <button
-                type="button"
-                className={styles.lecture}
-                onClick={e => onClickLecture(e, lec.id)}
-              >
                 <LectureCard
+                  edit={yourId===authorId}
                   role={role}
                   isAuthorized={isAuthorized}
                   key={lec.id}
@@ -110,8 +107,8 @@ const CourseMenu: React.FunctionComponent<ICourseMenuProps> = ({
                   changefavourite={isAuthorized ? changeFavouriteLecture : undefined}
                   /* eslint-disable-next-line @typescript-eslint/no-empty-function */
                   onClick={() => {}}
+                  onLectureClick={e => onClickLecture(e, lec.id)}
                 />
-              </button>
             ))}
           </div>
         )}
@@ -119,6 +116,7 @@ const CourseMenu: React.FunctionComponent<ICourseMenuProps> = ({
           <CourseDiscussion courseId={courseId} authorId={authorId} yourId={yourId} />
         )}
       </div>
+
     </div>
   );
 };

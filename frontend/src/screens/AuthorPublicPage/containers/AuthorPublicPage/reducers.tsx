@@ -26,7 +26,8 @@ const basicAuthorData = {
     duration: 0,
     lectures: 0,
     positiveReactions: 0,
-    allReactions: 0
+    allReactions: 0,
+    description: ''
   }],
   articles: [{
     id: '',

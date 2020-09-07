@@ -16,3 +16,5 @@ deploy:
   script: bash scripts/deploy.sh
   on:
     branch: dev
+notifications:
+  webhooks: https://fathomless-fjord-24024.herokuapp.com/notify

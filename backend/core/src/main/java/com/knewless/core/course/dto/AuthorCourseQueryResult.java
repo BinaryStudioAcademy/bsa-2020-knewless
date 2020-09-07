@@ -22,4 +22,5 @@ public class AuthorCourseQueryResult {
     private int allReactions;
     private Date updatedAt;
     private int lectures;
+    private String description;
 }

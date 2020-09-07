@@ -10,6 +10,7 @@ import com.knewless.core.course.dto.*;
 import com.knewless.core.course.model.Course;
 import com.knewless.core.course.model.Level;
 import com.knewless.core.currentUserCource.CurrentUserCourseRepository;
+import com.knewless.core.db.BaseEntity;
 import com.knewless.core.db.SourceType;
 import com.knewless.core.elasticsearch.EsService;
 import com.knewless.core.elasticsearch.model.EsDataType;
@@ -18,6 +19,7 @@ import com.knewless.core.favorite.FavoriteService;
 import com.knewless.core.history.WatchHistoryService;
 import com.knewless.core.lecture.LectureMapper;
 import com.knewless.core.lecture.LectureRepository;
+import com.knewless.core.lecture.LectureService;
 import com.knewless.core.lecture.dto.ShortLectureDto;
 import com.knewless.core.lecture.homework.HomeworkRepository;
 import com.knewless.core.lecture.homework.model.Homework;
@@ -110,10 +112,11 @@ public class CourseService {
                 lec = l;
             } else {
                 var lectureTags =
-                        tagRepository.findAllById(l.getTags().stream().map(t->t.getId()).collect(Collectors.toList()));
+                        tagRepository.findAllById(l.getTags().stream().map(BaseEntity::getId).collect(Collectors.toList()));
                 lec = Lecture.builder().name(l.getName())
                         .webLink(l.getWebLink())
                         .tags(new HashSet<>(lectureTags))
+                        .previewImage(l.getPreviewImage())
                         .urlOrigin(l.getUrlOrigin())
                         .url1080(l.getUrl1080())
                         .url720(l.getUrl720())
@@ -166,7 +169,7 @@ public class CourseService {
 
         course.setName(request.getName());
         course.setImage(request.getImage());
-        course.setLevel((request.getLevel()==null || request.getLevel() == "") ? null : Level.valueOf(request.getLevel()));
+        course.setLevel((request.getLevel()==null || request.getLevel().equals("")) ? null : Level.valueOf(request.getLevel()));
         course.setDescription(request.getDescription());
         course.setOverview(request.getOverview());
 
@@ -180,7 +183,7 @@ public class CourseService {
                 lec = l;
             } else {
                 var lectureTags =
-                        tagRepository.findAllById(l.getTags().stream().map(t->t.getId()).collect(Collectors.toList()));
+                        tagRepository.findAllById(l.getTags().stream().map(BaseEntity::getId).collect(Collectors.toList()));
                 lec = Lecture.builder().name(l.getName())
                         .course(course)
                         .tags(new HashSet<>(lectureTags))
@@ -383,13 +386,12 @@ public class CourseService {
             return List.of();
         }
         Author author = authorRepository.findByUserId(user.getId()).orElseThrow();
-        List<CourseDetailsDto> result = courseRepository.getDetailCoursesByAuthorId(author.getId()).stream()
+        return courseRepository.getDetailCoursesByAuthorId(author.getId()).stream()
                 .map(this::mapCourseDetailsQueryResultToDto)
-                .collect(Collectors.toList());
-        Collections.sort(result,
-                (c1, c2) -> (int) ((c2.getReleasedDate() == null ? Integer.MAX_VALUE : c2.getReleasedDate().getTime())
-                        - (c1.getReleasedDate() == null ? Integer.MAX_VALUE : c1.getReleasedDate().getTime())));
-        return result;
+                .sorted((c1, c2) -> (int) ((c2.getReleasedDate() == null ? Integer.MAX_VALUE
+                        					: c2.getReleasedDate().getTime())
+                        - (c1.getReleasedDate() == null ? Integer.MAX_VALUE
+							: c1.getReleasedDate().getTime()))).collect(Collectors.toList());
     }
 
     //course with draft

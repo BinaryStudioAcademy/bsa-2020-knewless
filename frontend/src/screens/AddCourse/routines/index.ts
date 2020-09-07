@@ -7,3 +7,4 @@ export const saveCourseRoutine = createRoutine('SAVE_COURSE');
 export const updateCourseRoutine = createRoutine('UPDATE_COURSE');
 export const clearCourseRoutine = createRoutine('CLEAR_COURSE');
 export const saveLectureRoutine = createRoutine('SAVE_LECTURE');
+export const fetchLectureRoutine = createRoutine('FETCH_LECTURE');

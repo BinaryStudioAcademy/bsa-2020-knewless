@@ -11,4 +11,5 @@ export interface IAuthorCourse {
   positiveReactions: number;
   allReactions: number;
   lectures: number;
+  description: string;
 }

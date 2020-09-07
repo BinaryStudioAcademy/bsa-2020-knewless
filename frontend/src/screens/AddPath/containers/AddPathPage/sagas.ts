@@ -27,7 +27,6 @@ function* loadTags() {
     yield put(fetchTagsRoutine.success(response));
   } catch (error) {
     yield put(fetchTagsRoutine.failure(error?.message));
-    toastr.error('Failed to load tags');
   }
 }
 
