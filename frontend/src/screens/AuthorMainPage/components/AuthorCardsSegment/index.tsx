@@ -32,7 +32,7 @@ export const AuthorCardsSegment: React.FunctionComponent<IAuthorCardsSegment> = 
           onClick={onCreateClick}
           className={styles.btn_right}
         >
-          Create new
+          Create more
         </GrayOutlineButton>
       )}
     </div>
