@@ -154,11 +154,12 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
     setIsPathNameValid(!!lastChangesName && isValidPathName(lastChangesName));
   }
 
-  function validateDescription(newName?: string) {
-    setIsDescriptionValid(isValidPathDescription(typeof newName === 'string' ? newName : pathDescription));
+  const validateDescription = (newDescription?: string) => {
+    const lastChangesDescription = typeof newDescription === 'string' ? newDescription : pathDescription;
+    setIsDescriptionValid(!!lastChangesDescription && isValidPathDescription(lastChangesDescription));
   }
 
-  const isRequiredFieldsValid = !!pathName && isPathNameValid && isDescriptionValid;
+  const isRequiredFieldsValid = !!pathName && isPathNameValid && isDescriptionValid && !!pathDescription;
   const isReadyToRelease = isRequiredFieldsValid && selectedCourses.length > 0;
   const isReadyToSave = (!isReleased && !!pathName && isPathNameValid && isDescriptionValid) || (isEdit && isReadyToRelease);
 
@@ -198,7 +199,7 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
   function onTagDeletion(i) {
     setIsChanged(true);
     const deletedTag = selectedTags[i];
-    if (deletedTag.id === pathImageTag.id) {
+    if (deletedTag?.id === pathImageTag?.id) {
       setPathImageTag(undefined);
     }
     if (deletedTag !== undefined) {

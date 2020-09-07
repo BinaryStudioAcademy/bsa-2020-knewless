@@ -165,14 +165,6 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
     }
   }, [location.pathname]);
 
-  const clearFields = () => {
-    setCourseName('');
-    setDescription('');
-    setLevel('');
-    setCourseTags([]);
-    setSelectedLectures([]);
-  };
-
   useEffect(() => {
     if (lectures.length === 0 && !isLecturesLoaded) {
       getLectures();
@@ -238,23 +230,30 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
   };
   const validateOverview = (newOverview?: string) => {
     const lastOverview = typeof newOverview === 'string' ? newOverview : overview;
-    setIsValidOverview(!!lastOverview && isOverviewValid(lastOverview));
+    if (lastOverview.length === 0) {
+      setIsValidOverview(true);
+      return;
+    }
+    setIsValidOverview(isOverviewValid(lastOverview));
   };
 
   const validateName = (newName?: string) => {
     const lastChangesName = typeof newName === 'string' ? newName : courseName;
     setIsValidName(!!lastChangesName && isValidCourseName(lastChangesName));
   };
-  const validateDescription = (newName?: string) => setIsValidDescription(
-    isValidCourseDescription(typeof newName === 'string' ? newName : description)
-  );
+
+  const validateDescription = (newDescription?: string) => {
+    const lastChangesDescription = typeof newDescription === 'string' ? newDescription : description;
+    setIsValidDescription(!!lastChangesDescription && isValidCourseDescription(lastChangesDescription));
+  }
+
   const validateLevel = (newName?: string) => {
     const lastChangesName = typeof newName === 'string' ? newName : level;
     setIsValidLevel(!!lastChangesName && levelOptions.filter(l => l.value === lastChangesName).length > 0);
   };
 
   const isRequiredFieldsValid = !!courseName && isValidName && isValidDescription && !!level && isValidLevel
-    && isValidImage && !!overview && isValidOverview;
+    && isValidImage && !!description && isValidOverview;
   const isReleseble = isRequiredFieldsValid && selectedLectures.length > 0;
 
   const isSaveble = (!isReleased && !!courseName && isValidName && isValidDescription && isValidLevel
@@ -305,14 +304,14 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
 
   const handleUpdateLectures = () => {
     getLectures();
-    const updated = [...lectures.sort(compareName)];
-    const filtered = updated.filter(l => !selectedLectures.map(s => s.id).includes(l.id))
-      .filter(l => {
-        if (!editCourse) return true;
-        return !(selectedLectures.map(s => s.id).includes(l.id) 
-        || selectedLectures.map(s => s.urlOrigin).includes(l.urlOrigin));
-      });
-    setPool(filtered);
+    // const updated = [...lectures.sort(compareName)];
+    // const filtered = updated.filter(l => !selectedLectures.map(s => s.id).includes(l.id))
+    //   .filter(l => {
+    //     if (!editCourse) return true;
+    //     return !(selectedLectures.map(s => s.id).includes(l.id) 
+    //     || selectedLectures.map(s => s.urlOrigin).includes(l.urlOrigin));
+    //   });
+    // setPool(filtered);
   };
 
   const onOverviewClose = () => {
@@ -320,7 +319,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
   };
 
   const handleCancelClick = () => {
-    clearFields();
+    setDefault();
     history.goBack();
   };
 

@@ -29,35 +29,17 @@
 
 .description__buttons
   display: flex
-  width: $buttons_width
+  width: auto
+  justify-content: flex-start
+  flex-wrap: wrap
   & > *
     margin-right: 15px !important
-
-.buttons_with_favourite
-  display: flex
-  flex-wrap: wrap
-  justify-content: space-between
-  align-items: flex-end
-  max-width: $buttons_width + 12rem
+    margin-bottom: 8px !important
 
 .button_favourite_wrp
-  width: 11.6rem
+  width: auto
   height: 44.7px
   min-height: 44.7px
-  margin-top: 8px
-
-.buttons_with_favourite
-  display: flex
-  flex-wrap: wrap
-  justify-content: space-between
-  align-items: flex-end
-  max-width: $buttons_width + 12rem
-
-.button_favourite_wrp
-  width: 11.6rem
-  height: 44.7px
-  min-height: 44.7px
-  margin-top: 8px
 
 .course_image
   position: relative
@@ -78,6 +60,3 @@
   width: 100%
   height: 100%
   object-fit: cover
-
-.favourite_wrp
-  margin-right: 20px
