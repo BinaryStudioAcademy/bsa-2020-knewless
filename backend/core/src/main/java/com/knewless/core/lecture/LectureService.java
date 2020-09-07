@@ -14,6 +14,7 @@ import com.knewless.core.tag.TagRepository;
 import com.knewless.core.user.UserRepository;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,7 +26,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class LectureService {
-
+    
     private final LectureRepository lectureRepository;
     private final FileManager fileManager;
     private final MessageSender messageSender;
@@ -86,7 +87,7 @@ public class LectureService {
     }
 
     public List<ShortLectureDto> getLecturesByUserId(UUID id) {
-        List<Lecture> allLectures = lectureRepository.getLecturesByUserId(id);
+        List<Lecture> allLectures = lectureRepository.getAllByUserId(id);
         List<Lecture> result = new ArrayList<>();
         allLectures.forEach(lec -> {
             if (!result.stream().map(Lecture::getName).collect(Collectors.toList()).contains(lec.getName())) {
@@ -104,11 +105,12 @@ public class LectureService {
                         l.getUrl1080(),
                         l.getUrl720(),
                         l.getUrl480(),
+                        l.getPreviewImage(),
                         l.getDuration(),
                         false))
                 .collect(Collectors.toList());
     }
-
+    
     public List<FavouriteLectureResponseDto> getFavouriteLecturesByUser(UUID userId){
         List<Lecture> lectures = lectureRepository.getFavouriteLecturesByUserId(userId, SourceType.LECTURE);
         List<FavouriteLectureResponseDto> result = new ArrayList<>();
