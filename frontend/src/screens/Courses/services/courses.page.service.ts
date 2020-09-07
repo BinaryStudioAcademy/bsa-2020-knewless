@@ -3,8 +3,7 @@ import { callApi } from 'helpers/api.helper';
 export async function getCourses() {
   const response = await callApi({
     endpoint: '/api/course/all',
-    type: 'GET',
-    queryParams: { page: 0, size: 10 }
+    type: 'GET'
   });
   return response.json();
 }

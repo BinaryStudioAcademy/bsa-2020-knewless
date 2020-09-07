@@ -4,10 +4,8 @@ import com.knewless.core.author.AuthorMapper;
 import com.knewless.core.author.AuthorRepository;
 import com.knewless.core.author.AuthorService;
 import com.knewless.core.author.dto.AuthorMainInfoDto;
-import com.knewless.core.author.model.Author;
 import com.knewless.core.course.CourseMapper;
 import com.knewless.core.course.CourseRepository;
-import com.knewless.core.course.dto.CourseWithMinutesDto;
 import com.knewless.core.course.model.Course;
 import com.knewless.core.course.model.Level;
 import com.knewless.core.currentUserCource.CurrentUserCourseRepository;
@@ -24,7 +22,6 @@ import com.knewless.core.student.model.Student;
 import com.knewless.core.subscription.SubscriptionService;
 import com.knewless.core.tag.TagMapper;
 import com.knewless.core.tag.TagRepository;
-import com.knewless.core.tag.dto.TagDto;
 import com.knewless.core.tag.model.Tag;
 import com.knewless.core.user.UserService;
 import com.knewless.core.user.role.model.Role;
@@ -72,10 +69,14 @@ public class PathService {
         this.studentService = studentService;
     }
 
-
     public List<PathDto> getPaths(Pageable pageable) {
-        var pathInfo = this.pathRepository.getAllPaths(pageable);
-        return pathInfo.stream()
+        return this.pathRepository.getPaths(pageable).stream()
+                .map(PathMapper.MAPPER::pathQueryResultToPathDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<PathDto> getAllPaths() {
+        return this.pathRepository.getAllPaths().stream()
                 .map(PathMapper.MAPPER::pathQueryResultToPathDto)
                 .collect(Collectors.toList());
     }
@@ -252,7 +253,7 @@ public class PathService {
 	public List<PathDto> getAdditionalPaths(List<UUID> id, Pageable pageable) {
 		List<PathQueryResult> result;
     	if (id.isEmpty()) {
-    		result = pathRepository.getAllPaths(pageable);
+    		result = pathRepository.getPaths(pageable);
 		} else {
     		result = pathRepository.getAdditionalPaths(id, pageable);
 		}

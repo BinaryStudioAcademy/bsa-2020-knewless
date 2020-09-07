@@ -362,15 +362,14 @@ public class CourseService {
         return course;
     }
 
-
     public List<CourseDetailsDto> getUserCourses(UUID id) {
         return courseRepository.getDetailCoursesByUserId(id).stream()
                 .map(this::mapCourseDetailsQueryResultToDto)
                 .collect(Collectors.toUnmodifiableList());
     }
 
-    public List<CourseDetailsDto> getAllCourses(Pageable pageable) {
-        return courseRepository.getDetailCourses(pageable).stream()
+    public List<CourseDetailsDto> getAllCourses() {
+        return courseRepository.getAllDetailCourses().stream()
                 .map(this::mapCourseDetailsQueryResultToDto)
                 .collect(Collectors.toUnmodifiableList());
     }

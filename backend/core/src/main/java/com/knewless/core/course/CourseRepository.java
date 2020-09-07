@@ -104,7 +104,7 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
             "FROM Course c " +
             "WHERE c.releasedDate IS NOT NULL " +
             "ORDER BY c.updatedAt DESC")
-    List<CourseDetailsQueryResult> getDetailCourses(Pageable pageable);
+    List<CourseDetailsQueryResult> getAllDetailCourses();
 
     @Query("SELECT new com.knewless.core.course.dto.CourseDetailsQueryResult(" +
             "c.id, c.name, c.level, c.author.id, concat(c.author.firstName,' ' , c.author.lastName), c.image, " +

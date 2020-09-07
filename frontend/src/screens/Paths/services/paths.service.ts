@@ -2,9 +2,8 @@ import { callApi } from 'helpers/api.helper';
 
 export async function getAllPathsRequest() {
   const response = await callApi({
-    endpoint: '/api/paths',
-    type: 'GET',
-    queryParams: { page: 0, size: 10 }
+    endpoint: '/api/paths/all',
+    type: 'GET'
   });
   return response.json();
 }
