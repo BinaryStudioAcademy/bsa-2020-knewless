@@ -22,6 +22,7 @@ import { IArticleState } from '@screens/ArticlePage/models/ArticleState';
 import { IDiscussionState } from '@containers/discussions/common/models/State';
 import { IWebsocketConnectorState } from '@containers/WebsocketConnector/model';
 import { IUserOverviewState } from '@containers/UserOverview/model';
+import { IAddArticleState } from '@screens/AddArticle/models/AddArticleState';
 
 export interface IAppState {
   toastr: any;
@@ -50,4 +51,5 @@ export interface IAppState {
   lectureDiscussion: IDiscussionState;
   websocket: IWebsocketConnectorState;
   userOverview: IUserOverviewState;
+  addArticlePage: IAddArticleState;
 }

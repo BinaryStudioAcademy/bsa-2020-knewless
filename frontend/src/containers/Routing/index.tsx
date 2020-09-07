@@ -115,6 +115,7 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({
         <PrivateRoute exact path="/path/edit/:pathId" roles={[RoleTypes.AUTHOR]} component={AddPathPage} />
         <PrivateRoute exact path="/history" roles={[RoleTypes.USER]} component={HistoryPage} />
         <PrivateRoute exact path="/article/:articleId" component={ArticlePage} />
+        <PrivateRoute exact path="/article/edit/:articleId" roles={[RoleTypes.AUTHOR]} component={AddArticlePage} />
         <PublicRoute path="/404" component={NotFoundPage} />
         <PublicRoute component={NotFoundPage} />
       </Switch>

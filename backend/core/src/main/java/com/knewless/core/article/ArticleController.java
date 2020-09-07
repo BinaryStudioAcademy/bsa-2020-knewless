@@ -27,6 +27,9 @@ public class ArticleController {
     public ArticleFullDto getArticle(@PathVariable UUID id){
         return articleService.getArticle(id);
     }
-
+    @GetMapping("/{id}/edit")
+    public ArticleDto getArticleEdit(@PathVariable UUID id, @CurrentUser UserPrincipal user){
+        return articleService.getArticleEdit(id, user);
+    }
 
 }

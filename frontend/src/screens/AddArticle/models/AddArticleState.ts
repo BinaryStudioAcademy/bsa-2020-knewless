@@ -5,6 +5,7 @@ import { IAppState } from '@models/AppState';
 export interface IAddArticleState {
   requests: {
     saveArticleRequest: IRequestState;
+    fetchArticleEditRequest: IRequestState;
   };
   data: IAddArticleData;
 }
