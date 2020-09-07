@@ -56,8 +56,9 @@ export const CoursePreview: React.FC<ICoursePreviewProps> = ({
 
   return (
     <div className={`${styles.container} ${className || ''}`}>
-      {location.pathname === "/courses" && role === "AUTHOR" && !isReleased &&
-        (<NavLink exact to={`/course/edit/${id}`}>
+      {location.pathname === '/courses' && role === 'AUTHOR' && !isReleased
+        && (
+        <NavLink exact to={`/course/edit/${id}`}>
           <Label
             as="a"
             basic
@@ -65,7 +66,8 @@ export const CoursePreview: React.FC<ICoursePreviewProps> = ({
           >
             Draft
           </Label>
-        </NavLink>)}
+        </NavLink>
+        )}
       <div className={styles.meta__image}>
         {flag !== undefined ? <img src={image} alt="" className={styles.inactive_avatar} />
           : (
