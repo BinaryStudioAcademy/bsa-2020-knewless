@@ -3,6 +3,7 @@ package com.knewless.core.lecture;
 import com.knewless.core.course.courseComment.CourseCommentMapper;
 import com.knewless.core.course.courseComment.dto.CourseCommentDto;
 import com.knewless.core.lecture.dto.LectureCreateResponseDto;
+import com.knewless.core.lecture.dto.LectureUpdateDto;
 import com.knewless.core.lecture.dto.SaveLectureDto;
 import com.knewless.core.lecture.dto.ShortLectureDto;
 import com.knewless.core.lecture.lectureComment.LectureCommentMapper;
@@ -86,5 +87,9 @@ public class LectureController {
                                                        @RequestParam(defaultValue = "2") int size) {
         return lectureCommentService.getCourseComments(lectureId, PageRequest.of(page, size)).stream()
                 .map(LectureCommentMapper.MAPPER::commentToDto).collect(Collectors.toList());
+    }
+    @GetMapping("/{lectureId}")
+    public LectureUpdateDto getLecture(@PathVariable("lectureId") UUID lectureId){
+        return lectureService.getLectureForEdit(lectureId);
     }
 }

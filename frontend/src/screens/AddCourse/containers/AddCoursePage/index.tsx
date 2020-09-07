@@ -25,7 +25,7 @@ import { IAppState } from 'models/AppState';
 import GrayOutlineButton from 'components/buttons/GrayOutlineButton';
 import GradientButton from 'components/buttons/GradientButton';
 import { InlineLoaderWrapper } from '@components/InlineLoaderWrapper';
-import UploadLectureModal from '../../components/UploadLectureModal';
+import UploadLectureModal from '../UploadLectureModal';
 import CourseImage from '@images/default_course_image.jpg';
 import {
   COURSE_NAME_MESSAGE,
@@ -522,15 +522,10 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
             data={overview}
             onClose={onOverviewClose}
           />
-          <InlineLoaderWrapper loading={!isTagsLoaded} centered>
-            {isTagsLoaded && (
-              <UploadLectureModal
-                isOpen={modalAddOpen}
-                openAction={setModalAddOpen}
-                tags={tags}
-              />
-            )}
-          </InlineLoaderWrapper>
+           <UploadLectureModal
+              isOpen={modalAddOpen}
+              openAction={setModalAddOpen}
+            />
         </div>
       )
   );

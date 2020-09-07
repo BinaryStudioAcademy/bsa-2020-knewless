@@ -11,6 +11,14 @@ export const getLecturesByUser = async () => {
   return response.json();
 };
 
+export const getLectureById = async (id: string) => {
+  const response = await callApi({
+    endpoint: `/api/lecture/${id}`,
+    type: 'GET'
+  });
+  return response.json();
+};
+
 export const getCourseById = async (id: string) => {
   const response = await callApi({
     endpoint: `/api/course/${id}/edit`,
@@ -52,6 +60,7 @@ export const addLectureToDb = async lecture => {
     type: 'POST',
     endpoint: '/api/lecture',
     requestData: {
+      id: lecture.id,
       name: lecture.name,
       description: lecture.description,
       duration: lecture.duration,

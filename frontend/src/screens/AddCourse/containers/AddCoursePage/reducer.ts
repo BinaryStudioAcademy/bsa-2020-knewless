@@ -4,7 +4,8 @@ import {
   saveCourseRoutine,
   saveLectureRoutine,
   fetchEditCourseRoutine,
-  clearCourseRoutine
+  clearCourseRoutine,
+  fetchLectureRoutine
 } from 'screens/AddCourse/routines';
 import { ICourseData } from '../../models/ICourseData';
 import { fetchTagsRoutine } from '@screens/AddPath/routines';
@@ -14,7 +15,8 @@ const initialState: ICourseData = {
   lectures: [],
   editCourse: undefined,
   isLecturesLoaded: false,
-  courseId: ''
+  courseId: '',
+  lectureUpdate: undefined
 };
 
 export const data = (state = initialState, action: Routine<any>) => {
@@ -54,6 +56,11 @@ export const data = (state = initialState, action: Routine<any>) => {
         ...state,
         lectures: updated
       };
+    case fetchLectureRoutine.SUCCESS:
+      return {
+        ...state,
+        lectureUpdate: action.payload
+      };  
     default:
       return state;
   }
