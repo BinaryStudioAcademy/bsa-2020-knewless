@@ -97,6 +97,22 @@ const Header = ({ currentUser, isAuthorized, authorId, isSettingsFilled, setNoAu
                 {location.pathname === '/paths' && <div className={styles.homeLine} />}
               </NavLink>
             </div>
+            {currentUser?.role?.name === 'AUTHOR' &&
+          <div className={styles.column}>
+              <NavLink exact to={isAuthorized && !isSettingsFilled ? '/settings' : '/articles'}>
+                <Label
+                  basic
+                  size="tiny"
+                  className={styles.routElement}
+                >
+                  <div className={styles.iconWrp}>
+                    <Icon name="file alternate outline" size="big" inverted />
+                  </div>
+                  <div className={styles.routName}>Articles</div>
+                </Label>
+                {location.pathname === '/articles' && <div className={styles.homeLine} />}
+              </NavLink>
+            </div>}
           </div>
           <SearchHeader className={location.pathname === '/search' ? styles.searchHidden : searchStyle} />
         </div>

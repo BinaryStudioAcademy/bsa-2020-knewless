@@ -7,6 +7,7 @@ import com.knewless.core.user.model.CurrentUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -27,6 +28,11 @@ public class ArticleController {
     public ArticleFullDto getArticle(@PathVariable UUID id){
         return articleService.getArticle(id);
     }
+    @GetMapping("/author")
+    public List<ArticleDto> getArticles(@CurrentUser UserPrincipal user){
+        return articleService.getArticles(user);
+    }
+
     @GetMapping("/{id}/edit")
     public ArticleDto getArticleEdit(@PathVariable UUID id, @CurrentUser UserPrincipal user){
         return articleService.getArticleEdit(id, user);
