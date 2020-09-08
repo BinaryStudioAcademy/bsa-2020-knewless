@@ -13,7 +13,7 @@ export interface IMessageListProps extends IContextProps {
 export const MessageList: React.FC<IMessageListProps> = ({
   messages, loading, authorId, yourId
 }) => (
-  <div className={styles.container}>
+  <div className={`${styles.container} ${messages?.length > 0 ? '' : styles.centered}`}>
     <InlineLoaderWrapper loading={loading} centered>
       {messages.length === 0 ? (
         <ListPlaceholder title="No comments here yet" />
