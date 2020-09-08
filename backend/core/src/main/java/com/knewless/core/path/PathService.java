@@ -174,10 +174,20 @@ public class PathService {
         if (request.getIsReleased()) path.setReleasedDate(new Date());
         var savedPath = this.pathRepository.save(path);
         var result = savedPath.getId();
+        String message;
         if (request.getIsReleased()) {
-            var message = author.getFirstName() + " " + author.getLastName() + " updated path: " + path.getName();
+            message = author.getFirstName() + " " + author.getLastName() + " added new path.";
+        } else {
+            message = author.getFirstName() + " " + author.getLastName() + " updated path: " + path.getName();
+        }
+
+        if (savedPath.getReleasedDate() != null) {
+            if (request.getIsReleased()) {
+                esService.put(EsDataType.PATH, savedPath);
+            } else {
+                esService.update(EsDataType.PATH, savedPath);
+            }
             this.subscriptionService.notifySubscribers(author.getId(), SourceType.AUTHOR, result, SourceType.PATH, message);
-            esService.update(EsDataType.PATH, savedPath);
         }
         return result;
     }

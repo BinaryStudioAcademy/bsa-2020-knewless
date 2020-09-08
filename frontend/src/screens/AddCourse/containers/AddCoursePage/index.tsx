@@ -166,9 +166,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
   }, [location.pathname]);
 
   useEffect(() => {
-    if (lectures.length === 0 && !isLecturesLoaded) {
-      getLectures();
-    }
+    if (!isLecturesLoaded) getLectures();
     const updated = [...lectures.sort(compareName)];
     const filtered = updated.filter(l => !selectedLectures.map(s => s.id).includes(l.id))
       .filter(l => {
