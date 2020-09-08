@@ -29,6 +29,7 @@ public class EsMapper {
 
         return EsEntity.builder()
                 .name(entity.getFullName())
+                .updatedAt(entity.getUpdatedAt().toString())
                 .sourceId(entity.getId())
                 .type(EsDataType.AUTHOR)
                 .metadata(metadata)
@@ -52,6 +53,7 @@ public class EsMapper {
 
         return EsEntity.builder()
                 .name(course.getName())
+                .updatedAt(course.getUpdatedAt().toString())
                 .sourceId(course.getId())
                 .type(EsDataType.COURSE)
                 .tags(tags)
@@ -75,6 +77,7 @@ public class EsMapper {
 
         return EsEntity.builder()
                 .name(path.getName())
+                .updatedAt(path.getUpdatedAt().toString())
                 .tags(path.getTags().stream().map(Tag::getName).collect(Collectors.toList()))
                 .sourceId(path.getId())
                 .type(EsDataType.PATH)
@@ -91,6 +94,7 @@ public class EsMapper {
         metadata.put("authors number", authors.size());
 
         return EsEntity.builder()
+                .updatedAt(school.getUpdatedAt().toString())
                 .name(school.getName())
                 .type(EsDataType.SCHOOL)
                 .sourceId(school.getId())
