@@ -17,6 +17,7 @@ import com.knewless.core.tag.model.Tag;
 import com.knewless.core.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -92,6 +93,7 @@ public class StudentService {
 		var updateSettings = StudentMapper.fromDto(settings, user);
 		updateSettings.setCreatedAt(oldSettings.get().getCreatedAt());
 		return Optional.of(studentRepository.save(updateSettings)).map(StudentMapper::fromEntity);
+
 	}
 
 	public StudentProfileDto getStudentProfile(UUID userId) {

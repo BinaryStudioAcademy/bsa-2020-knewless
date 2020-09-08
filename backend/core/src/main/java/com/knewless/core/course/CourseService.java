@@ -213,15 +213,21 @@ public class CourseService {
         lectureRepository.saveAll(thisLectures);
         Course updatedCourse = courseRepository.save(course);
 
-        esService.update(EsDataType.COURSE, updatedCourse);
-
         String message;
         if (request.getIsReleased()) {
             message = author.getFirstName() + " " + author.getLastName() + " added new course.";
         } else {
             message = author.getFirstName() + " " + author.getLastName() + " updated course: " + updatedCourse.getName();
         }
-        subscriptionService.notifySubscribers(author.getId(), SourceType.AUTHOR, course.getId(), SourceType.COURSE, message);
+
+        if (updatedCourse.getReleasedDate() != null) {
+            if (request.getIsReleased()) {
+                esService.put(EsDataType.COURSE, updatedCourse);
+            } else {
+                esService.update(EsDataType.COURSE, updatedCourse);
+            }
+            subscriptionService.notifySubscribers(author.getId(), SourceType.AUTHOR, course.getId(), SourceType.COURSE, message);
+        }
         return new CreateCourseResponseDto(updatedCourse.getId(), true);
     }
 
