@@ -48,7 +48,7 @@ public class WatchHistoryService {
 	public long getTotalViewSeconds(UUID userId) {
 		return historyRepository.getTotalViewSecondsByUserId(userId);
 	}
-    
+
     /**
      * @return value between 0 and 100 - percent of completion
      */
@@ -62,7 +62,7 @@ public class WatchHistoryService {
         }
         return (int) (fracture * 100);
     }
-    
+
     /**
      * @return value between 0 and 100 - percent of completion
      */
@@ -72,7 +72,7 @@ public class WatchHistoryService {
             if (h.getFractionWatched() >= PROGRESS_COMPLETED_THRESHOLD) {
                 return 100;
             } else {
-                return (int) h.getFractionWatched() * 100;
+                return (int) (h.getFractionWatched() * 100);
             }
         }).orElse(0);
     }
@@ -81,7 +81,7 @@ public class WatchHistoryService {
 		History viewHistory = historyRepository.findByUser_IdAndLecture_Id(userId, lectureId).orElseThrow();
 		return viewHistory.getSecondsWatched();
 	}
-    
+
     public void saveWatchHistory(UUID userId, WatchHistorySaveRequest request) {
         History history = historyRepository.findByUser_IdAndLecture_Id(userId, request.getLectureId())
                 .orElseGet(History::new);
@@ -115,7 +115,7 @@ public class WatchHistoryService {
                 })
                 .collect(Collectors.toList());
     }
-    
+
     private void saveToProgress(UUID userId, int watchedDifference, History savedHistory) {
         if (watchedDifference <= 0) {
             return;
