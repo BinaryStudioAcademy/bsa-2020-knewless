@@ -16,7 +16,7 @@ export interface IMyArticles {
 export const MyArticles: React.FC<IMyArticles> = ({
   articles, loading, role
 }) => {
-  const [activeIndex, setActiveIndex] = useState(-1);
+  const [activeIndex, setActiveIndex] = useState(1);
   if (loading) return null;
 
   const handleClick = (e, titleProps) => {
@@ -57,25 +57,6 @@ console.log(activeIndex);
           <div className={`${styles.wide_container}`}>
             <div className={styles.courses_container}>
               {loading || articles.map(a => (
-                 <ArticlePreview
-                 key={a.id}
-                 id={a.id}
-                 authorName={a.authorName}
-                 authorId={a.authorId}
-                 image={a.image}
-                 name={a.name}
-                 description={a.text}
-               />
-              ))}
-            </div>
-          </div>
-        ) : noCoursesPlaceholder}
-      </Accordion.Content>
-      <Accordion.Content active={activeIndex === -1}>
-        {articles.length > 0 ? (
-          <div className={`${styles.wide_container}`}>
-            <div className={styles.courses_container}>
-              {loading || articles.slice(0,4).map(a => (
                  <ArticlePreview
                  key={a.id}
                  id={a.id}
