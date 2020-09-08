@@ -53,7 +53,7 @@ const PathPage: React.FC<IPathPageProps> = ({
         type: SourceType.PATH
       });
     }
-  }, [pathId]);
+  }, [path]);
 
   if (loading) {
     return (

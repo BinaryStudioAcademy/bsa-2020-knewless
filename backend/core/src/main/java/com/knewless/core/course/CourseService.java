@@ -98,12 +98,10 @@ public class CourseService {
         Author author = authorRepository.findByUserId(userId).orElseThrow(
                 () -> new ResourceNotFoundException("Author", "userId", userId)
         );
-        List<Lecture> savedLectures = lectureRepository.getAllByUserId(userId);
-        List<UUID> idLecturesToSave = request.getLectures();
-        savedLectures.removeIf(l -> !idLecturesToSave.contains(l.getId()));
+        List<Lecture> savedLectures = lectureRepository.findAllById(request.getLectures());
         List<Lecture> thisLectures = new ArrayList<>();
         List<Homework> homeworks = new ArrayList<>();
-        Course course = Course.builder().level(request.getLevel().equals("") ? null : Level.valueOf(request.getLevel()))
+        Course course = Course.builder().level(request.getLevel() == "" ? null : Level.valueOf(request.getLevel()))
                 .author(author).name(request.getName()).description(request.getDescription()).image(request.getImage())
                 .overview(request.getOverview()).build();
         for (Lecture l : savedLectures) {

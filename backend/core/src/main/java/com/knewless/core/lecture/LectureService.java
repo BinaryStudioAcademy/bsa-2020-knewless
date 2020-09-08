@@ -16,14 +16,10 @@ import com.knewless.core.tag.TagRepository;
 import com.knewless.core.user.UserRepository;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -106,20 +102,23 @@ public class LectureService {
 
     public List<ShortLectureDto> getLecturesByUserId(UUID id) {
         List<Lecture> allLectures = lectureRepository.getAllByUserId(id);
+        Collections.sort(allLectures,
+                Comparator.comparingInt(l -> (l.getCourse() == null ? Integer.MIN_VALUE : Integer.MAX_VALUE)));
         List<Lecture> result = new ArrayList<>();
         allLectures.forEach(lec -> {
             if (lec.getUrlOrigin()!=null &&
                     !result.stream()
-                            .filter(l->l.getName() == lec.getName())
+                            .filter(l-> l.getName().equals(lec.getName()))
                             .map(Lecture::getUrlOrigin).collect(Collectors.toList()).contains(lec.getUrlOrigin()))  {
                 result.add(lec);
             }
             if (lec.getWebLink()!=null &&
                     !result.stream()
-                            .filter(l->l.getName() == lec.getName())
+                            .filter(l-> l.getName().equals(lec.getName()))
                             .map(Lecture::getUrlOrigin).collect(Collectors.toList()).contains(lec.getWebLink()))  {
                 result.add(lec);
             }
+            if (lec.getUrlOrigin()==null && lec.getWebLink()==null) result.add(lec);
         });
 
         return result.stream()

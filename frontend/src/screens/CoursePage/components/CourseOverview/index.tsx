@@ -118,25 +118,22 @@ const CourseOverview: React.FunctionComponent<ICourseOverviewProps> = ({
               }
             </p>
           </div>
-          <div className={styles.buttons_with_favourite}>
-            <div className={styles.description__buttons}>
-              <GradientButton
-                onClick={(progress && progress > 0 && isUser) || authorId === author?.id ? onResume : onStart}
-              >
-                {generateLecturesPageLinkTitle()}
-              </GradientButton>
-              <GrayOutlineButton onClick={() => setIsOverviewOpen(true)}>Course overview</GrayOutlineButton>
-            </div>
+          <div className={styles.description__buttons}>
+            <GradientButton
+              onClick={(progress && progress > 0 && isUser) || authorId === author?.id ? onResume : onStart}
+            >
+              {generateLecturesPageLinkTitle()}
+            </GradientButton>
+            {overview && <GrayOutlineButton onClick={() => setIsOverviewOpen(true)}>Course overview</GrayOutlineButton>}
             {isAuthorized && isUser && (
-              <div className={styles.button_favourite_wrp}>
-                <AddToFavouriteButton
-                  isFavourite={favourite}
-                  changeFavourite={changeFavourite}
-                  id={courseId}
-                  type={SourceType.COURSE}
-                />
-              </div>
-            )}
+            <div className={styles.button_favourite_wrp}>
+              <AddToFavouriteButton
+                isFavourite={favourite}
+                changeFavourite={changeFavourite}
+                id={courseId}
+                type={SourceType.COURSE}
+              />
+            </div>)}
           </div>
         </div>
       </div>
