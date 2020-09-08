@@ -1,31 +1,52 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './styles.module.sass';
 import ViewTotalTime from 'screens/StudentPage/components/ViewTotalTime';
 import { connect } from 'react-redux';
-import { fetchGetStudentProfileRoutine } from '../../routines';
+import { cleanFollowList, fetchGetStudentProfileRoutine } from '../../routines';
 import { CurrentCourse } from 'screens/StudentPage/components/CurrentCourse';
 import { CompletedCourse } from 'screens/StudentPage/components/CompletedCourse';
-import { List } from 'semantic-ui-react';
+import { Icon, List } from 'semantic-ui-react';
 import { IStudentProfile } from 'screens/StudentPage/models/IStudentProfile';
-import { IBindingAction } from 'models/Callbacks';
+import { IBindingAction, IBindingCallback1 } from 'models/Callbacks';
 import { RowPlaceholder } from '@components/placeholder/RowPlaceholder';
 import { InlineLoaderWrapper } from '@components/InlineLoaderWrapper';
 import { history } from '@helpers/history.helper';
 import CirclePackingChart from '@components/Charts/CirclePackingChart';
 import { ChartWrapper } from '@components/Charts/ChartWrapper';
 import { getTagsNameWithCountFromCourses } from '@helpers/tag.helper';
+import StudentFollowsModal from '@components/StudentFollowsModal';
+import { followAuthorRoutine, unfollowAuthorRoutine } from '@screens/AuthorPublicPage/routines';
+import GradientButton from '@components/buttons/GradientButton';
+import GrayOutlineButton from '@components/buttons/GrayOutlineButton';
+import Avatar from '@components/avatar/Avatar';
+
+export interface IStudentSubscriptions {
+  id: string;
+  name: string;
+  lectures: number;
+  avatar: string;
+  follow: boolean;
+}
 
 interface IStudentProfileProps {
   studentProfile: IStudentProfile;
   fetchStudentProfile: IBindingAction;
   isStudentProfileLoading: boolean;
+  followAuthor: IBindingCallback1<string>;
+  unfollowAuthor: IBindingCallback1<string>;
+  cleanFollow: IBindingAction;
 }
 
 const StudentProfile: React.FC<IStudentProfileProps> = ({
   studentProfile: profile,
   fetchStudentProfile: getStudentProfile,
-  isStudentProfileLoading = true
+  isStudentProfileLoading = true,
+  followAuthor,
+  unfollowAuthor,
+  cleanFollow
 }) => {
+  const [isFollowOpen, setIsFollowOpen] = useState(false);
+
   useEffect(() => {
     getStudentProfile();
   }, []);
@@ -60,10 +81,27 @@ const StudentProfile: React.FC<IStudentProfileProps> = ({
 
   const studentCoursesTags = getTagsNameWithCountFromCourses(profile.courses);
 
+  const handleOnClickFollow = id => {
+    followAuthor(id);
+  };
+  const handleOnClickUnfollow = id => {
+    unfollowAuthor(id);
+  };
+
+  const handleFollowClose = () => {
+    cleanFollow();
+    setIsFollowOpen(false);
+  };
+
   return (
     <div className={styles.profile}>
       <div className={styles.wrapperTitle}>
         <div id={styles.profileTitle}>Profile</div>
+        {profile.subscriptions.length > 0 && (
+        <GrayOutlineButton className={styles.subscription_button} icon onClick={() => setIsFollowOpen(true)}>
+          <p>Subscriptions</p>
+        </GrayOutlineButton>
+        )}
       </div>
       <div className={styles.wrapperTime}>
         <div className={styles.timeBlock}>
@@ -130,6 +168,13 @@ const StudentProfile: React.FC<IStudentProfileProps> = ({
           </List>
         </div>
       </div>
+      <StudentFollowsModal
+        isOpen={isFollowOpen}
+        subscriptions={profile.subscriptions}
+        followAuthor={handleOnClickFollow}
+        unfollowAuthor={handleOnClickUnfollow}
+        onClose={handleFollowClose}
+      />
     </div>
   );
 };
@@ -143,7 +188,10 @@ const mapStateToProps = (state: any) => {
 };
 
 const mapDispatchToProps = {
-  fetchStudentProfile: fetchGetStudentProfileRoutine
+  followAuthor: followAuthorRoutine,
+  unfollowAuthor: unfollowAuthorRoutine,
+  fetchStudentProfile: fetchGetStudentProfileRoutine,
+  cleanFollow: cleanFollowList.success
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(StudentProfile);

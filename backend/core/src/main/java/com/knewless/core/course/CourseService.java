@@ -293,6 +293,7 @@ public class CourseService {
                 .collect(Collectors.toList());
 
         if (result.size() < 3) {
+            result.forEach(course -> uuids.add(course.getId()));
             result.addAll(getAdditionalCourses(uuids, PageRequest.of(0, result.isEmpty() ? 3 : 3 - result.size())));
         }
         return result.stream()

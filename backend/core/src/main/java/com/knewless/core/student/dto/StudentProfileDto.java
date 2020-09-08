@@ -9,4 +9,5 @@ import java.util.List;
 public class StudentProfileDto {
     private int totalContentWatched;
     private List<CourseProfileDto> courses;
+    private List<StudentSubscriptionDto> subscriptions;
 }

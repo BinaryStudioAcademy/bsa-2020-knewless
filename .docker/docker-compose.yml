@@ -57,7 +57,7 @@ services:
     ports:
       - '5000:5000'
     volumes:
-      - /knewless/assets:/knewless/assets
+      - /knewless-data/assets:/knewless/assets
     env_file:
       - ~/.env/api.env
     logging:
@@ -92,7 +92,7 @@ services:
     ports:
       - '5010:5010'
     volumes:
-      - /knewless/assets:/knewless/assets
+      - /knewless-data/assets:/knewless/assets
     env_file:
       - ~/.env/fileprocessor.env
     logging:
@@ -134,7 +134,7 @@ services:
         max-file: "5"
     volumes:
       - /data/certs:/etc/nginx/certs
-      - /knewless/assets:/knewless/assets
+      - /knewless-data/assets:/knewless/assets
       - /etc/nginx/nginx.conf:/etc/nginx/nginx.conf
       - /etc/nginx/dhparam.pem:/etc/nginx/dhparam.pem
       - /etc/letsencrypt/live/knewless.tk/cert.pem:/etc/letsencrypt/live/knewless.tk/cert.pem

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { IFilterProps, IFilters } from '@screens/SearchResultsPage/components/model';
 import styles from './styles.module.sass';
 import { EsDataType } from '@screens/Search/models/EsDataTypes';
@@ -28,12 +28,20 @@ export const SchoolFilter: React.FC<ISchoolFilterProps> = (
     updateSorting, visualFilters, setSortingOptions, expanded, updateVisualFilters, updateMatchFilters, fetchedTags
   }
 ) => {
-  useEffect(() => {
-    setSortingOptions(sortOptions);
-  }, []);
+  const [isActive, setActive] = useState(false);
 
   useEffect(() => {
-    if (visualFilters.c === EsDataType.SCHOOL.valueOf()) {
+    setActive(visualFilters.c === EsDataType.SCHOOL);
+  }, [visualFilters.c]);
+
+  useEffect(() => {
+    if (isActive) {
+      setSortingOptions(sortOptions);
+    }
+  }, [isActive]);
+
+  useEffect(() => {
+    if (isActive) {
       switch (visualFilters.s) {
         case SortOptions.NAME_DESC:
           updateSorting(() => [{ order: SortOrder.DESC, field: 'name.keyword' }]);
@@ -58,6 +66,7 @@ export const SchoolFilter: React.FC<ISchoolFilterProps> = (
               fetchedTags={fetchedTags}
               updateMatchFilters={updateMatchFilters}
               updateVisualFilters={updateVisualFilters as any}
+              visualFilters={visualFilters}
             />
           </div>
         </div>

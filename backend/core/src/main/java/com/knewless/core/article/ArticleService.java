@@ -10,6 +10,7 @@ import com.knewless.core.exception.custom.ResourceNotFoundException;
 import com.knewless.core.security.oauth.UserPrincipal;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -47,6 +48,13 @@ public class ArticleService {
         return  article;
     }
 
+    public List<ArticleDto> getArticles(UserPrincipal user) {
+        Author author = authorRepository.findByUserId(user.getId()).orElseThrow();
+        return articleRepository.getArticlesByAuthorId(author.getId())
+                .stream()
+                .map( ArticleMapper::fromEntinty)
+                .collect(Collectors.toList());
+    }
     public ArticleDto getArticleEdit(UUID id, UserPrincipal user) {
         Author author = authorRepository.findByUserId(user.getId()).orElseThrow(
                 () -> new ResourceNotFoundException("Author", "userId", user.getId())

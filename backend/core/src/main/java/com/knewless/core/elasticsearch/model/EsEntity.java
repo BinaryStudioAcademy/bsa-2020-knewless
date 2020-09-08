@@ -25,6 +25,9 @@ public class EsEntity {
 
     @Id
     private String id;
+    
+    @Field(type = FieldType.Text)
+    private String updatedAt;
 
     @Field(type = FieldType.Text, analyzer = "autocomplete_index", searchAnalyzer = "autocomplete_search")
     private String name;

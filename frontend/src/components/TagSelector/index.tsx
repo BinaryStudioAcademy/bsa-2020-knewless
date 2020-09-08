@@ -23,7 +23,7 @@ export interface Tag {
 }
 
 // Note: if you need more props - add them with default values
-// Usage example: screens\AddPath\containers\AddPathPage\index.tsx
+// Usage example: screens\AddPath\containers\AddPathPage\CourseFilter.tsx
 export const TagSelector: React.FC<ITagSelectorProps> = ({
   onDelete, onAddition, id, noSuggestionsText = 'Tag not found',
   tags, suggestions, ref, minQueryLength = 1, placeholderText = 'Add new tag'

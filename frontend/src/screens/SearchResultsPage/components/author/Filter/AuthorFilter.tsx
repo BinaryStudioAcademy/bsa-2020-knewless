@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { IFilterProps, IFilters } from '@screens/SearchResultsPage/components/model';
 import styles from './styles.module.sass';
 import { EsDataType } from '@screens/Search/models/EsDataTypes';
@@ -25,14 +25,26 @@ const sortOptions = [
 export const AuthorFilter: React.FC<IAuthorFilterProps> = (
   { updateSorting, visualFilters, expanded, setSortingOptions }
 ) => {
+  const [isActive, setActive] = useState(false);
+
   useEffect(() => {
-    if (visualFilters.c === EsDataType.AUTHOR) {
+    setActive(visualFilters.c === EsDataType.AUTHOR);
+  }, [visualFilters.c]);
+
+  useEffect(() => {
+    if (isActive) {
+      setSortingOptions(sortOptions);
+    }
+  }, [isActive]);
+
+  useEffect(() => {
+    if (isActive) {
       setSortingOptions(sortOptions);
     }
   }, [visualFilters.c]);
 
   useEffect(() => {
-    if (visualFilters.c === EsDataType.AUTHOR.valueOf()) {
+    if (isActive) {
       switch (visualFilters.s) {
         case SortOptions.NAME_DESC:
           updateSorting(() => [{ order: SortOrder.DESC, field: 'name.keyword' }]);

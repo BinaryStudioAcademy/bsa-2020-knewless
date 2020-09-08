@@ -4,10 +4,11 @@ import React, { useEffect, useState } from 'react';
 export interface IFilteringTagSelectorProps {
   fetchedTags: Tag[];
   onChange: (tags: Tag[]) => void;
+  selectedTagNames: string[] | undefined;
 }
 
 export const StatefulTagSelector: React.FC<IFilteringTagSelectorProps> = (
-  { fetchedTags, onChange }
+  { fetchedTags, onChange, selectedTagNames }
 ) => {
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [storedTags, setStoredTags] = useState<Tag[]>([]);
@@ -17,9 +18,11 @@ export const StatefulTagSelector: React.FC<IFilteringTagSelectorProps> = (
   }, [selectedTags]);
 
   useEffect(() => {
-    setSelectedTags([]);
-    setStoredTags(fetchedTags);
-  }, [fetchedTags]);
+    const selected = fetchedTags.filter(tag => selectedTagNames?.includes(tag.name));
+    const stored = fetchedTags.filter(tag => !selectedTagNames?.includes(tag.name));
+    setSelectedTags(selected);
+    setStoredTags(stored);
+  }, [fetchedTags, selectedTagNames]);
 
   function selectedToStored(i: number) {
     const deletedTag = selectedTags[i];

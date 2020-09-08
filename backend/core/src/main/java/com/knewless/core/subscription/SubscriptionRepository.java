@@ -1,6 +1,7 @@
 package com.knewless.core.subscription;
 
 import com.knewless.core.db.SourceType;
+import com.knewless.core.student.dto.StudentSubscriptionQueryResult;
 import com.knewless.core.subscription.dto.SubscriptionDto;
 import com.knewless.core.subscription.model.Subscription;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -32,4 +33,9 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, UUID
             "AND s.sourceType = :sourceType")
     List<UUID> findAllBySource(UUID sourceId, SourceType sourceType);
 
+    @Query("SELECT new com.knewless.core.student.dto.StudentSubscriptionQueryResult(a.id, " +
+            "concat(a.firstName,' ', a.lastName), a.avatar) " +
+            "FROM Author a JOIN Subscription s ON a.id = s.sourceId " +
+            "WHERE s.user.id = :id")
+    List<StudentSubscriptionQueryResult> findAllByUserId(@Param("id") UUID id);
 }

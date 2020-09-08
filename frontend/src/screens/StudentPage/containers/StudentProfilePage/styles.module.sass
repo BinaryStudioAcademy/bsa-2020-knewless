@@ -29,12 +29,16 @@ body
 .wrapperTitle
   width: 100%
   background: #2A2B37 !important
+  display: flex
+  justify-content: space-between
+  align-items: center
+  max-width: $container_width
+  padding: 20px $side_padding
 
 #profileTitle
   margin: auto
   width: 100%
   max-width: $container_width + ($side_padding * 2)
-  padding: 30px $side_padding 20px
   color: #ffff
   font-family: Custom Open Sans, sans-serif
   font-style: normal
@@ -74,16 +78,12 @@ body
 
 .timeBlock
   display: flex
-  justify-content: flex-start
+  justify-content: space-between
   margin-left: auto
   max-width: $container_width + ($side_padding * 2) !important
   width: 100%
   padding-left: $side_padding
   padding-right: $side_padding
-
-  .clock
-    padding-top: 1em
-    margin-right: 30%
 
 .course
   cursor: pointer
@@ -117,3 +117,25 @@ body
 
 .chartLabel
   font-size: 1.1em
+
+.avatar
+  width: 6em
+  height: 6em
+
+.recent_author
+  display: flex
+  align-items: center
+
+  & > *
+    margin: 0 10px !important
+
+.author_preview
+  & > *
+    margin: 5px 0
+
+  &:hover
+    cursor: pointer
+    text-decoration: underline
+
+.subscription_button
+  min-width: unset !important

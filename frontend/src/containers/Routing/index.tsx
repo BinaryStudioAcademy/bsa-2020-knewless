@@ -39,7 +39,7 @@ import { NotFoundPage } from '@screens/NotFound/container/NotFoundPage';
 import { InlineLoaderWrapper } from '@components/InlineLoaderWrapper';
 import ArticlePage from '@screens/ArticlePage/containers/ArticlePage';
 import WebsocketConnector from '@containers/WebsocketConnector';
-
+import ArticlesPage from '@screens/Articles/containers/ArticlesPage';
 export interface IRoutingProps {
   isLoading: boolean;
   isAuthorized: boolean;
@@ -116,6 +116,7 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({
         <PrivateRoute exact path="/history" roles={[RoleTypes.USER]} component={HistoryPage} />
         <PrivateRoute exact path="/article/:articleId" component={ArticlePage} />
         <PrivateRoute exact path="/article/edit/:articleId" roles={[RoleTypes.AUTHOR]} component={AddArticlePage} />
+        <PrivateRoute exact path="/articles" roles={[RoleTypes.AUTHOR]} component={ArticlesPage} />
         <PublicRoute path="/404" component={NotFoundPage} />
         <PublicRoute component={NotFoundPage} />
       </Switch>

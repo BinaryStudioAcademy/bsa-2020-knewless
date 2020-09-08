@@ -23,7 +23,7 @@ function* followAuthor(action: Routine<any>) {
       sourceType: 'AUTHOR'
     };
     yield call(publicAuthorPageService.followAuthor, subscription);
-    yield put(followAuthorRoutine.success());
+    yield put(followAuthorRoutine.success(action.payload));
   } catch (error) {
     yield put(followAuthorRoutine.failure(error?.message));
   }
@@ -36,7 +36,7 @@ function* unfollowAuthor(action: Routine<any>) {
       sourceType: 'AUTHOR'
     };
     yield call(publicAuthorPageService.unfollowAuthor, subscription);
-    yield put(unfollowAuthorRoutine.success());
+    yield put(unfollowAuthorRoutine.success(action.payload));
   } catch (error) {
     yield put(unfollowAuthorRoutine.failure(error?.message));
   }

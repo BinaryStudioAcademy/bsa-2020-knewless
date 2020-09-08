@@ -302,14 +302,6 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
 
   const handleUpdateLectures = () => {
     getLectures();
-    // const updated = [...lectures.sort(compareName)];
-    // const filtered = updated.filter(l => !selectedLectures.map(s => s.id).includes(l.id))
-    //   .filter(l => {
-    //     if (!editCourse) return true;
-    //     return !(selectedLectures.map(s => s.id).includes(l.id) 
-    //     || selectedLectures.map(s => s.urlOrigin).includes(l.urlOrigin));
-    //   });
-    // setPool(filtered);
   };
 
   const onOverviewClose = () => {
