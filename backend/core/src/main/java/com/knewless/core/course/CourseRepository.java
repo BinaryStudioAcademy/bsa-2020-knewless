@@ -39,7 +39,7 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
     @Query(COURSE_SELECT + "WHERE c.id = :id")
     Optional<CourseQueryResult> getCourseByIdToEdit(@Param("id") UUID id);
 
-    @Query("SELECT new com.knewless.core.course.dto.CourseQueryResult(c.id, " +
+    @Query("SELECT DISTINCT new com.knewless.core.course.dto.CourseQueryResult(c.id, " +
             "c.name, c.level, concat(c.author.firstName,' ' , c.author.lastName), " +
             "c.author.id, c.image, " +
             "(SELECT COALESCE(SUM(cl.duration), 0) FROM c.lectures as cl), " +
@@ -47,7 +47,7 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
             "FROM c.reactions as cr), " +
             "SIZE(c.reactions)) " +
             "FROM Course c left join c.lectures l left join l.tags t " +
-            "WHERE (c.id NOT IN :id OR t.id NOT IN :tags) AND c.releasedDate IS NOT NULL")
+            "WHERE (c.id NOT IN :id AND t.id IN :tags) AND c.releasedDate IS NOT NULL")
     List<CourseQueryResult> getRecommendedCourses(@Param("id") List<UUID> id, @Param("tags") List<UUID> tags);
 
     @Query(COURSE_SELECT + "WHERE (c.id NOT IN :id) AND c.releasedDate IS NOT NULL")
@@ -162,4 +162,6 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
             "GROUP BY c.id " +
             "ORDER BY (SUM(cr.reaction) / SIZE(c.reactions)) DESC, SIZE(c.reactions) DESC ")
     List<UUID> getPopularCourses(Pageable pageable);
+
+    int countByAuthorId(UUID id);
 }

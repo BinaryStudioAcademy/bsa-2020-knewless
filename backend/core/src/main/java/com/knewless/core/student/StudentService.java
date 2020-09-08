@@ -1,17 +1,16 @@
 package com.knewless.core.student;
 
+import com.knewless.core.course.CourseRepository;
 import com.knewless.core.currentUserCource.CurrentUserCourseService;
 import com.knewless.core.dailyProgress.DailyProgressRepository;
 import com.knewless.core.dailyProgress.model.DailyProgress;
 import com.knewless.core.exception.custom.ResourceNotFoundException;
 import com.knewless.core.history.WatchHistoryService;
 import com.knewless.core.progressGoal.ProgressGoalRepository;
-import com.knewless.core.student.dto.ProgressResponseDto;
-import com.knewless.core.student.dto.StudentMainInfoDto;
-import com.knewless.core.student.dto.StudentProfileDto;
-import com.knewless.core.student.dto.StudentSettingsDto;
+import com.knewless.core.student.dto.*;
 import com.knewless.core.student.mapper.StudentMapper;
 import com.knewless.core.student.model.Student;
+import com.knewless.core.subscription.SubscriptionRepository;
 import com.knewless.core.tag.TagRepository;
 import com.knewless.core.tag.dto.TagDto;
 import com.knewless.core.tag.model.Tag;
@@ -38,12 +37,15 @@ public class StudentService {
 	private final WatchHistoryService watchHistoryService;
 	private final ProgressGoalRepository progressGoalRepository;
 	private final DailyProgressRepository dailyProgressRepository;
+	private final SubscriptionRepository subscriptionRepository;
+	private final CourseRepository courseRepository;
 
 	@Autowired
 	public StudentService(StudentRepository studentRepository, UserRepository userRepository,
 						  CurrentUserCourseService currentUserCourseService, TagRepository tagRepository,
 						  WatchHistoryService watchHistoryService, ProgressGoalRepository progressGoalRepository,
-						  DailyProgressRepository dailyProgressRepository) {
+						  DailyProgressRepository dailyProgressRepository, SubscriptionRepository subscriptionRepository,
+						  CourseRepository courseRepository) {
 		this.studentRepository = studentRepository;
 		this.userRepository = userRepository;
 		this.currentUserCourseService = currentUserCourseService;
@@ -51,6 +53,8 @@ public class StudentService {
 		this.watchHistoryService = watchHistoryService;
 		this.progressGoalRepository = progressGoalRepository;
 		this.dailyProgressRepository = dailyProgressRepository;
+		this.subscriptionRepository = subscriptionRepository;
+		this.courseRepository = courseRepository;
 	}
 
 	private static int secondsPassedSinceLastInterval(LocalDateTime goalSetAt, LocalDateTime now, int secondsInterval) {
@@ -97,6 +101,9 @@ public class StudentService {
 		var profile = new StudentProfileDto();
 		profile.setTotalContentWatched((int) this.watchHistoryService.getTotalViewSeconds(userId));
 		profile.setCourses(this.currentUserCourseService.getLearningCourses(userId));
+		profile.setSubscriptions(subscriptionRepository.findAllByUserId(userId).stream()
+		.map(result -> new StudentSubscriptionDto(result.getId(), result.getName(), courseRepository.countByAuthorId(result.getId()), result.getAvatar(), true))
+		.collect(Collectors.toList()));
 		return profile;
 	}
 

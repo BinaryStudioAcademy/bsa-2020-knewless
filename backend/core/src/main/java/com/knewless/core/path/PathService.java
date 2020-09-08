@@ -291,6 +291,7 @@ public class PathService {
 				.collect(Collectors.toList());
 
 		if (result.size() < 3) {
+		    result.forEach(path -> userPathsIds.add(path.getId()));
 			result.addAll(getAdditionalPaths(userPathsIds, PageRequest.of(0, result.isEmpty() ? 3 : 3 - result.size())));
 		}
 

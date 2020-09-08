@@ -43,7 +43,7 @@ export const InputBlock: React.FC<IInputBlockProps> = (
         className={styles.input}
         fluid
         value={inputText}
-        placeholder="Write a commentary..."
+        placeholder="Leave a comment..."
         onChange={(event, { value }) => setInputText(value)}
         onEnter={handleSend}
       />

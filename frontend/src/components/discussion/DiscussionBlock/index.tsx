@@ -21,7 +21,7 @@ export const DiscussionBlock: React.FC<IDiscussionBlockProps> = (
       <MessageList messages={messages} loading={fetchLoading} authorId={authorId} yourId={yourId} />
     </div>
     <div className={styles.inputContainer}>
-      <InputBlock sendLoading={sendLoading} sendMessage={sendMessage} errorSending={errorSending} />
+      {yourId && <InputBlock sendLoading={sendLoading} sendMessage={sendMessage} errorSending={errorSending} />}
     </div>
   </div>
 );
