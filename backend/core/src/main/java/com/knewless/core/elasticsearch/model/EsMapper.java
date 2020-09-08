@@ -25,7 +25,10 @@ public class EsMapper {
         }
 
         Map<String, Object> metadata = new HashMap<>();
-        // todo: add subscribers to author's meta
+        metadata.put("avatar", entity.getAvatar());
+        metadata.put("biography", entity.getBiography());
+        metadata.put("company", entity.getCompany());
+        metadata.put("job", entity.getJob());
 
         return EsEntity.builder()
                 .name(entity.getFullName())
@@ -48,6 +51,7 @@ public class EsMapper {
         metadata.put("date", course.getReleasedDate());
         metadata.put("level", course.getLevel().toString());
         metadata.put("total minutes", course.getLectures().stream().mapToInt(Lecture::getDuration).sum());
+        metadata.put("lectures", course.getLectures().size());
         metadata.put("rating", (int) Math.round(course.getReactions().stream().mapToInt(CourseReaction::getReaction).average().orElse(0)));
         metadata.put("ratingCount", 0);
 

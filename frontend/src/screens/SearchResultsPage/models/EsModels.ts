@@ -33,6 +33,7 @@ export interface IPathSearchResult extends ISearchResult {
     ['total minutes']: number;
     image: string;
     courses: number;
+    author: number;
   };
 }
 
@@ -42,4 +43,11 @@ export interface ISchoolSearchResult extends ISearchResult {
   };
 }
 
-export type IAuthorSearchResult = ISearchResult;
+export interface IAuthorSearchResult extends ISearchResult {
+  metadata: {
+    avatar: string;
+    biography: string;
+    company: string;
+    job: string;
+  };
+}
