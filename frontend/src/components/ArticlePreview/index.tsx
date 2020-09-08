@@ -6,6 +6,7 @@ import Ellipsis from 'react-ellipsis-pjs';
 import HTMLEllipsis from 'react-lines-ellipsis/lib/html';
 import { timeFormat } from '@helpers/time.helper';
 import  readingTime from 'reading-time';
+import responsiveHOC from 'react-lines-ellipsis/lib/responsiveHOC';
 
 export interface IArticlePreviewProps {
   id?: string;
@@ -22,6 +23,8 @@ export const ArticlePreview: React.FC<IArticlePreviewProps> = ({
   image, action, name, description,
   id, authorName, authorId, className
 }) => {
+   
+const ResponsiveEllipsis = responsiveHOC()(HTMLEllipsis);
   return (
     <div className={`${styles.container} ${className || ''}`}>
       <div className={styles.meta__image}>
@@ -46,9 +49,9 @@ export const ArticlePreview: React.FC<IArticlePreviewProps> = ({
         </div>
         <div className={styles.description}>
           <div className={styles.description_text}>
-            <HTMLEllipsis
+            <ResponsiveEllipsis 
               unsafeHTML={description}
-              maxLine='4'
+              maxLine='7'
               ellipsis='...'
               basedOn='letters'
             />
@@ -56,7 +59,7 @@ export const ArticlePreview: React.FC<IArticlePreviewProps> = ({
         </div>
         <div className={styles.bottom_flex}>
           <div>
-            <span className={styles.title}>read:</span>
+            <span className={styles.title}>reading time:</span>
             <span className={styles.number}>{timeFormat(Math.max(readingTime(description).time/1000,60))}</span>
           </div>
         </div>

@@ -125,9 +125,8 @@ public class CourseController {
     }
 
     @GetMapping("/all")
-    public List<CourseDetailsDto> getAllCourses(@RequestParam(defaultValue = "0") int page,
-                                                @RequestParam(defaultValue = "10") int size) {
-        return courseService.getAllCourses(PageRequest.of(page, size));
+    public List<CourseDetailsDto> getAllCourses() {
+        return courseService.getAllCourses();
     }
 
     @GetMapping("/lecture/tag/{tagId}")

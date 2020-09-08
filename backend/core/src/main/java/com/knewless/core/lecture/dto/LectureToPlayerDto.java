@@ -1,7 +1,5 @@
 package com.knewless.core.lecture.dto;
 
-import lombok.Data;
-
 public interface LectureToPlayerDto {
     String getId();
     String getName();
@@ -11,5 +9,6 @@ public interface LectureToPlayerDto {
     String getUrl720();
     String getUrl480();
     String getDescription();
+    String getPreviewImage();
     int getDuration();
 }

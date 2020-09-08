@@ -4,9 +4,10 @@ import { Icon, Input, Label, Modal, ModalContent } from 'semantic-ui-react';
 import GrayOutlineButton from 'components/buttons/GrayOutlineButton';
 import GradientButton from 'components/buttons/GradientButton';
 import { isVideo, cutLink, isLinkValid as checkLink } from './helper';
-import { IBindingCallback1 } from 'models/Callbacks';
+import { IBindingAction, IBindingCallback1 } from 'models/Callbacks';
+import { IAppState } from 'models/AppState';
 import { connect } from 'react-redux';
-import { fetchLecturesRoutine, saveLectureRoutine } from 'screens/AddCourse/routines';
+import { fetchTagsRoutine, fetchLecturesRoutine, saveLectureRoutine, fetchLectureRoutine } from 'screens/AddCourse/routines';
 import {
   DESCRIPTION_MESSAGE,
   isValidLectureDescription,
@@ -20,9 +21,12 @@ import { ITag } from '@screens/AddPath/models/domain';
 import { TagSelector } from '@components/TagSelector';
 import { history } from '@helpers/history.helper';
 import ReactPlayer from 'react-player/lazy';
+import { ILectureUpdate } from '@screens/AddCourse/models/ILectureUpdate';
 
 export interface ISaveLecture {
+  id?: string;
   video?: File;
+  fileName?: string;
   name: string;
   description: string;
   duration: number;
@@ -31,18 +35,23 @@ export interface ISaveLecture {
 }
 
 interface IUploadLectureModalProps {
+  id?:string;
   isOpen: boolean;
   openAction: (isOpen: boolean) => void;
   saveLecture: IBindingCallback1<ISaveLecture>;
+  getLecture: IBindingCallback1<String>;
+  fetchTags: IBindingAction;
   tags: ITag[];
+  lectureUpdate: ILectureUpdate;
 }
 
 export const UploadLectureModal: React.FC<IUploadLectureModalProps> = ({
-  isOpen = false, openAction, saveLecture: save, tags
+  isOpen = false, openAction, saveLecture: save, tags, id, lectureUpdate , getLecture, fetchTags
 }) => {
   const [description, setDescription] = useState('');
   const [name, setName] = useState('');
   const [file, setFile] = useState(null);
+  const [fileName, setFilename] = useState('');
   const [isValidName, setIsValidName] = useState(true);
   const [duration, setDuration] = useState(0);
   const [isValidDescription, setIsValidDescription] = useState(true);
@@ -54,33 +63,67 @@ export const UploadLectureModal: React.FC<IUploadLectureModalProps> = ({
   const inputRef = createRef<HTMLInputElement>();
   const tagsRef = createRef();
   const [isEdit, setIsEdit] = useState(false);
+  const [addByLink, setAddByLink] = useState(false);
+  const [link, setLink] = useState('');
+  const [isLinkValid, setLinkValid] = useState(true);
+  const [isLinkAccepted, setLinkAccepted] = useState(false);
+ 
+  useEffect(() =>{
+    if (isOpen){
+      fetchTags();
+     if(id){
+      getLecture(id);   
+    } }
+    else {
+      handleClose();
+    }
+  }, [id,isOpen]);
 
+  useEffect(()=>{
+    if(id){
+    setName(lectureUpdate?.name);
+    setDescription(lectureUpdate?.description);
+    setSelectedTags(lectureUpdate?.tags);
+    setDuration(lectureUpdate?.duration);
+    if( lectureUpdate?.link){
+    setLink(lectureUpdate?.link);
+    setAddByLink(true);
+    setLinkAccepted(true);
+    setFilename(undefined);
+    setIsValidFile(false);
+    } else{
+      setIsValidFile(true);
+      setFilename(lectureUpdate?.video);
+      setLink(undefined);
+      setAddByLink(false);
+      setLinkAccepted(false);
+    }
+  }
+  },[lectureUpdate])
+ 
   useEffect(() => {
     if (history.location.pathname.startsWith('/course/edit')) {
       setIsEdit(true);
     }
+    
   }, [history.location.pathname]);
 
   useEffect(() => {
-    setStoredTags(tags.filter(tag => !selectedTags.find(t => t.id === tag.id)));
+    setStoredTags(tags?.filter(tag => !selectedTags?.find(t => t.id === tag.id)));
   }, [tags]);
 
   const validateTagsAmount = (currentTags?: any[]) => {
     const lastChangesTags = currentTags || selectedTags;
-    setIsValidTagsAmount(lastChangesTags.length > 0 && lastChangesTags.length < 6);
+    setIsValidTagsAmount(lastChangesTags?.length > 0 && lastChangesTags?.length < 6);
   };
 
   useEffect(() => {
     validateTagsAmount();
   }, [selectedTags]);
-
-  const [addByLink, setAddByLink] = useState(false);
-  const [link, setLink] = useState('');
-  const [isLinkValid, setLinkValid] = useState(true);
-  const [isLinkAccepted, setLinkAccepted] = useState(false);
+ 
 
   const isReadyToSave = (isValidName && isValidDescription && duration > 0 && isValidTagsAmount)
-    && ((isValidFile && file) || isLinkAccepted);
+    && ((isValidFile && file)|| (fileName && id && !file) || isLinkAccepted);
 
   const validateName = (newName?: string) => {
     const lastChangesName = typeof newName === 'string' ? newName : name;
@@ -104,6 +147,7 @@ export const UploadLectureModal: React.FC<IUploadLectureModalProps> = ({
         setDuration(Math.round(vid.duration));
       };
       setFile(thisFile);
+      setFilename(thisFile.name);
       setIsValidFile(true);
     } else if (thisFile) setIsValidFile(false);
   };
@@ -115,6 +159,7 @@ export const UploadLectureModal: React.FC<IUploadLectureModalProps> = ({
     setIsValidName(true);
     setIsValidDescription(true);
     setFile(undefined);
+    setFilename(undefined);
     openAction(false);
     setAddByLink(false);
     setLink('');
@@ -129,12 +174,17 @@ export const UploadLectureModal: React.FC<IUploadLectureModalProps> = ({
     validateName();
     validateDescription();
     validateTagsAmount(selectedTags);
+    if(fileName && id && !file) {
+      setIsValidFile(true);
+    } else {
     setIsValidFile(file);
+    }
     if (!isReadyToSave) return;
 
     setButtonLoading(true);
     if (addByLink) {
       save({
+        id,
         name,
         description,
         link,
@@ -143,7 +193,9 @@ export const UploadLectureModal: React.FC<IUploadLectureModalProps> = ({
       });
     } else {
       save({
+        id,
         video: file,
+        fileName,
         name,
         description,
         duration,
@@ -159,6 +211,7 @@ export const UploadLectureModal: React.FC<IUploadLectureModalProps> = ({
     setAddByLink(true);
     setLinkAccepted(false);
     setFile(null);
+    setFilename(undefined);
   };
 
   const toggleWithFile = () => {
@@ -177,13 +230,13 @@ export const UploadLectureModal: React.FC<IUploadLectureModalProps> = ({
 
   function onTagAddition(tag) {
     setSelectedTags(prev => [...prev, tag]);
-    setStoredTags(prev => prev.filter(t => t.id !== tag.id));
+    setStoredTags(prev => prev?.filter(t => t.id !== tag.id));
   }
 
   function onTagDeletion(i) {
     const deletedTag = selectedTags[i];
     if (deletedTag !== undefined) {
-      setSelectedTags(prev => prev.filter((_, index) => index !== i));
+      setSelectedTags(prev => prev?.filter((_, index) => index !== i));
       setStoredTags(prev => [...prev, deletedTag]);
     }
   }
@@ -198,8 +251,8 @@ export const UploadLectureModal: React.FC<IUploadLectureModalProps> = ({
     <Modal size="small" open={isOpen} onClose={() => handleClose()}>
       <ModalContent className={styles.modal__upload__content}>
         <div className={styles.iconrow}>
-          <div className={styles.header}>Add new lecture</div>
-          {file && (
+  <div className={styles.header}>{id? 'Edit lecture' : 'Add new lecture'}</div>
+          {fileName && (
             <div className={styles.filecontainer}>
               <Label
                 basic
@@ -218,13 +271,14 @@ export const UploadLectureModal: React.FC<IUploadLectureModalProps> = ({
                   className={styles.filename}
                   onKeyDown={() => validateDescription()}
                 >
-                  {file?.name?.length > 25 ? `${file.name.substring(0, 23)}...` : file.name}
+                  {fileName?.length > 25 ? `${fileName.substring(0, 23)}...` : fileName}
                 </div>
                 <Icon
                   name="delete"
                   size="small"
                   onClick={() => {
                     setFile(undefined);
+                    setFilename(undefined);
                     setIsValidFile(true);
                   }}
                   inverted
@@ -363,10 +417,19 @@ export const UploadLectureModal: React.FC<IUploadLectureModalProps> = ({
     </Modal>
   );
 };
-
+const mapStateToProps = (state: IAppState) => {
+  const lectureUpdate= state.addcourse.data.lectureUpdate;
+  const tags = state.addcourse.data.tags; 
+  return {
+   lectureUpdate,
+   tags
+  };
+};
 const mapDispatchToProps = {
+  fetchTags: fetchTagsRoutine,
+  getLecture: fetchLectureRoutine,
   fetchLectures: fetchLecturesRoutine,
   saveLecture: saveLectureRoutine
 };
 
-export default connect(null, mapDispatchToProps)(UploadLectureModal);
+export default connect(mapStateToProps, mapDispatchToProps)(UploadLectureModal);

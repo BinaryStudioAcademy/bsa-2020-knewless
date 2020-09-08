@@ -1,0 +1,77 @@
+@import "src/styles/common_variables"
+
+.courses_content
+  padding-top: $header_height
+  color: #fff
+  background: #121421 !important
+  margin-bottom: $last_margin
+  flex: 1
+
+.wide_container
+  $container_width: 1400px
+  $side_padding: 80px
+  max-width: $container_width + ($side_padding * 2)
+  margin-left: auto
+  margin-right: auto
+  padding-left: $side_padding
+  padding-right: $side_padding
+
+.my_courses_accordion
+  display: flex
+  flex-direction: row
+  align-items: center
+  justify-content: space-between
+
+.content_row
+  margin-top: 2em
+  margin-bottom: .7em
+
+.content_row.no_padding
+  padding-left: 80px
+
+.courses_container
+  display: grid
+  grid-template-columns: 1fr 1fr
+  grid-gap: 30px 3%
+  margin-top: 1em
+
+.courses_title
+  display: flex
+  align-items: center
+  margin-top: .5em
+  color: #fff
+  margin-bottom: 2em
+  border-bottom: 1px solid #4a5053
+
+.filter
+  width: 20%
+
+  &:first-child
+    margin-bottom: 2px
+
+.input_title
+  font-size: .9em
+  margin-bottom: 3px
+
+.title
+  &_container
+    background: #2A2B37
+    height: 65px
+    width: 100%
+    padding-top: .4em
+
+    h3
+      line-height: 55px
+
+h3
+  font-weight: bold
+  font-size: 1.2em
+
+.row_placeholder
+  grid-column: 1 / span 2
+
+@media (max-width: 1350px)
+  .courses_container
+    width: 70%
+    margin: 0 auto
+    grid-template-columns: 1fr

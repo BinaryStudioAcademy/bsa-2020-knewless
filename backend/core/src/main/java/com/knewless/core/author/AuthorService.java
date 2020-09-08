@@ -27,7 +27,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 @Service
@@ -81,7 +80,7 @@ public class AuthorService {
         final var oldSettings = this.authorRepository.findByUser(user);
         if (oldSettings.isEmpty()) {
             Author author = authorRepository.save(AuthorMapper.fromDto(settings, user));
-            CompletableFuture.runAsync(() -> esService.put(EsDataType.AUTHOR, author));
+            esService.put(EsDataType.AUTHOR, author);
 
             return Optional.of(author)
                     .map(AuthorMapper::fromEntity);
@@ -137,7 +136,8 @@ public class AuthorService {
         List<FavouriteAuthorResponseDto> result = new ArrayList<>();
         authors.forEach(a -> result.add(com.knewless.core.author.AuthorMapper.MAPPER.authorToFavouriteAuthorResponseDto(a)));
         result.forEach(a->a.setFollowers(authorRepository.getNumberOfSubscriptions(a.getId()).orElse(0)));
-        result.forEach(a->a.setCourses(courseRepository.findAllByAuthorId(a.getId()).size()));
+        result.forEach(a->a.setCourses(courseRepository.findAllByAuthorId(a.getId()).stream()
+                .filter(c ->c.getReleasedDate() != null).collect(Collectors.toList()).size()));
         result.forEach(a->a.setPaths(pathRepository.findAllByAuthorId(a.getId()).size()));
         return result;
     }

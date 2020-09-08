@@ -15,6 +15,8 @@ import AuthorCard from '../../components/AuthorCard';
 import { ArticleCardPlaceHolder } from '@components/placeholder/ArticleCardPlaceHolder';
 import readingTime from 'reading-time';
 import { history } from '@helpers/history.helper';
+import { Icon, Label } from 'semantic-ui-react';
+import { IUser } from '@containers/AppRouter/models/IUser.ts';
 
 export interface IArticleProps {
   article: IArticle;
@@ -22,10 +24,11 @@ export interface IArticleProps {
   isAuthorized: boolean;
   loading: boolean;
   error: string;
+  user: IUser;
 }
 
 export const ArticlePage: React.FC<IArticleProps> = ({
-  getArticle, article, loading, error
+  getArticle, article, loading, error, user
 }) => {
   const { articleId } = useParams();
 
@@ -37,7 +40,6 @@ export const ArticlePage: React.FC<IArticleProps> = ({
 
   if (loading) return null;
   if (error) return <Redirect to="/404" />;
-
   return (
     <>
       <div className={styles.wrapperTitle}>
@@ -48,7 +50,24 @@ export const ArticlePage: React.FC<IArticleProps> = ({
           <div className={styles.wrapPreview}>
             <div className={styles.preview}>
               <div className={styles.form__name}>
-                <span className={styles.form__label}>{article?.name}</span>
+                <span className={styles.form__label}>{article?.name}
+                {article?.author?.userId=== user?.id  && (
+              <Label
+                style={{
+                  background: 'transparent',
+                  color: '#fff',
+                  verticalAlign: 'super',
+                  position: 'relative',
+                  top: '-8px',
+                  left: '10px',
+                  fontSize: '1.3rem',
+                  cursor: 'pointer'
+                }}
+                onClick={() => history.push(`/article/edit/${articleId}`)}
+              >
+                <Icon name="pencil" />
+              </Label>
+            )}</span>
                 <div className={styles.author}>
                   <NavLink exact to={`/author/${article.author?.id}`}>
                     <span>
@@ -111,10 +130,12 @@ export const ArticlePage: React.FC<IArticleProps> = ({
 const mapStateToProps = (state: IAppState) => {
   const { loading, error } = state.articlePage.requests.fetchArticleRequest;
   const { article } = state.articlePage.articleData;
+  const {user} = state.appRouter;
   const { isAuthorized } = state.auth.auth;
   return {
     article,
     isAuthorized,
+    user,
     loading,
     error
   };

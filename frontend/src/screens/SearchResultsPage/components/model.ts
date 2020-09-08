@@ -12,6 +12,7 @@ export interface ISearchSegmentProps {
 }
 
 export interface IFilters {
+  q?: string;
   // category
   c?: EsDataType;
   // sorting

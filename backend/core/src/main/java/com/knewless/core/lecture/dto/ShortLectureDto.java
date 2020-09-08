@@ -18,6 +18,7 @@ public class ShortLectureDto {
     private String url1080;
     private String url720;
     private String url480;
+    private String previewImage;
     private int timeSeconds;
     private boolean isFavourite;
 }

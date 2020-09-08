@@ -31,6 +31,7 @@ import courseDiscussion from '@containers/discussions/CourseDiscussion/rootReduc
 import lectureDiscussion from '@containers/discussions/LectureDiscussion/rootReducer';
 import websocket from '@containers/WebsocketConnector/rootReducer';
 import userOverview from '@containers/UserOverview/rootReducer';
+import articlesPage from '../screens/Articles/reducers';
 
 export default combineReducers({
   toastr,
@@ -64,5 +65,6 @@ export default combineReducers({
   courseDiscussion,
   lectureDiscussion,
   websocket,
-  userOverview
+  userOverview,
+  articlesPage
 });

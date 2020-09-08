@@ -3,13 +3,12 @@ import styles from './styles.module.sass';
 import { convertFromSeconds } from '@screens/Favourites/services/helper';
 import { ILecture } from '@screens/Favourites/models/ILecture';
 import { history } from '@helpers/history.helper';
-import { StyledRating } from 'components/StyledRating';
 import { Label, Icon } from 'semantic-ui-react';
 import noImage from '@images/no_image.png';
 
 interface ILectureRowProps {
   lecture: ILecture;
-  remove: (id: string) => void
+  remove: (id: string) => void;
 }
 
 export const LectureRow: React.FunctionComponent<ILectureRowProps> = ({
@@ -17,12 +16,12 @@ export const LectureRow: React.FunctionComponent<ILectureRowProps> = ({
 }) => {
   const redirectToLecture = () => {
     history.push(`/lecture/${lecture.id}`);
-  }
+  };
   return (
     <div className={styles.row}>
       <div onClick={() => redirectToLecture()} className={styles.gridrow}>
         <div className={styles.content_item}>
-          <img className={styles.course_image} src={lecture.image ? lecture.image : noImage}/>
+          <img className={styles.course_image} src={lecture.image ? lecture.image : noImage} />
         </div>
         <div className={styles.content_name}>{lecture.name}</div>
         <div className={styles.content_item}>{lecture.course}</div>

@@ -5,6 +5,7 @@ import com.knewless.core.dailyProgress.DailyProgressService;
 import com.knewless.core.history.dto.WatchHistorySaveRequest;
 import com.knewless.core.history.model.History;
 import com.knewless.core.lecture.LectureRepository;
+import com.knewless.core.lecture.dto.LectureHistoryDto;
 import com.knewless.core.tag.TagRepository;
 import com.knewless.core.tag.model.Tag;
 import com.knewless.core.user.UserRepository;
@@ -28,6 +29,8 @@ public class WatchHistoryService {
     private final DailyProgressService dailyProgressService;
     @Value("${app.watch_history.progress_completed_threshold}")
     private double PROGRESS_COMPLETED_THRESHOLD;
+    @Value("${fs.video_url}")
+    private String URL;
 
     @Autowired
     public WatchHistoryService(HistoryRepository historyRepository,
@@ -102,8 +105,13 @@ public class WatchHistoryService {
         return historyList.stream()
                 .map(HistoryMapper.MAPPER::historyToHistory)
                 .peek(h -> {
-                    List<String> tags = tagRepository.findAllByLectures_Id(h.getLecture().getId()).stream().map(Tag::getName).collect(Collectors.toList());
+                    LectureHistoryDto historyDto = h.getLecture();
+                    List<String> tags = tagRepository.findAllByLectures_Id(historyDto.getId())
+                            .stream().map(Tag::getName).collect(Collectors.toList());
                     h.setTags(tags);
+                    if (historyDto.getPreviewImage() != null && historyDto.getPreviewImage().startsWith("assets")) {
+                        historyDto.setPreviewImage(URL + historyDto.getPreviewImage());
+                    }
                 })
                 .collect(Collectors.toList());
     }
