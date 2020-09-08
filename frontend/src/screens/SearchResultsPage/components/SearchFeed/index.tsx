@@ -7,10 +7,10 @@ import {
 } from '@screens/SearchResultsPage/models/EsModels';
 import React, { useEffect, useState } from 'react';
 import { EsDataType } from '@screens/Search/models/EsDataTypes';
-import { PathSegment } from '@screens/SearchResultsPage/components/path/Segment';
-import { CourseSegment } from '@screens/SearchResultsPage/components/course/Segment';
-import { AuthorSegment } from '@screens/SearchResultsPage/components/author/Segment';
-import { SchoolSegment } from '@screens/SearchResultsPage/components/school/Segment';
+import { PathSegment } from '@screens/SearchResultsPage/components/path/Segment/PathSegment';
+import { CourseSegment } from '@screens/SearchResultsPage/components/course/Segment/CourseSegment';
+import { AuthorSegment } from '@screens/SearchResultsPage/components/author/Segment/AuthorSegment';
+import { SchoolSegment } from '@screens/SearchResultsPage/components/school/Segment/SchoolSegment';
 import styles from './styles.module.sass';
 
 export interface ISearchFeedProps {

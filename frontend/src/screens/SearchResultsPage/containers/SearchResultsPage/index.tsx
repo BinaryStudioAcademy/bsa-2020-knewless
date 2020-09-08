@@ -54,7 +54,7 @@ export const SearchResultsPage: React.FC<ISearchResultPageProps> = (
   const [filtersExpanded, setFiltersExpanded] = useState<boolean>(false);
   const [sortingQuery, setSortingQuery] = useState<ISearchSorting[]>([]);
   const [inputValue, setInputValue] = useState<string>();
-  const [pageLoaded, setPageLoaded] = useState(false);
+  const [isPageMounted, setPageMounted] = useState(false);
   const [sortOptions, setSortOptions] = useState([]);
   const [selectedSortOptionValue, setSelectedSortOption] = useState();
   const location = useLocation();
@@ -93,7 +93,7 @@ export const SearchResultsPage: React.FC<ISearchResultPageProps> = (
   useEffect(() => {
     urlToState();
     triggerTagsFetch();
-    setPageLoaded(true);
+    setPageMounted(true);
   }, []);
 
   useEffect(() => {
@@ -101,7 +101,7 @@ export const SearchResultsPage: React.FC<ISearchResultPageProps> = (
   }, [query]);
 
   useEffect(() => {
-    if (!isFetching && pageLoaded) {
+    if (!isFetching && isPageMounted) {
       handleSearchTrigger();
     }
   }, [matchQueryFilters, rangeQueryFilters, sortingQuery]);
@@ -111,7 +111,7 @@ export const SearchResultsPage: React.FC<ISearchResultPageProps> = (
     // fixme: initial load of the page while there are parameters in the url is not working
     //    the line below is commented out until I fix proper state load from url
     history.push(location);
-  }, [query]);
+  }, [query, visualFilters]);
 
   function handleCategoryChange(value) {
     // if category deselected, we clear the filters
@@ -125,6 +125,7 @@ export const SearchResultsPage: React.FC<ISearchResultPageProps> = (
   useEffect(() => {
     resetFilters();
     resetQueryParameters();
+    setVisualFilters({ q: visualFilters.q, c: visualFilters.c });
     if (visualFilters.c !== undefined) {
       setMatchQueryFilters([{ field: 'type', value: visualFilters.c }]);
     } else {

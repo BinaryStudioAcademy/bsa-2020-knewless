@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { IFilterProps, IFilters } from '@screens/SearchResultsPage/components/model';
 import styles from './styles.module.sass';
 import { EsDataType } from '@screens/Search/models/EsDataTypes';
@@ -31,12 +31,20 @@ export const PathFilter: React.FC<IPathFilterProps> = (
     setSortingOptions, expanded, fetchedTags
   }
 ) => {
-  useEffect(() => {
-    setSortingOptions(sortOptions);
-  }, []);
+  const [isActive, setActive] = useState(false);
 
   useEffect(() => {
-    if (visualFilters.c === EsDataType.PATH.valueOf()) {
+    setActive(visualFilters.c === EsDataType.PATH);
+  }, [visualFilters.c]);
+
+  useEffect(() => {
+    if (isActive) {
+      setSortingOptions(sortOptions);
+    }
+  }, [isActive]);
+
+  useEffect(() => {
+    if (isActive) {
       switch (visualFilters.s) {
         case SortOptions.NAME_DESC:
           updateSorting(() => [{ order: SortOrder.DESC, field: 'name.keyword' }]);
@@ -63,6 +71,7 @@ export const PathFilter: React.FC<IPathFilterProps> = (
               fetchedTags={fetchedTags}
               updateMatchFilters={updateMatchFilters}
               updateVisualFilters={updateVisualFilters as any}
+              visualFilters={visualFilters}
             />
           </div>
         </div>

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { IFilterProps, IFilters } from '@screens/SearchResultsPage/components/model';
 import { ComplexityLevel, levelOptions } from '@models/LevelsEnum';
 import { OutlineDropdown } from '@components/Dropdown';
@@ -48,6 +48,18 @@ export const CourseFilter: React.FC<ICourseFilterProps> = (
     setSortingOptions, expanded, fetchedTags
   }
 ) => {
+  const [isActive, setActive] = useState(false);
+
+  useEffect(() => {
+    setActive(visualFilters.c === EsDataType.COURSE);
+  }, [visualFilters.c]);
+
+  useEffect(() => {
+    if (isActive) {
+      setSortingOptions(sortOptions);
+    }
+  }, [isActive]);
+
   useEffect(() => {
     const field = 'metadata.level';
     const value = visualFilters.l;
@@ -69,11 +81,7 @@ export const CourseFilter: React.FC<ICourseFilterProps> = (
   }, [visualFilters.rMin, visualFilters.rMax]);
 
   useEffect(() => {
-    setSortingOptions(sortOptions);
-  }, []);
-
-  useEffect(() => {
-    if (visualFilters.c === EsDataType.COURSE.valueOf()) {
+    if (isActive) {
       switch (visualFilters.s) {
         case SortOptions.NAME_DESC:
           updateSorting(() => [{ order: SortOrder.DESC, field: 'name.keyword' }]);
@@ -133,6 +141,7 @@ export const CourseFilter: React.FC<ICourseFilterProps> = (
               fetchedTags={fetchedTags}
               updateMatchFilters={updateMatchFilters}
               updateVisualFilters={updateVisualFilters as any}
+              visualFilters={visualFilters}
             />
           </div>
         </div>
