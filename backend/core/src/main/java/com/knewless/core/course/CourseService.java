@@ -379,6 +379,7 @@ public class CourseService {
 
     public List<CourseDetailsDto> getAllCoursesByLectureTag(UUID tagId) {
         return courseRepository.getDetailCoursesByLectureTag(tagId).stream()
+                .distinct()
                 .map(this::mapCourseDetailsQueryResultToDto)
                 .collect(Collectors.toUnmodifiableList());
     }
