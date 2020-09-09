@@ -1,5 +1,7 @@
 package com.knewless.core.lecture;
 
+import com.knewless.core.comments.CommentSourceRepository;
+import com.knewless.core.course.model.Course;
 import com.knewless.core.db.SourceType;
 import com.knewless.core.lecture.dto.ShortLectureDto;
 import com.knewless.core.lecture.model.Lecture;
@@ -13,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface LectureRepository extends JpaRepository<Lecture, UUID> {
+public interface LectureRepository extends CommentSourceRepository<Lecture>, JpaRepository<Lecture, UUID> {
 	
 	
 	@Query("SELECT new com.knewless.core.lecture.dto.ShortLectureDto(l.id, l.name, " +
@@ -36,4 +38,9 @@ public interface LectureRepository extends JpaRepository<Lecture, UUID> {
 	List<Lecture> getFavouriteLecturesByUserId(@Param("userId") UUID userId, @Param("type") SourceType type);
 	
 	long countAllByCourse_Id(UUID courseId);
+	
+	@Override
+	default Optional<Lecture> findSourceById(UUID sourceId) {
+		return findById(sourceId);
+	}
 }

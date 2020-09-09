@@ -54,4 +54,5 @@ export interface IAppState {
   userOverview: IUserOverviewState;
   articlesPage: IArticlesState;
   addArticlePage: IAddArticleState;
+  articleDiscussion: IDiscussionState;
 }

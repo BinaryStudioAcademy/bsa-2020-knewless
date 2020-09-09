@@ -1,5 +1,6 @@
 package com.knewless.core.course;
 
+import com.knewless.core.comments.CommentSourceRepository;
 import com.knewless.core.course.dto.*;
 import com.knewless.core.course.model.Course;
 import com.knewless.core.db.SourceType;
@@ -14,7 +15,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
-public interface CourseRepository extends JpaRepository<Course, UUID> {
+public interface CourseRepository extends CommentSourceRepository<Course>, JpaRepository<Course, UUID> {
 
     //language=SpringDataQL
     String COURSE_SELECT = "SELECT new com.knewless.core.course.dto.CourseQueryResult(c.id, " +
@@ -164,4 +165,9 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
     List<UUID> getPopularCourses(Pageable pageable);
 
     int countByAuthorId(UUID id);
+    
+    @Override
+    default Optional<Course> findSourceById(UUID sourceId) {
+        return findById(sourceId);
+    }
 }

@@ -3,7 +3,7 @@ import styles from './styles.module.sass';
 import { IArticle } from '../../models/domain';
 import { IAppState } from '@models/AppState';
 import { connect } from 'react-redux';
-import { useParams, NavLink, Redirect } from 'react-router-dom';
+import { NavLink, Redirect, useParams } from 'react-router-dom';
 import { IBindingCallback1 } from '@models/Callbacks';
 import ReactHtmlParser from 'react-html-parser';
 import { ArticleCard } from '../../components/ArticleCard';
@@ -16,12 +16,13 @@ import AddToFavouriteButton, { IFavourite } from '@components/AddToFavouritesBut
 import { SourceType } from '@components/AddToFavouritesButton/helper/SourceType';
 import { RoleTypes } from '@containers/AppRouter/models/IRole';
 import {
-  fetchArticleDataRoutine,
   changeFavouriteArticleStateRoutine,
-  checkFavouriteArticleStateRoutine
+  checkFavouriteArticleStateRoutine,
+  fetchArticleDataRoutine
 } from '@screens/ArticlePage/routines';
 import { Icon, Label } from 'semantic-ui-react';
 import { IUser } from '@containers/AppRouter/models/IUser';
+import { CommentsSection } from '@screens/ArticlePage/components/ArticleCommentsSection';
 
 export interface IArticleProps {
   article: IArticle;
@@ -87,21 +88,21 @@ export const ArticlePage: React.FC<IArticleProps> = ({
                 <span className={styles.form__label}>
                   {article?.name}
                   {article?.author?.userId === user?.id && (
-                  <Label
-                    style={{
-                      background: 'transparent',
-                      color: '#fff',
-                      verticalAlign: 'super',
-                      position: 'relative',
-                      top: '-8px',
-                      left: '10px',
-                      fontSize: '1.3rem',
-                      cursor: 'pointer'
-                    }}
-                    onClick={() => history.push(`/article/edit/${articleId}`)}
-                  >
-                    <Icon name="pencil" />
-                  </Label>
+                    <Label
+                      style={{
+                        background: 'transparent',
+                        color: '#fff',
+                        verticalAlign: 'super',
+                        position: 'relative',
+                        top: '-8px',
+                        left: '10px',
+                        fontSize: '1.3rem',
+                        cursor: 'pointer'
+                      }}
+                      onClick={() => history.push(`/article/edit/${articleId}`)}
+                    >
+                      <Icon name="pencil" />
+                    </Label>
                   )}
                 </span>
                 <div className={styles.author}>
@@ -134,26 +135,32 @@ export const ArticlePage: React.FC<IArticleProps> = ({
                   id={article.author?.id}
                 />
               </div>
-              <div className={styles.articles_block}>
-                <div className={styles.content_row}>
-                  <CardsSegment
-                    title={`More from ${article.author?.name}`}
-                    onViewAllClick={() => history.push(`/author/${article.author?.id}`)}
-                    loading={false}
-                  >
-                    {loading && [1, 2, 3].map(x => <ArticleCardPlaceHolder key={x} hideButton={false} />)}
-                    {!loading && article?.author?.articles?.filter(a => a.id !== articleId).slice(0, 3).map(a => (
-                      <div key={a.id} className={styles.article_card}>
-                        <ArticleCard
-                          id={a.id}
-                          name={a.name}
-                          duration={Math.max(readingTime(a.text).time / 1000, 60)}
-                          imageSrc={a.image}
-                        />
-                      </div>
-                    ))}
-                  </CardsSegment>
+              {(article?.author?.articles?.filter(a => a.id !== articleId).length !== 0 || loading) && (
+                <div className={styles.articles_block}>
+                  <div className={styles.content_row}>
+                    <CardsSegment
+                      title={`More from ${article.author?.name}`}
+                      onViewAllClick={() => history.push(`/author/${article.author?.id}`)}
+                      loading={false}
+                    >
+                      {loading && [1, 2, 3].map(x => <ArticleCardPlaceHolder key={x} hideButton={false} />)}
+                      {!loading && article?.author?.articles?.filter(a => a.id !== articleId).slice(0, 3).map(a => (
+                        <div key={a.id} className={styles.article_card}>
+                          <ArticleCard
+                            id={a.id}
+                            name={a.name}
+                            duration={Math.max(readingTime(a.text).time / 1000, 60)}
+                            imageSrc={a.image}
+                          />
+                        </div>
+                      ))}
+                    </CardsSegment>
+                  </div>
                 </div>
+              )}
+              <div>
+                {articleId && article
+                && <CommentsSection articleId={articleId} yourId={user?.id} authorId={article.author?.userId} />}
               </div>
             </div>
           </div>

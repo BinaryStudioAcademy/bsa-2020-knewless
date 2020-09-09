@@ -5,10 +5,12 @@ import com.knewless.core.lecture.lectureComment.dto.SaveLectureCommentRequest;
 import com.knewless.core.security.oauth.UserPrincipal;
 import com.knewless.core.user.model.CurrentUser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("lecture_comment")
@@ -22,6 +24,14 @@ public class LectureCommentController {
 	
 	@PostMapping
 	public LectureCommentDto saveComment(@RequestBody SaveLectureCommentRequest request, @CurrentUser UserPrincipal userPrincipal) {
-		return service.save(request, userPrincipal.getId());
+		return (LectureCommentDto) service.save(request, userPrincipal.getId());
+	}
+	
+	@GetMapping("of/{lectureId}")
+	public List<LectureCommentDto> getCommentsByCourse(@PathVariable("lectureId") UUID lectureId,
+													   @RequestParam(defaultValue = "0") int page,
+													   @RequestParam(defaultValue = "2") int size) {
+		return service.getCommentsOf(lectureId, PageRequest.of(page, size)).stream()
+				.map(LectureCommentMapper.MAPPER::commentToDto).collect(Collectors.toList());
 	}
 }

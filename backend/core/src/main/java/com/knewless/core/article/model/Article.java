@@ -3,6 +3,7 @@ package com.knewless.core.article.model;
 import com.knewless.core.article.articleComment.model.ArticleComment;
 import com.knewless.core.article.articleReaction.model.ArticleReaction;
 import com.knewless.core.author.model.Author;
+import com.knewless.core.comments.CommentableEntity;
 import com.knewless.core.db.BaseEntity;
 import com.knewless.core.tag.model.Tag;
 import lombok.Data;
@@ -11,12 +12,13 @@ import lombok.EqualsAndHashCode;
 import javax.persistence.*;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "articles")
-public class Article extends BaseEntity {
+public class Article extends BaseEntity implements CommentableEntity {
     @Column(name = "name")
     private String name;
 
@@ -38,4 +40,9 @@ public class Article extends BaseEntity {
 
     @ManyToMany(mappedBy = "articles")
     private Set<Tag> tags = Set.of();
+    
+    @Override
+    public UUID getNotifiedUserId() {
+        return author.getUser().getId();
+    }
 }

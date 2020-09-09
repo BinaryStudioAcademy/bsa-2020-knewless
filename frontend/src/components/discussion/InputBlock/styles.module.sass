@@ -1,31 +1,43 @@
 .container
-  padding: 0
-  //padding: 0.5em
+  padding: 0.3em
   display: flex
-  //border: 1px solid #3f404c
   background: #121421
+  border: 1px solid #65656559
 
 .input
+  resize: none
   flex-grow: 1
   flex-shrink: 1
   margin-right: 0
-  border-radius: 0 !important
-  & > input
-    background: none !important
-    border: 1px solid #656565 !important
-    color: white !important
-    border-radius: 0 !important
-    transition: border-color ease-in-out 0.3s !important
-    &:focus
-      border-color: #989898 !important
+  border-radius: 0
+  background: none
+  color: white
+  transition: border-color ease-in-out 0.3s !important
+  min-height: 100%
+  border: none
+  &::placeholder
+    transition: opacity ease-in-out 0.2s
+  &:focus
+    outline: -webkit-focus-ring-color auto 0 !important
+    &::placeholder
+      opacity: 0.5
 
 .send_button
-  width: 3em !important
-  flex-shrink: 0
-  min-width: 3em !important
-  max-width: 3em !important
+  min-width: 36px !important
+  max-width: 36px !important
   padding: 1em !important
+  flex-shrink: 0
   margin-right: 0 !important
   border-radius: 0 !important
-  transition: 0.3s ease-in-out all !important
-  border-color: #989898 !important
+  border: none !important
+  height: 36px !important
+  min-height: 36px !important
+  display: flex !important
+  align-items: center
+  justify-content: center
+  align-self: flex-end
+  transition: opacity ease-in-out 0.3s !important
+  &:hover
+    box-shadow: none !important
+  & > i
+    margin-right: 0 !important

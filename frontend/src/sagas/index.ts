@@ -30,6 +30,7 @@ import lectureDiscussionSagas from '@containers/discussions/LectureDiscussion/sa
 import websocketSagas from '@containers/WebsocketConnector/sagas';
 import userOverviewSagas from '@containers/UserOverview/sagas';
 import articlesSagas from '../screens/Articles/sagas';
+import articleDiscussionSagas from '@containers/discussions/ArticleDiscussion/sagas';
 
 export default function* rootSaga() {
   yield all([
@@ -61,6 +62,7 @@ export default function* rootSaga() {
     articlePageSagas(),
     courseDiscussionSagas(),
     lectureDiscussionSagas(),
+    articleDiscussionSagas(),
     websocketSagas(),
     userOverviewSagas(),
     articlesSagas()

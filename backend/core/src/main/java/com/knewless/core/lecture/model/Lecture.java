@@ -1,5 +1,6 @@
 package com.knewless.core.lecture.model;
 
+import com.knewless.core.comments.CommentableEntity;
 import com.knewless.core.course.model.Course;
 import com.knewless.core.db.BaseEntity;
 import com.knewless.core.lecture.homework.model.Homework;
@@ -12,6 +13,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Table(name = "lectures")
@@ -21,7 +23,7 @@ import java.util.Set;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true, onlyExplicitlyIncluded = true)
-public class Lecture extends BaseEntity {
+public class Lecture extends BaseEntity implements CommentableEntity {
     @Column(name = "name")
     @ToString.Include
     private String name;
@@ -76,4 +78,9 @@ public class Lecture extends BaseEntity {
             joinColumns = @JoinColumn(name = "lecture_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private Set<Tag> tags = Set.of();
+    
+    @Override
+    public UUID getNotifiedUserId() {
+        return user.getId();
+    }
 }

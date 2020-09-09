@@ -1,4 +1,4 @@
-package com.knewless.core.lecture.lectureComment.dto;
+package com.knewless.core.article.articleComment.dto;
 
 import com.knewless.core.comments.CommentDto;
 import lombok.Data;
@@ -8,11 +8,11 @@ import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class LectureCommentDto extends CommentDto {
-	private UUID lectureId;
+public class ArticleCommentDto extends CommentDto {
+	private UUID articleId;
 	
 	@Override
 	public UUID getSourceId() {
-		return lectureId;
+		return articleId;
 	}
 }
