@@ -64,7 +64,7 @@ public interface PathRepository extends JpaRepository<Path, UUID> {
             "ORDER BY p.updatedAt DESC")
     List<PathQueryResult> getPathsByTagId(UUID tagId);
 
-    @Query("SELECT new com.knewless.core.path.dto.PathQueryResult(p.id, p.name, " +
+    @Query("SELECT DISTINCT new com.knewless.core.path.dto.PathQueryResult(p.id, p.name, " +
             "p.imageTag.source, SIZE(p.courses), " +
             "(SELECT COALESCE(SUM(pcl.duration), 0) FROM p.courses as pc " +
             "INNER JOIN pc.lectures as pcl)) " +
@@ -96,7 +96,7 @@ public interface PathRepository extends JpaRepository<Path, UUID> {
             "WHERE p.id = :id")
     List<Tag> getTagsByPathId(@Param("id") UUID id);
 
-    @Query("SELECT new com.knewless.core.path.dto.PathQueryResult(p.id, p.name, " +
+    @Query("SELECT DISTINCT new com.knewless.core.path.dto.PathQueryResult(p.id, p.name, " +
             "p.imageTag.source, SIZE(p.courses), " +
             "(SELECT COALESCE(SUM(pcl.duration), 0) FROM p.courses as pc " +
             "INNER JOIN pc.lectures as pcl)) " +

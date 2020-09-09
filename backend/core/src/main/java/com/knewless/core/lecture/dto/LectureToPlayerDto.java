@@ -11,4 +11,5 @@ public interface LectureToPlayerDto {
     String getDescription();
     String getPreviewImage();
     int getDuration();
+    int getIndex();
 }

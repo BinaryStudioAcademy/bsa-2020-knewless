@@ -13,6 +13,7 @@ public class LectureProjectionMapper {
 		lectureDto.setDescription(lecture.getDescription());
 		lectureDto.setDuration(lecture.getDuration());
 		lectureDto.setWebLink(lecture.getWebLink());
+		lectureDto.setIndex(lecture.getIndex());
 		if (lecture.getPreviewImage() != null) {
 			lectureDto.setPreviewImage(url + lecture.getPreviewImage());
 		}

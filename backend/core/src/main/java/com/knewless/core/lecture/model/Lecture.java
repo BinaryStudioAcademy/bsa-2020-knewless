@@ -45,12 +45,16 @@ public class Lecture extends BaseEntity implements CommentableEntity {
 
     @Column(name = "description")
     private String description;
-  
+
     @Column(name = "preview_image")
     private String previewImage;
 
     @Column(name = "duration")
     private int duration;
+
+    @Builder.Default
+    @Column
+    private int index = 0;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course_id")
@@ -78,7 +82,7 @@ public class Lecture extends BaseEntity implements CommentableEntity {
             joinColumns = @JoinColumn(name = "lecture_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private Set<Tag> tags = Set.of();
-    
+
     @Override
     public UUID getNotifiedUserId() {
         return user.getId();

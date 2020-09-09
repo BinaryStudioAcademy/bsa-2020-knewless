@@ -98,7 +98,7 @@ public class CourseService {
         Author author = authorRepository.findByUserId(userId).orElseThrow(
                 () -> new ResourceNotFoundException("Author", "userId", userId)
         );
-        List<Lecture> savedLectures = lectureRepository.findAllById(request.getLectures());
+        List<Lecture> savedLectures = lectureRepository.findAllById(request.getLectures().stream().map(CourseLectureDto::getId).collect(Collectors.toList()));
         List<Lecture> thisLectures = new ArrayList<>();
         List<Homework> homeworks = new ArrayList<>();
         Course course = Course.builder().level(request.getLevel() == "" ? null : Level.valueOf(request.getLevel()))
@@ -126,6 +126,14 @@ public class CourseService {
                 Homework homework = new Homework(l.getHomework().getDescription(), lec);
                 homeworks.add(homework);
             }
+
+            lec.setIndex(request.getLectures().stream()
+                            .filter(lecture -> lecture.getId().compareTo(l.getId()) == 0)
+                            .findFirst()
+                            .map(CourseLectureDto::getIndex)
+                            .orElse(0)
+            );
+
             thisLectures.add(lec);
         }
         if (request.getIsReleased()) course.setReleasedDate(new Date());
@@ -171,7 +179,7 @@ public class CourseService {
         course.setDescription(request.getDescription());
         course.setOverview(request.getOverview());
 
-        List<Lecture> savedLectures = lectureRepository.findAllById(request.getLectures());
+        List<Lecture> savedLectures = lectureRepository.findAllById(request.getLectures().stream().map(CourseLectureDto::getId).collect(Collectors.toList()));
         List<Lecture> thisLectures = new ArrayList<>();
         List<Homework> homeworks = new ArrayList<>();
 
@@ -197,6 +205,13 @@ public class CourseService {
                 Homework homework = new Homework(l.getHomework().getDescription(), lec);
                 homeworks.add(homework);
             }
+            lec.setIndex(request.getLectures().stream()
+                    .filter(lecture -> lecture.getId().compareTo(l.getId()) == 0)
+                    .findFirst()
+                    .map(CourseLectureDto::getIndex)
+                    .orElse(0)
+            );
+
             thisLectures.add(lec);
         }
 
@@ -244,6 +259,7 @@ public class CourseService {
                     lecture.setProgress(watchHistoryService.getProgressByLecture(userId,UUID.fromString(l.getId())));
                     return lecture;
                 })
+                .sorted(Comparator.comparingInt(com.knewless.core.lecture.dto.LectureDto::getIndex))
                 .collect(Collectors.toList());
         course.setLectures(favoriteService.checkFavouriteLecturesToPlayer(userId, lectures));
         course.setReviewed(reactionRepository.existsByCourseIdAndUserId(UUID.fromString(courseProjection.getId()), userId));
@@ -355,6 +371,7 @@ public class CourseService {
         List<ShortLectureDto> lectures = courseEntity.getLectures()
                 .stream()
                 .map(LectureMapper.MAPPER::lectureToShortLectureDto)
+                .sorted(Comparator.comparingInt(ShortLectureDto::getIndex))
                 .collect(Collectors.toList());
         course.setLectures(favoriteService.checkFavouriteLectures(userId, lectures));
         course.setTags(
@@ -428,6 +445,7 @@ public class CourseService {
         List<ShortLectureDto> lectures = courseEntity.getLectures()
                 .stream()
                 .map(LectureMapper.MAPPER::lectureToShortLectureDto)
+                .sorted(Comparator.comparingInt(ShortLectureDto::getIndex))
                 .collect(Collectors.toList());
 
         course.setLectures(lectures);

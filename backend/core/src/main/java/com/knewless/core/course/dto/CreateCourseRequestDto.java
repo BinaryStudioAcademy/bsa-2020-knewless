@@ -41,6 +41,6 @@ public class CreateCourseRequestDto {
 
     private Boolean isReleased = false;
 
-    private List<UUID> lectures;
+    private List<CourseLectureDto> lectures;
 
 }
