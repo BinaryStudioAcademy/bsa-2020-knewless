@@ -25,6 +25,7 @@ public class EsMapper {
         }
 
         Map<String, Object> metadata = new HashMap<>();
+        metadata.put("image", entity.getAvatar());
         // todo: add subscribers to author's meta
 
         return EsEntity.builder()

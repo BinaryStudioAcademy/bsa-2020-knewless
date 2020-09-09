@@ -42,4 +42,8 @@ export interface ISchoolSearchResult extends ISearchResult {
   };
 }
 
-export type IAuthorSearchResult = ISearchResult;
+export interface IAuthorSearchResult extends ISearchResult {
+  metadata: {
+    image: string;
+  };
+}

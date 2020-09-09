@@ -20,7 +20,7 @@ export const CourseRow: React.FunctionComponent<ICourseRowProps> = ({
   return (
     <div className={styles.row}>
       <div onClick={() => redirectToCourse()} className={styles.gridrow}>
-        <div className={styles.content_item}>
+        <div className={styles.content_item__first}>
           <img className={styles.course_image} src={course.image}/>
         </div>
         <div className={styles.content_name}>{course.name}</div>

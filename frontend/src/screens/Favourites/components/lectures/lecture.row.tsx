@@ -4,7 +4,7 @@ import { convertFromSeconds } from '@screens/Favourites/services/helper';
 import { ILecture } from '@screens/Favourites/models/ILecture';
 import { history } from '@helpers/history.helper';
 import { Label, Icon } from 'semantic-ui-react';
-import noImage from '@images/no_image.png';
+import noVideo from '@images/noVideo.png';
 
 interface ILectureRowProps {
   lecture: ILecture;
@@ -20,8 +20,8 @@ export const LectureRow: React.FunctionComponent<ILectureRowProps> = ({
   return (
     <div className={styles.row}>
       <div onClick={() => redirectToLecture()} className={styles.gridrow}>
-        <div className={styles.content_item}>
-          <img className={styles.course_image} src={lecture.image ? lecture.image : noImage} />
+        <div className={styles.content_item__first}>
+          <img className={lecture.image? styles.course_image : styles.no_video} src={lecture.image ? lecture.image : noVideo} />
         </div>
         <div className={styles.content_name}>{lecture.name}</div>
         <div className={styles.content_item}>{lecture.course}</div>
