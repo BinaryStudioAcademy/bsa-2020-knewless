@@ -9,7 +9,7 @@ function* tryConnectToWebsocket() {
     yield put(connectWebsocketRoutine.success(resp));
   } catch (error) {
     yield put(connectWebsocketRoutine.failure());
-    toastr.error('Fail to read all');
+    toastr.error('Failed to connect notifications');
   }
 }
 

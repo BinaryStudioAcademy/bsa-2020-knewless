@@ -40,6 +40,8 @@ import { InlineLoaderWrapper } from '@components/InlineLoaderWrapper';
 import ArticlePage from '@screens/ArticlePage/containers/ArticlePage';
 import WebsocketConnector from '@containers/WebsocketConnector';
 import ArticlesPage from '@screens/Articles/containers/ArticlesPage';
+import { IUser } from '@containers/AppRouter/models/IUser';
+
 export interface IRoutingProps {
   isLoading: boolean;
   isAuthorized: boolean;
@@ -50,6 +52,7 @@ export interface IRoutingProps {
   setOpen: IBindingCallback1<string>;
   redirectTo: string;
   isSettingsFilled: boolean;
+  currentUser: IUser;
 }
 
 const Routing: React.FunctionComponent<IRoutingProps> = ({
@@ -61,7 +64,8 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({
   loginUser,
   setOpen,
   redirectTo,
-  isSettingsFilled
+  isSettingsFilled,
+  currentUser
 }) => {
   const checkHeaderShown = () => {
     const headerBlackList = ['/login', '/register', '/lecture/', '/reset', '/savepassword', '/verifyemail'];
@@ -121,7 +125,7 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({
         <PublicRoute component={NotFoundPage} />
       </Switch>
       {isHeaderShown && <Footer />}
-      <WebsocketConnector />
+      <WebsocketConnector currentUser={currentUser} />
       <WebSocketNotifications />
       {onOpen && (
         <LoginModal
@@ -139,14 +143,15 @@ const Routing: React.FunctionComponent<IRoutingProps> = ({
 };
 
 const mapStateToProps = (state: IAppState) => {
-  const { settingsFilled } = state.appRouter;
+  const { settingsFilled, user } = state.appRouter;
   return {
     isAuthorized: state.auth.auth.isAuthorized,
     isLoginLoading: state.auth.requests.loginRequest.loading,
     isLoginFailure: state.auth.requests.loginRequest.error != null && !state.auth.requests.loginRequest.loading,
     onOpen: state.loginModal.open,
     redirectTo: state.loginModal.redirectTo,
-    isSettingsFilled: settingsFilled
+    isSettingsFilled: settingsFilled,
+    currentUser: user
   };
 };
 
