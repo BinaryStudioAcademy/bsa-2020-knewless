@@ -21,6 +21,7 @@ import { CourseCardPlaceHolder } from '@components/placeholder/CourseCardPlaceHo
 import { PathCardPlaceHolder } from '@components/placeholder/PathCardPlaceHolder';
 import { history } from '@helpers/history.helper';
 import { extractStudentLoading } from '@screens/MainPage/models/IMainStudentPageState';
+import { RowPlaceholder } from '@components/placeholder/RowPlaceholder';
 
 export interface IMainStudentPageProps {
   student: IStudent;
@@ -120,7 +121,7 @@ const MainStudentPage: React.FC<IMainStudentPageProps> = ({
             {!recommendedCoursesLoaded
               ? [1, 2, 3].map(x => <CourseCardPlaceHolder key={x} dependencyName="landing" hideButton={false} />) : (
                 <>
-                  {recommendedCourses.slice(0, 3).map(c => (
+                  {recommendedCourses.length ? recommendedCourses.slice(0, 3).map(c => (
                     <div className={styles.course_card}>
                       <CourseCard
                         id={c.id}
@@ -135,7 +136,12 @@ const MainStudentPage: React.FC<IMainStudentPageProps> = ({
                         tags={c.tags}
                       />
                     </div>
-                  ))}
+                  )) : (
+                    <RowPlaceholder
+                      title="No courses recommended for you right now"
+                      description="Check out this page later"
+                    />
+                  )}
                 </>
               )}
           </CardsSegment>
@@ -153,7 +159,7 @@ const MainStudentPage: React.FC<IMainStudentPageProps> = ({
                 </div>
               )) : (
                 <>
-                  {paths.slice(0, 3).map(p => (
+                  {paths.length ? paths.slice(0, 3).map(p => (
                     <div className={styles.path_card}>
                       <PathCard
                         id={p.id}
@@ -163,7 +169,13 @@ const MainStudentPage: React.FC<IMainStudentPageProps> = ({
                         duration={p.duration}
                       />
                     </div>
-                  ))}
+                  )) : (
+                    <RowPlaceholder
+                      title="No paths here for now"
+                      description="Check out this page later"
+                      webOnLeft={false}
+                    />
+                  )}
                 </>
               )}
           </CardsSegment>
