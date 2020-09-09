@@ -7,9 +7,11 @@ import { ILecture } from '@screens/Favourites/models/ILecture';
 import { IAuthor } from '@screens/Favourites/models/IAuthor';
 import { ICourse } from '@screens/Favourites/models/ICourse';
 import { IPath } from '@screens/Favourites/models/IPath';
-import { fetchFavouriteAuthorsRoutine, removeCourseFavouriteRoutine, removeAuthorFavouriteRoutine,
+import {
+  fetchFavouriteAuthorsRoutine, removeCourseFavouriteRoutine, removeAuthorFavouriteRoutine,
   fetchFavouriteCoursesRoutine, fetchFavouriteLecturesRoutine, removeLectureFavouriteRoutine,
-  fetchFavouritePathsRoutine, removePathFavouriteRoutine } from '@screens/Favourites/routines';
+  fetchFavouritePathsRoutine, removePathFavouriteRoutine, fetchFavouriteArticlesRoutine, removeArticleFavouriteRoutine
+} from '@screens/Favourites/routines';
 import LoaderWrapper from 'components/LoaderWrapper';
 import { Input } from 'semantic-ui-react';
 import { FavouriteCourses } from '@screens/Favourites/components/courses';
@@ -20,24 +22,29 @@ import { filterByName } from '../../services/helper';
 import { IFavourite } from '@components/AddToFavouritesButton/component';
 import { SourceType } from '@components/AddToFavouritesButton/helper/SourceType';
 import { FavouriteArticles } from '@screens/Favourites/components/articles';
+import { IFavouriteArticle } from '@screens/ArticlePage/models/domain';
 
 interface IFavouritesPageProps {
   fetchCourses: IBindingAction;
   fetchAuthors: IBindingAction;
   fetchLectures: IBindingAction;
   fetchPaths: IBindingAction;
+  fetchArticles: IBindingAction;
   isCoursesLoading: boolean;
   isPathsLoading: boolean;
   isAuthorsLoading: boolean;
   isLecturesLoading: boolean;
+  isArticlesLoading: boolean;
   courses: Array<ICourse>;
   lectures: Array<ILecture>;
   authors: Array<IAuthor>;
   paths: Array<IPath>;
+  articles: Array<IFavouriteArticle>;
   changeFavouriteCourse: IBindingCallback1<IFavourite>;
   changeFavouriteAuthor: IBindingCallback1<IFavourite>;
   changeFavouriteLecture: IBindingCallback1<IFavourite>;
   changeFavouritePath: IBindingCallback1<IFavourite>;
+  changeFavouriteArticle: IBindingCallback1<IFavourite>;
 }
 
 const FavouritesPage: React.FC<IFavouritesPageProps> = ({
@@ -45,25 +52,30 @@ const FavouritesPage: React.FC<IFavouritesPageProps> = ({
   changeFavouriteAuthor,
   changeFavouriteLecture,
   changeFavouritePath,
+  changeFavouriteArticle,
   fetchCourses,
   fetchAuthors,
   fetchLectures,
   fetchPaths,
+  fetchArticles,
   isCoursesLoading,
   isAuthorsLoading,
   isLecturesLoading,
   isPathsLoading,
+  isArticlesLoading,
   courses,
   authors,
   lectures,
-  paths
+  paths,
+  articles
 }) => {
   useEffect(() => {
     fetchCourses();
     fetchAuthors();
     fetchLectures();
     fetchPaths();
-  }, [fetchCourses, fetchAuthors, fetchLectures, fetchPaths]);
+    fetchArticles();
+  }, [fetchCourses, fetchAuthors, fetchLectures, fetchPaths, fetchArticles]);
 
   const [filter, setFilter] = useState('');
   const [current, setCurrent] = useState(0);
@@ -96,6 +108,13 @@ const FavouritesPage: React.FC<IFavouritesPageProps> = ({
     changeFavouritePath({
       id,
       type: SourceType.PATH
+    });
+  };
+
+  const removeArticleFromFavourite = (id: string) => {
+    changeFavouriteArticle({
+      id,
+      type: SourceType.ARTICLE
     });
   };
 
@@ -176,7 +195,9 @@ const FavouritesPage: React.FC<IFavouritesPageProps> = ({
           </div>
         </div>
         <div className={styles.wide_container}>
-          <LoaderWrapper loading={isCoursesLoading || isLecturesLoading || isAuthorsLoading || isPathsLoading}>
+          <LoaderWrapper
+            loading={isCoursesLoading || isLecturesLoading || isAuthorsLoading || isPathsLoading || isArticlesLoading}
+          >
             {current === 0 && (
               <FavouriteCourses filterByName={filtering} remove={removeCourseFromFavourite} courses={courses} />
             )}
@@ -187,7 +208,7 @@ const FavouritesPage: React.FC<IFavouritesPageProps> = ({
               <FavouriteLectures filterByName={filtering} remove={removeLectureFromFavourite} lectures={lectures} />
             )}
             {current === 3 && (
-              <FavouriteArticles articles={[]} />
+              <FavouriteArticles filterByName={filtering} remove={removeArticleFromFavourite} articles={articles} />
             )}
             {current === 2 && (
               <FavouritePaths filterByName={filtering} remove={removePathFromFavourite} paths={paths} />
@@ -200,16 +221,18 @@ const FavouritesPage: React.FC<IFavouritesPageProps> = ({
 };
 
 const mapStateToProps = (state: IAppState) => {
-  const { lectures, courses, authors, paths } = state.favourites.data;
+  const { lectures, courses, authors, paths, articles } = state.favourites.data;
   return {
     isCoursesLoading: state.favourites.requests.coursesRequest.loading,
     isAuthorsLoading: state.favourites.requests.authorsRequest.loading,
     isLecturesLoading: state.favourites.requests.lecturesRequest.loading,
     isPathsLoading: state.favourites.requests.pathsRequest.loading,
+    isArticlesLoading: state.favourites.requests.articlesRequest.loading,
     lectures,
     courses,
     authors,
-    paths
+    paths,
+    articles
   };
 };
 
@@ -218,10 +241,12 @@ const mapDispatchToProps = {
   fetchAuthors: fetchFavouriteAuthorsRoutine,
   fetchLectures: fetchFavouriteLecturesRoutine,
   fetchPaths: fetchFavouritePathsRoutine,
+  fetchArticles: fetchFavouriteArticlesRoutine,
   changeFavouriteCourse: removeCourseFavouriteRoutine,
   changeFavouriteAuthor: removeAuthorFavouriteRoutine,
   changeFavouriteLecture: removeLectureFavouriteRoutine,
-  changeFavouritePath: removePathFavouriteRoutine
+  changeFavouritePath: removePathFavouriteRoutine,
+  changeFavouriteArticle: removeArticleFavouriteRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(FavouritesPage);

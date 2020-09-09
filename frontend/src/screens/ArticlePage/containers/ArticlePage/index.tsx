@@ -1,9 +1,6 @@
 import React, { useEffect } from 'react';
 import styles from './styles.module.sass';
 import { IArticle } from '../../models/domain';
-import {
-  fetchArticleDataRoutine
-} from '../../routines';
 import { IAppState } from '@models/AppState';
 import { connect } from 'react-redux';
 import { useParams, NavLink, Redirect } from 'react-router-dom';
@@ -15,59 +12,98 @@ import AuthorCard from '../../components/AuthorCard';
 import { ArticleCardPlaceHolder } from '@components/placeholder/ArticleCardPlaceHolder';
 import readingTime from 'reading-time';
 import { history } from '@helpers/history.helper';
+import AddToFavouriteButton, { IFavourite } from '@components/AddToFavouritesButton/component';
+import { SourceType } from '@components/AddToFavouritesButton/helper/SourceType';
+import { RoleTypes } from '@containers/AppRouter/models/IRole';
+import {
+  fetchArticleDataRoutine,
+  changeFavouriteArticleStateRoutine,
+  checkFavouriteArticleStateRoutine
+} from '@screens/ArticlePage/routines';
 import { Icon, Label } from 'semantic-ui-react';
-import { IUser } from '@containers/AppRouter/models/IUser.ts';
+import { IUser } from '@containers/AppRouter/models/IUser';
 
 export interface IArticleProps {
   article: IArticle;
-  getArticle: IBindingCallback1<string>;
+  fetchArticle: IBindingCallback1<string>;
   isAuthorized: boolean;
   loading: boolean;
+  favourite: boolean;
   error: string;
+  role: string;
+  checkFavourite: IBindingCallback1<IFavourite>;
+  changeFavourite: IBindingCallback1<IFavourite>;
   user: IUser;
 }
 
 export const ArticlePage: React.FC<IArticleProps> = ({
-  getArticle, article, loading, error, user
+  fetchArticle, article, loading, error, user, role, isAuthorized, favourite,
+  checkFavourite, changeFavourite
 }) => {
   const { articleId } = useParams();
 
   useEffect(() => {
     if (articleId) {
-      getArticle(articleId);
+      fetchArticle(articleId);
+    }
+  }, [articleId]);
+
+  useEffect(() => {
+    if (articleId) {
+      checkFavourite({
+        id: articleId,
+        type: SourceType.ARTICLE
+      });
     }
   }, [articleId]);
 
   if (loading) return null;
   if (error) return <Redirect to="/404" />;
+
+  const isUser = role === RoleTypes.USER;
+
   return (
     <>
       <div className={styles.wrapperTitle}>
-        <div id={styles.articleTitle}>Article</div>
+        <div id={styles.articleTitle}>
+          <div>Article</div>
+          {isAuthorized && isUser && (
+            <div className={styles.button_favourite_wrp}>
+              <AddToFavouriteButton
+                id={articleId}
+                type={SourceType.ARTICLE}
+                changeFavourite={changeFavourite}
+                isFavourite={favourite}
+              />
+            </div>
+          )}
+        </div>
       </div>
       <div className={styles.main_container}>
         <div className={styles.main_content}>
           <div className={styles.wrapPreview}>
             <div className={styles.preview}>
               <div className={styles.form__name}>
-                <span className={styles.form__label}>{article?.name}
-                {article?.author?.userId=== user?.id  && (
-              <Label
-                style={{
-                  background: 'transparent',
-                  color: '#fff',
-                  verticalAlign: 'super',
-                  position: 'relative',
-                  top: '-8px',
-                  left: '10px',
-                  fontSize: '1.3rem',
-                  cursor: 'pointer'
-                }}
-                onClick={() => history.push(`/article/edit/${articleId}`)}
-              >
-                <Icon name="pencil" />
-              </Label>
-            )}</span>
+                <span className={styles.form__label}>
+                  {article?.name}
+                  {article?.author?.userId === user?.id && (
+                  <Label
+                    style={{
+                      background: 'transparent',
+                      color: '#fff',
+                      verticalAlign: 'super',
+                      position: 'relative',
+                      top: '-8px',
+                      left: '10px',
+                      fontSize: '1.3rem',
+                      cursor: 'pointer'
+                    }}
+                    onClick={() => history.push(`/article/edit/${articleId}`)}
+                  >
+                    <Icon name="pencil" />
+                  </Label>
+                  )}
+                </span>
                 <div className={styles.author}>
                   <NavLink exact to={`/author/${article.author?.id}`}>
                     <span>
@@ -129,20 +165,25 @@ export const ArticlePage: React.FC<IArticleProps> = ({
 
 const mapStateToProps = (state: IAppState) => {
   const { loading, error } = state.articlePage.requests.fetchArticleRequest;
-  const { article } = state.articlePage.articleData;
-  const {user} = state.appRouter;
+  const { article, favourite } = state.articlePage.articleData;
+  const { user } = state.appRouter;
   const { isAuthorized } = state.auth.auth;
+  const { role } = state.appRouter.user;
   return {
     article,
+    favourite,
     isAuthorized,
     user,
     loading,
-    error
+    error,
+    role: role?.name
   };
 };
 
 const mapDispatchToProps = {
-  getArticle: fetchArticleDataRoutine
+  fetchArticle: fetchArticleDataRoutine,
+  changeFavourite: changeFavouriteArticleStateRoutine,
+  checkFavourite: checkFavouriteArticleStateRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ArticlePage);

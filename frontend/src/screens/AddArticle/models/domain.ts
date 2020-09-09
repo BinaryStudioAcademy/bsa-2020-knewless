@@ -4,9 +4,10 @@ export interface IArticle {
   text: string;
   image?: string;
   uploadImage: File;
-  author?: IAuthorShort
+  author?: IAuthorShort;
 }
- export interface IAuthorShort{
+
+export interface IAuthorShort{
    id: string;
    userId: string;
    firstName: string;

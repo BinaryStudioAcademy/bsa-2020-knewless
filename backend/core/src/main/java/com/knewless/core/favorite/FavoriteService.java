@@ -1,5 +1,7 @@
 package com.knewless.core.favorite;
 
+import com.knewless.core.article.ArticleService;
+import com.knewless.core.article.dto.FavouriteArticleDto;
 import com.knewless.core.author.AuthorService;
 import com.knewless.core.author.dto.FavouriteAuthorResponseDto;
 import com.knewless.core.course.CourseRepository;
@@ -12,6 +14,7 @@ import com.knewless.core.favorite.model.Favorite;
 import com.knewless.core.lecture.Dto.FavouriteLectureResponseDto;
 import com.knewless.core.lecture.LectureMapper;
 import com.knewless.core.lecture.LectureService;
+import com.knewless.core.lecture.dto.LectureDto;
 import com.knewless.core.lecture.dto.ShortLectureDto;
 import com.knewless.core.path.PathService;
 import com.knewless.core.path.dto.FavouritePathResponseDto;
@@ -33,19 +36,22 @@ public class FavoriteService {
     private final CourseService courseService;
     private final AuthorService authorService;
     private final PathService pathService;
+    private final ArticleService articleService;
     @Autowired
     private LectureService lectureService;
     @Autowired
     private CourseRepository courseRepository;
 
     @Autowired
-    public FavoriteService(FavoriteRepository favoriteRepository, UserRepository userRepository, CourseService courseService,
-                           AuthorService authorService, PathService pathService) {
+    public FavoriteService(FavoriteRepository favoriteRepository, UserRepository userRepository,
+                           CourseService courseService, AuthorService authorService, PathService pathService,
+                           ArticleService articleService) {
         this.favoriteRepository = favoriteRepository;
         this.userRepository = userRepository;
         this.courseService = courseService;
         this.authorService = authorService;
         this.pathService = pathService;
+        this.articleService = articleService;
     }
 
     public boolean checkIsFavorite(UUID userId, UUID favouriteId, SourceType type) {
@@ -85,25 +91,29 @@ public class FavoriteService {
         return pathService.getFavouritePathsByUser(userId);
     }
 
+    public List<FavouriteArticleDto> getFavouriteArticles(UUID userId) {
+        return articleService.getFavouriteArticlesByUserId(userId);
+    }
+
     public List<ShortLectureDto> checkFavouriteLectures(UUID userId, List<ShortLectureDto> lectures) {
         if (userId == null) return lectures;
         List<Favorite> favorites = favoriteRepository.findFavoriteByUserIdAndSourceType(userId, SourceType.LECTURE);
-        List<UUID> lectureUuids = favorites.stream().map(f->f.getSourceId()).collect(Collectors.toList());
-        lectures.forEach(l->l.setFavourite(lectureUuids.contains(l.getId())));
+        List<UUID> lectureUuids = favorites.stream().map(Favorite::getSourceId).collect(Collectors.toList());
+        lectures.forEach(l -> l.setFavourite(lectureUuids.contains(l.getId())));
         return lectures;
     }
 
-    public List<com.knewless.core.lecture.dto.LectureDto> checkFavouriteLecturesToPlayer(UUID userId, List<com.knewless.core.lecture.dto.LectureDto> lectures) {
+    public List<LectureDto> checkFavouriteLecturesToPlayer(UUID userId, List<com.knewless.core.lecture.dto.LectureDto> lectures) {
         if (userId == null) return lectures;
         List<Favorite> favorites = favoriteRepository.findFavoriteByUserIdAndSourceType(userId, SourceType.LECTURE);
-        List<UUID> lectureUuids = favorites.stream().map(f->f.getSourceId()).collect(Collectors.toList());
-        lectures.forEach(l->l.setFavourite(lectureUuids.contains(l.getId())));
+        List<UUID> lectureUuids = favorites.stream().map(Favorite::getSourceId).collect(Collectors.toList());
+        lectures.forEach(l -> l.setFavourite(lectureUuids.contains(l.getId())));
         return lectures;
     }
 
     public List<ShortLectureDto> getFavouriteLecturesInCourse(UUID userId, UUID courseId) {
         List<Favorite> favorites = favoriteRepository.findFavoriteByUserIdAndSourceType(userId, SourceType.LECTURE);
-        List<UUID> lectureUuids = favorites.stream().map(f->f.getSourceId()).collect(Collectors.toList());
+        List<UUID> lectureUuids = favorites.stream().map(Favorite::getSourceId).collect(Collectors.toList());
         Course courseEntity = courseRepository.findById(courseId).orElseThrow(
                 () -> new ResourceNotFoundException("Course", "id", courseId));
         List<ShortLectureDto> result = courseEntity.getLectures()
@@ -112,4 +122,5 @@ public class FavoriteService {
                 .collect(Collectors.toList());
         return checkFavouriteLectures(userId, result);
     }
+
 }
