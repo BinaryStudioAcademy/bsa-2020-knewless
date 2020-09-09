@@ -29,23 +29,26 @@ body
 .wrapperTitle
   width: 100%
   background: #2A2B37 !important
-  display: flex
-  justify-content: space-between
-  align-items: center
-  max-width: $container_width
-  padding: 20px $side_padding
+  padding: 20px 0
 
 #profileTitle
   margin: auto
+  display: flex
+  justify-content: space-between
+  align-items: center
   width: 100%
   max-width: $container_width + ($side_padding * 2)
+  padding-left: $side_padding
+  padding-right: $side_padding
   color: #ffff
   font-family: Custom Open Sans, sans-serif
   font-style: normal
   font-weight: 600
   font-size: 1.5em
   line-height: 1.5em
-
+.clock
+  display: flex
+  align-items: center
 .title
   margin: auto
   width: 100%
@@ -79,11 +82,12 @@ body
 .timeBlock
   display: flex
   justify-content: space-between
-  margin-left: auto
   max-width: $container_width + ($side_padding * 2) !important
   width: 100%
   padding-left: $side_padding
   padding-right: $side_padding
+  margin-left: auto !important
+  margin-right: auto !important
 
 .course
   cursor: pointer
@@ -98,6 +102,11 @@ body
   cursor: pointer
   padding: 0 !important
   margin: 0 !important
+
+.activity
+  display: flex
+  justify-content: center
+  align-items: center
 
 .currentCourse
   background: #2A2B37
@@ -114,6 +123,7 @@ body
 .chart
   display: flex
   flex-direction: column
+  justify-content: flex-end
 
 .chartLabel
   font-size: 1.1em
