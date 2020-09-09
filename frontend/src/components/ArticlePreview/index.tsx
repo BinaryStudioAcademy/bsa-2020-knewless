@@ -51,7 +51,7 @@ const ResponsiveEllipsis = responsiveHOC()(HTMLEllipsis);
           <div className={styles.description_text}>
             <ResponsiveEllipsis 
               unsafeHTML={description}
-              maxLine='7'
+              maxLine='4'
               ellipsis='...'
               basedOn='letters'
             />

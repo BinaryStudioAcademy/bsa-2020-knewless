@@ -168,6 +168,7 @@ const LecturePage: React.FunctionComponent<ILectureProps> = ({
 
   const handleEnded = () => {
     const prev = lecturesData.lectures.findIndex(l => l.id === chosenVideoId);
+    setPlayerProgress({ playedSeconds: 0, loaded: 0, loadedSeconds: 0, played: 0 });
     if (prev + 1 !== lecturesData.lectures.length) {
       const nextId = lecturesData.lectures[prev + 1].id;
       setChosenVideo({ chosenVideo: nextId });

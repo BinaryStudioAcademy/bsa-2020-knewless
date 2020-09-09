@@ -1,4 +1,4 @@
-$image_size: 5rem
+$image_size: 6rem
 .card
   display: grid
   position: relative
@@ -9,10 +9,14 @@ $image_size: 5rem
   margin-bottom: 1rem
   grid-column-gap: 0.7rem
 
+.info
+  display: flex
+  flex-direction: column
+  grid-area: 1 / 2 / span 2 / span 1
 
 .author__image
   justify-self: center
-  align-self: center 
+  align-self: center
   width: $image_size
   height: $image_size
   object-fit: cover
@@ -29,11 +33,16 @@ $image_size: 5rem
 
 .biography
   align-self: flex-start
-  font-size: 1.05em
+  font-size: 0.9em
   text-overflow: ellipsis
   overflow: hidden
   line-height: 1.3em
-  height: 2.6em
   color: #aaa
   grid-column: 2
   grid-row: 2
+  padding-left: 0.1em
+
+.followers
+  color: #aaa
+  font-size: 0.95em
+  margin-bottom: 0.5em !important

@@ -4,6 +4,7 @@ import { ICourseCardProps } from '@components/CourseCard';
 import { IPathCardProps } from '@components/PathCard';
 import { IAuthorMainPageData } from '../../models/IAuthorMainPageData';
 import { fetchAuthorCoursesRoutine, fetchAuthorPathsRoutine, fetchAuthorRoutine } from '../../routines';
+import {setNoAuthorizedRoutine} from "@screens/Home/routines";
 
 const initialState: IAuthorMainPageData = {
   author: { } as IAuthor,
@@ -33,6 +34,11 @@ export const authorMainPageData = (state = initialState, action: Routine<any>) =
         ...state,
         authorPaths: [...action.payload],
         pathsLoaded: true
+      };
+    case setNoAuthorizedRoutine.TRIGGER:
+      return {
+        ...state,
+        author: {}
       };
     default:
       return state;

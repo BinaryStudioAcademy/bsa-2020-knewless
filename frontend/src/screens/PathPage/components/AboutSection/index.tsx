@@ -21,6 +21,7 @@ const AboutSection: React.FC<IAboutSectionProps> = ({ path }) => (
             biography={a?.biography}
             name={`${a?.firstName} ${a?.lastName}`}
             imageSrc={a?.avatar}
+            followers={a?.followers}
           />
         ))}
       </div>

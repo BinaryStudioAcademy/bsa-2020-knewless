@@ -11,6 +11,7 @@ import {
   fetchRecommendedCoursesRoutine,
   fetchStudentRoutine
 } from '../../routines';
+import {setNoAuthorizedRoutine} from "@screens/Home/routines";
 
 const initialState: IMainPageData = {
   student: { } as IStudent,
@@ -58,6 +59,11 @@ export const mainPageData = (state = initialState, action: Routine<any>) => {
       return {
         ...state,
         currentGoal: action.payload
+      };
+    case setNoAuthorizedRoutine.TRIGGER:
+      return {
+        ...state,
+        student: {}
       };
     default:
       return state;

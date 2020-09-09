@@ -26,7 +26,7 @@ export const AuthorSegment: React.FC<IAuthorSegmentProps> = ({ results, category
               id={author.sourceId}
               key={author.id}
               name={author.name}
-              image={author.metadata.image}
+              image={author.metadata.avatar}
             />
           </div>
         ))}

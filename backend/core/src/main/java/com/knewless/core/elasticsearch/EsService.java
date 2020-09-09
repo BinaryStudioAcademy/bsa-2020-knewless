@@ -94,7 +94,7 @@ public class EsService {
 
         SearchHits<EsEntity> entities = elasticsearchTemplate.search(searchQuery, EsEntity.class);
 
-        List<EsEntity> result = entities.getSearchHits().stream().map(SearchHit::getContent).collect(Collectors.toList());
+        List<EsEntity> result = entities.getSearchHits().stream().map(SearchHit::getContent).distinct().collect(Collectors.toList());
         return result.size() > 10 ? result.subList(0 , 10) : result;
     }
 

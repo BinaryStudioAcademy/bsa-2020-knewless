@@ -20,7 +20,7 @@ export const ListPlaceholder: React.FC<IListPlaceholderProps> = (
   <div className={styles.container}>
     <img className={styles.image} src={placeholderImage} alt="" />
     <span className={styles.title}>{title}</span>
-    <span className={styles.description}>{description}</span>
+    {description?.length > 0 && <span className={styles.description}>{description}</span>}
     {button?.onClick && <GrayOutlineButton onClick={button.onClick}>{button.text}</GrayOutlineButton>}
   </div>
 );

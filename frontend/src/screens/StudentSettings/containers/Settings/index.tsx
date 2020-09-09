@@ -184,6 +184,7 @@ const StudentSettings: React.FunctionComponent<IStudentSettingsProps> = ({
         tags: selectedTags
       };
       setSettings(updatedSettings);
+      history.push('/');
     }
   };
 
