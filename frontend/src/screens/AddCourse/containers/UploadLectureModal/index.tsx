@@ -207,6 +207,7 @@ export const UploadLectureModal: React.FC<IUploadLectureModalProps> = ({
   };
 
   const toggleWithLink = () => {
+    setIsValidFile(true);
     setDuration(0);
     setAddByLink(true);
     setLinkAccepted(false);
@@ -215,6 +216,7 @@ export const UploadLectureModal: React.FC<IUploadLectureModalProps> = ({
   };
 
   const toggleWithFile = () => {
+    setLinkValid(true);
     setDuration(0);
     setAddByLink(false);
     setLink('');

@@ -3,10 +3,20 @@
   flex-direction: row
   row-gap: 2em
   flex-wrap: wrap
-  justify-content: space-between
+  justify-content: space-evenly
 
 .card
-  width: 32%
+  display: flex
+  align-items: center
+  justify-content: center
 
 .title
   margin-bottom: 1em
+
+.container_grid
+  margin-top: 2rem
+  display: grid
+  grid-auto-flow: row 
+  grid-row-gap: 2rem
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr))
+  justify-content: stretch

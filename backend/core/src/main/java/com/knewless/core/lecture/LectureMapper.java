@@ -17,7 +17,7 @@ public interface LectureMapper {
 
     @Mapping(target="course", expression = "java(lecture.getCourse().getName())")
     @Mapping(target="author", expression = "java(lecture.getCourse().getAuthor().getFullName())")
-    @Mapping(target="image", expression = "java(\"\")")
+    @Mapping(target="image", expression = "java(lecture.getPreviewImage())")
     @Mapping(target="rating", expression = "java(lecture.getReactions().stream().map(r->r.getIsPositive()).filter(r -> r).collect(java.util.stream.Collectors.toList()).size())")
     FavouriteLectureResponseDto lectureToFavouriteLectureResponseDto(Lecture lecture);
 }
