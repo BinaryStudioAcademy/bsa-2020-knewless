@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  */
 public class EsMapper {
 	
-	public static EsEntity esEntityFromAuthorEntity(Author author) {
+	public static EsEntity esEntityFromAuthorEntity(Author author, Integer subs) {
 		if (author == null) {
 			return null;
 		}
@@ -31,6 +31,7 @@ public class EsMapper {
         metadata.put("biography", author.getBiography());
         metadata.put("company", author.getCompany());
         metadata.put("job", author.getJob());
+        metadata.put("subscribers", subs);
 		
 		return builderFromBaseEntity(author)
 				.name(author.getFullName())
