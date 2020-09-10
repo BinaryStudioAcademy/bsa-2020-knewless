@@ -1,20 +1,18 @@
 package com.knewless.core.lecture.lectureComment.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.knewless.core.user.dto.BriefUserDto;
+import com.knewless.core.comments.CommentDto;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-import java.time.ZonedDateTime;
 import java.util.UUID;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class LectureCommentDto {
-	private UUID id;
-	@JsonFormat(shape = JsonFormat.Shape.STRING)
-	private ZonedDateTime createdAt;
-	@JsonFormat(shape = JsonFormat.Shape.STRING)
-	private ZonedDateTime updatedAt;
-	private String text;
+public class LectureCommentDto extends CommentDto {
 	private UUID lectureId;
-	private BriefUserDto user;
+	
+	@Override
+	public UUID getSourceId() {
+		return lectureId;
+	}
 }

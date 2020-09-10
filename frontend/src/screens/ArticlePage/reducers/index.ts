@@ -1,5 +1,5 @@
- import { combineReducers } from 'redux';
-import { fetchArticleDataRoutine} from '../routines';
+import { combineReducers } from 'redux';
+import { fetchArticleDataRoutine } from '../routines';
 import { reducerCreator } from 'helpers/reducer.helper';
 import { articleData } from '../containers/ArticlePage/reducer';
 

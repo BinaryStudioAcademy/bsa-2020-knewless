@@ -2,7 +2,7 @@ import { callApi } from '@helpers/api.helper';
 
 export const getMessagesForCourse = async (courseId: string) => {
   const result = await callApi({
-    endpoint: `/api/course/${courseId}/comments`,
+    endpoint: `/api/course_comment/of/${courseId}`,
     type: 'GET',
     queryParams: { size: 200 }
   });

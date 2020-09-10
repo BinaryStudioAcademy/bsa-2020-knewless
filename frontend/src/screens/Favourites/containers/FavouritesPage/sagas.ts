@@ -1,8 +1,14 @@
 import { takeEvery, put, call, all } from 'redux-saga/effects';
-import { fetchFavouriteCoursesRoutine, removeCourseFavouriteRoutine,
-  fetchFavouriteAuthorsRoutine, fetchFavouriteLecturesRoutine, 
-  removeAuthorFavouriteRoutine, removeLectureFavouriteRoutine,
-  fetchFavouritePathsRoutine, removePathFavouriteRoutine } from 'screens/Favourites/routines';
+import {
+  fetchFavouriteCoursesRoutine,
+  removeCourseFavouriteRoutine,
+  fetchFavouriteAuthorsRoutine,
+  fetchFavouriteLecturesRoutine,
+  removeAuthorFavouriteRoutine,
+  removeLectureFavouriteRoutine,
+  fetchFavouritePathsRoutine,
+  removePathFavouriteRoutine, fetchFavouriteArticlesRoutine, removeArticleFavouriteRoutine
+} from 'screens/Favourites/routines';
 import * as favouritesService from '../../services/favourites.service';
 import { Routine } from 'redux-saga-routines';
 import * as courseService from '@screens/CoursePage/services/course.service';
@@ -60,6 +66,19 @@ function* watchFetchLectures() {
   yield takeEvery(fetchFavouriteLecturesRoutine.TRIGGER, fetchLectures);
 }
 
+function* fetchArticles() {
+  try {
+    const response = yield call(favouritesService.fetchArticles);
+    yield put(fetchFavouriteArticlesRoutine.success(response));
+  } catch (error) {
+    yield put(fetchFavouriteArticlesRoutine.failure(error?.message));
+  }
+}
+
+function* watchFetchArticles() {
+  yield takeEvery(fetchFavouriteArticlesRoutine.TRIGGER, fetchArticles);
+}
+
 function* removeCourseFromFavourite(action: Routine<any>) {
   try {
     yield call(courseService.changeFavouriteState, action.payload);
@@ -87,7 +106,6 @@ function* removeAuthorFromFavourite(action: Routine<any>) {
 function* watchRemoveAuthor() {
   yield takeEvery(removeAuthorFavouriteRoutine.TRIGGER, removeAuthorFromFavourite);
 }
-
 
 function* removeLectureFromFavourite(action: Routine<any>) {
   try {
@@ -117,15 +135,31 @@ function* watchRemovePath() {
   yield takeEvery(removePathFavouriteRoutine.TRIGGER, removePathFromFavourite);
 }
 
+function* removeArticleFromFavourite(action: Routine<any>) {
+  try {
+    yield call(courseService.changeFavouriteState, action.payload);
+    const response = yield call(favouritesService.fetchArticles);
+    yield put(removeArticleFavouriteRoutine.success(response));
+  } catch (error) {
+    yield put(removeArticleFavouriteRoutine.failure(error?.message));
+  }
+}
+
+function* watchRemoveArticle() {
+  yield takeEvery(removeArticleFavouriteRoutine.TRIGGER, removeArticleFromFavourite);
+}
+
 export default function* favouriteItemSagas() {
   yield all([
     watchFetchCourses(),
     watchFetchLectures(),
     watchFetchAuthors(),
+    watchFetchArticles(),
     watchRemoveCourse(),
     watchRemoveAuthor(),
     watchRemoveLecture(),
     watchFetchPaths(),
-    watchRemovePath()
+    watchRemovePath(),
+    watchRemoveArticle()
   ]);
 }

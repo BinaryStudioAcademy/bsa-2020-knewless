@@ -40,14 +40,15 @@ const SearchHeader: FunctionComponent<ISearchHeaderProps> = ({ className, clear,
   const onSearchFieldKeyPressed = (event: KeyboardEvent) => {
     if (event.key === 'Enter' && query.length > 0) {
       setIsOpen(false);
-      // setQuery('');
+      setQuery('');
       history.push(`/search?q=${query}`);
+      clearTimeout(timeoutRef.current);
     }
   };
 
   const onResultSelect = (event, data: SearchResultData) => {
     const item: ISearchResult = data.result;
-    // setQuery('');
+    setQuery('');
     setIsOpen(false);
 
     switch (item.type) {

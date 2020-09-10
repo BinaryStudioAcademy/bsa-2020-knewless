@@ -1,7 +1,5 @@
 package com.knewless.core.lecture;
 
-import com.knewless.core.course.courseComment.CourseCommentMapper;
-import com.knewless.core.course.courseComment.dto.CourseCommentDto;
 import com.knewless.core.lecture.dto.LectureCreateResponseDto;
 import com.knewless.core.lecture.dto.LectureUpdateDto;
 import com.knewless.core.lecture.dto.SaveLectureDto;
@@ -14,7 +12,6 @@ import com.knewless.core.user.model.CurrentUser;
 import com.knewless.core.validation.SingleMessageResponse;
 import com.knewless.core.validation.ValidationMessageCreator;
 import javassist.NotFoundException;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -81,13 +78,6 @@ public class LectureController {
                 lectureService.saveLectureWithUrl(request, userPrincipal.getId()));
     }
     
-    @GetMapping("/{lectureId}/comments")
-    public List<LectureCommentDto> getCommentsByCourse(@PathVariable("lectureId") UUID lectureId,
-                                                       @RequestParam(defaultValue = "0") int page,
-                                                       @RequestParam(defaultValue = "2") int size) {
-        return lectureCommentService.getCourseComments(lectureId, PageRequest.of(page, size)).stream()
-                .map(LectureCommentMapper.MAPPER::commentToDto).collect(Collectors.toList());
-    }
     @GetMapping("/{lectureId}")
     public LectureUpdateDto getLecture(@PathVariable("lectureId") UUID lectureId){
         return lectureService.getLectureForEdit(lectureId);

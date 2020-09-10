@@ -19,6 +19,7 @@ import { followAuthorRoutine, unfollowAuthorRoutine } from '@screens/AuthorPubli
 import GradientButton from '@components/buttons/GradientButton';
 import GrayOutlineButton from '@components/buttons/GrayOutlineButton';
 import Avatar from '@components/avatar/Avatar';
+import ViewActivity from 'screens/StudentPage/components/ViewActivity';
 
 export interface IStudentSubscriptions {
   id: string;
@@ -96,18 +97,20 @@ const StudentProfile: React.FC<IStudentProfileProps> = ({
   return (
     <div className={styles.profile}>
       <div className={styles.wrapperTitle}>
-        <div id={styles.profileTitle}>Profile</div>
+        <div id={styles.profileTitle}>Profile
         {profile.subscriptions.length > 0 && (
         <GrayOutlineButton className={styles.subscription_button} icon onClick={() => setIsFollowOpen(true)}>
           <p>Subscriptions</p>
         </GrayOutlineButton>
         )}
+        </div>
       </div>
       <div className={styles.wrapperTime}>
         <div className={styles.timeBlock}>
           <div className={styles.clock}>
             <ViewTotalTime totalTime={profile.totalContentWatched} />
           </div>
+          <ViewActivity activity={profile.activity}/>
           {studentCoursesTags.length > 0 && (
             <div className={styles.chart}>
               <ChartWrapper width={chart.width} height={chart.height} id={chart.wrapperId}>

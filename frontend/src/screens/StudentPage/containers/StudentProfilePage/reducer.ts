@@ -6,7 +6,8 @@ import {followAuthorRoutine, unfollowAuthorRoutine} from "@screens/AuthorPublicP
 const initProfile = {
   totalContentWatched: 0,
   courses: [],
-  subscriptions: []
+  subscriptions: [],
+  activity: []
 };
 
 export const studentProfile = (state: IStudentProfile = initProfile, action: Routine<any>) => {

@@ -30,6 +30,9 @@ export function pushQueueHandler(msg: string) {
     case NotificationType.PATH:
       socketService.pushToDiscussionParticipants(`path:${data.receiverId}`, data.body as any);
       break;
+    case NotificationType.ARTICLE:
+      socketService.pushToDiscussionParticipants(`article:${data.receiverId}`, data.body as any);
+      break;
     default:
       console.error('something was wrong ' + data.type + NotificationType.PERSONAL);
       break;

@@ -30,4 +30,5 @@ public class DailyProgressService {
 		progressRepository.save(progress);
 		log.info("Saved progress (+{}s) {}", watchedDifference,  progress);
 	}
+
 }

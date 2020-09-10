@@ -4,16 +4,15 @@ import com.knewless.core.article.dto.ArticleDto;
 import com.knewless.core.article.dto.ArticleFullDto;
 import com.knewless.core.security.oauth.UserPrincipal;
 import com.knewless.core.user.model.CurrentUser;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/article")
 public class ArticleController {
+
     private final ArticleService articleService;
 
     public ArticleController(ArticleService articleService) {
@@ -24,10 +23,12 @@ public class ArticleController {
     public ArticleDto saveArticle(@RequestBody ArticleDto article, @CurrentUser UserPrincipal userPrincipal) {
         return articleService.saveArticle(article, userPrincipal.getId());
     }
+
     @GetMapping("/{id}")
-    public ArticleFullDto getArticle(@PathVariable UUID id){
+    public ArticleFullDto getArticle(@PathVariable UUID id) {
         return articleService.getArticle(id);
     }
+
     @GetMapping("/author")
     public List<ArticleDto> getArticles(@CurrentUser UserPrincipal user){
         return articleService.getArticles(user);

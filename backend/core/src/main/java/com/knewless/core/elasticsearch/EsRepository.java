@@ -16,4 +16,6 @@ public interface EsRepository extends ElasticsearchRepository<EsEntity, UUID> {
     List<EsEntity> findByNameContainsIgnoreCase(String query);
 
     boolean existsBySourceId(UUID id);
+    
+    long deleteAllBy();
 }

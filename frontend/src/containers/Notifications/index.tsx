@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { createRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, Icon, Label, Popup } from 'semantic-ui-react';
 import NotificationItem from './NotificatonItem';
@@ -15,7 +15,7 @@ import styles from './styles.module.sass';
 const Notifications = ({ userId, notifications, fetchNotifications: fetch,
   readNotif: read, deleteAllNotifications: deleteAll,
   readAllNotifs: readAll, styleName, role }) => {
-  const ref = useRef(null);
+  const ref = createRef<HTMLDivElement>();
   useEffect(() => {
     if (userId) {
       fetch({ userId });
@@ -28,7 +28,7 @@ const Notifications = ({ userId, notifications, fetchNotifications: fetch,
 
   return (
     <Popup
-      onMount={() => { if (notifications.length > 0) { ref.current.scrollIntoView(); } }}
+      onMount={() => ref.current.scrollTo(0, -ref.current.scrollHeight)}
       className={styles.popup}
       trigger={(
         <Label basic className={styleName}>
@@ -48,12 +48,12 @@ const Notifications = ({ userId, notifications, fetchNotifications: fetch,
                 <Dropdown icon="ellipsis vertical">
                   <Dropdown.Menu>
                     <Dropdown.Item icon="eye" text="Read all" onClick={() => readAll({ userId })} />
-                    <Dropdown.Item icon="trash" text="Delete all" onClick={() => deleteAll({ userId: userId })} />
+                    <Dropdown.Item icon="trash" text="Delete all" onClick={() => deleteAll({ userId })} />
                   </Dropdown.Menu>
                 </Dropdown>
               </div>
             </div>
-            <div className={styles.notifications}>
+            <div className={styles.notifications} ref={ref}>
               {notifications.map(item => (
                 <NotificationItem
                   notification={item}
@@ -62,7 +62,6 @@ const Notifications = ({ userId, notifications, fetchNotifications: fetch,
                   role={role}
                 />
               ))}
-              <div ref={ref} />
             </div>
           </div>
         ) : (

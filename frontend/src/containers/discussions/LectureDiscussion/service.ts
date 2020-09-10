@@ -3,7 +3,7 @@ import { ISendMessageArgument } from '@containers/discussions/CourseDiscussion/s
 
 export const getMessagesForLecture = async (courseId: string) => {
   const result = await callApi({
-    endpoint: `/api/lecture/${courseId}/comments`,
+    endpoint: `/api/lecture_comment/of/${courseId}`,
     type: 'GET',
     queryParams: { size: 200 }
   });

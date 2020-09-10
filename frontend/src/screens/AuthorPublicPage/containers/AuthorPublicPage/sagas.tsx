@@ -2,13 +2,17 @@ import { all, call, put, takeEvery } from 'redux-saga/effects';
 import { toastr } from 'react-redux-toastr';
 import * as publicAuthorPageService from 'screens/AuthorPublicPage/services/publicAuthorPageService';
 import { Routine } from 'redux-saga-routines';
-import { fetchAuthorDataRoutine, followAuthorRoutine,
-  unfollowAuthorRoutine, changeFavouriteAuthorStateRoutine, checkFavouriteAuthorStateRoutine } from 'screens/AuthorPublicPage/routines';
+import {
+  fetchAuthorDataRoutine,
+  followAuthorRoutine,
+  unfollowAuthorRoutine,
+  changeFavouriteAuthorStateRoutine,
+  checkFavouriteAuthorStateRoutine
+} from 'screens/AuthorPublicPage/routines';
 
 function* getAuthorData(action: Routine<any>) {
   try {
     const response = yield call(publicAuthorPageService.getData, action.payload);
-    console.log(response);
     yield put(fetchAuthorDataRoutine.success(response));
   } catch (error) {
     yield put(fetchAuthorDataRoutine.failure(error?.message));
@@ -72,7 +76,6 @@ function* checkFavouriteAuthorState(action: Routine<any>) {
 function* watchCheckFavouriteAuthorState() {
   yield takeEvery(checkFavouriteAuthorStateRoutine.TRIGGER, checkFavouriteAuthorState);
 }
-
 
 export default function* dataSagas() {
   yield all([

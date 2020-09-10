@@ -2,7 +2,7 @@ import styles from './styles.module.sass';
 import { Icon } from 'semantic-ui-react';
 import GrayOutlineButton from '@components/buttons/GrayOutlineButton';
 import React, { useCallback, useEffect, useState } from 'react';
-import { InputWithEnter } from '@components/InputWithEnter';
+import TextareaAutosize from 'react-textarea-autosize';
 
 export interface IInputBlockProps {
   sendLoading: boolean;
@@ -10,6 +10,8 @@ export interface IInputBlockProps {
   message?: string;
   sendMessage: (text: string) => void;
 }
+
+const ENTER_CHAR_CODE = 13;
 
 export const InputBlock: React.FC<IInputBlockProps> = (
   { sendLoading, message, sendMessage, errorSending }
@@ -31,21 +33,30 @@ export const InputBlock: React.FC<IInputBlockProps> = (
     setInputValid(inputText !== undefined && inputText.trim() !== '');
   }, [inputText]);
 
-  const handleSend = useCallback(() => {
+  const handleSend = useCallback(ev => {
     if (inputValid) {
-      sendMessage(inputText);
+      sendMessage(inputText.trim());
     }
-  }, [inputText]);
+    ev.preventDefault();
+  }, [inputText, inputValid]);
+
+  function handleEnterPress(ev) {
+    if (ev.charCode === ENTER_CHAR_CODE) {
+      if (!ev.shiftKey) {
+        handleSend(ev);
+      }
+    }
+  }
 
   return (
     <div className={styles.container}>
-      <InputWithEnter
+      <TextareaAutosize
         className={styles.input}
-        fluid
         value={inputText}
         placeholder="Leave a comment..."
-        onChange={(event, { value }) => setInputText(value)}
-        onEnter={handleSend}
+        onChange={event => setInputText(event.target.value)}
+        onKeyPress={handleEnterPress}
+        maxRows={3}
       />
       <GrayOutlineButton
         className={styles.send_button}

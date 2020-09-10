@@ -31,3 +31,11 @@ export const fetchLectures = async () => {
   });
   return response.json();
 };
+
+export const fetchArticles = async () => {
+  const response = await callApi({
+    endpoint: '/api/favorite/articles',
+    type: 'GET'
+  });
+  return response.json();
+};

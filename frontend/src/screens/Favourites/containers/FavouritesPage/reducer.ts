@@ -1,20 +1,32 @@
 import { Routine } from 'redux-saga-routines';
-import { fetchFavouriteAuthorsRoutine, removeCourseFavouriteRoutine, removeAuthorFavouriteRoutine,
-  fetchFavouriteCoursesRoutine, fetchFavouriteLecturesRoutine, removeLectureFavouriteRoutine, 
-  removePathFavouriteRoutine, fetchFavouritePathsRoutine } from 'screens/Favourites/routines';
+import {
+  fetchFavouriteArticlesRoutine,
+  fetchFavouriteAuthorsRoutine,
+  fetchFavouriteCoursesRoutine,
+  fetchFavouriteLecturesRoutine,
+  fetchFavouritePathsRoutine,
+  removeArticleFavouriteRoutine,
+  removeAuthorFavouriteRoutine,
+  removeCourseFavouriteRoutine,
+  removeLectureFavouriteRoutine,
+  removePathFavouriteRoutine
+} from 'screens/Favourites/routines';
 import { IFavouriteData } from '../../models/IFavouriteData';
 
-export const data = (state: IFavouriteData = { 
+const initialState = {
   isAuthorsFetched: false,
   isLecturesFetched: false,
   isCoursesFetched: false,
   isPathsFetched: false,
+  isArticlesFetched: false,
   courses: [],
   lectures: [],
   authors: [],
-  paths: []
- },
-  action: Routine<any>) => {
+  paths: [],
+  articles: []
+};
+
+export const data = (state: IFavouriteData = initialState, action: Routine<any>) => {
   switch (action.type) {
     case fetchFavouriteAuthorsRoutine.SUCCESS:
       return {
@@ -40,6 +52,12 @@ export const data = (state: IFavouriteData = {
         isPathsFetched: true,
         paths: action.payload
       };
+    case fetchFavouriteArticlesRoutine.SUCCESS:
+      return {
+        ...state,
+        isArticlesFetched: true,
+        articles: action.payload
+      };
     case removeLectureFavouriteRoutine.SUCCESS:
       return {
         ...state,
@@ -59,6 +77,11 @@ export const data = (state: IFavouriteData = {
       return {
         ...state,
         paths: action.payload
+      };
+    case removeArticleFavouriteRoutine.SUCCESS:
+      return {
+        ...state,
+        articles: action.payload
       };
     default:
       return state;

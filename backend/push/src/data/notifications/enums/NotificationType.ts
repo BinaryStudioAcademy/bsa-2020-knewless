@@ -4,5 +4,6 @@ export enum NotificationType {
     PERSONAL = 'PERSONAL',
     COURSE = 'COURSE',
     LECTURE = 'LECTURE',
-    PATH = 'PATH'
+    PATH = 'PATH',
+    ARTICLE = 'ARTICLE'
 }

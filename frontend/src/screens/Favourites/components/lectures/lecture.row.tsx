@@ -21,7 +21,11 @@ export const LectureRow: React.FunctionComponent<ILectureRowProps> = ({
     <div className={styles.row}>
       <div onClick={() => redirectToLecture()} className={styles.gridrow}>
         <div className={styles.content_item__first}>
-          <img className={lecture.image? styles.course_image : styles.no_video} src={lecture.image ? lecture.image : noVideo} />
+          <img
+            alt={lecture.name}
+            className={lecture.image ? styles.course_image : styles.no_video}
+            src={lecture.image ? lecture.image : noVideo}
+          />
         </div>
         <div className={styles.content_name}>{lecture.name}</div>
         <div className={styles.content_item}>{lecture.course}</div>

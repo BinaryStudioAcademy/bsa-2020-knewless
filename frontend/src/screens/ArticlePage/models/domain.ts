@@ -4,13 +4,23 @@ export interface IArticle {
   text: string;
   image?: string;
   uploadImage: File;
-  author?: IAuthorShort
+  author?: IAuthorShort;
+  favourite?: boolean;
 }
- export interface IAuthorShort{
-   id: string;
-   userId: string;
-   name: string;
-   avatar: string;
-   biography:string;
-   articles: IArticle[];
- }
+
+export interface IFavouriteArticle {
+  id?: string;
+  name: string;
+  image?: string;
+  authorName: string;
+  readingTime: number;
+}
+
+export interface IAuthorShort {
+  id: string;
+  userId: string;
+  name: string;
+  avatar: string;
+  biography: string;
+  articles: IArticle[];
+}

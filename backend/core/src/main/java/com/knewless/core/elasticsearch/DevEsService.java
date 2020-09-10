@@ -22,19 +22,21 @@ import java.util.stream.Collectors;
 @Profile("DEV")
 public class DevEsService {
 	private final EsService esService;
+	private final EsRepository esRepository;
 	private final PathRepository pathService;
 	private final CourseRepository courseService;
 	private final AuthorRepository authorService;
 	
 	@Autowired
-	public DevEsService(EsService esService, PathRepository pathService, CourseRepository courseService, AuthorRepository authorService) {
+	public DevEsService(EsService esService, EsRepository esRepository, PathRepository pathService, CourseRepository courseService, AuthorRepository authorService) {
 		this.esService = esService;
+		this.esRepository = esRepository;
 		this.pathService = pathService;
 		this.courseService = courseService;
 		this.authorService = authorService;
 	}
 	
-	public void syncWithStorage() {
+	public String syncWithStorage() {
 		List<Course> courses = courseService.findAll();
 		List<Author> authors = authorService.findAll();
 		List<Path> paths = pathService.findAll();
@@ -45,6 +47,9 @@ public class DevEsService {
 		sync(courses, esCourses, EsDataType.COURSE);
 		sync(authors, esAuthors, EsDataType.AUTHOR);
 		sync(paths, esPaths, EsDataType.PATH);
+		int beforeSync = entities.size();
+		int afterSync = esService.findAll().size();
+		return "Synced entities: number before: " + beforeSync + ", number after: " + afterSync;
 	}
 	
 	private void sync(List<? extends BaseEntity> dbEntities, List<EsEntity> esEntities, EsDataType dataType) {
@@ -68,5 +73,9 @@ public class DevEsService {
 				esService.put(dataType, dbEntity);
 			}
 		}
+	}
+	
+	public long clear() {
+		return esRepository.deleteAllBy();
 	}
 }

@@ -18,4 +18,5 @@ public class LectureDto {
     private int duration;
     private int progress;
     private boolean favourite;
+    private int index;
 }

@@ -21,6 +21,7 @@ public class ShortLectureDto {
     private String previewImage;
     private int timeSeconds;
     private boolean isFavourite;
+    private int index;
 }
 
 //dto for reusing lectures in different courses

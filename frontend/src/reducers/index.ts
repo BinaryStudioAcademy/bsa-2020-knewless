@@ -29,6 +29,7 @@ import addArticlePage from '../screens/AddArticle/reducers';
 import articlePage from '../screens/ArticlePage/reducers';
 import courseDiscussion from '@containers/discussions/CourseDiscussion/rootReducer';
 import lectureDiscussion from '@containers/discussions/LectureDiscussion/rootReducer';
+import articleDiscussion from '@containers/discussions/ArticleDiscussion/rootReducer';
 import websocket from '@containers/WebsocketConnector/rootReducer';
 import userOverview from '@containers/UserOverview/rootReducer';
 import articlesPage from '../screens/Articles/reducers';
@@ -64,6 +65,7 @@ export default combineReducers({
   articlePage,
   courseDiscussion,
   lectureDiscussion,
+  articleDiscussion,
   websocket,
   userOverview,
   articlesPage

@@ -3,6 +3,8 @@ import styles from './styles.module.sass';
 import { Modal, ModalContent, ModalHeader } from 'semantic-ui-react';
 import { AddCourseFilterableList, IFilterableItem } from '../AddCourseFilterableList';
 import GrayOutlineButton from '@components/buttons/GrayOutlineButton';
+import { DragNDropList } from '@screens/AddCourse/components/DragNDropList';
+import { IBindingCallback1 } from '@models/Callbacks';
 
 export interface IDepsSelectorProps {
   selected: IFilterableItem[];
@@ -14,6 +16,7 @@ export interface IDepsSelectorProps {
   sortFn?: (item1: IFilterableItem, item2: IFilterableItem) => number;
   openModalAction: (open: boolean) => void;
   updateLectures: () => void;
+  onDragEnd: IBindingCallback1<any>;
 }
 
 export const AddCourseDependenciesSelector: React.FC<IDepsSelectorProps> = ({
@@ -25,7 +28,8 @@ export const AddCourseDependenciesSelector: React.FC<IDepsSelectorProps> = ({
   dependencyName,
   sortFn,
   openModalAction,
-  updateLectures: update
+  updateLectures: update,
+  onDragEnd
 }) => {
   const [modalChooseOpen, setModalChooseOpen] = useState(false);
   const handleOpen = () => {
@@ -46,13 +50,14 @@ export const AddCourseDependenciesSelector: React.FC<IDepsSelectorProps> = ({
           </div>
         </div>
         <div className={styles.list_container}>
-          <AddCourseFilterableList
+          <DragNDropList
             items={selected}
             itemToJsx={item => itemToJsx(item, selectedToStored, true)}
-            sortFn={sortFn}
+            sortFn={undefined}
             scrolling
             placeholderTitle={`You can add more ${dependencyName.toLowerCase()}s`}
             placeholderDescription="Just click the button above."
+            onDragEnd={onDragEnd}
           />
         </div>
       </div>

@@ -3,6 +3,7 @@ package com.knewless.core.student;
 import com.knewless.core.course.CourseRepository;
 import com.knewless.core.currentUserCource.CurrentUserCourseService;
 import com.knewless.core.dailyProgress.DailyProgressRepository;
+import com.knewless.core.dailyProgress.dto.ActivityDto;
 import com.knewless.core.dailyProgress.model.DailyProgress;
 import com.knewless.core.exception.custom.ResourceNotFoundException;
 import com.knewless.core.history.WatchHistoryService;
@@ -23,6 +24,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -103,6 +105,21 @@ public class StudentService {
 		var profile = new StudentProfileDto();
 		profile.setTotalContentWatched((int) this.watchHistoryService.getTotalViewSeconds(userId));
 		profile.setCourses(this.currentUserCourseService.getLearningCourses(userId));
+		var firstDay = (LocalDate.now()).minusWeeks(1) ;
+		var activity = dailyProgressRepository.getAllByUserId_AndDateBetween(userId, (LocalDate.now()).minusWeeks(1) , LocalDate.now());
+		List<ActivityDto> activityList = new ArrayList<>();
+		for(int i = 1; i<8; i++){
+			ActivityDto item = new ActivityDto();
+			LocalDate currentDay = (firstDay).plusDays(i);
+			item.setDate(currentDay);
+			int seconds = activity.stream()
+					.filter(a -> a.getDate().equals(currentDay))
+					.map(DailyProgress::getSeconds)
+					.findFirst().orElse(0);
+			item.setSeconds(seconds);
+			activityList.add(item);
+		}
+		profile.setActivity(activityList);
 		profile.setSubscriptions(subscriptionRepository.findAllByUserId(userId).stream()
 		.map(result -> new StudentSubscriptionDto(result.getId(), result.getName(), courseRepository.countByAuthorId(result.getId()), result.getAvatar(), true))
 		.collect(Collectors.toList()));

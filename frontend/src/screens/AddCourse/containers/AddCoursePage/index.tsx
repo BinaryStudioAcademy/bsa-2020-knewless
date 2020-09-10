@@ -41,11 +41,11 @@ import { levelOptions } from '@models/LevelsEnum';
 import { IFullCourseData } from '@screens/CoursePage/models/IFullCourseData';
 import { IUpdateCourse } from '@screens/AddCourse/models/IUpdateCourse';
 import { ITag } from '@screens/AddPath/models/domain';
-import { fetchAuthorRoutine } from '@screens/AuthorMainPage/routines/index';
+import { fetchAuthorRoutine } from '@screens/AuthorMainPage/routines';
 import OverviewModal from '@components/OverviewModal';
 import { IRole } from '@containers/AppRouter/models/IRole';
 
-interface IAddCourseProps {
+export interface IAddCourseProps {
   lectures: ILecture[];
   tags: ITag[];
   isTagsLoaded: boolean;
@@ -88,7 +88,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
   fetchAuthor
 }) => {
   const location = useLocation();
-  const { courseId } = useParams();  
+  const { courseId } = useParams();
   const isReleased = editCourse?.releasedDate !== null && editCourse?.releasedDate !== undefined;
   const isEdit = location.pathname.startsWith('/course/edit');
   const [selectedLectures, setSelectedLectures] = useState(Array<ILecture>());
@@ -136,14 +136,14 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
   window.onbeforeunload = () => {
     clearCourse();
     setDefault();
-  }
+  };
 
   useEffect(() => {
     fetchTags();
   }, []);
 
   useEffect(() => {
-    if (location.pathname === "/add_course") setDefault();
+    if (location.pathname === '/add_course') setDefault();
     if (isEdit && editCourse) {
       fetchCourse(courseId);
       setSelectedLectures([...editCourse.lectures]);
@@ -192,7 +192,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
   useEffect(() => {
     if (!authorId) fetchAuthor();
     setAuthor(authorName);
-  },[authorName]);
+  }, [authorName]);
 
   useEffect(() => {
     if (editCourse && isEdit) {
@@ -248,7 +248,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
   const validateDescription = (newDescription?: string) => {
     const lastChangesDescription = typeof newDescription === 'string' ? newDescription : description;
     setIsValidDescription(!!lastChangesDescription && isValidCourseDescription(lastChangesDescription));
-  }
+  };
 
   const validateLevel = (newName?: string) => {
     const lastChangesName = typeof newName === 'string' ? newName : level;
@@ -292,7 +292,10 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
       name: courseName,
       level,
       isReleased: isRelease,
-      lectures: selectedLectures.map(i => i.id),
+      lectures: selectedLectures.map((i, index) => ({
+        id: i.id,
+        index: index + 1
+      })),
       description,
       image: previewImage,
       uploadImage,
@@ -330,6 +333,28 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
   const handleCancelClick = () => {
     setDefault();
     history.goBack();
+  };
+
+  const reorder = (list: ILecture[], startIndex, endIndex) => {
+    const result = Array.from(list);
+    const [removed] = result.splice(startIndex, 1);
+    result.splice(endIndex, 0, removed);
+
+    return result;
+  };
+
+  const onDragEnd = result => {
+    if (!result.destination) {
+      return;
+    }
+
+    const items = reorder(
+      selectedLectures,
+      result.source.index,
+      result.destination.index
+    );
+
+    setSelectedLectures(items);
   };
 
   return (
@@ -518,6 +543,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
                       sortFn={compareName}
                       openModalAction={setModalAddOpen}
                       updateLectures={handleUpdateLectures}
+                      onDragEnd={onDragEnd}
                     />
                   )}
                 </InlineLoaderWrapper>
@@ -530,10 +556,10 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
             data={overview}
             onClose={onOverviewClose}
           />
-           <UploadLectureModal
-              isOpen={modalAddOpen}
-              openAction={setModalAddOpen}
-            />
+          <UploadLectureModal
+            isOpen={modalAddOpen}
+            openAction={setModalAddOpen}
+          />
         </div>
       )
   );

@@ -4,6 +4,7 @@ import com.knewless.core.author.dto.AuthorInfoArticleDto;
 import lombok.Data;
 
 import java.util.UUID;
+
 @Data
 public class ArticleFullDto {
     private UUID id;
@@ -11,4 +12,5 @@ public class ArticleFullDto {
     private String text;
     private String image;
     private AuthorInfoArticleDto author;
+    private boolean isFavourite;
 }

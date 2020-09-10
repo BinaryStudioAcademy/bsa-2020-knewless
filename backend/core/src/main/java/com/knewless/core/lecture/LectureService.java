@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class LectureService {
-    
+
     private final LectureRepository lectureRepository;
     private final FileManager fileManager;
     private final MessageSender messageSender;
@@ -133,10 +133,11 @@ public class LectureService {
                         l.getUrl480(),
                         l.getPreviewImage(),
                         l.getDuration(),
-                        false))
+                        false,
+                        l.getIndex()))
                 .collect(Collectors.toList());
     }
-    
+
     public List<FavouriteLectureResponseDto> getFavouriteLecturesByUser(UUID userId){
         List<Lecture> lectures = lectureRepository.getFavouriteLecturesByUserId(userId, SourceType.LECTURE);
         List<FavouriteLectureResponseDto> result = new ArrayList<>();

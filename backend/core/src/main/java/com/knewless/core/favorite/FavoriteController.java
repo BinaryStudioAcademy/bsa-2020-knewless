@@ -1,5 +1,6 @@
 package com.knewless.core.favorite;
 
+import com.knewless.core.article.dto.FavouriteArticleDto;
 import com.knewless.core.author.dto.FavouriteAuthorResponseDto;
 import com.knewless.core.course.dto.FavouriteCourseResponseDto;
 import com.knewless.core.db.SourceType;
@@ -53,6 +54,11 @@ public class FavoriteController {
     @GetMapping("/paths")
     public List<FavouritePathResponseDto> getFavouritePaths(@CurrentUser UserPrincipal userPrincipal) {
         return favoriteService.getFavouritePaths(userPrincipal.getId());
+    }
+
+    @GetMapping("/articles")
+    public List<FavouriteArticleDto> getFavouriteArticles(@CurrentUser UserPrincipal userPrincipal) {
+        return favoriteService.getFavouriteArticles(userPrincipal.getId());
     }
 
 }

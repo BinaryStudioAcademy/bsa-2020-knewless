@@ -1,6 +1,7 @@
 package com.knewless.core.course.model;
 
 import com.knewless.core.author.model.Author;
+import com.knewless.core.comments.CommentableEntity;
 import com.knewless.core.course.courseComment.model.CourseComment;
 import com.knewless.core.course.courseReaction.model.CourseReaction;
 import com.knewless.core.db.BaseEntity;
@@ -21,7 +22,7 @@ import java.util.UUID;
 @ToString(callSuper = true, onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "courses")
-public class Course extends BaseEntity {
+public class Course extends BaseEntity implements CommentableEntity {
 
     @Column(name = "name")
     @ToString.Include
@@ -66,6 +67,11 @@ public class Course extends BaseEntity {
 
     public Course(UUID id) {
         this.setId(id);
+    }
+    
+    @Override
+    public UUID getNotifiedUserId() {
+        return author.getUser().getId();
     }
 }
 

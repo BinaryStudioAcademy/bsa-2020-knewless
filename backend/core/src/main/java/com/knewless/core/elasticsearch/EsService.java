@@ -1,5 +1,6 @@
 package com.knewless.core.elasticsearch;
 
+import com.knewless.core.author.AuthorRepository;
 import com.knewless.core.author.model.Author;
 import com.knewless.core.course.model.Course;
 import com.knewless.core.db.BaseEntity;
@@ -36,6 +37,9 @@ public class EsService {
 
     @Autowired
     private TagRepository tagRepository;
+    
+    @Autowired
+    private AuthorRepository authorRepository;
 
     @Autowired
     private ElasticsearchOperations elasticsearchTemplate;
@@ -69,7 +73,8 @@ public class EsService {
             }
 
             case AUTHOR: {
-                entity = EsMapper.esEntityFromAuthorEntity((Author) data);
+                Integer subs = authorRepository.getNumberOfSubscriptions(data.getId()).orElse(0);
+                entity = EsMapper.esEntityFromAuthorEntity((Author) data, subs);
                 break;
             }
 

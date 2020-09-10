@@ -39,16 +39,22 @@ export const MessageBubble: React.FC<IMessageBubbleProps> = (
   return (
     <div className={styles.message__container}>
       <div className={styles.message__header}>
-        <DarkPopup
-          trigger={(
-            <span className={`${user.id === yourId ? styles.message__nick_you : styles.message__nick}`}>
-              {user.username || user.email}
-            </span>
+        {yourId !== undefined ? (
+          <DarkPopup
+            trigger={(
+              <span className={`${user.id === yourId ? styles.message__nick_you : styles.message__nick}`}>
+                {user.username || user.email}
+              </span>
           )}
-          content={
-            <UserOverview userId={user?.id} role={user?.role} />
+            content={
+              <UserOverview userId={user?.id} role={user?.role} />
           }
-        />
+          />
+        ) : (
+          <span className={styles.message__nick}>
+            {user.username || user.email}
+          </span>
+        )}
         {user.id === authorId && (
           <DarkPopup
             trigger={<Icon className={styles.author_icon} name="user" />}
