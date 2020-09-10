@@ -8,9 +8,11 @@ import com.knewless.core.course.dto.CourseProfileDto;
 import com.knewless.core.currentUserCource.dto.CurrentUserCourseDto;
 import com.knewless.core.currentUserCource.mapper.CurrentUserCourseMapper;
 import com.knewless.core.currentUserCource.model.CurrentUserCourse;
+import com.knewless.core.history.WatchHistoryService;
 import com.knewless.core.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,20 +31,25 @@ public class CurrentUserCourseService {
 
     private final CourseRepository courseRepository;
 
+    private final WatchHistoryService watchHistoryService;
+
     @Autowired
     public CurrentUserCourseService(CourseService courseService, UserRepository userRepository,
                                     CurrentUserCourseRepository currentUserCourseRepository,
-                                    CourseRepository courseRepository) {
+                                    CourseRepository courseRepository, WatchHistoryService watchHistoryService) {
         this.courseService = courseService;
         this.userRepository = userRepository;
         this.currentUserCourseRepository = currentUserCourseRepository;
         this.courseRepository = courseRepository;
+        this.watchHistoryService = watchHistoryService;
     }
 
     public List<CourseDto> getContinueLearningCourses(UUID userId) {
         return currentUserCourseRepository
-                .getContinueLearningCoursesId(userId, PageRequest.of(0, 10))
+                .getContinueLearningCoursesId(userId, Pageable.unpaged())
                 .stream()
+                .filter(id -> watchHistoryService.getProgressByCourse(userId, id) < 100)
+                .limit(10)
                 .map(courseService::getCourseById)
                 .collect(Collectors.toList());
     }

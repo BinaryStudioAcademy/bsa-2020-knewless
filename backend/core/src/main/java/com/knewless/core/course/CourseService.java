@@ -43,6 +43,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -476,7 +477,7 @@ public class CourseService {
 
         reactionRepository.save(reaction);
 
-        esService.updateCourseRating(courseId, getCourseById(courseId).getRating());
+        CompletableFuture.runAsync(() -> esService.updateCourseRating(courseId, getCourseById(courseId).getRating()));
 
         return getCourseRating(courseId);
     }
