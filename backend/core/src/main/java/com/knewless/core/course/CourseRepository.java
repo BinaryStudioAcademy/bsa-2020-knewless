@@ -73,7 +73,7 @@ public interface CourseRepository extends CommentSourceRepository<Course>, JpaRe
 
     @SuppressWarnings("SpringDataRepositoryMethodReturnTypeInspection")
     @Query("SELECT DISTINCT new com.knewless.core.course.dto.AuthorCourseQueryResult(c.id, c.name, c.level, " +
-            "concat(c.author.firstName,' ' , c.author.lastName), c.image, " +
+            "concat(c.author.firstName,' ' , c.author.lastName), c.author.id, c.image, " +
             "(SELECT COALESCE(SUM(cl.duration), 0) FROM c.lectures as cl), " +
             "(SELECT COALESCE(SUM(cr.reaction), 0) FROM c.reactions as cr), " +
             "SIZE(c.reactions), c.updatedAt, SIZE(c.lectures), c.description " +

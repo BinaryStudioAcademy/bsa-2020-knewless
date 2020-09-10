@@ -53,7 +53,7 @@ export const MyPaths: React.FC<IMyPaths> = ({
               My Paths
               <Icon name="dropdown" />
             </div>
-            {isAuthor && <GrayOutlineButton content="Create path" onClick={handleCreatePathClick} />}
+            {isAuthor && myPaths.length !== 0 && <GrayOutlineButton content="Create path" onClick={handleCreatePathClick} />}
           </h3>
         </div>
       </Accordion.Title>

@@ -57,7 +57,7 @@ export const HistoryItem: React.FC<IHistoryItemProps> = ({
         <CircleProgress
           percentage={Math.round(historyItem.fractionWatched * 100)}
           width={55}
-          strokeWidth={3}
+          strokeWidth={2}
           primaryColor={['#3378BD', '#FF8576']}
           secondaryColor="#121421"
         />

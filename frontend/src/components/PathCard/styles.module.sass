@@ -2,7 +2,7 @@
   position: relative
   background: #2B2A36
   display: grid
-  grid-template-columns: 5em 1fr
+  grid-template-columns: 6em 1fr
   grid-template-rows: 3.3em 1em
   padding: 3em 2em
   grid-column-gap: 0.5em
@@ -28,7 +28,6 @@
       background: #2A2B37
       opacity: 0.5
       cursor: pointer
-  &_none
 
 .title
   align-self: flex-start
@@ -41,8 +40,10 @@
   text-overflow: ellipsis
   display: -webkit-box
   //noinspection CssUnknownProperty https://caniuse.com/#search=line-clamp
-  -webkit-line-clamp: 2 /* number of lines to show */
+  -webkit-line-clamp: 2
+  /* number of lines to show */
   -webkit-box-orient: vertical
+
   a
     color: #fff
 
@@ -50,6 +51,7 @@
   display: flex
   grid-area: 2 / 2
   gap: 1em
+
   span
     font-size: 0.9em
     color: #fff
@@ -60,6 +62,7 @@
 
 .link
   cursor: pointer
+
   &:hover
     text-decoration: underline
 
@@ -71,11 +74,10 @@
   height: 2em
   width: 3.5em
   background-color: grey
-  border-radius: 0
-  border-bottom-right-radius: 4px 
-  padding: auto
+  border-radius: 0 0 4px 0
   padding: 5px
   border: none
+
   &:hover
     position: absolute
     height: 2em
@@ -86,6 +88,5 @@
     background-color: grey
     opacity: 1
     color: black
-    border-radius: 0
-    border-bottom-right-radius: 4px
+    border-radius: 0 0 4px 0
     padding: 5px

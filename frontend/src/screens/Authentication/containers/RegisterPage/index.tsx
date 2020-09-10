@@ -8,6 +8,7 @@ import AuthImage from '@components/AuthImage';
 import { IAppState } from '@models/AppState';
 import { registerRoutine } from '@screens/Home/routines';
 import RegisterForm from '@components/RegisterForm';
+import { openLoginModalRoutine } from '@containers/LoginModal/routines';
 
 export interface IRegisterRequest {
   email: string;
@@ -20,6 +21,7 @@ interface IRegisterProps {
   isRegisterFailure: boolean;
   registerUser: IBindingAction;
   error: string;
+  closePopup: IBindingAction;
 }
 
 const RegisterPage: React.FunctionComponent<IRegisterProps> = ({
@@ -27,14 +29,15 @@ const RegisterPage: React.FunctionComponent<IRegisterProps> = ({
   isRegisterLoading,
   registerUser: register,
   isRegisterFailure,
-  error
+  error,
+  closePopup
 }) => (
   isAuthorized
     ? <Redirect to="/" />
     : (
       <div className={styles.main_container}>
         {isRegisterFailure && (<div className={styles.main_container__error_message}>{error}</div>)}
-        <RegisterForm register={register} isRegisterLoading={isRegisterLoading} />
+        <RegisterForm closePopup={closePopup} register={register} isRegisterLoading={isRegisterLoading} />
         <AuthImage />
       </div>
     ));
@@ -50,7 +53,8 @@ const mapStateToProps = (state: IAppState) => {
 };
 
 const mapDispatchToProps = {
-  registerUser: registerRoutine.trigger
+  registerUser: registerRoutine.trigger,
+  closePopup: openLoginModalRoutine.success
 };
 
 export default connect(

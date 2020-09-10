@@ -50,7 +50,7 @@ function* watchStartCourseRequest() {
 
 function* saveReview({ payload }: AnyAction) {
   try {
-    yield put(saveCourseReviewRoutine.request());
+    // yield put(saveCourseReviewRoutine.request());
     const response = yield call(() => courseService.saveReview(payload));
     yield put(saveCourseReviewRoutine.success({ rating: response, review: payload.rating }));
   } catch (error) {

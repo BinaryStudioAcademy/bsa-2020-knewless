@@ -2,7 +2,7 @@ import { Button, Divider, Form, Grid, Header, Message, Segment } from 'semantic-
 import { FACEBOOK_AUTH_URL, GOOGLE_AUTH_URL } from '@screens/Authentication/constants';
 import React, { FunctionComponent, useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { IBindingCallback1 } from '@models/Callbacks';
+import { IBindingAction, IBindingCallback1 } from '@models/Callbacks';
 import LogoWithText from '../LogoWithText';
 import styles from './styles.module.sass';
 import { IRegisterRequest } from '@screens/Authentication/containers/RegisterPage';
@@ -18,11 +18,13 @@ import {
 interface IRegisterForm {
   register: IBindingCallback1<IRegisterRequest>;
   isRegisterLoading: boolean;
+  closePopup: IBindingAction;
 }
 
 const RegisterForm: FunctionComponent<IRegisterForm> = ({
   register,
-  isRegisterLoading
+  isRegisterLoading,
+  closePopup
 }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -51,6 +53,8 @@ const RegisterForm: FunctionComponent<IRegisterForm> = ({
       register({ email, password });
     }
   };
+
+  closePopup();
 
   return (
     <div>

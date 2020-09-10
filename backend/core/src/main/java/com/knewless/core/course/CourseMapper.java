@@ -35,8 +35,6 @@ public interface CourseMapper {
     @Mapping(target = "rating", expression = "java(CourseMapper.calculateRating(s.getAllReactions(), s.getPositiveReactions()))")
     CourseProfileDto courseQueryToCourseProfileDto(CourseQueryResult s);
 
-    @Mapping(target = "rating", ignore = true)
-    @Mapping(target = "tags", ignore = true)
     AuthorCourseDto authorCourseQueryResultToAuthorCourseDto(AuthorCourseQueryResult courseQueryResult);
 
     @Mapping(target = "tags", ignore = true)

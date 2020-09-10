@@ -57,8 +57,13 @@ export const industryOptions = [
 export const roleOptions = [
   { key: 0, value: 'DevOps', text: 'DevOps' },
   { key: 1, value: 'IT Support', text: 'IT Support' },
-  { key: 2, value: 'Game Dev', text: 'Game Dev' },
+  { key: 2, value: 'Full-stack Game Dev', text: 'Full-stack Game Dev' },
   { key: 3, value: 'Mobile Dev', text: 'Mobile Dev' },
   { key: 4, value: 'Manager', text: 'Manager' },
-  { key: 5, value: 'QA', text: 'QA' }
+  { key: 5, value: 'QA', text: 'QA' },
+  { key: 6, value: 'Backend Dev', text: 'Backend Dev' },
+  { key: 7, value: 'Frontend Dev', text: 'Frontend Dev' },
+  { key: 8, value: 'Full-stack Dev', text: 'Full-stack Dev' },
+  { key: 9, value: 'Graphic Designer', text: 'Graphic Designer' },
+  { key: 10, value: 'UI/UX Designer', text: 'UI/UX Designer' }
 ];

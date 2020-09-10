@@ -24,7 +24,7 @@ import { GradientButton } from '@components/buttons/GradientButton';
 import GrayOutlineButton from '@components/buttons/GrayOutlineButton';
 import { PathPreview } from '../../components/PathPreview';
 import ConfirmationModal from '@components/ConfirmationModal';
-import { useHistory, useParams, useLocation } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { toastr } from 'react-redux-toastr';
 import { IBindingAction, IBindingCallback1 } from '@models/Callbacks';
 import {
@@ -55,9 +55,9 @@ export interface ISavePathProps {
 
 export const AddPathPage: React.FC<ISavePathProps> = ({
   courses, tags, tagsLoading, coursesLoading, pathUploading, triggerFetchCourses,
-  triggerFetchTags, triggerSavePath, fetchEditPath, editPath, updatePath, editPathLoading, fetchAuthorData, editPathUploading
+  triggerFetchTags, triggerSavePath, fetchEditPath, editPath, updatePath, editPathLoading,
+  fetchAuthorData, editPathUploading
 }) => {
-  const history = useHistory();
   const location = useLocation();
   const { pathId } = useParams();
   const tagsRef = createRef();
@@ -87,10 +87,10 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
     setIsDescriptionValid(true);
     setIsConfirming(false);
     setIsChanged(false);
-  }
-  
+  };
+
   useEffect(() => {
-    if (location.pathname === "/add_path") setDefault();
+    if (location.pathname === '/add_path') setDefault();
     if (isEdit && editPath) {
       fetchEditPath(pathId);
       setPathName(editPath.name);
@@ -157,11 +157,12 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
   const validateDescription = (newDescription?: string) => {
     const lastChangesDescription = typeof newDescription === 'string' ? newDescription : pathDescription;
     setIsDescriptionValid(!!lastChangesDescription && isValidPathDescription(lastChangesDescription));
-  }
+  };
 
   const isRequiredFieldsValid = !!pathName && isPathNameValid && isDescriptionValid && !!pathDescription;
   const isReadyToRelease = isRequiredFieldsValid && selectedCourses.length > 0;
-  const isReadyToSave = (!isReleased && !!pathName && isPathNameValid && isDescriptionValid) || (isEdit && isReadyToRelease);
+  const isReadyToSave = (!isReleased && !!pathName && isPathNameValid && isDescriptionValid)
+    || (isEdit && isReadyToRelease);
 
   function handleSavePath(isRelease: boolean) {
     if (!isChanged && !isRelease) return;
@@ -242,7 +243,7 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
       />
     );
   };
-  
+
   const countOverallDuration = useCallback(
     () => selectedCourses.map(c => c.timeSeconds).reduce((a, b) => a + b, 0), [selectedCourses]
   );
@@ -375,7 +376,8 @@ export const AddPathPage: React.FC<ISavePathProps> = ({
                             onClick={() => handleSavePath(true)}
                             loading={(!isEdit && pathUploading) || (isEdit && editPathUploading)}
                             content="Release"
-                          />)}
+                          />
+                          )}
                         </div>
                       </div>
                     </div>
