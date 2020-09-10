@@ -33,8 +33,8 @@ export const MyArticles: React.FC<IMyArticles> = ({
       button={{ text: 'Create first article', onClick: handleCreateCourseClick }}
       description="Let's fix it! 🙂"
     />
-  ) ;
-console.log(activeIndex);
+  );
+
   return (
     <Accordion>
       <Accordion.Title
@@ -48,7 +48,7 @@ console.log(activeIndex);
               My Articles
               <Icon name="dropdown" />
             </div>
-             <GrayOutlineButton content="Create article" onClick={handleCreateCourseClick} />
+            {articles.length !== 0 && <GrayOutlineButton content="Create article" onClick={handleCreateCourseClick}/>}
           </h3>
         </div>
       </Accordion.Title>

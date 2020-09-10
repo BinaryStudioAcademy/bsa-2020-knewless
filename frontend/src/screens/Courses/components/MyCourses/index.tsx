@@ -56,7 +56,7 @@ export const MyCourses: React.FC<IMyCourses> = ({
               My Courses
               <Icon name="dropdown" />
             </div>
-            {isAuthor && <GrayOutlineButton content="Create course" onClick={handleCreateCourseClick} />}
+            {isAuthor && continueCourses.length !== 0 && <GrayOutlineButton content="Create course" onClick={handleCreateCourseClick} />}
           </h3>
         </div>
       </Accordion.Title>

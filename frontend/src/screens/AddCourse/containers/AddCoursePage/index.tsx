@@ -335,6 +335,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
       result.destination.index
     );
 
+    if (result.source.index !== result.destination.index) setIsChanged(true);
     setSelectedLectures(items);
   };
 
