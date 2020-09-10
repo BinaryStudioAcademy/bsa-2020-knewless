@@ -13,9 +13,12 @@ public class AuthorCourseDto {
     private String name;
     private String level;
     private String author;
+    private UUID authorId;
     private List<TagDto> tags;
     private String imageSrc;
     private long duration;
     private int rating;
+    private boolean isReviewed;
+    private int ratingCount;
     private Date updatedAt;
 }

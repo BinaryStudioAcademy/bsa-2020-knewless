@@ -106,7 +106,7 @@ public class CourseController {
 
     @GetMapping("/author-latest/{authorId}")
     public ResponseEntity<List<AuthorCourseDto>> getAuthorLatestCourses(@PathVariable UUID authorId) {
-        return ResponseEntity.ok(courseService.getLatestCoursesByAuthorId(authorId));
+        return ResponseEntity.ok(this.courseService.getLatestCoursesByAuthorId(authorId));
     }
 
     @GetMapping("author")

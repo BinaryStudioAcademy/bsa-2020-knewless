@@ -4,7 +4,7 @@ import { ICourseCardProps } from '@components/CourseCard';
 import { IPathCardProps } from '@components/PathCard';
 import { IAuthorMainPageData } from '../../models/IAuthorMainPageData';
 import { fetchAuthorCoursesRoutine, fetchAuthorPathsRoutine, fetchAuthorRoutine } from '../../routines';
-import {setNoAuthorizedRoutine} from "@screens/Home/routines";
+import { setNoAuthorizedRoutine } from '@screens/Home/routines';
 
 const initialState: IAuthorMainPageData = {
   author: { } as IAuthor,

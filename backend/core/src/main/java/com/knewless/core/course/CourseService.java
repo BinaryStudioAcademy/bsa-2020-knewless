@@ -343,7 +343,7 @@ public class CourseService {
     }
 
     public List<AuthorCourseDto> getLatestCoursesByAuthorId(UUID authorId) {
-        return courseRepository.getLatestCoursesByAuthorId(authorId).stream()
+        return this.courseRepository.getLatestCoursesByAuthorId(authorId).stream()
                 .map(CourseMapper.MAPPER::authorCourseQueryResultToAuthorCourseDto)
                 .peek(c -> c.setTags(mapTagsToTagDtos(this.tagRepository.getTagsByCourseId(c.getId()))))
                 .collect(Collectors.toUnmodifiableList());

@@ -33,10 +33,11 @@ export const PathCard: React.FunctionComponent<IPathCardProps> = (
 ) => {
   const location = useLocation();
   return (
-  <div className={className || ''}>
-    <div className={styles.container}>
-      {location.pathname === "/paths" && role === "AUTHOR" && !released &&
-      (<NavLink exact to={`/path/edit/${id}`}>
+    <div className={className || ''}>
+      <div className={styles.container}>
+        {location.pathname === '/paths' && role === 'AUTHOR' && !released
+      && (
+      <NavLink exact to={`/path/edit/${id}`}>
         <Label
           as="a"
           basic
@@ -44,30 +45,31 @@ export const PathCard: React.FunctionComponent<IPathCardProps> = (
         >
           Draft
         </Label>
-      </NavLink>)}
-      <img
-        src={logoSrc || noImage}
-        className={`${styles.logo} ${clickableImage && styles.clickable}`}
-        alt="Path logo"
-        ref={imageRef}
-      />
-      <div className={styles.title}>
-        {id ? (
-        <NavLink exact to={released === false ? `/path/edit/${id}` : `/path/${id}`}>
-          <span className={styles.link}>{name}</span>
-        </NavLink>)
-          : <span>{name}</span>}
-      </div>
-      <div className={styles.meta}>
-        <div>
-          <span className={styles.indicator}>{courses}</span>
-          <span> Courses</span>
+      </NavLink>
+      )}
+        <img
+          src={logoSrc || noImage}
+          className={`${styles.logo} ${clickableImage && styles.clickable}`}
+          alt="Path logo"
+          ref={imageRef}
+        />
+        <div className={styles.title}>
+          {id ? (
+            <NavLink exact to={released === false ? `/path/edit/${id}` : `/path/${id}`}>
+              <span className={styles.link}>{name}</span>
+            </NavLink>
+          ) : <span>{name}</span>}
         </div>
-        <div>
-          <span className={styles.indicator}>{timeFormat(duration)}</span>
+        <div className={styles.meta}>
+          <div>
+            <span className={styles.indicator}>{courses}</span>
+            <span> Courses</span>
+          </div>
+          <div>
+            <span className={styles.indicator}>{timeFormat(duration)}</span>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-);
-}
+  );
+};

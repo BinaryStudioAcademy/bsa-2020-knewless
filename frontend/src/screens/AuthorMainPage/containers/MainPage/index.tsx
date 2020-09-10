@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { IAuthor } from '../../models/IAuthor';
 import { IAppState } from '@models/AppState';
-import { AuthorCourseCard, IAuthorCourseCardProps } from '../../components/AuthorCourseCard';
 import { IPathCardProps, PathCard } from '@components/PathCard';
 import { AuthorCardsSegment } from '../../components/AuthorCardsSegment';
 import AuthorInfoBlock from '../../components/AuthorInfoBlock';
@@ -13,11 +12,12 @@ import { history } from '@helpers/history.helper';
 import styles from './styles.module.sass';
 import { CourseCardPlaceHolder } from '@components/placeholder/CourseCardPlaceHolder';
 import { PathCardPlaceHolder } from '@components/placeholder/PathCardPlaceHolder';
+import { CourseCard, ICourseCardProps } from '@components/CourseCard';
 
 export interface IMainAuthorPageProps {
   author: IAuthor;
   user: IUser;
-  authorCourses: IAuthorCourseCardProps[];
+  authorCourses: ICourseCardProps[];
   authorPaths: IPathCardProps[];
   fetchAuthor: IBindingAction;
   fetchAuthorCourses: (id: string) => void;
@@ -30,7 +30,7 @@ export interface IMainAuthorPageProps {
   isSettingsFilled: boolean;
 }
 
-const MainAuthorPage: React.FunctionComponent<IMainAuthorPageProps> = ({
+const MainAuthorPage: React.FC<IMainAuthorPageProps> = ({
   author,
   user,
   authorCourses,
@@ -69,10 +69,18 @@ const MainAuthorPage: React.FunctionComponent<IMainAuthorPageProps> = ({
                 <>
                   {(authorCourses && authorCourses.length > 0) ? authorCourses.slice(0, 3).map(c => (
                     <div className={styles.course_card} key={c.id}>
-                      <AuthorCourseCard
+                      <CourseCard
                         id={c.id}
                         name={c.name}
+                        author={c.author}
+                        authorId={c.authorId}
+                        duration={c.duration}
                         imageSrc={c.imageSrc}
+                        level={c.level}
+                        rating={c.rating}
+                        hideButton
+                        ratingCount={c.ratingCount}
+                        tags={c.tags}
                       />
                     </div>
                   )) : coursesLoaded && authorCourses.length === 0

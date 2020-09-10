@@ -87,7 +87,7 @@ $side_padding: 80px
     height: 100%
     display: grid
     grid-template-columns: calc(100% / 3 + 2px) calc(100% / 3 + 2px) calc(100% / 3 - 4px)
-    grid-template-rows: 5% 90% 5%
+    grid-template-rows: 0 100%
     grid-template-areas: " . . . " " coursesNumber schoolCard articlesNumber " " . . . "
 
     .cardCoursesNumberWrapper, .cardArticlesNumberWrapper
@@ -103,7 +103,7 @@ $side_padding: 80px
     .cardStyleAuthorPublic
       height: 19.8vh
       display: grid
-      grid-template-rows: 75% 25%
+      grid-template-rows: 75% 15%
       grid-template-areas: " mainPart " " bottomPart "
       justify-content: center
       align-items: center
@@ -118,7 +118,7 @@ $side_padding: 80px
         justify-content: center
 
       .cardTextField
-        padding-top: .3em
+        padding-top: .1em
         height: 100%
         font-size: 5vw
         text-align: center
