@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import styles from './styles.module.sass';
 import { IArticle } from '../../models/domain';
 import { IAppState } from '@models/AppState';
@@ -42,6 +42,18 @@ export const ArticlePage: React.FC<IArticleProps> = ({
   checkFavourite, changeFavourite
 }) => {
   const { articleId } = useParams();
+  const discussionRef = useRef(null);
+  const [toDiscussion, setToDiscussion] = useState(undefined);
+
+  useEffect(() => {
+    setToDiscussion(history.location?.state?.toDiscussion);
+  },[history.location?.state]);
+
+  useEffect(() => {
+    if (toDiscussion && discussionRef.current?.offsetTop) {
+      window.scrollTo(0, discussionRef.current?.offsetTop);
+    }
+  },[toDiscussion, discussionRef.current?.offsetTop, loading]);
 
   useEffect(() => {
     if (articleId) {
@@ -158,7 +170,7 @@ export const ArticlePage: React.FC<IArticleProps> = ({
                   </div>
                 </div>
               )}
-              <div>
+              <div ref={discussionRef}>
                 {articleId && article
                 && <CommentsSection articleId={articleId} yourId={user?.id} authorId={article.author?.userId} />}
               </div>

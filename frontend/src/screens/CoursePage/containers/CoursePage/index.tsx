@@ -71,7 +71,7 @@ const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
   const [toDiscussion, setToDiscussion] = useState(undefined);
   useEffect(() => {
     setToDiscussion(history.location?.state?.toDiscussion);
-  },[history.location?.state])
+  },[history.location?.state]);
   
   useEffect(() => {
     if (courseId) {
