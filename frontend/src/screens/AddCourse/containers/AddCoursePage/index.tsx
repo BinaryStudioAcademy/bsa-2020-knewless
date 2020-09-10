@@ -254,8 +254,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
     && isValidImage && !!description && isValidOverview;
   const isReleseble = isRequiredFieldsValid && selectedLectures.length > 0;
 
-  const isSaveble = (!isReleased && !!courseName && isValidName && isValidDescription && isValidLevel
-    && isValidImage && isValidOverview) || (isEdit && isReleseble);
+  const isSaveble = (!isReleased && courseName?.length > 0) || (isEdit && isReleseble);
 
   const handleUploadFile = file => {
     const thisFile: File = file;
