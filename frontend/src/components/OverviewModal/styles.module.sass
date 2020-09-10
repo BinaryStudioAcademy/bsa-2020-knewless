@@ -1,24 +1,41 @@
-.overview_container *
-  color: unset !important
-  list-style: disc
-  margin: 16px 0
+.overview_container
+    & *
+      color: unset !important
+      list-style: disc
+      margin: 16px 0
 
-.overview_container li
-  margin: 5px 40px
+    & li
+      margin: 5px 40px
 
-.overview_container pre
-  background-color: #f7f7f7
-  padding: 16px
-  border: 1px solid #b9b9b9
+    & pre
+      background-color: #f7f7f7
+      padding: 16px
+      border: 1px solid #b9b9b9
 
-.overview_container table
-  & *
-    padding: 10px
-    border: 1px solid #b9b9b9
+    & a
+      text-decoration: underline
 
-.overview_container a
-  text-decoration: underline
+      &:hover
+        text-decoration: underline
+        color: #0086af !important
 
-  &:hover
-    text-decoration: underline
-    color: #0086af !important
+    & table *
+      padding: 10px
+      border: 1px solid #b9b9b9
+
+    & blockquote
+      border-left: 10px solid #b9b9b9
+      background-color: #b9b9b91c
+
+      & blockquote
+        margin-left: 20px
+        background-color: transparent
+
+      & > *
+        margin-left: 10px
+
+      & > *:first-child
+        padding-top: 16px
+
+      &> *:last-child
+        padding-bottom: 16px
