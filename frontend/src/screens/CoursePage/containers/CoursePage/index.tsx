@@ -23,6 +23,7 @@ import RatingModal from '@components/RatingModal';
 import { saveCourseReviewRoutine } from '@screens/LecturePage/routines';
 import { IFavourite } from '@components/AddToFavouritesButton/component';
 import { SourceType } from '@components/AddToFavouritesButton/helper/SourceType';
+import { useHistory } from "react-router-dom";
 import { IAuthor } from '@screens/AuthorMainPage/models/IAuthor';
 
 interface ICoursePageProps {
@@ -66,7 +67,12 @@ const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
 }) => {
   const { courseId } = useParams();
   const [isOpen, setIsOpen] = useState(false);
-
+  const history = useHistory();
+  const [toDiscussion, setToDiscussion] = useState(undefined);
+  useEffect(() => {
+    setToDiscussion(history.location?.state?.toDiscussion);
+  },[history.location?.state])
+  
   useEffect(() => {
     if (courseId) {
       fetchData(courseId);
@@ -150,6 +156,7 @@ const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
           openReviewModal={openViewModal}
           role={role}
           yourId={yourId}
+          toDiscussion={toDiscussion}
         />
         <div className="separator" />
         <AuthorInfo

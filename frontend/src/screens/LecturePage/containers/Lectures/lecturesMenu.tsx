@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Menu, Segment } from 'semantic-ui-react';
 
@@ -19,11 +19,16 @@ export interface ILecturesMenuProps {
   lectureId: string;
   authorId: string;
   userId: string;
+  toDiscussion?: boolean;
 }
 
 const LecturesMenu: React.FunctionComponent<ILecturesMenuProps> = ({
-  menuProps, setMenu, setChosenVideo, playerProgress, role, lectureId, authorId, userId
-}) => (
+  menuProps, setMenu, setChosenVideo, playerProgress, role, lectureId, authorId, userId, toDiscussion
+}) => {
+  useEffect(() => {
+    if (toDiscussion) setMenu({ lecturesMenuActiveItem: 'Disscussions' });
+  }, [toDiscussion])
+  return (
   <div style={{ height: '100%' }}>
     <Menu className="lecturesMenu" pointing secondary widths="2">
       <Menu.Item
@@ -45,6 +50,7 @@ const LecturesMenu: React.FunctionComponent<ILecturesMenuProps> = ({
     </Segment>
   </div>
 );
+};
 
 const mapStateToProps = (state: any) => ({
   menuProps: state.lecturePage.lectureMenu,

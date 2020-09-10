@@ -29,10 +29,11 @@ export interface IAddArticleProps {
   fetchArticle: IBindingCallback1<string>;
   isAuthorized: boolean;
   article: IArticle;
+  saveLoading: boolean;
 }
 
 export const AddArticlePage: React.FC<IAddArticleProps> = ({
-  saveArticle , article , fetchArticle
+  saveArticle , article , fetchArticle, saveLoading
 }) => {
   const location = useLocation();
   const { articleId } = useParams();  
@@ -85,7 +86,6 @@ export const AddArticlePage: React.FC<IAddArticleProps> = ({
       uploadImage
     };
     saveArticle(article);
-    history.push('/');
   };
 
   const handleCancel = () => {
@@ -173,6 +173,7 @@ export const AddArticlePage: React.FC<IAddArticleProps> = ({
                   />
                   <GradientButton
                     disabled={!isReadyToRelease}
+                    loading={saveLoading}
                     className={isReadyToRelease ? styles.button_release : styles.button_release_disabled}
                     onClick={handleSaveArticle}
                     content="Save"
@@ -192,7 +193,8 @@ const mapStateToProps = (state: IAppState) => {
   const { isAuthorized } = state.auth.auth;
   return {
     isAuthorized,
-    article
+    article,
+    saveLoading: state.addArticlePage.requests.saveArticleRequest.loading
   };
 };
 

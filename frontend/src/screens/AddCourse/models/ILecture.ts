@@ -4,4 +4,5 @@ export interface ILecture {
   description?: string;
   urlOrigin?: string;
   timeSeconds?: number;
+  webLink?: string;
 }

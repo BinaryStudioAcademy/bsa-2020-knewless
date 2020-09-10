@@ -21,6 +21,7 @@ interface ICourseMenuProps {
   courseId: string;
   authorId: string;
   yourId: string;
+  toDiscussion?: boolean;
 }
 
 const CourseMenu: React.FunctionComponent<ICourseMenuProps> = ({
@@ -33,9 +34,10 @@ const CourseMenu: React.FunctionComponent<ICourseMenuProps> = ({
   role,
   courseId,
   authorId,
-  yourId
+  yourId,
+  toDiscussion
 }) => {
-  const [selected, setSelected] = useState(0);
+  const [selected, setSelected] = useState((toDiscussion && 2) || 0);
   const onClickLecture = (e, id) => {
     if (!isAuthorized) openLoginModal(`/lecture/${id}`);
     else {
