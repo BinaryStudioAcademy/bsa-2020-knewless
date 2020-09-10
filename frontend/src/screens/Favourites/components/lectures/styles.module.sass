@@ -6,11 +6,11 @@
   background: inherit
   color: white
   display: grid
-  height: 70vh
+  height: 100vh
   width: 100%
   grid-template-rows: repeat(auto-fill, 80px)
   grid-row-gap: .3em
-
+  
 .row
   display: flex
   justify-content: space-between
@@ -76,6 +76,11 @@
   &__last
     font-weight: 400
     justify-self: end
+  &__first
+    display: flex
+    align-items: center
+    justify-content: center
+    justify-self: stretch
 
   &__first
     display: flex

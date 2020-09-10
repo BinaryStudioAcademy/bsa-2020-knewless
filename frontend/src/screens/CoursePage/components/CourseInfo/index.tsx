@@ -30,6 +30,7 @@ interface ICourseInfoProps {
   courseId: string;
   authorUserId: string;
   yourId: string;
+  toDiscussion?: boolean;
 }
 
 const CourseInfo: React.FunctionComponent<ICourseInfoProps> = ({
@@ -50,7 +51,8 @@ const CourseInfo: React.FunctionComponent<ICourseInfoProps> = ({
   changeFavouriteLecture,
   courseId,
   authorUserId,
-  yourId
+  yourId,
+  toDiscussion
 }) => (
   <div className="content_row">
     <div className={`${styles.info} flex_item aligned_item`}>
@@ -112,6 +114,7 @@ const CourseInfo: React.FunctionComponent<ICourseInfoProps> = ({
         courseId={courseId}
         authorId={authorUserId}
         yourId={yourId}
+        toDiscussion={toDiscussion}
       />
     </div>
   </div>

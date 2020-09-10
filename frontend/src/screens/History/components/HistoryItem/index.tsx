@@ -39,7 +39,7 @@ export const HistoryItem: React.FC<IHistoryItemProps> = ({
         )}
       <h4
         className={`${styles.collumn} ${styles.name}`}
-        onClick={() => history.push(`/lecture/${historyItem.lecture.id}`)}
+        onClick={() => window.open(`/lecture/${historyItem.lecture.id}`)}
       >
         {historyItem.lecture.name}
       </h4>

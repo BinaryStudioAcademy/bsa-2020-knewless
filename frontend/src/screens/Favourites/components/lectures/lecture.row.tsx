@@ -15,7 +15,7 @@ export const LectureRow: React.FunctionComponent<ILectureRowProps> = ({
   lecture, remove
 }) => {
   const redirectToLecture = () => {
-    history.push(`/lecture/${lecture.id}`);
+    window.open(`/lecture/${lecture.id}`);
   };
   return (
     <div className={styles.row}>

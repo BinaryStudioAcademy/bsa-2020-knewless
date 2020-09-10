@@ -16,6 +16,7 @@ function* saveArticle({ payload }: AnyAction) {
     }
     const response = yield call(addArticleService.saveArticle, payload);
     yield put(saveArticleRoutine.success(response));
+    addArticleService.forwardArticles();
   } catch (error) {
     yield put(saveArticleRoutine.failure(error?.message));
   }

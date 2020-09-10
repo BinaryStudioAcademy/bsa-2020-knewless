@@ -172,11 +172,16 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
       .filter(l => {
         if (!l.timeSeconds) return true;
         if (!editCourse) return true;
-        return !(selectedLectures.map(s => s.id).includes(l.id)
+        if (l.urlOrigin) {
+          return !(selectedLectures.map(s => s.id).includes(l.id) 
         || selectedLectures.map(s => s.urlOrigin).includes(l.urlOrigin));
+        } else {
+          return !(selectedLectures.map(s => s.id).includes(l.id) 
+        || selectedLectures.map(s => s.webLink).includes(l.webLink));
+        };
       });
     setPool(filtered);
-  }, [lectures, getLectures]);
+  }, [lectures]);
 
   useEffect(() => {
     if (isEdit && (editCourse?.id !== courseId)) {
@@ -304,6 +309,20 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
 
   const handleUpdateLectures = () => {
     getLectures();
+    const updated = [...lectures.sort(compareName)];
+    const filtered = updated.filter(l => !selectedLectures.map(s => s.id).includes(l.id))
+      .filter(l => {
+        if (!l.timeSeconds) return true;
+        if (!editCourse) return true;
+        if (l.urlOrigin) {
+          return !(selectedLectures.map(s => s.id).includes(l.id) 
+        || selectedLectures.map(s => s.urlOrigin).includes(l.urlOrigin));
+        } else {
+          return !(selectedLectures.map(s => s.id).includes(l.id) 
+        || selectedLectures.map(s => s.webLink).includes(l.webLink));
+        };
+      });
+    setPool(filtered);
   };
 
   const onOverviewClose = () => {

@@ -14,7 +14,7 @@ import styles from './styles.module.sass';
 
 const Notifications = ({ userId, notifications, fetchNotifications: fetch,
   readNotif: read, deleteAllNotifications: deleteAll,
-  readAllNotifs: readAll, styleName }) => {
+  readAllNotifs: readAll, styleName, role }) => {
   const ref = createRef<HTMLDivElement>();
   useEffect(() => {
     if (userId) {
@@ -59,6 +59,7 @@ const Notifications = ({ userId, notifications, fetchNotifications: fetch,
                   notification={item}
                   key={item.id}
                   readNotif={read}
+                  role={role}
                 />
               ))}
             </div>

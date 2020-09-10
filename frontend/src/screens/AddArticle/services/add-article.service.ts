@@ -1,4 +1,5 @@
 import { callApi } from 'helpers/api.helper';
+import { history } from '@helpers/history.helper';
 
 export const saveArticle = async request => {
     const response = await callApi({
@@ -15,3 +16,11 @@ export const saveArticle = async request => {
     });
     return response.json();
   };
+
+export function forwardHome() {
+    history.push('/');
+};
+  
+export function forwardArticles() {
+    history.push('/articles');
+};

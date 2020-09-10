@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
 import ReactPlayer from 'react-player/lazy';
-import { Link, Redirect } from 'react-router-dom';
+import { Link, Redirect, useLocation } from 'react-router-dom';
 import { ICourseData } from '@screens/LecturePage/models/ICourseData';
 import { IBindingCallback1 } from 'models/Callbacks';
 import {
@@ -116,6 +116,11 @@ const LecturePage: React.FunctionComponent<ILectureProps> = ({
   const [result, setResult] = useState('');
   const [isShowQuality, setIsShowQuality] = useState(false);
   const [currentVideoDuration, setCurrentVideoDuration] = useState<number>(0);
+  
+  function useQuery() {
+    return new URLSearchParams(useLocation().search);
+  }
+  const toDiscussion = useQuery().get("tab") === "discussion";
 
   const triggerSaveTime: any = useCallback(
     () => saveWatchTime({
@@ -257,6 +262,7 @@ const LecturePage: React.FunctionComponent<ILectureProps> = ({
                 role={role}
                 setChosenVideo={handleChooseVideo}
                 playerProgress={playerProgress.playedSeconds}
+                toDiscussion={toDiscussion}
               />
             </div>
           </>

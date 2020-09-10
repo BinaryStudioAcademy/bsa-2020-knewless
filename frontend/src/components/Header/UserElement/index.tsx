@@ -49,7 +49,7 @@ const UserElement = ({ user, authorId, isSettingsFilled, setNoAuthorized }) => {
         </Label>
       </NavLink>
     }
-    <Notifications userId={user.id} styleName={styles.toolbarBtn} />
+    <Notifications userId={user.id} styleName={styles.toolbarBtn} role={user?.role?.name}/>
     <Popup
       id={styles.popup}
       on="click"

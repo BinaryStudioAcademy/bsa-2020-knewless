@@ -3,8 +3,26 @@ import PropTypes from 'prop-types';
 import styles from './styles.module.sass';
 import { timeComparator } from '@helpers/date.helper';
 import { Icon } from 'semantic-ui-react';
+import { useHistory, Link } from 'react-router-dom';
 
-const NotificationItem = ({ notification, readNotif }) => (
+const NotificationItem = ({ notification, readNotif, role }) => {
+  const history = useHistory();
+  const isAuthor = notification.sourceType?.toLowerCase() === "author";
+  const isCourse = notification.sourceType?.toLowerCase() === "course";
+  const isLecture = notification.sourceType?.toLowerCase() === "lecture";
+  const handleClick = () => {
+    if (isAuthor && role === "AUTHOR") return;
+    if (isCourse && role === "AUTHOR") {
+      history.push({pathname: `/${notification.sourceType?.toLowerCase()}/${notification.sourceId}`, state: { toDiscussion: true }});
+      return;
+    };
+    if (isLecture && role === "AUTHOR") {
+      return;
+    };
+    history.push(`/${notification.sourceType?.toLowerCase()}/${notification.sourceId}`);
+  };
+
+  return (
   <div
     className={`${styles.item} ${!notification.read ? styles.unread : ''}`}
     onPointerOverCapture={() => { if (!notification.read) { readNotif({ id: notification.id }); } }}
@@ -21,13 +39,21 @@ const NotificationItem = ({ notification, readNotif }) => (
       </svg>
       {/* eslint-enable max-len*/}
       <div className={styles.text}>
-        <a
-          href={`/${notification.sourceType?.toLowerCase()}/${notification.sourceId}`}
-          target="_tab"
+        {!(isLecture && role === "AUTHOR") &&
+        (<div
+          onClick={() => handleClick()}
+          className={isAuthor && role === "AUTHOR" ? styles.inactive : styles.link}
+        >
+          {notification.text}
+        </div>)}
+        {(isLecture && role === "AUTHOR") &&
+        (<Link
+          to={{ pathname: `/${notification.sourceType?.toLowerCase()}/${notification.sourceId}?tab=discussion` }}
+          target="_blank"
           className={styles.link}
         >
           {notification.text}
-        </a>
+        </Link>)}
         <p className={styles.time}>{timeComparator(notification.date)}</p>
       </div>
       <Icon
@@ -37,6 +63,7 @@ const NotificationItem = ({ notification, readNotif }) => (
     </div>
   </div>
 );
+}
 
 NotificationItem.defaultProps = {
   notification: undefined,
