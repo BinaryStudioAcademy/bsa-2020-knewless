@@ -5,4 +5,5 @@ export interface ILecture {
   urlOrigin?: string;
   timeSeconds?: number;
   webLink?: string;
+  tags?: string[];
 }

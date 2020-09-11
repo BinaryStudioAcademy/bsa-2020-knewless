@@ -13,6 +13,7 @@ public interface LectureMapper {
 
     @Mapping(target = "timeSeconds", source = "duration")
     @Mapping(target = "favourite", ignore = true)
+    @Mapping(target = "tags", expression = "java(lecture.getTags().stream().map(t -> t.getId()).collect(java.util.stream.Collectors.toList()))")
     ShortLectureDto lectureToShortLectureDto(Lecture lecture);
 
     @Mapping(target="course", expression = "java(lecture.getCourse().getName())")

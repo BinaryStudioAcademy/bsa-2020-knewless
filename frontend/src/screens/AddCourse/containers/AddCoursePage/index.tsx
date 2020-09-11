@@ -173,10 +173,10 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
         if (!l.timeSeconds) return true;
         if (!editCourse) return true;
         if (l.urlOrigin) {
-          return !(selectedLectures.map(s => s.id).includes(l.id) 
+          return !(selectedLectures.map(s => s.id).includes(l.id)
         || selectedLectures.map(s => s.urlOrigin).includes(l.urlOrigin));
         } else {
-          return !(selectedLectures.map(s => s.id).includes(l.id) 
+          return !(selectedLectures.map(s => s.id).includes(l.id)
         || selectedLectures.map(s => s.webLink).includes(l.webLink));
         };
       });
@@ -315,10 +315,10 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
         if (!l.timeSeconds) return true;
         if (!editCourse) return true;
         if (l.urlOrigin) {
-          return !(selectedLectures.map(s => s.id).includes(l.id) 
+          return !(selectedLectures.map(s => s.id).includes(l.id)
         || selectedLectures.map(s => s.urlOrigin).includes(l.urlOrigin));
         } else {
-          return !(selectedLectures.map(s => s.id).includes(l.id) 
+          return !(selectedLectures.map(s => s.id).includes(l.id)
         || selectedLectures.map(s => s.webLink).includes(l.webLink));
         };
       });
@@ -356,6 +356,11 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
     if (result.source.index !== result.destination.index) setIsChanged(true);
     setSelectedLectures(items);
   };
+
+  useEffect(() => {
+    const ids = [...new Set(selectedLectures.flatMap(l => l.tags))];
+    setCourseTags(ids.map(t => tags.find(tag => tag.id === t).name));
+  }, [selectedLectures]);
 
   return (
     history.location.pathname.startsWith('/course/edit') && loadingEditCourse
@@ -476,7 +481,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
                 <div className={styles.preview_warning_container}>
                   <CoursePreview
                     authorName={author}
-                    tags={courseTags.map(t => t.name)}
+                    tags={courseTags}
                     rating={rating}
                     image={previewImage}
                     authorId={authorId}
@@ -486,7 +491,7 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
                     durationMinutes={getMinutes(selectedLectures)}
                     action={handleUploadFile}
                     description={description}
-                    ratingCount={0}
+                    ratingCount={editCourse?.ratingCount ? editCourse.ratingCount : 0}
                   />
                   {!isValidImage && (
                     <Label

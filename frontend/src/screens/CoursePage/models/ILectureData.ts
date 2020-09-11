@@ -5,4 +5,5 @@ export interface ILectureData {
   timeSeconds: number;
   favourite: boolean;
   urlOrigin?: string;
+  tags: string[];
 }
