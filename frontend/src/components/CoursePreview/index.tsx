@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Icon, Label } from 'semantic-ui-react';
 import { StyledRating } from '@components/StyledRating';
 import { NavLink, useLocation } from 'react-router-dom';
@@ -32,6 +32,7 @@ export const CoursePreview: React.FC<ICoursePreviewProps> = ({
   id, authorName, authorId, tags, rating, className, members,
   ratingCount, role, isReleased
 }) => {
+
   const location = useLocation();
   const optionalIcon = (isSelected: boolean) => {
     switch (isSelected) {
@@ -122,7 +123,7 @@ export const CoursePreview: React.FC<ICoursePreviewProps> = ({
           <div className={styles.description_text}>
             <Ellipsis
               text={description}
-              lines={2}
+              lines={4}
             />
           </div>
         </div>
