@@ -3,6 +3,9 @@ package com.knewless.core.elasticsearch;
 import com.knewless.core.author.AuthorRepository;
 import com.knewless.core.author.model.Author;
 import com.knewless.core.course.model.Course;
+import com.knewless.core.currentUserCource.CurrentUserCourseRepository;
+import com.knewless.core.currentUserCource.CurrentUserCourseService;
+import com.knewless.core.currentUserCource.model.CurrentUserCourse;
 import com.knewless.core.db.BaseEntity;
 import com.knewless.core.elasticsearch.dto.*;
 import com.knewless.core.elasticsearch.model.EsDataType;
@@ -40,6 +43,9 @@ public class EsService {
 
     @Autowired
     private AuthorRepository authorRepository;
+    
+    @Autowired
+    private CurrentUserCourseRepository currentUserCourseRepository;
 
     @Autowired
     private ElasticsearchOperations elasticsearchTemplate;
@@ -81,7 +87,8 @@ public class EsService {
             case COURSE: {
                 Course course = (Course) data;
                 List<String> tags = tagRepository.getTagsNamesByCourseId(course.getId());
-                entity = EsMapper.esEntityFromCourseEntity(course, tags);
+                long members = currentUserCourseRepository.getMembersByCourse(course.getId());
+                entity = EsMapper.esEntityFromCourseEntity(course, tags, members);
                 break;
             }
 

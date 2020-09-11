@@ -25,6 +25,7 @@ export interface ICourseSearchResult extends ISearchResult {
     lectures: number;
     description: string;
     ratingCount: number;
+    members: number;
   };
 }
 

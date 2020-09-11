@@ -40,7 +40,7 @@ public class EsMapper {
 				.build();
 	}
 	
-	public static EsEntity esEntityFromCourseEntity(Course course, List<String> tags) {
+	public static EsEntity esEntityFromCourseEntity(Course course, List<String> tags, long members) {
 		if (course == null) {
 			return null;
 		}
@@ -50,10 +50,12 @@ public class EsMapper {
 		metadata.put("author", course.getAuthor().getFullName());
 		metadata.put("authorId", course.getAuthor().getId());
 		metadata.put("date", course.getReleasedDate());
+		metadata.put("description", course.getDescription());
+		metadata.put("members", members);
 		metadata.put("level", course.getLevel().toString());
 		metadata.put("total minutes", course.getLectures().stream().mapToInt(Lecture::getDuration).sum());metadata.put("lectures", course.getLectures().size());
 		metadata.put("rating", (int) Math.round(course.getReactions().stream().mapToInt(CourseReaction::getReaction).average().orElse(0)));
-		metadata.put("ratingCount", 0);
+		metadata.put("ratingCount", course.getReactions().size());
 		
 		return builderFromBaseEntity(course)
 				.name(course.getName())
