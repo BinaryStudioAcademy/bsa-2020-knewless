@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { ReactComponent as ArchiveIcon } from '../../icons/archive.svg';
 import { ReactComponent as DiscussionIcon } from '../../icons/discussion.svg';
 import { ReactComponent as InfoIcon } from '../../icons/info.svg';
@@ -37,7 +37,18 @@ const CourseMenu: React.FunctionComponent<ICourseMenuProps> = ({
   yourId,
   toDiscussion
 }) => {
-  const [selected, setSelected] = useState((toDiscussion && 2) || 0);
+  const discussionRef = useRef(null);
+  const [isScrolled, setIsScrolled] = useState(false)
+  const [selected, setSelected] = useState(0);
+
+  useEffect(() => {
+    if (toDiscussion && discussionRef.current?.offsetTop && !isScrolled) {
+      setIsScrolled(true);
+      setSelected(2);
+      window.scrollTo(0, discussionRef.current?.offsetTop + 250);
+    }
+  },[toDiscussion, discussionRef.current?.offsetTop]);
+
   const onClickLecture = (e, id) => {
     if (!isAuthorized) openLoginModal(`/lecture/${id}`);
     else {
@@ -114,9 +125,11 @@ const CourseMenu: React.FunctionComponent<ICourseMenuProps> = ({
             ))}
           </div>
         )}
-        {selected === 2 && (
-          <CourseDiscussion courseId={courseId} authorId={authorId} yourId={yourId} />
-        )}
+        <div ref={discussionRef}>
+          {selected === 2 && (
+              <CourseDiscussion courseId={courseId} authorId={authorId} yourId={yourId} />
+          )}
+        </div>
       </div>
 
     </div>

@@ -10,9 +10,10 @@ const NotificationItem = ({ notification, readNotif, role }) => {
   const isAuthor = notification.sourceType?.toLowerCase() === "author";
   const isCourse = notification.sourceType?.toLowerCase() === "course";
   const isLecture = notification.sourceType?.toLowerCase() === "lecture";
+  const isArticle = notification.sourceType?.toLowerCase() === "article";
   const handleClick = () => {
     if (isAuthor && role === "AUTHOR") return;
-    if (isCourse && role === "AUTHOR") {
+    if ((isCourse || isArticle) && role === "AUTHOR") {
       history.push({pathname: `/${notification.sourceType?.toLowerCase()}/${notification.sourceId}`, state: { toDiscussion: true }});
       return;
     };
