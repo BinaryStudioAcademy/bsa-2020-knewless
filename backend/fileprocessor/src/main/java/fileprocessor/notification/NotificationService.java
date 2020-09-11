@@ -10,19 +10,19 @@ import java.util.UUID;
 
 @Service
 public class NotificationService {
-    @Autowired
-    private NotificationRepository notificationRepository;
-
-    public Notification saveLectureNotification(UUID sourceId, UUID userId) {
-        User user = new User();
-        user.setId(userId);
-        Notification notification = new Notification();
-        notification.setUser(user);
-        notification.setText("File processed");
-        notification.setRead(false);
-        notification.setSourceId(sourceId);
-        notification.setSourceType(SourceType.LECTURE);
-
-        return notificationRepository.save(notification);
-    }
+	@Autowired
+	private NotificationRepository notificationRepository;
+	
+	public Notification saveLectureNotification(UUID lectureId, String lectureName, UUID userId) {
+		User user = new User();
+		user.setId(userId);
+		Notification notification = new Notification();
+		notification.setUser(user);
+		notification.setText("Lecture " + lectureName + " processed");
+		notification.setRead(false);
+		notification.setSourceId(lectureId);
+		notification.setSourceType(SourceType.LECTURE);
+		
+		return notificationRepository.save(notification);
+	}
 }

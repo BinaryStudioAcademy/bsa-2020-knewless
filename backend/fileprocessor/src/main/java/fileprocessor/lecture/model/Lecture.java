@@ -37,4 +37,6 @@ public class Lecture extends BaseEntity {
 
     @Column(name = "duration")
     private int duration;
+    
+    private String name;
 }
