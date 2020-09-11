@@ -10,4 +10,5 @@ import java.util.UUID;
 public class ProgressGoalBriefDto {
 	private UUID id;
 	private String name;
+	private int durationSeconds;
 }

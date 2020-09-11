@@ -68,3 +68,10 @@ export async function getAllGoals() {
   });
   return resp.json();
 }
+
+export async function setCongratsShown() {
+  await callApi({
+    endpoint: '/api/student/goal/shown',
+    type: 'PUT'
+  });
+}

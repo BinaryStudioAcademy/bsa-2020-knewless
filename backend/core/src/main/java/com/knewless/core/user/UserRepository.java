@@ -39,4 +39,8 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     @Query(value = "DELETE FROM users " +
             "WHERE verified_email = FALSE AND EXTRACT(EPOCH FROM timezone('Europe/Kiev', current_timestamp) - created_at) >= :expiration", nativeQuery = true)
     void deleteExpired(long expiration);
+    
+    @SuppressWarnings("SpringDataRepositoryMethodReturnTypeInspection")
+    @Query("select u.role from User u where u.id = :userId")
+    Role getRoleByUserId(UUID userId);
 }

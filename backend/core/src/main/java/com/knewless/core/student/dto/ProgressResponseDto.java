@@ -17,4 +17,6 @@ public class ProgressResponseDto {
 	private int secondsNeededOverall;
 	private LocalDateTime goalStarted;
 	private LocalDateTime goalExpires;
+	private boolean isDone;
+	private boolean congratulationShown;
 }

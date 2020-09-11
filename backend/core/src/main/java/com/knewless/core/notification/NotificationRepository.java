@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
 
@@ -41,4 +42,8 @@ public interface NotificationRepository extends JpaRepository<Notification, UUID
     @Modifying
     @Query("update Notification n set n.isRead = true where n.user.id = :userId")
     void readAllUserNotifications(@Param("userId") UUID userId);
+    
+    @Query("select (count(n) > 0) from Notification n where n.user.id = :userId and n.sourceId = :goalId " +
+            "and n.sourceType = 'PERSONAL_GOAL_COMPLETION' and n.createdAt >= :from and n.createdAt <= :to")
+    boolean dailyProgressNotificationForGoalByRange(Timestamp from, Timestamp to, UUID goalId, UUID userId);
 }
