@@ -135,10 +135,12 @@ const AuthorPublicPage: React.FC<IAuthorPublic> = ({
               </p>
               &nbsp; followers
             </div>
-            <div className={styles.authorBiography}>
-              <p>ABOUT AUTHOR</p>
-              <p>{authorData.biography}</p>
-            </div>
+            {authorData?.biography && authorData.biography.trim().length > 0 && (
+              <div className={styles.authorBiography}>
+                <p>ABOUT AUTHOR</p>
+                <p>{authorData.biography}</p>
+              </div>
+            )}
           </div>
           <div className={styles.cardsAuthorPublicPageWrapper}>
             <div className={styles.cardsGridLines}>
