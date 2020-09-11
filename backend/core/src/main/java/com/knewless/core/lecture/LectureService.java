@@ -24,6 +24,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.knewless.core.youtube.YoutubeHelper.extractYoutubePreview;
+import static com.knewless.core.youtube.YoutubeHelper.isYoutubeLink;
+
 @Service
 public class LectureService {
 
@@ -101,8 +104,7 @@ public class LectureService {
 
     public List<ShortLectureDto> getLecturesByUserId(UUID id) {
         List<Lecture> allLectures = lectureRepository.getAllByUserId(id);
-        Collections.sort(allLectures,
-                Comparator.comparingInt(l -> (l.getCourse() == null ? Integer.MIN_VALUE : Integer.MAX_VALUE)));
+        allLectures.sort(Comparator.comparingInt(l -> (l.getCourse() == null ? Integer.MIN_VALUE : Integer.MAX_VALUE)));
         List<Lecture> result = new ArrayList<>();
         allLectures.forEach(lec -> {
             if (lec.getUrlOrigin()!=null &&
@@ -173,6 +175,7 @@ public class LectureService {
                     .name(lectureDto.getName())
                     .description(lectureDto.getDescription())
                     .webLink(lectureDto.getUrl())
+                    .previewImage(isYoutubeLink(lectureDto.getUrl()) ? extractYoutubePreview(lectureDto.getUrl()) : null)
                     .tags(new HashSet<>(lectureTags))
                     .user(user)
                     .duration((int) lectureDto.getDuration())
@@ -187,7 +190,7 @@ public class LectureService {
                     .build();
         }
     }
-
+    
     public LectureUpdateDto getLectureForEdit(UUID lectureId) {
         var lecture = lectureRepository.findById(lectureId).orElseThrow();
         return LectureEditMapper.fromEntity(lecture);
