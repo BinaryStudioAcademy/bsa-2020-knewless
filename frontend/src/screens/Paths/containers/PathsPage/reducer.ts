@@ -8,12 +8,13 @@ import {
   fetchAllAuthorPathsRoutine
 } from '@screens/Paths/routines';
 
-export const data = (state: IPathsData = { paths: [], myPaths: [], tags: [] }, action: Routine<any>) => {
+export const data = (state: IPathsData = { paths: [], myPaths: [], tags: [], isMyPathsLoaded: false }, action: Routine<any>) => {
   switch (action.type) {
     case fetchPathsAndTagsRoutine.SUCCESS:
       return {
         ...state,
-        ...action.payload
+        isMyPathsLoaded: true,
+        ...action.payload,
       };
     case fetchPathsByTagRoutine.SUCCESS:
       return {
@@ -33,6 +34,7 @@ export const data = (state: IPathsData = { paths: [], myPaths: [], tags: [] }, a
     case fetchAllAuthorPathsRoutine.SUCCESS:
       return {
         ...state,
+        isMyPathsLoaded: true,
         ...action.payload
       };
     case fetchPathsByTagRoutine.FAILURE:

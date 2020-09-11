@@ -5,4 +5,5 @@ export interface IPathsData {
   paths: IPathCardProps[];
   myPaths: IPathCardProps[];
   tags: ITagData[];
+  isMyPathsLoaded: boolean;
 }

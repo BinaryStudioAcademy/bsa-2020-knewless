@@ -37,6 +37,7 @@ export interface IPathsPageProps {
   pathsByTagsLoading: boolean;
   authorPathsLoading: boolean;
   allTagsLoading: boolean;
+  isMyPathsLoaded: boolean;
 }
 
 const PathsPage: React.FC<IPathsPageProps> = ({
@@ -52,7 +53,8 @@ const PathsPage: React.FC<IPathsPageProps> = ({
   pathsAndTagsLoading,
   allPathsLoading,
   pathsByTagsLoading,
-  allTagsLoading
+  allTagsLoading,
+  isMyPathsLoaded
 }) => {
   useEffect(() => {
     switch (role?.name) {
@@ -80,6 +82,7 @@ const PathsPage: React.FC<IPathsPageProps> = ({
               myPaths={myPaths}
               loading={pathsAndTagsLoading}
               role={role.name}
+              isMyPathsLoaded={isMyPathsLoaded}
             />
           )}
           {(!role || role.name !== RoleTypes.AUTHOR) && (
@@ -109,7 +112,8 @@ const mapStateToProps = (state: IAppState) => ({
   pathsByTagsLoading: extractPathsByTagsLoading(state),
   authorPathsLoading: extractAuthorPathsLoading(state),
   allTagsLoading: extractAllTagsLoading(state),
-  role: state.appRouter.user.role
+  role: state.appRouter.user.role,
+  isMyPathsLoaded: state.pathsPage.data.isMyPathsLoaded
 });
 
 const mapDispatchToProps = {

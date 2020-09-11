@@ -11,10 +11,11 @@ export interface IMyPaths {
   myPaths: IPathCardProps[];
   role: string;
   loading: boolean;
+  isMyPathsLoaded: boolean;
 }
 
 export const MyPaths: React.FC<IMyPaths> = ({
-  myPaths, loading, role
+  myPaths, loading, role, isMyPathsLoaded
 }) => {
   const [activeIndex, setActiveIndex] = useState(1);
   const isAuthor = role === RoleTypes.AUTHOR;
@@ -58,7 +59,7 @@ export const MyPaths: React.FC<IMyPaths> = ({
         </div>
       </Accordion.Title>
       <Accordion.Content active={activeIndex === 1}>
-        {loading || myPaths.length > 0 ? (
+        {!isMyPathsLoaded || myPaths.length > 0 ? (
           <div className={`${styles.wide_container}`}>
             <div className={styles.courses_container}>
               {myPaths.map(p => (
