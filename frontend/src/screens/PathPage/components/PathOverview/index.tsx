@@ -60,16 +60,14 @@ const PathOverview: React.FunctionComponent<IPathOverviewProps> = ({ isAuthorize
             }
           </p>
         </div>
-        {isAuthorized && role === 'USER' && (
-          <div className={styles.button_favourite_wrp}>
-            <AddToFavouriteButton
-              isFavourite={favourite}
-              changeFavourite={changeFavourite}
-              id={pathId}
-              type={SourceType.PATH}
-            />
-          </div>
-        )}
+        <div className={styles.button_favourite_wrp}>
+          <AddToFavouriteButton
+            isFavourite={favourite}
+            changeFavourite={changeFavourite}
+            id={pathId}
+            type={SourceType.PATH}
+          />
+        </div>
       </div>
     </div>
   );
