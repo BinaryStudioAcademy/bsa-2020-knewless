@@ -1,5 +1,6 @@
 package com.knewless.core.lecture;
 
+import com.knewless.core.db.BaseEntity;
 import com.knewless.core.db.SourceType;
 import com.knewless.core.emailservice.EmailService;
 import com.knewless.core.fileManager.FileManager;
@@ -31,18 +32,15 @@ public class LectureService {
     private final MessageSender messageSender;
     private final UserRepository userRepository;
     private final TagRepository tagRepository;
-    private final EmailService emailService;
 
     @Autowired
     public LectureService(LectureRepository lectureRepository, FileManager fileManager,
-                          MessageSender messageSender, UserRepository userRepository, TagRepository tagRepository,
-                          EmailService emailService) {
+                          MessageSender messageSender, UserRepository userRepository, TagRepository tagRepository) {
         this.fileManager = fileManager;
         this.lectureRepository = lectureRepository;
         this.messageSender = messageSender;
         this.userRepository = userRepository;
         this.tagRepository = tagRepository;
-        this.emailService = emailService;
     }
 
     public LectureCreateResponseDto saveLecture(UUID userId, MultipartFile file, String filename, UUID lectureId, int duration)
@@ -166,6 +164,7 @@ public class LectureService {
                     .description(lectureUpdate.getDescription())
                     .timeSeconds(lectureUpdate.getDuration())
                     .name(lectureUpdate.getName())
+                    .tags(lectureTags.stream().map(BaseEntity::getId).collect(Collectors.toList()))
                     .build();
         } else {
             var user = userRepository.getOne(userId);
@@ -184,6 +183,7 @@ public class LectureService {
                     .description(savedLecture.getDescription())
                     .timeSeconds(savedLecture.getDuration())
                     .name(savedLecture.getName())
+                    .tags(lectureTags.stream().map(BaseEntity::getId).collect(Collectors.toList()))
                     .build();
         }
     }
