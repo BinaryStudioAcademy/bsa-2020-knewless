@@ -2,7 +2,6 @@ package com.knewless.core.lecture;
 
 import com.knewless.core.db.BaseEntity;
 import com.knewless.core.db.SourceType;
-import com.knewless.core.emailservice.EmailService;
 import com.knewless.core.fileManager.FileManager;
 import com.knewless.core.lecture.Dto.FavouriteLectureResponseDto;
 import com.knewless.core.lecture.dto.LectureCreateResponseDto;
@@ -18,6 +17,7 @@ import com.knewless.core.tag.model.Tag;
 import com.knewless.core.user.UserRepository;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -35,6 +35,8 @@ public class LectureService {
     private final MessageSender messageSender;
     private final UserRepository userRepository;
     private final TagRepository tagRepository;
+    @Value("${fs.video_url}")
+    private String URL;
 
     @Autowired
     public LectureService(LectureRepository lectureRepository, FileManager fileManager,
@@ -142,11 +144,13 @@ public class LectureService {
                 .collect(Collectors.toList());
     }
 
-    public List<FavouriteLectureResponseDto> getFavouriteLecturesByUser(UUID userId){
+    public List<FavouriteLectureResponseDto> getFavouriteLecturesByUser(UUID userId) {
         List<Lecture> lectures = lectureRepository.getFavouriteLecturesByUserId(userId, SourceType.LECTURE);
-        List<FavouriteLectureResponseDto> result = new ArrayList<>();
-        lectures.forEach(l-> result.add(LectureMapper.MAPPER.lectureToFavouriteLectureResponseDto(l)));
-        return result;
+        return lectures.stream().map(LectureMapper.MAPPER::lectureToFavouriteLectureResponseDto).peek(favLecture -> {
+            if (favLecture.getImage().startsWith("assets/")) {
+                favLecture.setImage(URL + favLecture.getImage());
+            }
+        }).collect(Collectors.toList());
     }
 
     public LectureCreateResponseDto saveLectureWithUrl(SaveLectureDto lectureDto, UUID userId) {

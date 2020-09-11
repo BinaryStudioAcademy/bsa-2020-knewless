@@ -24,7 +24,7 @@ const AuthorCard: React.FC<IAuthorCardProps> = ({
       </div>
       <div className={styles.biography}>
         <span className={styles.followers}>{followers === 1 ? '1 follower' : `${followers} followers`}</span>
-        {biography && <Ellipsis text={biography} lines={2} />}
+        {biography && <div className={styles.biography_text}><Ellipsis text={biography} lines={2} /></div>}
       </div>
     </div>
   </div>

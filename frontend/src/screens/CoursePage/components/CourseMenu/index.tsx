@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ReactComponent as ArchiveIcon } from '../../icons/archive.svg';
 import { ReactComponent as DiscussionIcon } from '../../icons/discussion.svg';
 import { ReactComponent as InfoIcon } from '../../icons/info.svg';
@@ -8,7 +8,6 @@ import { ILectureData } from '@screens/CoursePage/models/ILectureData';
 import { IBindingAction, IBindingCallback1 } from '@models/Callbacks';
 import { IFavourite } from '@components/AddToFavouritesButton/component';
 import CourseDiscussion from '@containers/discussions/CourseDiscussion';
-import UploadLectureModal from '@screens/AddCourse/containers/UploadLectureModal';
 
 interface ICourseMenuProps {
   lectures: ILectureData[];
@@ -38,7 +37,7 @@ const CourseMenu: React.FunctionComponent<ICourseMenuProps> = ({
   toDiscussion
 }) => {
   const discussionRef = useRef(null);
-  const [isScrolled, setIsScrolled] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false);
   const [selected, setSelected] = useState(0);
 
   useEffect(() => {
@@ -47,7 +46,7 @@ const CourseMenu: React.FunctionComponent<ICourseMenuProps> = ({
       setSelected(2);
       window.scrollTo(0, discussionRef.current?.offsetTop + 250);
     }
-  },[toDiscussion, discussionRef.current?.offsetTop]);
+  }, [toDiscussion, discussionRef.current?.offsetTop]);
 
   const onClickLecture = (e, id) => {
     if (!isAuthorized) openLoginModal(`/lecture/${id}`);
@@ -107,31 +106,29 @@ const CourseMenu: React.FunctionComponent<ICourseMenuProps> = ({
         {selected === 1 && (
           <div className={styles.lectures}>
             {lectures.map(lec => (
-                <LectureCard
-                  edit={yourId===authorId}
-                  role={role}
-                  isAuthorized={isAuthorized}
-                  key={lec.id}
-                  timeMinutes={lec.timeSeconds}
-                  name={lec.name}
-                  description={lec.description}
-                  favourite={lec.favourite}
-                  id={lec.id}
-                  changefavourite={isAuthorized ? changeFavouriteLecture : undefined}
+              <LectureCard
+                edit={yourId === authorId}
+                role={role}
+                isAuthorized={isAuthorized}
+                key={lec.id}
+                timeMinutes={lec.timeSeconds}
+                name={lec.name}
+                description={lec.description}
+                favourite={lec.favourite}
+                id={lec.id}
+                changefavourite={isAuthorized ? changeFavouriteLecture : undefined}
                   /* eslint-disable-next-line @typescript-eslint/no-empty-function */
-                  onClick={() => {}}
-                  onLectureClick={e => onClickLecture(e, lec.id)}
-                />
+                onClick={() => {}}
+                onLectureClick={e => onClickLecture(e, lec.id)}
+              />
             ))}
           </div>
         )}
-        <div ref={discussionRef}>
-          {selected === 2 && (
-              <CourseDiscussion courseId={courseId} authorId={authorId} yourId={yourId} />
-          )}
-        </div>
+        <div ref={discussionRef} />
+        {selected === 2 && (
+          <CourseDiscussion courseId={courseId} authorId={authorId} yourId={yourId} />
+        )}
       </div>
-
     </div>
   );
 };
