@@ -30,7 +30,7 @@ export const AuthorCardsSegment: React.FunctionComponent<IAuthorCardsSegment> = 
       {onCreateClick && (
         <GrayOutlineButton
           onClick={onCreateClick}
-          className={styles.btn_right}
+          className={`${styles.btn_right} ${styles.btn_create_more}`}
         >
           Create more
         </GrayOutlineButton>
