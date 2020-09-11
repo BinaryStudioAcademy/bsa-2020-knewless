@@ -158,6 +158,12 @@ public interface CourseRepository extends CommentSourceRepository<Course>, JpaRe
 
     List<Course> findAllByAuthorId(UUID id);
 
+    @Query("SELECT COUNT(c.id) " +
+            "FROM Course c " +
+            "WHERE c.author.id = :authorId " +
+            "AND c.releasedDate IS NOT NULL")
+    int countReleasedByAuthorId(UUID authorId);
+
     @Query("SELECT c.id " +
             "FROM Course c JOIN c.reactions cr " +
             "GROUP BY c.id " +
@@ -165,7 +171,7 @@ public interface CourseRepository extends CommentSourceRepository<Course>, JpaRe
     List<UUID> getPopularCourses(Pageable pageable);
 
     int countByAuthorId(UUID id);
-    
+
     @Override
     default Optional<Course> findSourceById(UUID sourceId) {
         return findById(sourceId);

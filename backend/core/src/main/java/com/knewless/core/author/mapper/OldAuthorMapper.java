@@ -1,12 +1,18 @@
 package com.knewless.core.author.mapper;
 
+import com.knewless.core.author.dto.AuthorBriefInfoDto;
 import com.knewless.core.author.dto.AuthorInfoArticleDto;
 import com.knewless.core.author.dto.AuthorSettingsDto;
 import com.knewless.core.author.model.Author;
+import com.knewless.core.school.dto.SchoolBriefInfoDto;
 import com.knewless.core.user.model.User;
+import com.knewless.core.user.role.model.RoleType;
 import lombok.Data;
 
-public class AuthorMapper {
+import java.util.Optional;
+import java.util.UUID;
+
+public class OldAuthorMapper {
     public static AuthorSettingsDto fromEntity(Author author) {
         if (author == null)
             return null;
@@ -51,4 +57,19 @@ public class AuthorMapper {
         result.setBiography(author.getBiography());
         return result;
     }
+
+    public static AuthorBriefInfoDto fromEntities(Author author, Integer followersCount,
+                                           Optional<SchoolBriefInfoDto> schoolBriefInfo, UUID userId) {
+        final var briefInfoDto = new AuthorBriefInfoDto();
+        briefInfoDto.setId(author.getId());
+        briefInfoDto.setUserId(userId);
+        briefInfoDto.setFirstName(author.getFirstName());
+        briefInfoDto.setLastName(author.getLastName());
+        briefInfoDto.setAvatar(author.getAvatar());
+        briefInfoDto.setRole(RoleType.AUTHOR.name());
+        briefInfoDto.setSchoolInfo(schoolBriefInfo);
+        briefInfoDto.setFollowers(followersCount);
+        return briefInfoDto;
+    }
+
 }

@@ -3,7 +3,7 @@ package com.knewless.core.article.mapper;
 import com.knewless.core.article.dto.ArticleDto;
 import com.knewless.core.article.dto.ArticleFullDto;
 import com.knewless.core.article.model.Article;
-import com.knewless.core.author.mapper.AuthorMapper;
+import com.knewless.core.author.mapper.OldAuthorMapper;
 import com.knewless.core.author.model.Author;
 
 public class ArticleMapper {
@@ -30,7 +30,7 @@ public class ArticleMapper {
         ArticleFullDto result = new ArticleFullDto();
         result.setName(article.getName());
         result.setText(article.getText());
-        result.setAuthor(AuthorMapper.fromEntinyToArticleInfo(article.getAuthor()));
+        result.setAuthor(OldAuthorMapper.fromEntinyToArticleInfo(article.getAuthor()));
         result.setImage(article.getImage());
         return result;
     }

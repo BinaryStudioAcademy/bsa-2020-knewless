@@ -5,11 +5,11 @@ import com.knewless.core.author.dto.AuthorBriefInfoDto;
 import com.knewless.core.author.dto.AuthorPublicDto;
 import com.knewless.core.author.dto.AuthorSettingsDto;
 import com.knewless.core.author.dto.FavouriteAuthorResponseDto;
-import com.knewless.core.author.mapper.AuthorInfoMapper;
-import com.knewless.core.author.mapper.AuthorMapper;
+import com.knewless.core.author.mapper.OldAuthorMapper;
 import com.knewless.core.author.model.Author;
 import com.knewless.core.course.CourseMapper;
 import com.knewless.core.course.CourseRepository;
+import com.knewless.core.currentUserCource.CurrentUserCourseRepository;
 import com.knewless.core.db.SourceType;
 import com.knewless.core.elasticsearch.EsService;
 import com.knewless.core.elasticsearch.model.EsDataType;
@@ -49,6 +49,8 @@ public class AuthorService {
 
     private final TagRepository tagRepository;
 
+    private final CurrentUserCourseRepository currentUserCourseRepository;
+
     @Autowired
     public AuthorService(AuthorRepository authorRepository,
                          UserRepository userRepository,
@@ -56,7 +58,8 @@ public class AuthorService {
                          SubscriptionService subscriptionService,
                          ArticleRepository articleRepository,
                          PathRepository pathRepository,
-                         EsService esService, TagRepository tagRepository) {
+                         EsService esService, TagRepository tagRepository,
+                         CurrentUserCourseRepository currentUserCourseRepository) {
         this.authorRepository = authorRepository;
         this.userRepository = userRepository;
         this.courseRepository = courseRepository;
@@ -65,13 +68,14 @@ public class AuthorService {
         this.esService = esService;
         this.pathRepository = pathRepository;
         this.tagRepository = tagRepository;
+        this.currentUserCourseRepository = currentUserCourseRepository;
     }
 
     public Optional<AuthorSettingsDto> getAuthorSettings(UUID userId) {
         final var user = this.userRepository.findById(userId).orElseThrow(
                 () -> new ResourceNotFoundException("AuthorSettings", "userId", userId)
         );
-        return this.authorRepository.findByUser(user).map(AuthorMapper::fromEntity);
+        return this.authorRepository.findByUser(user).map(OldAuthorMapper::fromEntity);
     }
 
     public Optional<AuthorSettingsDto> setAuthorSettings(AuthorSettingsDto settings) {
@@ -80,16 +84,16 @@ public class AuthorService {
         );
         final var oldSettings = this.authorRepository.findByUser(user);
         if (oldSettings.isEmpty()) {
-            Author author = authorRepository.save(AuthorMapper.fromDto(settings, user));
+            Author author = authorRepository.save(OldAuthorMapper.fromDto(settings, user));
             CompletableFuture.runAsync(() -> esService.put(EsDataType.AUTHOR, author));
 
             return Optional.of(author)
-                    .map(AuthorMapper::fromEntity);
+                    .map(OldAuthorMapper::fromEntity);
         }
-        final var updateSettings = AuthorMapper.fromDto(settings, user);
+        final var updateSettings = OldAuthorMapper.fromDto(settings, user);
         updateSettings.setCreatedAt(oldSettings.get().getCreatedAt());
         return Optional.of(this.authorRepository.save(updateSettings))
-                .map(AuthorMapper::fromEntity);
+                .map(OldAuthorMapper::fromEntity);
     }
 
     public AuthorBriefInfoDto getAuthorInfoByUserId(UUID userId) {
@@ -103,7 +107,7 @@ public class AuthorService {
                 : 0;
         final var schoolBriefInfo = SchoolInfoMapper.from(authorSchool, schoolMembersCount);
         final var authorFollowersCount = this.authorRepository.getNumberOfSubscriptions(author.getId()).orElse(0);
-        return AuthorInfoMapper.fromEntities(author, authorFollowersCount, schoolBriefInfo, userId);
+        return OldAuthorMapper.fromEntities(author, authorFollowersCount, schoolBriefInfo, userId);
     }
 
     public AuthorPublicDto getAuthorPublicDto(UUID authorId, UserPrincipal userPrincipal) throws NotFoundException {
@@ -112,34 +116,38 @@ public class AuthorService {
         );
         final var authorCourses = courseRepository.getLatestCoursesByAuthorId(authorId).stream()
                 .map(CourseMapper.MAPPER::authorCourseQueryResultToAuthorCourseWithTagsDto)
+                .peek(course -> {
+                    final var courseTags = this.tagRepository.getTagsByCourseId(course.getId()).stream()
+                            .filter(Objects::nonNull)
+                            .map(tag -> new TagDto(tag.getId(), tag.getName(), tag.getSource()))
+                            .collect(Collectors.toUnmodifiableList());
+                    course.setTags(courseTags);
+                    course.setMembers(this.currentUserCourseRepository.getMembersByCourse(course.getId()));
+                })
                 .collect(Collectors.toUnmodifiableList());
-        for (var course : authorCourses) {
-            final var courseTags = this.tagRepository.getTagsByCourseId(course.getId()).stream()
-                    .filter(Objects::nonNull)
-                    .map(tag -> new TagDto(tag.getId(), tag.getName(), tag.getSource()))
-                    .collect(Collectors.toUnmodifiableList());
-            course.setTags(courseTags);
-        }
         final var articles = this.articleRepository.getArticleDtoByAuthorId(authorId);
         final var school = this.authorRepository.getSchoolByAuthorId(authorId);
         final var schoolId = school.map(School::getId).map(UUID::toString).orElse("");
         final var schoolName = school.map(School::getName).orElse("");
-        final var isSubscribed = !subscriptionService.isSubscribe(userPrincipal.getId(), authorId, SourceType.AUTHOR);
+        final var isSubscribed = !this.subscriptionService.isSubscribe(
+                userPrincipal.getId(), authorId, SourceType.AUTHOR
+        );
         final var subscribesCount = this.authorRepository.getNumberOfSubscriptions(authorId).orElse(0);
         return new AuthorPublicDto(
-                author.getId() ,author.getUser().getId(), author.getFirstName(), author.getLastName(), author.getAvatar(),
+                author.getId(), author.getUser().getId(), author.getFirstName(), author.getLastName(), author.getAvatar(),
                 author.getBiography(), schoolName, schoolId, subscribesCount, authorCourses, articles, isSubscribed
         );
     }
 
     public List<FavouriteAuthorResponseDto> getFavouriteAuthorsByUser(UUID userId) {
-        List<Author> authors = authorRepository.getFavouriteAuthorsByUserId(userId, SourceType.AUTHOR);
-        List<FavouriteAuthorResponseDto> result = new ArrayList<>();
-        authors.forEach(a -> result.add(com.knewless.core.author.AuthorMapper.MAPPER.authorToFavouriteAuthorResponseDto(a)));
-        result.forEach(a->a.setFollowers(authorRepository.getNumberOfSubscriptions(a.getId()).orElse(0)));
-        result.forEach(a->a.setCourses(courseRepository.findAllByAuthorId(a.getId()).stream()
-                .filter(c ->c.getReleasedDate() != null).collect(Collectors.toList()).size()));
-        result.forEach(a->a.setPaths(pathRepository.findAllByAuthorId(a.getId()).size()));
-        return result;
+        return this.authorRepository.getFavouriteAuthorsByUserId(userId, SourceType.AUTHOR).stream()
+                .map(AuthorMapper.MAPPER::authorToFavouriteAuthorResponseDto)
+                .peek(a -> {
+                    a.setFollowers(this.authorRepository.getNumberOfSubscriptions(a.getId()).orElse(0));
+                    a.setCourses(this.courseRepository.countReleasedByAuthorId(a.getId()));
+                    a.setPaths(this.pathRepository.findAllByAuthorId(a.getId()).size());
+                })
+                .collect(Collectors.toUnmodifiableList());
     }
+
 }

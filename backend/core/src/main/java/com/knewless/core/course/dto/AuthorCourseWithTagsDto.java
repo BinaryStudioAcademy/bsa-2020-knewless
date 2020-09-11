@@ -26,4 +26,5 @@ public class AuthorCourseWithTagsDto {
     private Date updatedAt;
     private int lectures;
     private String description;
+    private long members;
 }

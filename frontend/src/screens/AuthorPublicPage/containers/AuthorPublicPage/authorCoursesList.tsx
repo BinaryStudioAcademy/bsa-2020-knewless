@@ -32,6 +32,7 @@ const CoursesList: React.FC<IAuthorCoursesList> = ({ authorData, courses }) => (
             action={null}
             name={c.name}
             description={c.description}
+            members={c?.members}
             ratingCount={c.allReactions}
             className={styles.preview}
           />
