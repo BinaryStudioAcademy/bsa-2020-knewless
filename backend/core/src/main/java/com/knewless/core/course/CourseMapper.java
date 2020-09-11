@@ -19,6 +19,7 @@ public interface CourseMapper {
     @Mapping(target = "rating", expression = "java(CourseMapper.calculateRating(s.getAllReactions(), s.getPositiveReactions()))")
     @Mapping(source = "allReactions", target = "ratingCount")
     @Mapping(target = "reviewed", ignore = true)
+    @Mapping(target = "tags", ignore = true)
     CourseDto courseQueryResultToCourseDto(CourseQueryResult s);
 
     @Mapping(source = "imageSrc", target = "image")
@@ -35,9 +36,17 @@ public interface CourseMapper {
     @Mapping(target = "rating", expression = "java(CourseMapper.calculateRating(s.getAllReactions(), s.getPositiveReactions()))")
     CourseProfileDto courseQueryToCourseProfileDto(CourseQueryResult s);
 
-    AuthorCourseDto authorCourseQueryResultToAuthorCourseDto(AuthorCourseQueryResult courseQueryResult);
+    @Mapping(target = "reviewed", ignore = true)
+    @Mapping(target = "tags", ignore = true)
+    @Mapping(target = "rating",
+            expression =
+                    "java(CourseMapper.calculateRating(course.getAllReactions(), course.getPositiveReactions()))"
+    )
+    @Mapping(target = "ratingCount", source = "allReactions")
+    AuthorCourseDto authorCourseQueryResultToAuthorCourseDto(AuthorCourseQueryResult course);
 
     @Mapping(target = "tags", ignore = true)
+    @Mapping(target = "members", ignore = true)
     AuthorCourseWithTagsDto authorCourseQueryResultToAuthorCourseWithTagsDto(AuthorCourseQueryResult courseQueryResult);
 
 	@Mapping(target = "author", ignore = true)
@@ -57,7 +66,7 @@ public interface CourseMapper {
             expression =
                     "java(CourseMapper.calculateRating(course.getAllReactions(), course.getPositiveReactions()))"
     )
-    @Mapping(source = "allReactions", target = "ratingCount")
+    @Mapping(target = "ratingCount", source = "allReactions")
     CourseDetailsDto courseDetailsResultToCourseDetailsDto(CourseDetailsQueryResult course);
 
     @Mapping(target="authorId", expression = "java(course.getAuthor().getId())")
