@@ -65,7 +65,10 @@ $previewheight: 15em
 
 .tags
   margin: auto 0
-  text-justify: center
+  overflow: hidden
+  text-overflow: ellipsis
+  white-space: nowrap
+  color: #ff8576
 
   span
     margin-right: 8px
@@ -194,6 +197,7 @@ $previewheight: 15em
   display: flex
   justify-content: flex-end
   align-items: center
+  flex-shrink: 0
 
   & > p
     margin-right: 5px
