@@ -7,10 +7,10 @@ import { useHistory, Link } from 'react-router-dom';
 
 const NotificationItem = ({ notification, readNotif, role }) => {
   const history = useHistory();
-  const isAuthor = notification.sourceType?.toLowerCase() === "author";
-  const isCourse = notification.sourceType?.toLowerCase() === "course";
-  const isLecture = notification.sourceType?.toLowerCase() === "lecture";
-  const isArticle = notification.sourceType?.toLowerCase() === "article";
+  const isAuthor = notification.sourceType?.toLowerCase() === 'author';
+  const isCourse = notification.sourceType?.toLowerCase() === 'course';
+  const isLecture = notification.sourceType?.toLowerCase() === 'lecture';
+  const isArticle = notification.sourceType?.toLowerCase() === 'article';
   const isGoalCompleted = notification.sourceType === 'PERSONAL_GOAL_COMPLETION';
 
   const handleClick = () => {
