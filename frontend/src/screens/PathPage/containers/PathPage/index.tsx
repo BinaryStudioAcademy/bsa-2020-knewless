@@ -8,7 +8,11 @@ import { InlineLoaderWrapper } from '@components/InlineLoaderWrapper';
 import styles from './styles.module.sass';
 import { IBindingCallback1 } from '@models/Callbacks';
 import { IPath } from '@screens/PathPage/models/IPath';
-import { fetchPathDataRoutine, changeFavouritePathStateRoutine, checkFavouritePathStateRoutine } from '@screens/PathPage/routines';
+import {
+  fetchPathDataRoutine,
+  changeFavouritePathStateRoutine,
+  checkFavouritePathStateRoutine
+} from '@screens/PathPage/routines';
 import { IFavourite } from '@components/AddToFavouritesButton/component';
 import { SourceType } from '@components/AddToFavouritesButton/helper/SourceType';
 
@@ -25,7 +29,7 @@ interface IPathPageProps {
   error: string;
 }
 
-const PathPage: React.FC<IPathPageProps> = ({ 
+const PathPage: React.FC<IPathPageProps> = ({
   fetchData,
   path,
   loading,
@@ -45,9 +49,8 @@ const PathPage: React.FC<IPathPageProps> = ({
     }
   }, [pathId]);
 
-  
   useEffect(() => {
-    if (pathId && role === "USER") {
+    if (pathId && role === 'USER') {
       checkFavourite({
         id: pathId,
         type: SourceType.PATH
@@ -67,7 +70,7 @@ const PathPage: React.FC<IPathPageProps> = ({
 
   return (
     <div className={styles.content}>
-      <PathOverview 
+      <PathOverview
         favourite={favourite}
         changeFavourite={changeFavourite}
         isAuthorized={isAuthorized}
@@ -80,6 +83,7 @@ const PathPage: React.FC<IPathPageProps> = ({
     </div>
   );
 };
+
 const mapStateToProps = (state: IAppState) => {
   const { path } = state.pathPage.pathData;
   const { isAuthorized } = state.auth.auth;

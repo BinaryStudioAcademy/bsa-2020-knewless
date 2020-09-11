@@ -16,7 +16,13 @@ import {
 import { IAppState } from '@models/AppState';
 import { extractCourses, extractTags, extractEditPath } from '../../models/AddPathData';
 import { connect } from 'react-redux';
-import { areCoursesLoading, areTagsLoading, isPathUploading, isEditPathLoading, isEditPathUploading } from '../../models/AddPathState';
+import {
+  areCoursesLoading,
+  areTagsLoading,
+  isPathUploading,
+  isEditPathLoading,
+  isEditPathUploading
+} from '../../models/AddPathState';
 import { InlineLoaderWrapper } from '@components/InlineLoaderWrapper';
 import noImage from '@images/no_image.png';
 import { TagSelector } from '@components/TagSelector';

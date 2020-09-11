@@ -18,6 +18,7 @@ public class ProgressGoalService {
 
 	public List<ProgressGoalBriefDto> getAll() {
 		return repository.findAll().stream().map(goal -> ProgressGoalBriefDto.builder()
-				.id(goal.getId()).name(goal.getName()).build()).collect(Collectors.toList());
+				.id(goal.getId()).name(goal.getName()).durationSeconds(goal.getDurationSeconds()).build())
+				.collect(Collectors.toList());
 	}
 }

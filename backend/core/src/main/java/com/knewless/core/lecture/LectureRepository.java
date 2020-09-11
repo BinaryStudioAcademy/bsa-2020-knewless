@@ -17,12 +17,6 @@ import java.util.UUID;
 
 public interface LectureRepository extends CommentSourceRepository<Lecture>, JpaRepository<Lecture, UUID> {
 
-
-	@Query("SELECT new com.knewless.core.lecture.dto.ShortLectureDto(l.id, l.name, " +
-			"l.description, l.webLink, l.urlOrigin, l.url1080, l.url720, l.url480, l.previewImage, l.duration, false, l.index) " +
-			"FROM Lecture l WHERE l.user.id = :id")
-	List<ShortLectureDto> getShortLecturesByUserId(@Param("id") UUID id);
-
 	List<Lecture> getAllByUserId(UUID userId);
 
 	@Transactional

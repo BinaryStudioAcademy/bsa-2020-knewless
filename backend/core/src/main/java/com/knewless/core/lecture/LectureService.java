@@ -13,6 +13,7 @@ import com.knewless.core.lecture.model.Lecture;
 import com.knewless.core.messaging.Message;
 import com.knewless.core.messaging.MessageSender;
 import com.knewless.core.tag.TagRepository;
+import com.knewless.core.tag.model.Tag;
 import com.knewless.core.user.UserRepository;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -134,7 +135,8 @@ public class LectureService {
                         l.getPreviewImage(),
                         l.getDuration(),
                         false,
-                        l.getIndex()))
+                        l.getIndex(),
+                        l.getTags().stream().map(Tag::getId).collect(Collectors.toList())))
                 .collect(Collectors.toList());
     }
 

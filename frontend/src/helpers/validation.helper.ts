@@ -30,7 +30,7 @@ const emailRegex = /^\w[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~"-]*@((\[?[0-9]{1,3}\.[0-9
 const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,32}$/;
 const userNameRegex = /^[a-zA-Z]{2,40}$/;
 const companyRegex = /^$|^[a-zA-Z0-9- ]{2,40}$/;
-const urlRegex = /^$|^(https?):\/\/[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]/;
+const urlRegex = /^$|^(https?):\/\/[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]$/;
 const twitterRegex = /^$|^https(?:s)?:\/\/twitter\.com\/([a-zA-Z0-9_]+)$/;
 const twitterUserRegex = /^$|^[a-zA-Z0-9_]+$/;
 const biographyRegex = /^[\d\D]{0,600}$/;

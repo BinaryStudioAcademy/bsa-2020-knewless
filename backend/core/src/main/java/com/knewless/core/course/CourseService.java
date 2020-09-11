@@ -477,7 +477,10 @@ public class CourseService {
 
         reactionRepository.save(reaction);
 
-        CompletableFuture.runAsync(() -> esService.updateCourseRating(courseId, getCourseById(courseId).getRating()));
+        CompletableFuture.runAsync(() -> {
+            CourseDto entity = getCourseById(courseId);
+            esService.updateCourseRating(courseId, entity.getRating(), entity.getRatingCount());
+        });
 
         return getCourseRating(courseId);
     }

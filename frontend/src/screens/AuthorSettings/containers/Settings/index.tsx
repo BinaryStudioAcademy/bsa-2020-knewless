@@ -68,7 +68,7 @@ const AuthorSettings: React.FunctionComponent<IAuthorSettingsProps> = ({
     setLocation(settings.location);
     setCompany(settings.company);
     setJob(settings.job);
-    setWebsite(settings.website);
+    setWebsite(settings.website ? settings.website : '');
     setTwitterUser(getTwitterUserFromUrl(settings?.twitter || ''));
     setBiography(settings.biography || '');
   }, [settings]);

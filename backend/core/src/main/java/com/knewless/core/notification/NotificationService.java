@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -77,5 +79,10 @@ public class NotificationService {
 	public List<NotificationDto> getAll(UUID userId) {
 		return notificationRepository.findAllByUser(userId).stream()
 				.map(NotificationDto::fromEntity).collect(Collectors.toList());
+	}
+	
+	public boolean wasNotificationAboutProgressSent(LocalDateTime from, LocalDateTime to, UUID goalId, UUID userId) {
+		return notificationRepository.dailyProgressNotificationForGoalByRange(
+				Timestamp.valueOf(from), Timestamp.valueOf(to), goalId, userId);
 	}
 }

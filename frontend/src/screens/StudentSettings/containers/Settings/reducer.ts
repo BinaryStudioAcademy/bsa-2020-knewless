@@ -2,6 +2,7 @@ import { Routine } from 'redux-saga-routines';
 import { IStudentSettings } from '../../models/IStudentSettings';
 import { ITag } from '../../models/ITag';
 import { fetchGetStudentSettingsRoutine, fetchAllTagsRoutine } from '../../routines';
+import {setNoAuthorizedRoutine} from "@screens/Home/routines";
 
 const initSettings = {
   id: undefined,
@@ -28,6 +29,8 @@ export const studentSettings = (state: IStudentSettings = initSettings, action: 
   switch (action.type) {
     case fetchGetStudentSettingsRoutine.SUCCESS:
       return action.payload;
+    case setNoAuthorizedRoutine.TRIGGER:
+      return initSettings;
     default:
       return state;
   }
@@ -37,10 +40,10 @@ const basicTag = {
   id: undefined,
   name: undefined,
   imageSrc: undefined
-}
+};
 
 export const getAllTags = (state: ITag[] = [basicTag], action: Routine<any>) => {
-  switch(action.type) {
+  switch (action.type) {
     case fetchAllTagsRoutine.SUCCESS:
       console.log(action.payload);
       return action.payload;

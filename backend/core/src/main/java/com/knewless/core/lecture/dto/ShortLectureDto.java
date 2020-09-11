@@ -2,6 +2,7 @@ package com.knewless.core.lecture.dto;
 
 import lombok.Data;
 
+import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,7 @@ public class ShortLectureDto {
     private int timeSeconds;
     private boolean isFavourite;
     private int index;
+    List<UUID> tags;
 }
 
 //dto for reusing lectures in different courses

@@ -37,7 +37,7 @@ public class EsService {
 
     @Autowired
     private TagRepository tagRepository;
-    
+
     @Autowired
     private AuthorRepository authorRepository;
 
@@ -120,17 +120,16 @@ public class EsService {
     }
 
     // TODO replace call of this method with "update" one from this service
-    public void updateCourseRating(UUID courseId, int rating) {
+    public void updateCourseRating(UUID courseId, int rating, int ratingCount) {
         EsEntity entity = esRepository.findBySourceId(courseId).orElse(null);
         if (entity == null) {
             return;
         }
 
         Map<String, Object> metadata = (Map<String, Object>) entity.getMetadata();
-        Optional<Integer> ratingCount = Optional.of((Integer) metadata.get("ratingCount"));
 
         metadata.put("rating", rating);
-        metadata.put("ratingCount", ratingCount.map(integer -> integer + 1).orElse(0));
+        metadata.put("ratingCount", ratingCount);
         esRepository.save(entity);
     }
 

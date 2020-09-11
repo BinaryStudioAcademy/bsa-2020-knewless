@@ -6,7 +6,7 @@ import {
   fetchCurrentGoalProgressRoutine,
   fetchPathsRoutine,
   fetchRecommendedCoursesRoutine,
-  fetchStudentRoutine,
+  fetchStudentRoutine, setCongratsShownRoutine,
   setCurrentGoalRoutine
 } from '../../routines';
 import { AnyAction } from 'redux';
@@ -26,7 +26,7 @@ function* watchGetStudentCourses() {
   yield takeEvery(fetchContinueCoursesRoutine.TRIGGER, getContinueCourses);
 }
 
-function* getRecommendedCourses({ payload }: AnyAction) {
+function* getRecommendedCourses() {
   try {
     const response = yield call(mainPageService.getRecommendedCourses);
     yield put(fetchRecommendedCoursesRoutine.success(response));
@@ -93,20 +93,33 @@ function* watchTryGetGoalProgress() {
   yield takeEvery(fetchCurrentGoalProgressRoutine.TRIGGER, getGoalProgress);
 }
 
-function* setGoal({ payload }: AnyAction) {
+function* trySetGoal({ payload }: AnyAction) {
   try {
     yield call(mainPageService.setPersonalGoal, payload);
     yield put(setCurrentGoalRoutine.success());
     toastr.success('Personal goal updated successfully!');
     yield put(fetchCurrentGoalProgressRoutine.trigger());
   } catch (e) {
-    toastr.error(e.message);
+    toastr.error('Can\'t update personal goal');
     yield put(setCurrentGoalRoutine.failure(e.message));
   }
 }
 
 function* watchSetCurrentGoal() {
-  yield takeEvery(setCurrentGoalRoutine.TRIGGER, setGoal);
+  yield takeEvery(setCurrentGoalRoutine.TRIGGER, trySetGoal);
+}
+
+function* trySetCongratsShown() {
+  try {
+    yield call(mainPageService.setCongratsShown);
+    yield put(setCongratsShownRoutine.success());
+  } catch (e) {
+    yield put(setCongratsShownRoutine.failure(e.message));
+  }
+}
+
+function* watchCongratsShown() {
+  yield takeEvery(setCongratsShownRoutine.TRIGGER, trySetCongratsShown);
 }
 
 export default function* studentMainPageSagas() {
@@ -117,6 +130,7 @@ export default function* studentMainPageSagas() {
     watchGetStudent(),
     watchTryFetchAllGoals(),
     watchTryGetGoalProgress(),
-    watchSetCurrentGoal()
+    watchSetCurrentGoal(),
+    watchCongratsShown()
   ]);
 }

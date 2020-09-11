@@ -28,7 +28,7 @@ const Notifications = ({ userId, notifications, fetchNotifications: fetch,
 
   return (
     <Popup
-      onMount={() => ref.current.scrollTo(0, -ref.current.scrollHeight)}
+      onMount={() => { if (ref.current) ref.current.scrollTo(0, -ref.current.scrollHeight); }}
       className={styles.popup}
       trigger={(
         <Label basic className={styleName}>

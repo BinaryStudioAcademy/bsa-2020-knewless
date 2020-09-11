@@ -20,10 +20,12 @@ import java.util.UUID;
 public class StudentController {
 
 	private final StudentService studentService;
+	private final StudentGoalProgressService studentGoalProgressService;
 
 	@Autowired
-	public StudentController(StudentService studentService) {
+	public StudentController(StudentService studentService, StudentGoalProgressService studentGoalProgressService) {
 		this.studentService = studentService;
+		this.studentGoalProgressService = studentGoalProgressService;
 	}
 
 	@GetMapping
@@ -73,11 +75,16 @@ public class StudentController {
 
 	@PostMapping("goal")
 	public void setGoal(@CurrentUser UserPrincipal userPrincipal, @RequestBody SetGoalRequest request) {
-		studentService.setProgressGoal(userPrincipal.getId(), request.getGoalId());
+		studentGoalProgressService.setProgressGoal(userPrincipal.getId(), request.getGoalId());
 	}
 
 	@GetMapping("goal")
 	public Optional<ProgressResponseDto> getCurrentProgress(@CurrentUser UserPrincipal userPrincipal) {
-		return studentService.getCurrentProgress(userPrincipal.getId());
+		return studentGoalProgressService.getCurrentProgress(userPrincipal.getId());
+	}
+	
+	@PutMapping("goal/shown")
+	public void setCongratulationsShown(@CurrentUser UserPrincipal userPrincipal) {
+		studentGoalProgressService.setCongratulationsShown(userPrincipal.getId());
 	}
 }

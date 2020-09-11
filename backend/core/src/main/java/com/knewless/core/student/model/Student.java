@@ -72,4 +72,7 @@ public class Student extends BaseEntity {
 
     @Column(name = "date_goal_set")
     private LocalDate dateGoalSet;
+    
+    @Column(name = "congratulation_shown")
+    private LocalDate congratulationShown;
 }

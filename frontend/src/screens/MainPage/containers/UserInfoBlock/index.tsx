@@ -12,10 +12,12 @@ import {
   extractGoalsLoading,
   extractSetGoalLoading
 } from '@screens/MainPage/models/IMainStudentPageState';
-import { setCurrentGoalRoutine } from '@screens/MainPage/routines';
+import { setCongratsShownRoutine, setCurrentGoalRoutine } from '@screens/MainPage/routines';
 import GradientButton from '@components/buttons/GradientButton';
 import AvatarWithGradient from '@components/avatar/AvatarWithBackground';
-import { secondsFormatted } from '@screens/MainPage/containers/UserInfoBlock/seconds.helper';
+import { secondsFormatted } from '@helpers/seconds.helper';
+import moment from 'moment';
+import { CongratulationsAnimation } from '@screens/MainPage/containers/CongratulationsAnimation';
 
 interface IUserInfoBlockProps {
   student: IStudent;
@@ -26,6 +28,7 @@ interface IUserInfoBlockProps {
   currentGoalLoading?: boolean;
   settingGoalLoading?: boolean;
   trySetCurrentGoal?: (goalId: string) => void;
+  trySetCongratsShown: () => void;
 }
 
 interface IDropdownItem {
@@ -37,18 +40,20 @@ const UserInfoBlock: React.FunctionComponent<IUserInfoBlockProps> = (
   {
     student: { firstName, job, avatar }, goals, currentGoal,
     currentGoalLoading, goalsLoading, settingGoalLoading, trySetCurrentGoal,
-    studentLoading
+    studentLoading, trySetCongratsShown
   }
 ) => {
   const [goalItems, setGoalItems] = useState<IDropdownItem[]>([]);
   const [selectedGoalId, setSelectedGoalId] = useState<string>('');
 
   useEffect(() => {
-    setGoalItems(goals.map(g => ({
-      text: g.name,
-      value: g.id
-    })) || []);
-  }, [goals]);
+    setGoalItems(goals.filter(g => !currentGoal || g.durationSeconds >= currentGoal?.secondsDone
+      || g.id === currentGoal?.goalId)
+      .map(g => ({
+        text: g.name,
+        value: g.id
+      })));
+  }, [currentGoal, goals]);
 
   useEffect(() => {
     if (currentGoal) {
@@ -94,18 +99,38 @@ const UserInfoBlock: React.FunctionComponent<IUserInfoBlockProps> = (
               <>
                 {currentGoal ? (
                   <>
-                    <p className={styles.goalTitle}>Current goal progress</p>
+                    {currentGoal.done && !currentGoal.congratulationShown
+                    && (
+                    <CongratulationsAnimation
+                      title="You've completed the goal!"
+                      onCompletion={trySetCongratsShown}
+                    />
+                    )}
+                    {currentGoal.done ? (
+                      // eslint-disable-next-line jsx-a11y/accessible-emoji
+                      <p className={styles.goalTitle}>You rock 🤘 Goal completed</p>
+                    ) : (
+                      <p className={styles.goalTitle}>Current goal progress</p>
+                    )}
                     <Popup
-                      content={`Watched ${secondsFormatted(currentGoal.secondsDone)} of
+                      wide
+                      content={(
+                        <div className={styles.popup_container}>
+                          <span>{`Starting from ${moment(currentGoal.goalStarted).format('ddd, D MMMM')}`}</span>
+                          <span>
+                            {`Watched ${secondsFormatted(currentGoal.secondsDone)} of
                           ${secondsFormatted(currentGoal.secondsNeededOverall)}`}
+                          </span>
+                        </div>
+)}
                       trigger={(
                         <Progress
                           progress="percent"
                           percent={currentGoal.percentsDone}
                           className={styles.progressBar}
                           color="blue"
-                          autoSuccess
                           size="medium"
+                          indicating={currentGoal.done}
                         />
                       )}
                     />
@@ -126,18 +151,20 @@ const UserInfoBlock: React.FunctionComponent<IUserInfoBlockProps> = (
               placeholder={goalItems.length === 0 ? 'No goals available' : 'Select your goal'}
               className={styles.goalDropdownMenu}
               options={goalItems}
-              disabled={goalItems.length === 0}
+              disabled={goalItems.length <= 1}
               loading={goalsLoading}
               onChange={(_, { value }) => setSelectedGoalId(value as string)}
               value={selectedGoalId || ''}
               required
-              clearable
             />
             <GradientButton
               type="submit"
               onClick={() => trySetCurrentGoal(selectedGoalId === '' ? undefined : selectedGoalId)}
               loading={settingGoalLoading}
-              disabled={currentGoal?.goalId === selectedGoalId || goalsLoading}
+              disabled={
+                currentGoal?.goalId === selectedGoalId || goalsLoading
+                || (!currentGoal && (selectedGoalId === ''))
+              }
               className={styles.submitGoalButton}
             >
               Save
@@ -158,7 +185,8 @@ export const mapStateToProps = (state: IAppState) => ({
 });
 
 export const mapDispatchToProps = {
-  trySetCurrentGoal: setCurrentGoalRoutine
+  trySetCurrentGoal: setCurrentGoalRoutine,
+  trySetCongratsShown: setCongratsShownRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserInfoBlock);
