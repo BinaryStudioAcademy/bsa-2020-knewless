@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Redirect } from 'react-router-dom';
+import { useParams, Redirect, useHistory } from 'react-router-dom';
 import styles from './styles.module.sass';
 import '../../styles/common.sass';
 import CourseOverview from '../../components/CourseOverview';
@@ -23,7 +23,6 @@ import RatingModal from '@components/RatingModal';
 import { saveCourseReviewRoutine } from '@screens/LecturePage/routines';
 import { IFavourite } from '@components/AddToFavouritesButton/component';
 import { SourceType } from '@components/AddToFavouritesButton/helper/SourceType';
-import { useHistory } from "react-router-dom";
 import { IAuthor } from '@screens/AuthorMainPage/models/IAuthor';
 
 interface ICoursePageProps {
@@ -71,13 +70,20 @@ const CoursePage: React.FunctionComponent<ICoursePageProps> = ({
   const [toDiscussion, setToDiscussion] = useState(undefined);
   useEffect(() => {
     setToDiscussion(history.location?.state?.toDiscussion);
-  },[history.location?.state]);
-  
+  }, [history.location?.state]);
+
   useEffect(() => {
     if (courseId) {
       fetchData(courseId);
     }
   }, []);
+
+  useEffect(() => {
+    const id = history.location.pathname.substring(history.location.pathname.lastIndexOf('/') + 1);
+    if (id.length > 0) {
+      fetchData(id);
+    }
+  }, [history.location]);
 
   useEffect(() => {
     if (courseId) {
