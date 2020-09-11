@@ -1,6 +1,7 @@
 import { Routine } from 'redux-saga-routines';
 import { IAuthorSettings } from '../../models/IAuthorSettings';
 import { fetchGetAuthorSettingsRoutine } from '../../routines';
+import { setNoAuthorizedRoutine } from '@screens/Home/routines';
 
 const initSettings = {
   id: undefined,
@@ -19,6 +20,8 @@ export const authorSettings = (state: IAuthorSettings = initSettings, action: Ro
   switch (action.type) {
     case fetchGetAuthorSettingsRoutine.SUCCESS:
       return action.payload;
+    case setNoAuthorizedRoutine.TRIGGER:
+      return initSettings;
     default:
       return state;
   }
