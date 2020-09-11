@@ -83,6 +83,7 @@ public class LectureService {
                     .description(lectureUpdate.getDescription())
                     .timeSeconds(lectureUpdate.getDuration())
                     .name(lectureUpdate.getName())
+                    .tags(lectureTags.stream().map(BaseEntity::getId).collect(Collectors.toList()))
                     .build();
         } else {
             var lecture = new Lecture();
@@ -98,6 +99,7 @@ public class LectureService {
                     .description(savedLecture.getDescription())
                     .timeSeconds(savedLecture.getDuration())
                     .name(savedLecture.getName())
+                    .tags(lectureTags.stream().map(BaseEntity::getId).collect(Collectors.toList()))
                     .build();
         }
     }
