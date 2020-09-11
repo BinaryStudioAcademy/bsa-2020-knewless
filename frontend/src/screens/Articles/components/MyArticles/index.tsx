@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Accordion, Icon } from 'semantic-ui-react';
 import { ArticlePreview } from '@components/ArticlePreview';
 import styles from '../../containers/ArticlesPage/styles.module.sass';
@@ -48,7 +48,7 @@ export const MyArticles: React.FC<IMyArticles> = ({
               My Articles
               <Icon name="dropdown" />
             </div>
-            {articles.length !== 0 && <GrayOutlineButton content="Create article" onClick={handleCreateCourseClick}/>}
+            {articles.length !== 0 && <GrayOutlineButton content="Create article" onClick={handleCreateCourseClick} />}
           </h3>
         </div>
       </Accordion.Title>
@@ -57,15 +57,15 @@ export const MyArticles: React.FC<IMyArticles> = ({
           <div className={`${styles.wide_container}`}>
             <div className={styles.courses_container}>
               {loading || articles.map(a => (
-                 <ArticlePreview
-                 key={a.id}
-                 id={a.id}
-                 authorName={a.authorName}
-                 authorId={a.authorId}
-                 image={a.image}
-                 name={a.name}
-                 description={a.text}
-               />
+                <ArticlePreview
+                  key={a.id}
+                  id={a.id}
+                  authorName={a.authorName}
+                  authorId={a.authorId}
+                  image={a.image}
+                  name={a.name}
+                  description={a.text}
+                />
               ))}
             </div>
           </div>

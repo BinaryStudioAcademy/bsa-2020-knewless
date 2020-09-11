@@ -1,13 +1,11 @@
 import React, { useEffect } from 'react';
-import {
-  fetchArticlesRoutine,
-} from '../../routines';
-import { IBindingAction, IBindingCallback1 } from '@models/Callbacks';
+import { fetchArticlesRoutine } from '../../routines';
+import { IBindingAction } from '@models/Callbacks';
 import { connect } from 'react-redux';
 import { IAppState } from '@models/AppState';
 import { IArticle } from '@screens/Articles/models/IArticle';
 import { MyArticles } from '@screens/Articles/components/MyArticles';
-import { IRole, RoleTypes } from '@containers/AppRouter/models/IRole';
+import { IRole } from '@containers/AppRouter/models/IRole';
 import styles from './styles.module.sass';
 import { InlineLoaderWrapper } from '@components/InlineLoaderWrapper';
 
@@ -30,13 +28,13 @@ const ArticlesPage: React.FC<IArticlesPageProps> = ({
 
   return (
     <div className={styles.courses_content}>
-      {  !articlesLoading ? (
-          <MyArticles
-            articles={articles}
-            loading={articlesLoading}
-            role={role.name}
-          />
-          ) : (<InlineLoaderWrapper loading centered />)}
+      {!articlesLoading ? (
+        <MyArticles
+          articles={articles}
+          loading={articlesLoading}
+          role={role.name}
+        />
+      ) : (<InlineLoaderWrapper loading centered />)}
     </div>
   );
 };
