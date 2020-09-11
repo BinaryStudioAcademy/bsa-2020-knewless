@@ -33,6 +33,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -154,7 +155,7 @@ public class PathService {
         if (request.getIsReleased()) {
             var message = author.getFirstName() + " " + author.getLastName() + " added new path.";
             this.subscriptionService.notifySubscribers(author.getId(), SourceType.AUTHOR, result, SourceType.PATH, message);
-            esService.put(EsDataType.PATH, savedPath);
+            CompletableFuture.runAsync(() -> esService.put(EsDataType.PATH, savedPath));
         }
         return result;
     }
@@ -183,9 +184,9 @@ public class PathService {
 
         if (savedPath.getReleasedDate() != null) {
             if (request.getIsReleased()) {
-                esService.put(EsDataType.PATH, savedPath);
+                CompletableFuture.runAsync(() -> esService.put(EsDataType.PATH, savedPath));
             } else {
-                esService.update(EsDataType.PATH, savedPath);
+                CompletableFuture.runAsync(() -> esService.update(EsDataType.PATH, savedPath));
             }
             this.subscriptionService.notifySubscribers(author.getId(), SourceType.AUTHOR, result, SourceType.PATH, message);
         }
