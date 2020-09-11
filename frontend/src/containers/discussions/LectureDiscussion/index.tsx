@@ -39,11 +39,13 @@ const LectureDiscussion: React.FunctionComponent<ILectureDiscussionProps> = ({
   const handleSendMessage = useCallback(text => sendMessage({ text, resourceId: lectureId }), [lectureId]);
 
   useEffect(() => {
-    io.on(`lecture:${lectureId}`, (message: IMessage) => {
-      receiveMessage(message);
-    });
+    if (io) {
+      io.on(`lecture:${lectureId}`, (message: IMessage) => {
+        receiveMessage(message);
+      });
+    }
     return () => {
-      io.removeAllListeners(`lecture:${lectureId}`);
+      if (io) io.removeAllListeners(`lecture:${lectureId}`);
     };
   }, [io]);
 
