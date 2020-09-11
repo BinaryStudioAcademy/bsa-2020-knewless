@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Button, Icon, Label } from 'semantic-ui-react';
 import { StyledRating } from '@components/StyledRating';
 import { NavLink, useLocation } from 'react-router-dom';
@@ -28,11 +28,25 @@ export interface ICoursePreviewProps {
 }
 
 export const CoursePreview: React.FC<ICoursePreviewProps> = ({
-  image, lecturesNumber, durationMinutes, level, flag, action, name, description,
-  id, authorName, authorId, tags, rating, className, members,
-  ratingCount, role, isReleased
+  image,
+  lecturesNumber,
+  durationMinutes,
+  level,
+  flag,
+  action,
+  name,
+  description,
+  id,
+  authorName,
+  authorId,
+  tags,
+  rating,
+  className,
+  members,
+  ratingCount,
+  role,
+  isReleased
 }) => {
-
   const location = useLocation();
   const optionalIcon = (isSelected: boolean) => {
     switch (isSelected) {

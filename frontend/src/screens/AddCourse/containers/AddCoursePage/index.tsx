@@ -175,10 +175,9 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
         if (l.urlOrigin) {
           return !(selectedLectures.map(s => s.id).includes(l.id)
         || selectedLectures.map(s => s.urlOrigin).includes(l.urlOrigin));
-        } else {
-          return !(selectedLectures.map(s => s.id).includes(l.id)
+        }
+        return !(selectedLectures.map(s => s.id).includes(l.id)
         || selectedLectures.map(s => s.webLink).includes(l.webLink));
-        };
       });
     setPool(filtered);
   }, [lectures]);
@@ -317,10 +316,9 @@ const AddCourse: React.FunctionComponent<IAddCourseProps> = ({
         if (l.urlOrigin) {
           return !(selectedLectures.map(s => s.id).includes(l.id)
         || selectedLectures.map(s => s.urlOrigin).includes(l.urlOrigin));
-        } else {
-          return !(selectedLectures.map(s => s.id).includes(l.id)
+        }
+        return !(selectedLectures.map(s => s.id).includes(l.id)
         || selectedLectures.map(s => s.webLink).includes(l.webLink));
-        };
       });
     setPool(filtered);
   };

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Form } from 'semantic-ui-react';
 import styles from './styles.module.sass';
-import { locationOptions } from './options';
+import { locationOptions } from '@screens/StudentSettings/containers/Settings/options';
 import { history } from '@helpers/history.helper';
 import { connect } from 'react-redux';
 import { fetchGetAuthorSettingsRoutine, fetchSetAuthorSettingsRoutine } from '@screens/AuthorSettings/routines';
