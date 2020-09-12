@@ -111,20 +111,6 @@ const StudentProfile: React.FC<IStudentProfileProps> = ({
             <ViewTotalTime totalTime={profile.totalContentWatched} />
           </div>
           <ViewActivity activity={profile.activity}/>
-          {studentCoursesTags.length > 0 && (
-            <div className={styles.chart}>
-              <ChartWrapper width={chart.width} height={chart.height} id={chart.wrapperId}>
-                <CirclePackingChart
-                  data={studentCoursesTags}
-                  width={chart.width}
-                  height={chart.height}
-                  wrapperId={chart.wrapperId}
-                  styles={chart.styles}
-                />
-              </ChartWrapper>
-              <div className={styles.chartLabel}>Topics</div>
-            </div>
-          )}
         </div>
       </div>
       <div className={styles.detailsProfile}>

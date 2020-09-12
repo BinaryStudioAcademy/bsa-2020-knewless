@@ -83,7 +83,7 @@ return (
    <div
       style={{
         width: '400px',
-        height: '150px',
+        height: '120px',
       }}
     >
        <Chart 
