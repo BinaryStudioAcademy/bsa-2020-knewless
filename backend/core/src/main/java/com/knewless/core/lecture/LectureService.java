@@ -147,7 +147,7 @@ public class LectureService {
     public List<FavouriteLectureResponseDto> getFavouriteLecturesByUser(UUID userId) {
         List<Lecture> lectures = lectureRepository.getFavouriteLecturesByUserId(userId, SourceType.LECTURE);
         return lectures.stream().map(LectureMapper.MAPPER::lectureToFavouriteLectureResponseDto).peek(favLecture -> {
-            if (favLecture.getImage().startsWith("assets/")) {
+            if (favLecture.getImage() != null && favLecture.getImage().startsWith("assets/")) {
                 favLecture.setImage(URL + favLecture.getImage());
             }
         }).collect(Collectors.toList());
